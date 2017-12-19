@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
-    "outFile": "./build/all.js",
+    "outFile": "../../build/ts/base.js",
     "sourceMap": true,
     "inlineSources": true,
     "removeComments": false,
     "allowJs": true,
     "target": "es5",
     "lib": [
-      "DOM",
       "ES5",
-      "ScriptHost",
       "ES2015.Collection",
       "es2015.promise"
     ],
@@ -26,6 +24,7 @@
     ]
   },
   "include": [
-    "./src/**/*"
+    "./references.ts",
+    "./**/*"
   ]
 }
