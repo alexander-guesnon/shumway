@@ -24,7 +24,7 @@ module Shumway.AVM1.Lib {
   }
 
   export function toAS3ColorTransform(v: any): flash.geom.ColorTransform {
-    var context = v.context;
+    let context = v.context;
     if (!(v instanceof AVM1Object)) {
       return new context.sec.flash.geom.ColorTransform(1, 1, 1, 1, 0, 0, 0, 0);
     }
@@ -84,7 +84,7 @@ module Shumway.AVM1.Lib {
     }
 
     alConstruct(args?: any[]): AVM1Object {
-      var obj = Object.create(AVM1ColorTransform.prototype);
+      let obj = Object.create(AVM1ColorTransform.prototype);
       args = args || [];
       AVM1ColorTransform.apply(obj, [this.context].concat(args));
       return obj;
@@ -120,13 +120,13 @@ module Shumway.AVM1.Lib {
     }
 
     public setRgb(rgb: number) {
-      var t = toAS3ColorTransform(this);
+      let t = toAS3ColorTransform(this);
       t.color = alToInt32(this.context, rgb);
       copyAS3ColorTransform(t, this);
     }
 
     public concat(second: AVM1ColorTransform): void {
-      var t = toAS3ColorTransform(this);
+      let t = toAS3ColorTransform(this);
       t.concat(toAS3ColorTransform(second));
       copyAS3ColorTransform(t, this);
     }

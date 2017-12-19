@@ -16,9 +16,9 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF {
-  export var MP3WORKER_PATH: string = '../../lib/mp3/mp3worker.js';
+  export let MP3WORKER_PATH: string = '../../lib/mp3/mp3worker.js';
 
-  var mp3Worker: Worker = null;
+  let mp3Worker: Worker = null;
 
   function ensureMP3Worker(): Worker {
     if (!mp3Worker) {
@@ -32,7 +32,7 @@ module Shumway.SWF {
     return mp3Worker;
   }
 
-  var nextSessionId: number = 0;
+  let nextSessionId: number = 0;
 
   export class MP3DecoderSession {
     private _sessionId: number;
@@ -58,7 +58,7 @@ module Shumway.SWF {
     private onworkermessage(e) {
       if (e.data.sessionId !== this._sessionId)
         return;
-      var action = e.data.action;
+      let action = e.data.action;
       switch (action) {
         case 'closed':
           if (this.onclosed) {
@@ -101,21 +101,21 @@ module Shumway.SWF {
 
 
     public static processAll(data: Uint8Array): Promise<{data:Uint8Array; id3Tags: any;}> {
-      var currentBufferSize = 8000;
-      var currentBuffer = new Float32Array(currentBufferSize);
-      var bufferPosition = 0;
-      var id3Tags = [];
-      var sessionAborted = false;
+      let currentBufferSize = 8000;
+      let currentBuffer = new Float32Array(currentBufferSize);
+      let bufferPosition = 0;
+      let id3Tags = [];
+      let sessionAborted = false;
 
-      var promiseWrapper = new PromiseWrapper<{data:Uint8Array; id3Tags: any;}>();
-      var session = new MP3DecoderSession();
+      let promiseWrapper = new PromiseWrapper<{data:Uint8Array; id3Tags: any;}>();
+      let session = new MP3DecoderSession();
       session.onframedata = function (frameData, channels, sampleRate, bitRate) {
-        var needed = frameData.length + bufferPosition;
+        let needed = frameData.length + bufferPosition;
         if (needed > currentBufferSize) {
           do {
             currentBufferSize *= 2;
           } while (needed > currentBufferSize);
-          var newBuffer = new Float32Array(currentBufferSize);
+          let newBuffer = new Float32Array(currentBufferSize);
           newBuffer.set(currentBuffer);
           currentBuffer = newBuffer;
         }

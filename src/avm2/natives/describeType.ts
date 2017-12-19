@@ -56,8 +56,8 @@ module Shumway.AVMX.AS {
   export function describeTypeJSON(sec: AXSecurityDomain, o: any, flags: number): any {
     // Class traits aren't returned for numeric primitives, undefined, null, bound methods, or
     // non-class-constructor functions.
-    var isInt = (o|0) === o;
-    var nullOrUndefined = isNullOrUndefined(o);
+    let isInt = (o|0) === o;
+    let nullOrUndefined = isNullOrUndefined(o);
     if (flags & DescribeTypeFlags.USE_ITRAITS && (nullOrUndefined || isInt)) {
       return null;
     }
@@ -81,12 +81,12 @@ module Shumway.AVMX.AS {
         return null;
       }
     }
-    var cls: AXClass = o.hasOwnProperty('classInfo') ? o : o.axClass;
+    let cls: AXClass = o.hasOwnProperty('classInfo') ? o : o.axClass;
     release || assert(cls, "No class found for object " + o);
-    var describeClass = cls === o && !(flags & DescribeTypeFlags.USE_ITRAITS);
-    var info: ClassInfo = cls.classInfo;
+    let describeClass = cls === o && !(flags & DescribeTypeFlags.USE_ITRAITS);
+    let info: ClassInfo = cls.classInfo;
 
-    var description: any = sec.createObject();
+    let description: any = sec.createObject();
     // For numeric literals that fit into ints, special case the name.
     if (isInt) {
       description.$Bgname = 'int';
@@ -104,18 +104,18 @@ module Shumway.AVMX.AS {
     return description;
   }
 
-  var tmpName = new Multiname(null, 0, CONSTANT.QName, [Namespace.PUBLIC], null);
-  var tmpAttr = new Multiname(null, 0, CONSTANT.QNameA, [Namespace.PUBLIC], null);
+  let tmpName = new Multiname(null, 0, CONSTANT.QName, [Namespace.PUBLIC], null);
+  let tmpAttr = new Multiname(null, 0, CONSTANT.QNameA, [Namespace.PUBLIC], null);
 
   export function describeType(sec: AXSecurityDomain, value: any, flags: number): ASXML {
     // Ensure that the XML classes have been initialized:
     tmpName.name = 'XML';
-    var xmlClass = <AXXMLClass>sec.application.getClass(tmpName);
-    var classDescription: any = describeTypeJSON(sec, value, flags);
-    var x: ASXML = xmlClass.Create('<type/>');
+    let xmlClass = <AXXMLClass>sec.application.getClass(tmpName);
+    let classDescription: any = describeTypeJSON(sec, value, flags);
+    let x: ASXML = xmlClass.Create('<type/>');
     tmpAttr.name = 'name';
     x.setProperty(tmpAttr, classDescription.$Bgname);
-    var bases = classDescription.$Bgtraits.$Bgbases.value;
+    let bases = classDescription.$Bgtraits.$Bgbases.value;
     if (bases.length) {
       tmpAttr.name = 'base';
       x.setProperty(tmpAttr, bases[0]);
@@ -128,10 +128,10 @@ module Shumway.AVMX.AS {
     x.setProperty(tmpAttr, classDescription.$BgisStatic.toString());
     describeTraits(x, classDescription.$Bgtraits);
 
-    var instanceDescription: any = describeTypeJSON(sec, value,
+    let instanceDescription: any = describeTypeJSON(sec, value,
                                                     flags | DescribeTypeFlags.USE_ITRAITS);
     if (instanceDescription) {
-      var e: ASXML = xmlClass.Create('<factory/>');
+      let e: ASXML = xmlClass.Create('<factory/>');
       tmpAttr.name = 'type';
       e.setProperty(tmpAttr, instanceDescription.$Bgname);
       if (describeTraits(e, instanceDescription.$Bgtraits)) {
@@ -142,41 +142,41 @@ module Shumway.AVMX.AS {
   }
 
   function describeTraits(x: ASXML, traits: any): boolean {
-    var traitsCount = 0;
-    var bases = traits.$Bgbases && traits.$Bgbases.value;
-    for (var i = 0; bases && i < bases.length; i++) {
-      var base: string = bases[i];
-      var e: ASXML = x.sec.AXXML.Create('<extendsClass type="' + escapeAttributeValue(base) + '"/>');
+    let traitsCount = 0;
+    let bases = traits.$Bgbases && traits.$Bgbases.value;
+    for (let i = 0; bases && i < bases.length; i++) {
+      let base: string = bases[i];
+      let e: ASXML = x.sec.AXXML.Create('<extendsClass type="' + escapeAttributeValue(base) + '"/>');
       x.appendChild(e);
       traitsCount++;
     }
-    var interfaces = traits.$Bginterfaces && traits.$Bginterfaces.value;
-    for (var i = 0; interfaces && i < interfaces.length; i++) {
-      var e: ASXML = x.sec.AXXML.Create('<implementsInterface type="' +
+    let interfaces = traits.$Bginterfaces && traits.$Bginterfaces.value;
+    for (let i = 0; interfaces && i < interfaces.length; i++) {
+      let e: ASXML = x.sec.AXXML.Create('<implementsInterface type="' +
                                         escapeAttributeValue(interfaces[i]) + '"/>');
       x.appendChild(e);
       traitsCount++;
     }
     if (traits.$Bgconstructor !== null) {
-      var e: ASXML = x.sec.AXXML.Create('<constructor/>');
+      let e: ASXML = x.sec.AXXML.Create('<constructor/>');
       describeParams(e, traits.$Bgconstructor);
       x.appendChild(e);
       traitsCount++;
     }
-    var variables = traits.$Bgvariables && traits.$Bgvariables.value;
-    for (var i = 0; variables && i < variables.length; i++) {
-      var variable: any = variables[i];
-      var nodeName = variable.$Bgaccess === 'readonly' ? 'constant' : 'variable';
-      var e: ASXML = x.sec.AXXML.Create('<' + nodeName +
+    let variables = traits.$Bgvariables && traits.$Bgvariables.value;
+    for (let i = 0; variables && i < variables.length; i++) {
+      let variable: any = variables[i];
+      let nodeName = variable.$Bgaccess === 'readonly' ? 'constant' : 'variable';
+      let e: ASXML = x.sec.AXXML.Create('<' + nodeName +
                                         ' name="' + escapeAttributeValue(variable.$Bgname) +
                                         '" type="' + variable.$Bgtype + '"/>');
       finishTraitDescription(variable, e, x);
       traitsCount++;
     }
-    var accessors = traits.$Bgaccessors && traits.$Bgaccessors.value;
-    for (var i = 0; accessors && i < accessors.length; i++) {
-      var accessor: any = accessors[i];
-      var e: ASXML = x.sec.AXXML.Create('<accessor ' +
+    let accessors = traits.$Bgaccessors && traits.$Bgaccessors.value;
+    for (let i = 0; accessors && i < accessors.length; i++) {
+      let accessor: any = accessors[i];
+      let e: ASXML = x.sec.AXXML.Create('<accessor ' +
                                         'name="' + escapeAttributeValue(accessor.$Bgname) +
                                         '" access="' + accessor.$Bgaccess +
                                         '" type="' + escapeAttributeValue(accessor.$Bgtype) +
@@ -185,10 +185,10 @@ module Shumway.AVMX.AS {
       finishTraitDescription(accessor, e, x);
       traitsCount++;
     }
-    var methods = traits.$Bgmethods && traits.$Bgmethods.value;
-    for (var i = 0; methods && i < methods.length; i++) {
-      var method: any = methods[i];
-      var e: ASXML = x.sec.AXXML.Create('<method ' + 'name="' +
+    let methods = traits.$Bgmethods && traits.$Bgmethods.value;
+    for (let i = 0; methods && i < methods.length; i++) {
+      let method: any = methods[i];
+      let e: ASXML = x.sec.AXXML.Create('<method ' + 'name="' +
                                         escapeAttributeValue(method.$Bgname) +
                                         '" declaredBy="' +
                                         escapeAttributeValue(method.$BgdeclaredBy) +
@@ -217,9 +217,9 @@ module Shumway.AVMX.AS {
     if (!parameters) {
       return;
     }
-    for (var i = 0; i < parameters.length; i++) {
-      var p = parameters[i];
-      var f: ASXML = x.sec.AXXML.Create('<parameter index="' + (i + 1) + '" type="' +
+    for (let i = 0; i < parameters.length; i++) {
+      let p = parameters[i];
+      let f: ASXML = x.sec.AXXML.Create('<parameter index="' + (i + 1) + '" type="' +
                                         escapeAttributeValue(p.$Bgtype) + '" optional="' +
                                         p.$Bgoptional + '"/>');
       x.appendChild(f);
@@ -230,15 +230,15 @@ module Shumway.AVMX.AS {
     if (!metadata_) {
       return;
     }
-    var metadata: any[] = metadata_.value;
-    for (var i = 0; i < metadata.length; i++) {
-      var md = metadata[i];
-      var m: ASXML = x.sec.AXXML.Create('<metadata name="' + escapeAttributeValue(md.$Bgname)
+    let metadata: any[] = metadata_.value;
+    for (let i = 0; i < metadata.length; i++) {
+      let md = metadata[i];
+      let m: ASXML = x.sec.AXXML.Create('<metadata name="' + escapeAttributeValue(md.$Bgname)
                                         + '"/>');
-      var values = md.$Bgvalue.value;
-      for (var j = 0; j < values.length; j++) {
-        var value = values[j];
-        var a: ASXML = x.sec.AXXML.Create('<arg key="' +
+      let values = md.$Bgvalue.value;
+      for (let j = 0; j < values.length; j++) {
+        let value = values[j];
+        let a: ASXML = x.sec.AXXML.Create('<arg key="' +
                                           escapeAttributeValue(value.$Bgkey) + '" value="' +
                                           escapeAttributeValue(value.$Bgvalue) + '"/>');
         m.appendChild(a);
@@ -251,11 +251,11 @@ module Shumway.AVMX.AS {
     if (!list) {
       return null;
     }
-    var result = sec.createArray([]);
+    let result = sec.createArray([]);
 
-    for (var i = 0; i < list.length; i++) {
-      var metadata = list[i];
-      var key = metadata.getName();
+    for (let i = 0; i < list.length; i++) {
+      let metadata = list[i];
+      let key = metadata.getName();
       // Filter out the [native] metadata nodes. These are implementation details Flash doesn't
       // expose, so we don't, either.
       if (key === 'native') {
@@ -267,12 +267,12 @@ module Shumway.AVMX.AS {
   }
 
   function describeMetadata(sec: AXSecurityDomain, metadata: MetadataInfo) {
-    var result = sec.createObject();
+    let result = sec.createObject();
     result.$Bgname = metadata.name;
-    var values = [];
+    let values = [];
     result.$Bgvalue = sec.createArray(values);
-    for (var i = 0; i < metadata.keys.length; i++) {
-      var val = sec.createObject();
+    for (let i = 0; i < metadata.keys.length; i++) {
+      let val = sec.createObject();
       val.$Bgvalue = metadata.getValueAt(i);
       val.$Bgkey = metadata.getKeyAt(i);
       values.push(val);
@@ -282,20 +282,20 @@ module Shumway.AVMX.AS {
 
   function addTraits(cls: AXClass, info: ClassInfo, describingClass: boolean,
                      flags: DescribeTypeFlags) {
-    var sec = cls.sec;
-    var includeBases = flags & DescribeTypeFlags.INCLUDE_BASES;
-    var includeMethods = flags & DescribeTypeFlags.INCLUDE_METHODS && !describingClass;
-    var obj = sec.createObject();
+    let sec = cls.sec;
+    let includeBases = flags & DescribeTypeFlags.INCLUDE_BASES;
+    let includeMethods = flags & DescribeTypeFlags.INCLUDE_METHODS && !describingClass;
+    let obj = sec.createObject();
 
-    var variablesVal = obj.$Bgvariables =
+    let variablesVal = obj.$Bgvariables =
       flags & DescribeTypeFlags.INCLUDE_VARIABLES ? sec.createArray([]) : null;
-    var accessorsVal = obj.$Bgaccessors =
+    let accessorsVal = obj.$Bgaccessors =
       flags & DescribeTypeFlags.INCLUDE_ACCESSORS ? sec.createArray([]) : null;
 
-    var metadataList: any[] = null;
+    let metadataList: any[] = null;
     // Somewhat absurdly, class metadata is only included when describing instances.
     if (flags & DescribeTypeFlags.INCLUDE_METADATA && !describingClass) {
-      var metadata: MetadataInfo[] = info.trait.getMetadata();
+      let metadata: MetadataInfo[] = info.trait.getMetadata();
       if (metadata) {
         metadataList = describeMetadataList(sec, metadata);
       }
@@ -309,27 +309,27 @@ module Shumway.AVMX.AS {
     if (flags & DescribeTypeFlags.INCLUDE_INTERFACES) {
       obj.$Bginterfaces = sec.createArray([]);
       if (!describingClass) {
-        var interfacesVal = obj.$Bginterfaces.value;
-        var interfaces = cls.classInfo.instanceInfo.getInterfaces(cls);
+        let interfacesVal = obj.$Bginterfaces.value;
+        let interfaces = cls.classInfo.instanceInfo.getInterfaces(cls);
         interfaces.forEach((iface) => interfacesVal.push(iface.name.toFQNString(true)));
       }
     } else {
       obj.$Bginterfaces = null;
     }
 
-    var methodsVal = obj.$Bgmethods = includeMethods ? sec.createArray([]) : null;
-    var basesVal = obj.$Bgbases = includeBases ? sec.createArray([]) : null;
+    let methodsVal = obj.$Bgmethods = includeMethods ? sec.createArray([]) : null;
+    let basesVal = obj.$Bgbases = includeBases ? sec.createArray([]) : null;
 
-    var encounteredKeys: any = Object.create(null);
+    let encounteredKeys: any = Object.create(null);
 
     // Needed for accessor-merging.
-    var encounteredGetters: any = Object.create(null);
-    var encounteredSetters: any = Object.create(null);
+    let encounteredGetters: any = Object.create(null);
+    let encounteredSetters: any = Object.create(null);
 
-    var addBase = false;
-    var isInterface = info.instanceInfo.isInterface();
+    let addBase = false;
+    let isInterface = info.instanceInfo.isInterface();
     while (cls) {
-      var className = cls.classInfo.instanceInfo.getName().toFQNString(true);
+      let className = cls.classInfo.instanceInfo.getName().toFQNString(true);
       if (includeBases && addBase && !describingClass) {
         basesVal.push(className);
       } else {
@@ -350,7 +350,7 @@ module Shumway.AVMX.AS {
     if (describingClass) {
       // When describing Class objects, accessors are ignored. *Except* the `prototype` accessor.
       if (flags & DescribeTypeFlags.INCLUDE_ACCESSORS) {
-        var val = sec.createObject();
+        let val = sec.createObject();
         val.$Bgname = 'prototype';
         val.$Bgtype = '*';
         val.$Bgaccess = "readonly";
@@ -374,10 +374,10 @@ module Shumway.AVMX.AS {
       // All types share some fields, but setting them in one place changes the order in which
       // they're defined - and hence show up in iteration. While it is somewhat unlikely that
       // real content relies on that order, tests certainly do, so we duplicate the code.
-      for (var i = 0; i < traits.length; i++) {
-        var t = traits[i];
-        var mn = t.getName();
-        var ns = mn.namespace;
+      for (let i = 0; i < traits.length; i++) {
+        let t = traits[i];
+        let mn = t.getName();
+        let ns = mn.namespace;
         // Hide all non-public members whose namespace doesn't have a URI specified.
         // Or, if HIDE_NSURI_METHODS is set, hide those, too, because bugs in Flash.
         // For interfaces, include all traits. We should've made sure to only have
@@ -387,12 +387,12 @@ module Shumway.AVMX.AS {
           continue;
         }
         // Strip the namespace off of interface methods. They're always treated as public.
-        var name = isInterface ? mn.name : mn.toFQNString(true);
+        let name = isInterface ? mn.name : mn.toFQNString(true);
         if (encounteredGetters[name] !== encounteredSetters[name]) {
-          var val = encounteredKeys[name];
+          let val = encounteredKeys[name];
           val.$Bgaccess = 'readwrite';
           if (t.kind === TRAIT.Getter) {
-            var type = (<MethodTraitInfo>t).getMethodInfo().getType();
+            let type = (<MethodTraitInfo>t).getMethodInfo().getType();
             val.$Bgtype = type ? type.name.toFQNString(true) : '*';
           }
           continue;
@@ -402,9 +402,9 @@ module Shumway.AVMX.AS {
         }
         //TODO: check why we have public$$_init in `Object`
 
-        var val = sec.createObject();
+        let val = sec.createObject();
         encounteredKeys[name] = val;
-        var metadata: MetadataInfo[] = t.getMetadata();
+        let metadata: MetadataInfo[] = t.getMetadata();
         switch (t.kind) {
           case TRAIT.Const:
           case TRAIT.Slot:
@@ -413,7 +413,7 @@ module Shumway.AVMX.AS {
             }
             val.$Bgname = name;
             val.$Bguri = ns.reflectedURI;
-            var typeName = (<SlotTraitInfo>t).getTypeName();
+            let typeName = (<SlotTraitInfo>t).getTypeName();
             val.$Bgtype = typeName ? typeName.toFQNString(true) : '*';
             val.$Bgaccess = "readwrite";
             val.$Bgmetadata = flags & DescribeTypeFlags.INCLUDE_METADATA ?
@@ -425,18 +425,18 @@ module Shumway.AVMX.AS {
             if (!includeMethods) {
               continue;
             }
-            var returnType = (<MethodTraitInfo>t).getMethodInfo().getType();
+            let returnType = (<MethodTraitInfo>t).getMethodInfo().getType();
             val.$BgreturnType = returnType ? returnType.name.toFQNString(true) : '*';
             val.$Bgmetadata = flags & DescribeTypeFlags.INCLUDE_METADATA ?
                               describeMetadataList(sec, metadata) :
                               null;
             val.$Bgname = name;
             val.$Bguri = ns.reflectedURI;
-            var parametersVal = val.$Bgparameters = sec.createArray([]);
-            var parameters = (<MethodTraitInfo>t).getMethodInfo().parameters;
-            for (var j = 0; j < parameters.length; j++) {
-              var param = parameters[j];
-              var paramVal = sec.createObject();
+            let parametersVal = val.$Bgparameters = sec.createArray([]);
+            let parameters = (<MethodTraitInfo>t).getMethodInfo().parameters;
+            for (let j = 0; j < parameters.length; j++) {
+              let param = parameters[j];
+              let paramVal = sec.createObject();
               paramVal.$Bgtype = param.type ? param.getType().toFQNString(true) : '*';
               paramVal.$Bgoptional = 'value' in param;
               parametersVal.push(paramVal);
@@ -451,11 +451,11 @@ module Shumway.AVMX.AS {
             }
             val.$Bgname = name;
             if (t.kind === TRAIT.Getter) {
-              var returnType = (<MethodTraitInfo>t).getMethodInfo().getType();
+              let returnType = (<MethodTraitInfo>t).getMethodInfo().getType();
               val.$Bgtype = returnType ? returnType.name.toFQNString(true) : '*';
               encounteredGetters[name] = val;
             } else {
-              var paramType = (<MethodTraitInfo>t).getMethodInfo().parameters[0].getType();
+              let paramType = (<MethodTraitInfo>t).getMethodInfo().parameters[0].getType();
               val.$Bgtype = paramType ? paramType.toFQNString(true) : '*';
               encounteredSetters[name] = val;
             }

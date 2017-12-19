@@ -130,7 +130,7 @@ module Shumway.Tools.Profiler {
     }
 
     destroy() {
-      var eventTarget = this._eventTarget;
+      let eventTarget = this._eventTarget;
       eventTarget.removeEventListener("mousedown", this._boundOnMouseDown);
       eventTarget.removeEventListener("mouseover", this._boundOnMouseOver);
       eventTarget.removeEventListener("mouseout", this._boundOnMouseOut);
@@ -144,10 +144,10 @@ module Shumway.Tools.Profiler {
 
     updateCursor(cursor: MouseCursor) {
       if (!MouseController._cursorOwner || MouseController._cursorOwner === this._target) {
-        var el: HTMLElement = <HTMLElement>(<any>this._eventTarget).parentElement;
+        let el: HTMLElement = <HTMLElement>(<any>this._eventTarget).parentElement;
         if (MouseController._cursor !== cursor) {
           MouseController._cursor = cursor;
-          var self = this;
+          let self = this;
           ["", "-moz-", "-webkit-"].forEach(function (prefix) {
             el.style.cursor = prefix + cursor;
           });
@@ -163,7 +163,7 @@ module Shumway.Tools.Profiler {
     private _onMouseDown(event: MouseEvent) {
       this._killHoverCheck();
       if (event.button === 0) {
-        var pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
+        let pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
         this._dragInfo = <DragInfo>{
           start: pos,
           current: pos,
@@ -178,9 +178,9 @@ module Shumway.Tools.Profiler {
     }
 
     private _onDrag(event: MouseEvent) {
-      var dragInfo = this._dragInfo;
-      var current = this._getTargetMousePos(event, dragInfo.originalTarget);
-      var delta:Point = {
+      let dragInfo = this._dragInfo;
+      let current = this._getTargetMousePos(event, dragInfo.originalTarget);
+      let delta:Point = {
         x: current.x - dragInfo.start.x,
         y: current.y - dragInfo.start.y
       };
@@ -193,8 +193,8 @@ module Shumway.Tools.Profiler {
     private _onMouseUp(event: MouseEvent) {
       window.removeEventListener("mousemove", this._boundOnDrag);
       window.removeEventListener("mouseup", this._boundOnMouseUp);
-      var self = this;
-      var dragInfo = this._dragInfo;
+      let self = this;
+      let dragInfo = this._dragInfo;
       if (dragInfo.hasMoved) {
         this._target.onDragEnd(dragInfo.start.x, dragInfo.start.y, dragInfo.current.x, dragInfo.current.y, dragInfo.delta.x, dragInfo.delta.y);
       } else {
@@ -208,7 +208,7 @@ module Shumway.Tools.Profiler {
     private _onMouseOver(event: MouseEvent) {
       event.target.addEventListener("mousemove", this._boundOnMouseMove, false);
       if (!this._dragInfo) {
-        var pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
+        let pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
         this._target.onMouseOver(pos.x, pos.y);
         this._startHoverCheck(event);
       }
@@ -224,7 +224,7 @@ module Shumway.Tools.Profiler {
 
     private _onMouseMove(event: MouseEvent) {
       if (!this._dragInfo) {
-        var pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
+        let pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
         this._target.onMouseMove(pos.x, pos.y);
         this._killHoverCheck();
         this._startHoverCheck(event);
@@ -235,9 +235,9 @@ module Shumway.Tools.Profiler {
       if (!event.altKey && !event.metaKey && !event.ctrlKey && !event.shiftKey) {
         event.preventDefault();
         if (!this._dragInfo && !this._wheelDisabled) {
-          var pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
-          var delta = clamp((typeof event.deltaY !== "undefined") ? event.deltaY / 16 : -event.wheelDelta / 40, -1, 1);
-          var zoom = Math.pow(1.2, delta) - 1;
+          let pos = this._getTargetMousePos(event, <HTMLElement>(event.target));
+          let delta = clamp((typeof event.deltaY !== "undefined") ? event.deltaY / 16 : -event.wheelDelta / 40, -1, 1);
+          let zoom = Math.pow(1.2, delta) - 1;
           this._target.onMouseWheel(pos.x, pos.y, zoom);
         }
       }
@@ -262,13 +262,13 @@ module Shumway.Tools.Profiler {
     }
 
     private _onMouseMoveIdleHandler() {
-      var hoverInfo = this._hoverInfo;
+      let hoverInfo = this._hoverInfo;
       hoverInfo.isHovering = true;
       this._target.onHoverStart(hoverInfo.pos.x, hoverInfo.pos.y);
     }
 
     private _getTargetMousePos(event: MouseEvent, target: HTMLElement): Point {
-      var rect = target.getBoundingClientRect();
+      let rect = target.getBoundingClientRect();
       return {
         x: event.clientX - rect.left,
         y: event.clientY - rect.top

@@ -20,8 +20,8 @@ module Shumway.AVM1.Lib {
   import flash = Shumway.AVMX.AS.flash;
 
   export function toAS3Point(v: AVM1Object): flash.geom.Point {
-    var context = v.context;
-    var x, y;
+    let context = v.context;
+    let x, y;
     if (v instanceof AVM1Object) {
       x = alCoerceNumber(context, v.alGet('x'));
       y = alCoerceNumber(context, v.alGet('y'));
@@ -83,7 +83,7 @@ module Shumway.AVM1.Lib {
 
     public interpolate(pt1: AVM1Point, pt2: AVM1Point, f: number): AVM1Point {
       f = alToNumber(this.context, f);
-      var p = this.context.sec.flash.geom.Point.axClass.interpolate(toAS3Point(pt1), toAS3Point(pt2), f);
+      let p = this.context.sec.flash.geom.Point.axClass.interpolate(toAS3Point(pt1), toAS3Point(pt2), f);
       return AVM1Point.fromAS3Point(this.context, p);
     }
 
@@ -147,7 +147,7 @@ module Shumway.AVM1.Lib {
     }
 
     public clone(): AVM1Point {
-      var result = new AVM1Point(this.context);
+      let result = new AVM1Point(this.context);
       if (this instanceof AVM1Object) {
         result.alPut('x', this.alGet('x'));
         result.alPut('y', this.alGet('y'));
@@ -161,7 +161,7 @@ module Shumway.AVM1.Lib {
 
     public normalize(length: number): void {
       length = alToNumber(this.context, length);
-      var p = toAS3Point(this);
+      let p = toAS3Point(this);
       p.normalize(length);
       copyAS3PointTo(p, this);
     }
@@ -169,7 +169,7 @@ module Shumway.AVM1.Lib {
     public offset(dx: number, dy: number): void {
       dx = alToNumber(this.context, dx);
       dy = alToNumber(this.context, dy);
-      var p = toAS3Point(this);
+      let p = toAS3Point(this);
       p.offset(dx, dy);
       copyAS3PointTo(p, this);
     }

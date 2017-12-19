@@ -145,7 +145,7 @@ module Shumway.AVM1.Lib {
     public getTextFormat(beginIndex: number = -1, endIndex: number = -1) {
       beginIndex = alToInteger(this.context, beginIndex);
       endIndex = alToInteger(this.context, endIndex);
-      var as3TextFormat = this._as3Object.getTextFormat(beginIndex, endIndex);
+      let as3TextFormat = this._as3Object.getTextFormat(beginIndex, endIndex);
       return AVM1TextFormat.createFromNative(this.context, as3TextFormat);
     }
 
@@ -250,7 +250,7 @@ module Shumway.AVM1.Lib {
     }
 
     public setNewTextFormat(value) {
-      var as3TextFormat;
+      let as3TextFormat;
       if (value instanceof AVM1TextFormat) {
         as3TextFormat = (<AVM1TextFormat>value)._as3Object;
       }
@@ -258,7 +258,7 @@ module Shumway.AVM1.Lib {
     }
 
     public setTextFormat() {
-      var beginIndex: number = -1, endIndex: number = -1, tf;
+      let beginIndex: number = -1, endIndex: number = -1, tf;
       switch (arguments.length) {
         case 0:
           return; // invalid amount of arguments
@@ -275,7 +275,7 @@ module Shumway.AVM1.Lib {
           tf = arguments[2];
           break;
       }
-      var as3TextFormat;
+      let as3TextFormat;
       if (tf instanceof AVM1TextFormat) {
         as3TextFormat = (<AVM1TextFormat>tf)._as3Object;
       }
@@ -336,7 +336,7 @@ module Shumway.AVM1.Lib {
         return;
       }
 
-      var instance = this._as3Object;
+      let instance = this._as3Object;
       if (this._exitFrameHandler && !name) {
         instance.removeEventListener('exitFrame', this._exitFrameHandler);
         this._exitFrameHandler = null;
@@ -353,11 +353,11 @@ module Shumway.AVM1.Lib {
     }
 
     private _syncTextFieldValue(instance, name) {
-      var clip;
-      var hasPath = name.indexOf('.') >= 0 || name.indexOf(':') >= 0;
-      var avm1ContextUtils = this.context.utils;
+      let clip;
+      let hasPath = name.indexOf('.') >= 0 || name.indexOf(':') >= 0;
+      let avm1ContextUtils = this.context.utils;
       if (hasPath) {
-        var targetPath = name.split(/[.:\/]/g);
+        let targetPath = name.split(/[.:\/]/g);
         name = targetPath.pop();
         if (targetPath[0] == '_root' || targetPath[0] === '') {
           if (instance.root === null) {
@@ -372,7 +372,7 @@ module Shumway.AVM1.Lib {
           clip = getAVM1Object(instance._parent, this.context);
         }
         while (targetPath.length > 0) {
-          var childName = targetPath.shift();
+          let childName = targetPath.shift();
           clip = avm1ContextUtils.getProperty(clip, childName);
           if (!clip) {
             return; // cannot find child clip

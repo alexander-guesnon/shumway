@@ -33,7 +33,7 @@ module Shumway {
     Dirty           = DirtyBounds | DirtyContent | DirtyStyle | DirtyFlow
   }
 
-  var _decodeHTMLMap = {
+  let _decodeHTMLMap = {
     lt:   '<',
     gt:   '>',
     amp:  '&',
@@ -54,19 +54,19 @@ module Shumway {
    * This is complete enough to handle encoded HTML produced by the Flash IDE.
    */
   function decodeHTML(s: string): string {
-    var r = "";
-    for (var i = 0; i < s.length; i++) {
-      var c = s.charAt(i);
+    let r = "";
+    for (let i = 0; i < s.length; i++) {
+      let c = s.charAt(i);
       if (c !== '&') {
         r += c;
       } else {
         // Look for the first '&' or ';', both of these can terminate
         // the current char code.
-        var j = StringUtilities.indexOfAny(s, ['&', ';'], i + 1);
+        let j = StringUtilities.indexOfAny(s, ['&', ';'], i + 1);
         if (j > 0) {
-          var v = s.substring(i + 1, j);
+          let v = s.substring(i + 1, j);
           if (v.length > 1 && v.charAt(0) === "#") {
-            var n = 0;
+            let n = 0;
             if (v.length > 2 && v.charAt(1) === "x") {
               n = parseInt(v.substring(1));
             } else {
@@ -84,7 +84,7 @@ module Shumway {
         } else {
           // Flash sometimes generates entities that don't have terminators,
           // like &bthello. Strong bad sometimes encodes this that way.
-          for (var k in _decodeHTMLMap) {
+          for (let k in _decodeHTMLMap) {
             if (s.indexOf(k, i + 1) === i + 1) {
               r += _decodeHTMLMap[k];
               i += k.length;
@@ -137,17 +137,17 @@ module Shumway {
     }
 
     parseHtml(htmlText: string, styleSheet: flash.text.StyleSheet, multiline: boolean) {
-      var plainText = '';
-      var textRuns = this.textRuns;
+      let plainText = '';
+      let textRuns = this.textRuns;
       textRuns.length = 0;
 
-      var beginIndex = 0;
-      var endIndex = 0;
-      var textFormat = this.defaultTextFormat.clone();
-      var prevTextRun: flash.text.TextRun = null;
-      var stack = [];
+      let beginIndex = 0;
+      let endIndex = 0;
+      let textFormat = this.defaultTextFormat.clone();
+      let prevTextRun: flash.text.TextRun = null;
+      let stack = [];
 
-      var handler: HTMLParserHandler;
+      let handler: HTMLParserHandler;
       Shumway.HTMLParser(htmlText, handler = {
         chars: (text) => {
           text = decodeHTML(text);
@@ -164,7 +164,7 @@ module Shumway {
           }
         },
         start: (tagName, attributes) => {
-          var hasStyle = false;
+          let hasStyle = false;
           if (styleSheet) {
             hasStyle = styleSheet.hasStyle(tagName);
             if (hasStyle) {
@@ -178,8 +178,8 @@ module Shumway {
             case 'a':
               stack.push(textFormat);
               somewhatImplemented('<a/>');
-              var target = attributes.target || textFormat.target;
-              var url = attributes.url || textFormat.url;
+              let target = attributes.target || textFormat.target;
+              let url = attributes.url || textFormat.url;
               if (target !== textFormat.target || url !== textFormat.url) {
                 if (!hasStyle) {
                   textFormat = textFormat.clone();
@@ -199,11 +199,11 @@ module Shumway {
               break;
             case 'font':
               stack.push(textFormat);
-              var color = ColorUtilities.isValidHexColor(attributes.color) ? ColorUtilities.hexToRGB(attributes.color) : textFormat.color;
-              var font = attributes.face || textFormat.font;
-              var size = isNaN(attributes.size) ? textFormat.size : +attributes.size;
-              var letterSpacing = isNaN(attributes.letterspacing) ? textFormat.letterSpacing : +attributes.letterspacing;
-              var kerning = isNaN(attributes.kerning) ? textFormat.kerning : +attributes.kerning;
+              let color = ColorUtilities.isValidHexColor(attributes.color) ? ColorUtilities.hexToRGB(attributes.color) : textFormat.color;
+              let font = attributes.face || textFormat.font;
+              let size = isNaN(attributes.size) ? textFormat.size : +attributes.size;
+              let letterSpacing = isNaN(attributes.letterspacing) ? textFormat.letterSpacing : +attributes.letterspacing;
+              let kerning = isNaN(attributes.kerning) ? textFormat.kerning : +attributes.kerning;
               if (color !== textFormat.color ||
                   font !== textFormat.font ||
                   size !== textFormat.size ||
@@ -251,11 +251,11 @@ module Shumway {
               break;
             case 'span':
             case 'p':
-              var hasClassStyle = false;
+              let hasClassStyle = false;
               stack.push(textFormat);
 
               if (styleSheet && attributes.class) {
-                var cssClass = '.' + attributes.class;
+                let cssClass = '.' + attributes.class;
                 hasClassStyle = styleSheet.hasStyle(cssClass);
                 if (hasClassStyle) {
                   if (!hasStyle) {
@@ -269,7 +269,7 @@ module Shumway {
                 break;
               }
 
-              var align = attributes.align;
+              let align = attributes.align;
               if (flash.text.TextFormatAlign.toNumber(align) > -1 && align !== textFormat.align) {
                 if (!(hasStyle || hasClassStyle)) {
                   textFormat = textFormat.clone();
@@ -279,12 +279,12 @@ module Shumway {
               break;
             case 'textformat':
               stack.push(textFormat);
-              var blockIndent = isNaN(attributes.blockindent) ? textFormat.blockIndent : +attributes.blockindent;
-              var indent      = isNaN(attributes.indent)      ? textFormat.indent      : +attributes.indent;
-              var leading     = isNaN(attributes.leading)     ? textFormat.leading     : +attributes.leading;
-              var leftMargin  = isNaN(attributes.leftmargin)  ? textFormat.leftMargin  : +attributes.leftmargin;
-              var rightMargin = isNaN(attributes.rightmargin) ? textFormat.rightMargin : +attributes.rightmargin;
-              //var tabStops = attributes.tabstops || textFormat.tabStops;
+              let blockIndent = isNaN(attributes.blockindent) ? textFormat.blockIndent : +attributes.blockindent;
+              let indent      = isNaN(attributes.indent)      ? textFormat.indent      : +attributes.indent;
+              let leading     = isNaN(attributes.leading)     ? textFormat.leading     : +attributes.leading;
+              let leftMargin  = isNaN(attributes.leftmargin)  ? textFormat.leftMargin  : +attributes.leftmargin;
+              let rightMargin = isNaN(attributes.rightmargin) ? textFormat.rightMargin : +attributes.rightmargin;
+              //let tabStops = attributes.tabstops || textFormat.tabStops;
               if (blockIndent !== textFormat.blockIndent ||
                   indent !== textFormat.indent ||
                   leading !== textFormat.leading ||
@@ -347,7 +347,7 @@ module Shumway {
       this._plainText = value.split('\n').join('\r');
       this.textRuns.length = 0;
       if (value) {
-        var textRun = new this.sec.flash.text.TextRun(0, value.length, this.defaultTextFormat);
+        let textRun = new this.sec.flash.text.TextRun(0, value.length, this.defaultTextFormat);
         this.textRuns[0] = textRun;
       }
       this._serializeTextRuns();
@@ -443,27 +443,27 @@ module Shumway {
     }
 
     private _serializeTextRuns() {
-      var textRuns = this.textRuns;
+      let textRuns = this.textRuns;
       this.textRunData.clear();
-      for (var i = 0; i < textRuns.length; i++) {
+      for (let i = 0; i < textRuns.length; i++) {
         this._writeTextRun(textRuns[i]);
       }
       this.flags |= TextContentFlags.DirtyContent;
     }
 
     private _writeTextRun(textRun: flash.text.TextRun) {
-      var textRunData = this.textRunData;
+      let textRunData = this.textRunData;
 
       textRunData.writeInt(textRun.beginIndex);
       textRunData.writeInt(textRun.endIndex);
 
-      var textFormat = textRun.textFormat;
+      let textFormat = textRun.textFormat;
 
-      var size = +textFormat.size;
+      let size = +textFormat.size;
       textRunData.writeInt(size);
 
-      var fontClass = this.sec.flash.text.Font.axClass;
-      var font = fontClass.getByNameAndStyle(textFormat.font, textFormat.style) ||
+      let fontClass = this.sec.flash.text.Font.axClass;
+      let font = fontClass.getByNameAndStyle(textFormat.font, textFormat.style) ||
                  fontClass.getDefaultFont();
       if (font.fontType === flash.text.FontType.EMBEDDED) {
         textRunData.writeUTF('swffont' + font._id);
@@ -474,8 +474,8 @@ module Shumway {
       textRunData.writeInt(altTieBreakRound(font.descent * size, false));
       textRunData.writeInt(textFormat.leading === null ? font.leading * size : +textFormat.leading);
       // For embedded fonts, always set bold and italic to false. They're fully identified by name.
-      var bold: boolean = false;
-      var italic: boolean = false;
+      let bold: boolean = false;
+      let italic: boolean = false;
       if (font.fontType === flash.text.FontType.DEVICE) {
         if (textFormat.bold === null) {
           bold = font.fontStyle === flash.text.FontStyle.BOLD ||
@@ -511,8 +511,8 @@ module Shumway {
       if (!format) {
         format = this.defaultTextFormat;
       }
-      var plainText = this._plainText;
-      var newRun = new this.sec.flash.text.TextRun(plainText.length,
+      let plainText = this._plainText;
+      let newRun = new this.sec.flash.text.TextRun(plainText.length,
                                                    plainText.length + newText.length, format);
       this._plainText = plainText + newText;
       this.textRuns.push(newRun);
@@ -523,12 +523,12 @@ module Shumway {
       if (!format) {
         format = this.defaultTextFormat;
       }
-      var plainText = this._plainText;
+      let plainText = this._plainText;
       this._plainText = newText + plainText;
-      var textRuns = this.textRuns;
-      var shift = newText.length;
-      for (var i = 0; i < textRuns.length; i++) {
-        var run = textRuns[i];
+      let textRuns = this.textRuns;
+      let shift = newText.length;
+      for (let i = 0; i < textRuns.length; i++) {
+        let run = textRuns[i];
         run.beginIndex += shift;
         run.endIndex += shift;
       }
@@ -549,7 +549,7 @@ module Shumway {
         return;
       }
 
-      var plainText = this._plainText;
+      let plainText = this._plainText;
 
       // When inserting text to the end, we can simply add a new text run without changing any
       // existing ones.
@@ -558,11 +558,11 @@ module Shumway {
         return;
       }
 
-      var defaultTextFormat = this.defaultTextFormat;
+      let defaultTextFormat = this.defaultTextFormat;
 
       // A text format used for new text runs will have unset properties merged in from the default
       // text format.
-      var newFormat = defaultTextFormat;
+      let newFormat = defaultTextFormat;
       if (format) {
         newFormat = newFormat.clone();
         newFormat.merge(format);
@@ -582,27 +582,27 @@ module Shumway {
         return;
       }
 
-      var textRuns = this.textRuns;
-      var newTextRuns: flash.text.TextRun[] = [];
-      var newEndIndex = beginIndex + newText.length;
-      var shift = newEndIndex - endIndex;
-      for (var i = 0; i < textRuns.length; i++) {
-        var run = textRuns[i];
-        var isLast = i >= textRuns.length - 1;
+      let textRuns = this.textRuns;
+      let newTextRuns: flash.text.TextRun[] = [];
+      let newEndIndex = beginIndex + newText.length;
+      let shift = newEndIndex - endIndex;
+      for (let i = 0; i < textRuns.length; i++) {
+        let run = textRuns[i];
+        let isLast = i >= textRuns.length - 1;
         if (beginIndex < run.endIndex) {
           // Skip all following steps (including adding the current run to the new list of runs) if
           // the inserted text overlaps the current run, which is not the last one.
           if (!isLast && beginIndex <= run.beginIndex && newEndIndex >= run.endIndex) {
             continue;
           }
-          var containsBeginIndex = run.containsIndex(beginIndex);
-          var containsEndIndex = run.containsIndex(endIndex) ||
+          let containsBeginIndex = run.containsIndex(beginIndex);
+          let containsEndIndex = run.containsIndex(endIndex) ||
                                  (isLast && endIndex >= run.endIndex);
           if (containsBeginIndex && containsEndIndex) {
             // The current run spans over the inserted text.
             if (format) {
               // Split up the current run.
-              var clone = run.clone();
+              let clone = run.clone();
               clone.endIndex = beginIndex;
               newTextRuns.push(clone);
               i--;

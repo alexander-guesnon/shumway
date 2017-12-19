@@ -74,8 +74,8 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
       this._setFlags(flags);
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
         children[i]._propagateFlagsDown(flags);
       }
     }
@@ -86,9 +86,9 @@ module Shumway.AVMX.AS.flash.display {
     _constructChildren(): void {
       release || counter.count("DisplayObjectContainer::_constructChildren");
 
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (child._hasFlags(DisplayObjectFlags.Constructed)) {
           continue;
         }
@@ -105,11 +105,11 @@ module Shumway.AVMX.AS.flash.display {
         }
         child._setFlags(DisplayObjectFlags.Constructed);
 
-        var eventClass = this.sec.flash.events.Event.axClass;
+        let eventClass = this.sec.flash.events.Event.axClass;
         if (child._hasFlags(DisplayObjectFlags.HasPlaceObjectInitPending)) {
           child._removeFlags(DisplayObjectFlags.HasPlaceObjectInitPending);
 
-          var avm1Context = child._symbol.avm1Context;
+          let avm1Context = child._symbol.avm1Context;
           Shumway.AVM1.Lib.initializeAVM1Object(child, avm1Context, child._placeObjectTag);
 
           try {
@@ -146,9 +146,9 @@ module Shumway.AVMX.AS.flash.display {
     _enqueueFrameScripts() {
       if (this._hasFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren)) {
         this._removeFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren);
-        var children = this._children;
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        let children = this._children;
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
           if (this.sec.flash.display.DisplayObjectContainer.axIsType(child) ||
               this.sec.flash.display.AVM1Movie.axIsType(child)) {
             (<DisplayObjectContainer>child)._enqueueFrameScripts();
@@ -185,7 +185,7 @@ module Shumway.AVMX.AS.flash.display {
     _setTabChildren(enable: boolean) {
       enable = !!enable;
 
-      var old = this._tabChildren;
+      let old = this._tabChildren;
       this._tabChildren = enable;
       if (old !== enable) {
         this.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.TAB_CHILDREN_CHANGE, true));
@@ -230,7 +230,7 @@ module Shumway.AVMX.AS.flash.display {
           (<DisplayObjectContainer>child).contains(this)) {
         this.sec.throwError('ArgumentError', Errors.CantAddParentError);
       }
-      var children = this._children;
+      let children = this._children;
       if (index < 0 || index > children.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
@@ -250,7 +250,7 @@ module Shumway.AVMX.AS.flash.display {
         // The children list could have been mutated as a result of |removeChild|.
         index = clamp(index, 0, children.length);
       }
-      for (var i = children.length - 1; i >= index; i--) {
+      for (let i = children.length - 1; i >= index; i--) {
         children[i]._index++;
       }
       children.splice(index, 0, child);
@@ -282,11 +282,11 @@ module Shumway.AVMX.AS.flash.display {
 
       depth = depth | 0;
 
-      var children = this._children;
-      var maxIndex = children.length - 1;
-      var index = maxIndex + 1;
-      for (var i = maxIndex; i >= 0; i--) {
-        var current = children[i];
+      let children = this._children;
+      let maxIndex = children.length - 1;
+      let index = maxIndex + 1;
+      for (let i = maxIndex; i >= 0; i--) {
+        let current = children[i];
         if (current._depth > -1) {
           if (current._depth < depth) {
             index = i + 1;
@@ -301,7 +301,7 @@ module Shumway.AVMX.AS.flash.display {
         child._index = index;
       } else {
         children.splice(index, 0, child);
-        for (var i = index; i < children.length; i++) {
+        for (let i = index; i < children.length; i++) {
           children[i]._index = i;
         }
       }
@@ -320,12 +320,12 @@ module Shumway.AVMX.AS.flash.display {
 
       index = index | 0;
 
-      var children = this._children;
+      let children = this._children;
       if (index < 0 || index >= children.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
 
-      var child = children[index];
+      let child = children[index];
       if (child._hasFlags(DisplayObjectFlags.Constructed)) {
         child.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.REMOVED, true));
         if (this.stage) {
@@ -337,7 +337,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       children.splice(index, 1);
-      for (var i = children.length - 1; i >= index; i--) {
+      for (let i = children.length - 1; i >= index; i--) {
         children[i]._index--;
       }
       child._setParent(null, -1);
@@ -361,7 +361,7 @@ module Shumway.AVMX.AS.flash.display {
     setChildIndex(child: DisplayObject, index: number /*int*/): void {
       index = index | 0;
       checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
-      var children = this._children;
+      let children = this._children;
       if (index < 0 || index >= children.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
@@ -369,7 +369,7 @@ module Shumway.AVMX.AS.flash.display {
         this.sec.throwError('ArgumentError', Errors.NotAChildError);
       }
       child._setDepth(-1);
-      var currentIndex = this.getChildIndex(child);
+      let currentIndex = this.getChildIndex(child);
       if (children.length === 1 || currentIndex === index) {
         return;
       }
@@ -379,7 +379,7 @@ module Shumway.AVMX.AS.flash.display {
       } else {
         children.splice(currentIndex, 1);
         children.splice(index, 0, child);
-        var i = currentIndex < index ? currentIndex : index;
+        let i = currentIndex < index ? currentIndex : index;
         while (i < children.length) {
           children[i]._index = i++;
         }
@@ -390,12 +390,12 @@ module Shumway.AVMX.AS.flash.display {
     getChildAt(index: number): DisplayObject {
       index = index | 0;
 
-      var children = this._children;
+      let children = this._children;
       if (index < 0 || index >= children.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
 
-      var child = this._lookupChildByIndex(index, LookupChildOptions.DEFAULT);
+      let child = this._lookupChildByIndex(index, LookupChildOptions.DEFAULT);
       if (!child) {
         return null;
       }
@@ -409,9 +409,9 @@ module Shumway.AVMX.AS.flash.display {
      */
     getTimelineObjectAtDepth(depth: number /*int*/): flash.display.DisplayObject {
       depth = depth | 0;
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (child._depth > depth) {
           break;
         }
@@ -427,11 +427,11 @@ module Shumway.AVMX.AS.flash.display {
      */
     getClipDepthIndex(depth: number): number {
       depth = depth | 0;
-      var children = this._children;
-      var index = this._children.length - 1;
-      var first = true;
-      for (var i = index; i >= 0; i--) {
-        var child = children[i];
+      let children = this._children;
+      let index = this._children.length - 1;
+      let first = true;
+      for (let i = index; i >= 0; i--) {
+        let child = children[i];
         // Ignore children that don't have a depth value.
         if (child._depth < 0) {
           continue;
@@ -450,7 +450,7 @@ module Shumway.AVMX.AS.flash.display {
     getChildByName(name: string): DisplayObject {
       name = axCoerceString(name);
 
-      var child = this._lookupChildByName(name, LookupChildOptions.DEFAULT);
+      let child = this._lookupChildByName(name, LookupChildOptions.DEFAULT);
       if (child) {
         child._addReference();
         return child;
@@ -464,7 +464,7 @@ module Shumway.AVMX.AS.flash.display {
      * reference nor taking ownership.
      */
     _lookupChildByIndex(index: number, options: LookupChildOptions): DisplayObject {
-      var child = this._children[index];
+      let child = this._children[index];
       if (child && (child._hasFlags(DisplayObjectFlags.Constructed) ||
                     options & LookupChildOptions.INCLUDE_NON_INITIALIZED)) {
         return child;
@@ -477,13 +477,13 @@ module Shumway.AVMX.AS.flash.display {
      * nor taking ownership.
      */
     _lookupChildByName(name: string, options: LookupChildOptions): DisplayObject {
-      var children = this._children;
+      let children = this._children;
       if (children.length === 0) {
         return null;
       }
 
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (!child._hasFlags(DisplayObjectFlags.Constructed) &&
             !(options & LookupChildOptions.INCLUDE_NON_INITIALIZED)) {
           continue;
@@ -499,8 +499,8 @@ module Shumway.AVMX.AS.flash.display {
 
       // Trying again in non-case sensitive mode (mostly for AVM1).
       name = name.toLowerCase();
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (!child._hasFlags(DisplayObjectFlags.Constructed) &&
           !(options & LookupChildOptions.INCLUDE_NON_INITIALIZED)) {
           continue;
@@ -523,7 +523,7 @@ module Shumway.AVMX.AS.flash.display {
     _containsPointImpl(globalX: number, globalY: number, localX: number, localY: number,
                                testingType: HitTestingType, objects: DisplayObject[],
                                skipBoundsCheck: boolean): HitTestingResult {
-      var result: HitTestingResult;
+      let result: HitTestingResult;
       if (!skipBoundsCheck) {
         result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
         // Same as in the DisplayObject base case, we're done if we don't have a hit or are only
@@ -533,10 +533,10 @@ module Shumway.AVMX.AS.flash.display {
         }
       }
 
-      var anyChildHit = false;
-      var children = this._getUnclippedChildren(testingType, globalX, globalY);
-      for (var i = children ? children.length : 0; i--; ) {
-        var child = children[i];
+      let anyChildHit = false;
+      let children = this._getUnclippedChildren(testingType, globalX, globalY);
+      for (let i = children ? children.length : 0; i--; ) {
+        let child = children[i];
         if (child._maskedObject) {
           continue;
         }
@@ -578,7 +578,7 @@ module Shumway.AVMX.AS.flash.display {
         }
         return HitTestingResult.Shape;
       }
-      var selfHit = this._containsPointDirectly(localX, localY, globalX, globalY);
+      let selfHit = this._containsPointDirectly(localX, localY, globalX, globalY);
       if (selfHit) {
         if (testingType === HitTestingType.Drop) {
           // For Drop, replace previous hit with current one.
@@ -601,13 +601,13 @@ module Shumway.AVMX.AS.flash.display {
       // having to test clipping.
       // Note: if speed is an issue, we could set a flag on containers that have at least one
       // clipping mask and do this step only if that flag is set.
-      var children = this._children;
+      let children = this._children;
       if (!children) {
         return null;
       }
-      var unclippedChildren: DisplayObject[]; // Lazily created.
-      for (var i = 0; children && i < children.length; i++) {
-        var child = children[i];
+      let unclippedChildren: DisplayObject[]; // Lazily created.
+      for (let i = 0; children && i < children.length; i++) {
+        let child = children[i];
         if (child._clipDepth !== -1) {
           if (!unclippedChildren) {
             unclippedChildren = children.slice(0, i);
@@ -620,7 +620,7 @@ module Shumway.AVMX.AS.flash.display {
           // If the point isn't contained in the clipping mask, we can skip all the clipped objects.
           // We pass HitTestShape here because we never want to collect hit objects, which the
           // higher testing types would attempt to do.
-          var containsPoint = child._containsGlobalPoint(globalX, globalY,
+          let containsPoint = child._containsGlobalPoint(globalX, globalY,
                                                          HitTestingType.HitTestShape, null);
           if (!containsPoint) {
             i = this.getClipDepthIndex(child._clipDepth);
@@ -639,8 +639,8 @@ module Shumway.AVMX.AS.flash.display {
      * bounds into the bounds.
      */
     _getChildBounds(bounds: Bounds, includeStrokes: boolean) {
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
         bounds.unionInPlace(children[i]._getTransformedBounds(this, includeStrokes));
       }
     }
@@ -655,9 +655,9 @@ module Shumway.AVMX.AS.flash.display {
     getObjectsUnderPoint(globalPoint: flash.geom.Point): ASArray {
       release || counter.count("DisplayObjectContainer::getObjectsUnderPoint");
 
-      var globalX = globalPoint.x * 20 | 0;
-      var globalY = globalPoint.y * 20 | 0;
-      var objects = [];
+      let globalX = globalPoint.x * 20 | 0;
+      let globalY = globalPoint.y * 20 | 0;
+      let objects = [];
       this._containsGlobalPoint(globalX, globalY, HitTestingType.ObjectsUnderPoint, objects);
       // getObjectsUnderPoint returns results in exactly the opposite order we collect them in.
       return this.sec.createArrayUnsafe(objects.reverse());
@@ -676,7 +676,7 @@ module Shumway.AVMX.AS.flash.display {
     swapChildrenAt(index1: number /*int*/, index2: number /*int*/): void {
       index1 = index1 | 0; index2 = index2 | 0;
 
-      var children = this._children;
+      let children = this._children;
       if (index1 < 0 || index1 >= children.length ||
           index2 < 0 || index2 >= children.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
@@ -691,9 +691,9 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     private _swapChildrenAt(index1: number, index2: number) {
-      var children = this._children;
-      var child1 = children[index1];
-      var child2 = children[index2];
+      let children = this._children;
+      let child1 = children[index1];
+      let child2 = children[index2];
       children[index2] = child1;
       child1._setDepth(-1);
       child1._index = index2;
@@ -716,7 +716,7 @@ module Shumway.AVMX.AS.flash.display {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
 
-      var count = endIndex - beginIndex + 1;
+      let count = endIndex - beginIndex + 1;
       if (count > 0) {
         while (count--) {
           this.removeChildAt(beginIndex);
@@ -725,9 +725,9 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     public hashCode(): number {
-      var hash = 0;
-      for (var i = 0; i < this.numChildren; i++) {
-        var child = this.getChildAt(i);
+      let hash = 0;
+      for (let i = 0; i < this.numChildren; i++) {
+        let child = this.getChildAt(i);
         if (child) {
           hash = mixHash(hash, this.getChildAt(i).hashCode());
         }
@@ -739,9 +739,9 @@ module Shumway.AVMX.AS.flash.display {
      * This is a very slow recursive function that should not be used in performance critical code.
      */
     public getAncestorCount(): number {
-      var count = 0;
-      for (var i = 0; i < this.numChildren; i++) {
-        var child = this.getChildAt(i);
+      let count = 0;
+      for (let i = 0; i < this.numChildren; i++) {
+        let child = this.getChildAt(i);
         if (child) {
           count += 1 + this.getChildAt(i).getAncestorCount();
         }

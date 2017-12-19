@@ -26,19 +26,19 @@ module Shumway.AVMX.AS.flash.geom {
    *  | 3  7 11  15 |
    */
 
-  var precision = 1e-7;
+  let precision = 1e-7;
 
-  var transposeTransform = new Uint32Array([
+  let transposeTransform = new Uint32Array([
     0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15
   ]);
 
   function getRotationMatrix(theta, u, v, w, a, b, c, sec: ISecurityDomain) {
     // http://inside.mines.edu/~gmurray/ArbitraryAxisRotation/
-    var u2 = u * u, v2 = v * v, w2 = w * w;
-    var L2 = u2 + v2 + w2, L = Math.sqrt(L2);
+    let u2 = u * u, v2 = v * v, w2 = w * w;
+    let L2 = u2 + v2 + w2, L = Math.sqrt(L2);
     u /= L; v /= L; w /= L;
     u2 /= L2; v2 /= L2; w2 /= L2;
-    var cos = Math.cos(theta), sin = Math.sin(theta);
+    let cos = Math.cos(theta), sin = Math.sin(theta);
 
     return sec.flash.geom.Matrix3D.axClass.FromArray([
       u2 + (v2 + w2) * cos,
@@ -67,7 +67,7 @@ module Shumway.AVMX.AS.flash.geom {
     static axClass: typeof Matrix3D;
 
     static FromArray(matrix: any) {
-      var result = Object.create(this.tPrototype);
+      let result = Object.create(this.tPrototype);
       result._matrix = new Float32Array(matrix);
       return result;
     }
@@ -103,7 +103,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     get rawData(): any {
-      var result = new this.sec.Float64Vector();
+      let result = new this.sec.Float64Vector();
       this.copyRawDataTo(result, 0, false);
       return result;
     }
@@ -111,22 +111,22 @@ module Shumway.AVMX.AS.flash.geom {
       this.copyRawDataFrom(v, 0, false);
     }
     get position(): flash.geom.Vector3D {
-      var m = this._matrix;
+      let m = this._matrix;
       return new this.sec.flash.geom.Vector3D(m[12], m[13], m[14]);
     }
     set position(pos: flash.geom.Vector3D) {
-      var m = this._matrix;
+      let m = this._matrix;
       m[12] = pos.x;
       m[13] = pos.y;
       m[14] = pos.z;
     }
     get determinant(): number {
-      var m = this._matrix;
-      var m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
+      let m = this._matrix;
+      let m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
           m21 = m[1], m22 = m[5], m23 = m[9 ], m24 = m[13],
           m31 = m[2], m32 = m[6], m33 = m[10], m34 = m[14],
           m41 = m[3], m42 = m[7], m43 = m[11], m44 = m[15];
-      var d;
+      let d;
       d = m11 * (m22 * (m33 * m44 - m43 * m34) - m32 * (m23 * m44 - m43 * m24) + m42 * (m23 * m34 - m33 * m24)) -
           m21 * (m12 * (m33 * m44 - m43 * m34) - m32 * (m13 * m44 - m43 * m14) + m42 * (m13 * m34 - m33 * m14)) +
           m31 * (m12 * (m23 * m44 - m43 * m24) - m22 * (m13 * m44 - m43 * m14) + m42 * (m13 * m24 - m23 * m14)) -
@@ -141,13 +141,13 @@ module Shumway.AVMX.AS.flash.geom {
       dest._matrix.set(this._matrix);
     }
     append(lhs: flash.geom.Matrix3D): void {
-      var ma = lhs._matrix, mb = this._matrix, m = this._matrix;
-      var ma11 = ma[0], ma12 = ma[4], ma13 = ma[8 ], ma14 = ma[12],
+      let ma = lhs._matrix, mb = this._matrix, m = this._matrix;
+      let ma11 = ma[0], ma12 = ma[4], ma13 = ma[8 ], ma14 = ma[12],
           ma21 = ma[1], ma22 = ma[5], ma23 = ma[9 ], ma24 = ma[13],
           ma31 = ma[2], ma32 = ma[6], ma33 = ma[10], ma34 = ma[14],
           ma41 = ma[3], ma42 = ma[7], ma43 = ma[11], ma44 = ma[15];
 
-      var mb11 = mb[0], mb12 = mb[4], mb13 = mb[8 ], mb14 = mb[12],
+      let mb11 = mb[0], mb12 = mb[4], mb13 = mb[8 ], mb14 = mb[12],
           mb21 = mb[1], mb22 = mb[5], mb23 = mb[9 ], mb24 = mb[13],
           mb31 = mb[2], mb32 = mb[6], mb33 = mb[10], mb34 = mb[14],
           mb41 = mb[3], mb42 = mb[7], mb43 = mb[11], mb44 = mb[15];
@@ -173,12 +173,12 @@ module Shumway.AVMX.AS.flash.geom {
       m[15] = ma41 * mb14 + ma42 * mb24 + ma43 * mb34 + ma44 * mb44;
     }
     prepend(rhs: flash.geom.Matrix3D): void {
-      var ma = this._matrix, mb = rhs._matrix, m = this._matrix;
-      var ma11 = ma[0], ma12 = ma[4], ma13 = ma[8 ], ma14 = ma[12],
+      let ma = this._matrix, mb = rhs._matrix, m = this._matrix;
+      let ma11 = ma[0], ma12 = ma[4], ma13 = ma[8 ], ma14 = ma[12],
           ma21 = ma[1], ma22 = ma[5], ma23 = ma[9 ], ma24 = ma[13],
           ma31 = ma[2], ma32 = ma[6], ma33 = ma[10], ma34 = ma[14],
           ma41 = ma[3], ma42 = ma[7], ma43 = ma[11], ma44 = ma[15];
-      var mb11 = mb[0], mb12 = mb[4], mb13 = mb[8 ], mb14 = mb[12],
+      let mb11 = mb[0], mb12 = mb[4], mb13 = mb[8 ], mb14 = mb[12],
           mb21 = mb[1], mb22 = mb[5], mb23 = mb[9 ], mb24 = mb[13],
           mb31 = mb[2], mb32 = mb[6], mb33 = mb[10], mb34 = mb[14],
           mb41 = mb[3], mb42 = mb[7], mb43 = mb[11], mb44 = mb[15];
@@ -204,15 +204,15 @@ module Shumway.AVMX.AS.flash.geom {
       m[15] = ma41 * mb14 + ma42 * mb24 + ma43 * mb34 + ma44 * mb44;
     }
     invert(): boolean {
-      var d = this.determinant;
+      let d = this.determinant;
       if (Math.abs(d) < precision) {
         return false;
       }
 
       d = 1 / d;
-      var m = this._matrix;
+      let m = this._matrix;
       // operating on transposed matrix
-      var m11 = m[0 ], m12 = m[1 ], m13 = m[2 ], m14 = m[3 ],
+      let m11 = m[0 ], m12 = m[1 ], m13 = m[2 ], m14 = m[3 ],
           m21 = m[4 ], m22 = m[5 ], m23 = m[6 ], m24 = m[7 ],
           m31 = m[8 ], m32 = m[9 ], m33 = m[10], m34 = m[11],
           m41 = m[12], m42 = m[13], m43 = m[14], m44 = m[15];
@@ -240,7 +240,7 @@ module Shumway.AVMX.AS.flash.geom {
       return true;
     }
     identity(): void {
-      var m = this._matrix;
+      let m = this._matrix;
       m[0] = m[5] = m[10] = m[15] = 1;
       m[1] = m[2] = m[3] = m[4] = m[6] = m[7] = m[8] = m[9] = m[11] = m[12] = m[13] = m[14] = 0;
     }
@@ -254,8 +254,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     appendTranslation(x: number, y: number, z: number): void {
       x = +x; y = +y; z = +z;
-      var m = this._matrix;
-      var m41 = m[3], m42 = m[7], m43 = m[11], m44 = m[15];
+      let m = this._matrix;
+      let m41 = m[3], m42 = m[7], m43 = m[11], m44 = m[15];
 
       m[0 ] += x * m41;
       m[1 ] += y * m41;
@@ -281,7 +281,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
     appendScale(xScale: number, yScale: number, zScale: number): void {
       xScale = +xScale; yScale = +yScale; zScale = +zScale;
-      var m = this._matrix;
+      let m = this._matrix;
 
       m[0 ] *= xScale;
       m[1 ] *= yScale;
@@ -301,8 +301,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     prependTranslation(x: number, y: number, z: number): void {
       x = +x; y = +y; z = +z;
-      var m = this._matrix;
-      var m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
+      let m = this._matrix;
+      let m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
           m21 = m[1], m22 = m[5], m23 = m[9 ], m24 = m[13],
           m31 = m[2], m32 = m[6], m33 = m[10], m34 = m[14],
           m41 = m[3], m42 = m[7], m43 = m[11], m44 = m[15];
@@ -319,7 +319,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
     prependScale(xScale: number, yScale: number, zScale: number): void {
       xScale = +xScale; yScale = +yScale; zScale = +zScale;
-      var m = this._matrix;
+      let m = this._matrix;
 
       m[0 ] *= xScale;
       m[1 ] *= xScale;
@@ -337,8 +337,8 @@ module Shumway.AVMX.AS.flash.geom {
       m[11] *= zScale;
     }
     transformVector(v: flash.geom.Vector3D): flash.geom.Vector3D {
-      var m = this._matrix;
-      var x = v.x, y = v.y, z = v.z;
+      let m = this._matrix;
+      let x = v.x, y = v.y, z = v.z;
       return new this.sec.flash.geom.Vector3D(
         m[0] * x + m[4] * y + m[8 ] * z + m[12],
         m[1] * x + m[5] * y + m[9 ] * z + m[13],
@@ -346,8 +346,8 @@ module Shumway.AVMX.AS.flash.geom {
       );
     }
     deltaTransformVector(v: flash.geom.Vector3D): flash.geom.Vector3D {
-      var m = this._matrix;
-      var x = v.x, y = v.y, z = v.z;
+      let m = this._matrix;
+      let x = v.x, y = v.y, z = v.z;
       return new this.sec.flash.geom.Vector3D(
         m[0] * x + m[4] * y + m[8 ] * z,
         m[1] * x + m[5] * y + m[9 ] * z,
@@ -355,13 +355,13 @@ module Shumway.AVMX.AS.flash.geom {
       );
     }
     transformVectors(vin: any, vout: any): void {
-      var m = this._matrix;
-      var m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
+      let m = this._matrix;
+      let m11 = m[0], m12 = m[4], m13 = m[8 ], m14 = m[12],
           m21 = m[1], m22 = m[5], m23 = m[9 ], m24 = m[13],
           m31 = m[2], m32 = m[6], m33 = m[10], m34 = m[14],
           m41 = m[3], m42 = m[7], m43 = m[11], m44 = m[15];
-      for (var i = 0; i < vin.length - 2; i += 3) {
-        var x = vin.axGetNumericProperty(i),
+      for (let i = 0; i < vin.length - 2; i += 3) {
+        let x = vin.axGetNumericProperty(i),
             y = vin.axGetNumericProperty(i + 1),
             z = vin.axGetNumericProperty(i + 2);
         vout.push(m11 * x + m12 * y + m13 * z + m14);
@@ -370,8 +370,8 @@ module Shumway.AVMX.AS.flash.geom {
       }
     }
     transpose(): void {
-      var m = this._matrix;
-      var tmp;
+      let m = this._matrix;
+      let tmp;
       tmp = m[1]; m[1] = m[4]; m[4] = tmp;
       tmp = m[2]; m[2] = m[8]; m[5] = tmp;
       tmp = m[3]; m[3] = m[12]; m[12] = tmp;
@@ -393,34 +393,34 @@ module Shumway.AVMX.AS.flash.geom {
     }
     copyRawDataTo(vector: any, index: number /*uint*/ = 0, transpose: boolean = false): void {
       vector = vector; index = index >>> 0; transpose = !!transpose;
-      var m = this._matrix;
+      let m = this._matrix;
       if (transpose) {
-        for (var i = 0, j = index | 0; i < 16; i++, j++) {
+        for (let i = 0, j = index | 0; i < 16; i++, j++) {
           vector.axSetNumericProperty(j, m[transposeTransform[i]]);
         }
       } else {
-        for (var i = 0, j = index | 0; i < 16; i++, j++) {
+        for (let i = 0, j = index | 0; i < 16; i++, j++) {
           vector.axSetNumericProperty(j, m[i]);
         }
       }
     }
     copyRawDataFrom(vector: Float64Vector, index: number /*uint*/ = 0, transpose: boolean = false): void {
       vector = vector; index = index >>> 0; transpose = !!transpose;
-      var m = this._matrix;
+      let m = this._matrix;
       if (transpose) {
-        for (var i = 0, j = index | 0; i < 16; i++, j++) {
+        for (let i = 0, j = index | 0; i < 16; i++, j++) {
           m[transposeTransform[i]] = vector.axGetNumericProperty(j) || 0; // removing NaN
         }
       } else {
-        for (var i = 0, j = index | 0; i < 16; i++, j++) {
+        for (let i = 0, j = index | 0; i < 16; i++, j++) {
           m[i] = vector.axGetNumericProperty(j) || 0; // removing NaN
         }
       }
     }
     copyRowTo(row: number /*uint*/, vector3D: flash.geom.Vector3D): void {
       row = row >>> 0; vector3D = vector3D;
-      var offset = row | 0;
-      var m = this._matrix;
+      let offset = row | 0;
+      let m = this._matrix;
       vector3D.x = m[offset];
       vector3D.y = m[offset + 4];
       vector3D.z = m[offset + 8];
@@ -428,8 +428,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     copyColumnTo(column: number /*uint*/, vector3D: flash.geom.Vector3D): void {
       column = column >>> 0; vector3D = vector3D;
-      var offset = column << 2;
-      var m = this._matrix;
+      let offset = column << 2;
+      let m = this._matrix;
       vector3D.x = m[offset];
       vector3D.y = m[offset + 1];
       vector3D.z = m[offset + 2];
@@ -437,8 +437,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     copyRowFrom(row: number /*uint*/, vector3D: flash.geom.Vector3D): void {
       row = row >>> 0; vector3D = vector3D;
-      var offset = row | 0;
-      var m = this._matrix;
+      let offset = row | 0;
+      let m = this._matrix;
       m[offset] = vector3D.x;
       m[offset + 4] = vector3D.y;
       m[offset + 8] = vector3D.z;
@@ -446,8 +446,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     copyColumnFrom(column: number /*uint*/, vector3D: flash.geom.Vector3D): void {
       column = column >>> 0; vector3D = vector3D;
-      var offset = column << 2;
-      var m = this._matrix;
+      let offset = column << 2;
+      let m = this._matrix;
       m[offset] = vector3D.x;
       m[offset + 1] = vector3D.y;
       m[offset + 2] = vector3D.z;

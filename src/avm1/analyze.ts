@@ -44,17 +44,17 @@ module Shumway.AVM1 {
 
     constructor() {}
     analyze(parser: ActionsDataParser): AnalyzerResults {
-      var actions: ActionCodeBlockItem[] = [];
-      var labels: number[] = [0];
-      var processedLabels: boolean[] = [true];
-      var constantPoolFound: boolean = false;
-      var singleConstantPoolAt0: any[] = null;
+      let actions: ActionCodeBlockItem[] = [];
+      let labels: number[] = [0];
+      let processedLabels: boolean[] = [true];
+      let constantPoolFound: boolean = false;
+      let singleConstantPoolAt0: any[] = null;
 
       // Parsing all actions we can reach. Every action will have next position
       // and conditional jump location.
-      var queue: number[] = [0];
+      let queue: number[] = [0];
       while (queue.length > 0) {
-        var position = queue.shift();
+        let position = queue.shift();
         if (actions[position]) {
           continue;
         }
@@ -62,28 +62,28 @@ module Shumway.AVM1 {
 
         // reading block of actions until the first jump of end of actions
         while (!parser.eof && !actions[position]) {
-          var action = parser.readNext();
+          let action = parser.readNext();
           if (action.actionCode === 0) {
             break;
           }
 
-          var nextPosition = parser.position;
+          let nextPosition = parser.position;
 
-          var item: ActionCodeBlockItem = {
+          let item: ActionCodeBlockItem = {
             action: action,
             next: nextPosition,
             conditionalJumpTo: -1
           };
 
-          var jumpPosition: number = 0;
-          var branching: boolean = false;
-          var nonConditionalBranching: boolean = false;
+          let jumpPosition: number = 0;
+          let branching: boolean = false;
+          let nonConditionalBranching: boolean = false;
           switch (action.actionCode) {
             case ActionCode.ActionWaitForFrame:
             case ActionCode.ActionWaitForFrame2:
               branching = true;
               // skip is specified in amount of actions (instead of bytes)
-              var skipCount: number = action.actionCode === ActionCode.ActionWaitForFrame ?
+              let skipCount: number = action.actionCode === ActionCode.ActionWaitForFrame ?
                 action.args[1] : action.args[0];
               parser.skip(skipCount);
               jumpPosition = parser.position;
@@ -143,17 +143,17 @@ module Shumway.AVM1 {
       }
 
       // Creating blocks for every unique label
-      var blocks: ActionCodeBlock[] = [];
+      let blocks: ActionCodeBlock[] = [];
       labels.forEach((position) => {
         if (!actions[position]) {
           return;
         }
-        var items: ActionCodeBlockItem[] = [];
-        var lastPosition = position;
+        let items: ActionCodeBlockItem[] = [];
+        let lastPosition = position;
 
         // continue grabbing items until other label or next code exist
         do {
-          var item: ActionCodeBlockItem = actions[lastPosition];
+          let item: ActionCodeBlockItem = actions[lastPosition];
           items.push(item);
           lastPosition = item.next;
         } while(!processedLabels[lastPosition] && actions[lastPosition]);
@@ -167,7 +167,7 @@ module Shumway.AVM1 {
 
       // Determines if action blocks (or defined function) is using the single
       // constants pool defined at the beginning of the action block.
-      var singleConstantPool: any[] = null;
+      let singleConstantPool: any[] = null;
       if (constantPoolFound) {
         singleConstantPool = singleConstantPoolAt0;
       } else if (this.parentResults) {

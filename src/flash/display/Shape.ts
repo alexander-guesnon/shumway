@@ -62,7 +62,7 @@ module Shumway.AVMX.AS.flash.display {
 
     _containsPointDirectly(localX: number, localY: number,
                            globalX: number, globalY: number): boolean {
-      var graphics = this._getGraphics();
+      let graphics = this._getGraphics();
       return !!graphics && graphics._containsPoint(localX, localY, true, 0);
     }
   }
@@ -75,7 +75,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: Timeline.SymbolData, loaderInfo: flash.display.LoaderInfo): ShapeSymbol {
-      var symbol = new ShapeSymbol(data, loaderInfo.sec.flash.display.Shape.axClass);
+      let symbol = new ShapeSymbol(data, loaderInfo.sec.flash.display.Shape.axClass);
       symbol._setBoundsFromData(data);
       symbol.graphics = flash.display.Graphics.FromData(data, loaderInfo);
       symbol.processRequires((<any>data).require, loaderInfo);
@@ -86,9 +86,9 @@ module Shumway.AVMX.AS.flash.display {
       if (!dependencies) {
         return;
       }
-      var textures = this.graphics.getUsedTextures();
-      for (var i = 0; i < dependencies.length; i++) {
-        var symbol = <flash.display.BitmapSymbol>loaderInfo.getSymbolById(dependencies[i]);
+      let textures = this.graphics.getUsedTextures();
+      for (let i = 0; i < dependencies.length; i++) {
+        let symbol = <flash.display.BitmapSymbol>loaderInfo.getSymbolById(dependencies[i]);
         if (!symbol) {
           if (dependencies[i] !== 65535) {
             // Id 65535 is somehow used invalidly in lots of embedded shapes created by the

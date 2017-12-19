@@ -78,17 +78,17 @@ module Shumway.AVMX.AS.flash.net {
       return this._buffer.length;
     }
     load(request: flash.net.URLRequest): void {
-      var Event = flash.events.Event;
-      var IOErrorEvent = flash.events.IOErrorEvent;
-      var ProgressEvent = flash.events.ProgressEvent;
-      var HTTPStatusEvent = flash.events.HTTPStatusEvent;
+      let Event = flash.events.Event;
+      let IOErrorEvent = flash.events.IOErrorEvent;
+      let ProgressEvent = flash.events.ProgressEvent;
+      let HTTPStatusEvent = flash.events.HTTPStatusEvent;
 
-      var session = FileLoadingService.instance.createSession();
-      var self = this;
-      var initStream = true;
-      var eventsPackage = this.sec.flash.events;
+      let session = FileLoadingService.instance.createSession();
+      let self = this;
+      let initStream = true;
+      let eventsPackage = this.sec.flash.events;
       session.onprogress = function (data, progressState) {
-        var readPosition = self._buffer.position;
+        let readPosition = self._buffer.position;
         self._buffer.position = self._writePosition;
         self._buffer.writeRawBytes(data);
         self._writePosition = self._buffer.position;
@@ -102,7 +102,7 @@ module Shumway.AVMX.AS.flash.net {
         self._connected = false;
         self.dispatchEvent(new eventsPackage.IOErrorEvent(IOErrorEvent.IO_ERROR, false, false,
                                                           error));
-        var isXDomainError = typeof error === 'string' && error.indexOf('XDOMAIN') >= 0;
+        let isXDomainError = typeof error === 'string' && error.indexOf('XDOMAIN') >= 0;
         Telemetry.instance.reportTelemetry({topic: 'loadResource',
           resultType: isXDomainError ? Telemetry.LoadResource.StreamCrossdomain :
                                        Telemetry.LoadResource.StreamDenied});
@@ -114,11 +114,11 @@ module Shumway.AVMX.AS.flash.net {
           resultType: Telemetry.LoadResource.StreamAllowed});
       };
       session.onhttpstatus = function (location: string, httpStatus: number, httpHeaders: any) {
-        var httpStatusEvent = new eventsPackage.HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false,
+        let httpStatusEvent = new eventsPackage.HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false,
                                                                 false, httpStatus);
-        var headers = [];
+        let headers = [];
         httpHeaders.split(/(?:\n|\r?\n)/g).forEach(function (h) {
-          var m = /^([^:]+): (.*)$/.exec(h);
+          let m = /^([^:]+): (.*)$/.exec(h);
           if (m) {
             headers.push(new self.sec.flash.net.URLRequestHeader(m[1], m[2]));
             if (m[1] === 'Location') { // Headers have redirect location
@@ -126,7 +126,7 @@ module Shumway.AVMX.AS.flash.net {
             }
           }
         });
-        var boxedHeaders = self.sec.createArray(headers);
+        let boxedHeaders = self.sec.createArray(headers);
         httpStatusEvent.axSetPublicProperty('responseHeaders', boxedHeaders);
         httpStatusEvent.axSetPublicProperty('responseURL', location);
         self.dispatchEvent(httpStatusEvent);

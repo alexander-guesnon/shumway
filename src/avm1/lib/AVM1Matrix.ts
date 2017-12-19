@@ -20,8 +20,8 @@ module Shumway.AVM1.Lib {
   import flash = Shumway.AVMX.AS.flash;
 
   export function toAS3Matrix(v: AVM1Object): flash.geom.Matrix {
-    var context = v.context;
-    var a, b, c, d, tx, ty;
+    let context = v.context;
+    let a, b, c, d, tx, ty;
     if (v instanceof AVM1Object) {
       a = alCoerceNumber(context, v.alGet('a'));
       b = alCoerceNumber(context, v.alGet('b'));
@@ -139,7 +139,7 @@ module Shumway.AVM1.Lib {
     }
 
     public clone(): AVM1Matrix {
-      var result = new AVM1Matrix(this.context);
+      let result = new AVM1Matrix(this.context);
       if (this instanceof AVM1Object) {
         result.alPut('a', this.alGet('a'));
         result.alPut('b', this.alGet('b'));
@@ -152,7 +152,7 @@ module Shumway.AVM1.Lib {
     }
 
     public concat(other: AVM1Matrix): void {
-      var m = toAS3Matrix(this), m2 = toAS3Matrix(other);
+      let m = toAS3Matrix(this), m2 = toAS3Matrix(other);
       m.concat(m2);
       copyAS3MatrixTo(m, this);
     }
@@ -163,7 +163,7 @@ module Shumway.AVM1.Lib {
       rotation = alCoerceNumber(this.context, rotation);
       tx = alCoerceNumber(this.context, tx);
       ty = alCoerceNumber(this.context, ty);
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.createBox(scaleX, scaleY, rotation, tx, ty);
       copyAS3MatrixTo(m, this);
     }
@@ -174,14 +174,14 @@ module Shumway.AVM1.Lib {
       rotation = alCoerceNumber(this.context, rotation);
       tx = alCoerceNumber(this.context, tx);
       ty = alCoerceNumber(this.context, ty);
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.createGradientBox(width, height, rotation, tx, ty);
       copyAS3MatrixTo(m, this);
     }
 
     public deltaTransformPoint(pt: AVM1Point): AVM1Point {
-      var p = toAS3Point(pt);
-      var m = toAS3Matrix(this);
+      let p = toAS3Point(pt);
+      let m = toAS3Matrix(this);
       return AVM1Point.fromAS3Point(this.context, m.deltaTransformPoint(p));
     }
 
@@ -195,14 +195,14 @@ module Shumway.AVM1.Lib {
     }
 
     public invert(): void {
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.invert();
       copyAS3MatrixTo(m, this);
     }
 
     public rotate(angle: number): void {
       angle = alCoerceNumber(this.context, angle);
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.rotate(angle);
       copyAS3MatrixTo(m, this);
     }
@@ -210,7 +210,7 @@ module Shumway.AVM1.Lib {
     public scale(sx: number, sy: number): void {
       sx = alCoerceNumber(this.context, sx);
       sy = alCoerceNumber(this.context, sy);
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.scale(sx, sy);
       copyAS3MatrixTo(m, this);
     }
@@ -220,15 +220,15 @@ module Shumway.AVM1.Lib {
     }
 
     public transformPoint(pt: AVM1Point): AVM1Point {
-      var p = toAS3Point(pt);
-      var m = toAS3Matrix(this);
+      let p = toAS3Point(pt);
+      let m = toAS3Matrix(this);
       return AVM1Point.fromAS3Point(this.context, m.transformPoint(p));
     }
 
     public translate(tx: number, ty: number): void {
       tx = alCoerceNumber(this.context, tx);
       ty = alCoerceNumber(this.context, ty);
-      var m = toAS3Matrix(this);
+      let m = toAS3Matrix(this);
       m.translate(tx, ty);
       copyAS3MatrixTo(m, this);
     }

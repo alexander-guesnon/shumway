@@ -57,7 +57,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     get concatenatedMatrix(): flash.geom.Matrix {
-      var matrix = this._displayObject._getConcatenatedMatrix().clone().toPixelsInPlace();
+      let matrix = this._displayObject._getConcatenatedMatrix().clone().toPixelsInPlace();
       // For some reason, all dimensions are scale 5x for off-stage objects.
       if (!this._displayObject._stage) {
         matrix.scale(5, 5);
@@ -72,9 +72,9 @@ module Shumway.AVMX.AS.flash.geom {
     get pixelBounds(): flash.geom.Rectangle {
       // Only somewhat implemented because this is largely untested.
       release || somewhatImplemented("public flash.geom.Transform::get pixelBounds");
-      var stage = this._displayObject.stage;
-      var targetCoordinateSpace = stage || this._displayObject;
-      var rect = this._displayObject.getRect(targetCoordinateSpace);
+      let stage = this._displayObject.stage;
+      let targetCoordinateSpace = stage || this._displayObject;
+      let rect = this._displayObject.getRect(targetCoordinateSpace);
       // For some reason, all dimensions are scale 5x for off-stage objects.
       if (!stage) {
         rect.width *= 5;
@@ -104,7 +104,7 @@ module Shumway.AVMX.AS.flash.geom {
     getRelativeMatrix3D(relativeTo: flash.display.DisplayObject): flash.geom.Matrix3D {
       checkNullParameter(relativeTo, "relativeTo", this.sec);
       release || somewhatImplemented("public flash.geom.Transform::getRelativeMatrix3D");
-      var matrix3D = this._displayObject._matrix3D;
+      let matrix3D = this._displayObject._matrix3D;
       // TODO: actually calculate the relative matrix.
       return matrix3D ? matrix3D.clone() : null;
     }
@@ -114,7 +114,7 @@ module Shumway.AVMX.AS.flash.geom {
       if (!this._displayObject._hasFlags(display.DisplayObjectFlags.HasPerspectiveProjection)) {
         return null;
       }
-      var PerspectiveProjectionClass = this.sec.flash.geom.PerspectiveProjection.axClass;
+      let PerspectiveProjectionClass = this.sec.flash.geom.PerspectiveProjection.axClass;
       return PerspectiveProjectionClass.FromDisplayObject(this._displayObject);
     }
 

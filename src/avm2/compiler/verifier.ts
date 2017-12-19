@@ -64,10 +64,10 @@ module Shumway.AVM2.Verifier {
         return;
       }
 
-      var curr = this._head;
-      var prev = null;
-      var node = new SortedListNode<T>(value, null);
-      var compare = this._compare;
+      let curr = this._head;
+      let prev = null;
+      let node = new SortedListNode<T>(value, null);
+      let compare = this._compare;
       while (curr) {
         if (compare(curr.value, node.value) > 0) {
           if (prev) {
@@ -90,10 +90,10 @@ module Shumway.AVM2.Verifier {
      * NOTE: DELETE most likley doesn't work if there are multiple active iterations going on.
      */
     public forEach(visitor: (value: T) => any) {
-      var curr = this._head;
-      var last = null;
+      let curr = this._head;
+      let last = null;
       while (curr) {
-        var result = visitor(curr.value);
+        let result = visitor(curr.value);
         if (result === SortedList.RETURN) {
           return;
         } else if (result === SortedList.DELETE) {
@@ -118,13 +118,13 @@ module Shumway.AVM2.Verifier {
         return undefined;
       }
       this._length --;
-      var ret = this._head;
+      let ret = this._head;
       this._head = this._head.next;
       return ret.value;
     }
 
     public contains(value: T): boolean {
-      var curr = this._head;
+      let curr = this._head;
       while (curr) {
         if (curr.value === value) {
           return true;
@@ -135,8 +135,8 @@ module Shumway.AVM2.Verifier {
     }
 
     public toString(): string {
-      var str = "[";
-      var curr = this._head;
+      let str = "[";
+      let curr = this._head;
       while (curr) {
         str += curr.value.toString();
         curr = curr.next;
@@ -194,7 +194,7 @@ module Shumway.AVM2.Verifier {
 
     static from(info: Info, domain: ApplicationDomain): Type {
       release || assert (info.hash);
-      var type = Type._cache[info.hash];
+      let type = Type._cache[info.hash];
       if (!type) {
         type = Type._cache[info.hash] = new TraitsType(info, domain);
       }
@@ -209,9 +209,9 @@ module Shumway.AVM2.Verifier {
       if (mn === undefined) {
         return Type.Undefined;
       } else {
-        var qn = Multiname.isQName(mn) ? Multiname.getFullQualifiedName(mn) : undefined;
+        let qn = Multiname.isQName(mn) ? Multiname.getFullQualifiedName(mn) : undefined;
         if (qn) {
-          var type = Type._cache.byQN[qn];
+          let type = Type._cache.byQN[qn];
           if (type) {
             return type;
           }
@@ -220,8 +220,8 @@ module Shumway.AVM2.Verifier {
           return Type.Void;
         }
         release || assert(domain, "An ApplicationDomain is needed.");
-        var info = domain.findClassInfo(mn);
-        var type = info ? Type.from(info, domain) : Type.Any;
+        let info = domain.findClassInfo(mn);
+        let type = info ? Type.from(info, domain) : Type.Any;
         if (mn.hasTypeParameter()) {
           type = new ParameterizedType(<TraitsType>type, Type.fromName(mn.typeParameter, domain));
         }
@@ -398,13 +398,13 @@ module Shumway.AVM2.Verifier {
 
     instanceType(): TraitsType {
       release || assert(this.info instanceof ClassInfo);
-      var classInfo = <ClassInfo>this.info;
+      let classInfo = <ClassInfo>this.info;
       return <TraitsType>(this._cachedType || (this._cachedType = <TraitsType>Type.from(classInfo.instanceInfo, this.domain)));
     }
 
     classType(): TraitsType {
       release || assert(this.info instanceof InstanceInfo);
-      var instanceInfo = <InstanceInfo>this.info;
+      let instanceInfo = <InstanceInfo>this.info;
       return <TraitsType>(this._cachedType || (this._cachedType = <TraitsType>Type.from(instanceInfo.classInfo, this.domain)));
     }
 
@@ -413,9 +413,9 @@ module Shumway.AVM2.Verifier {
         return Type.Class;
       }
       release || assert(this.info instanceof InstanceInfo);
-      var instanceInfo = <InstanceInfo>this.info;
+      let instanceInfo = <InstanceInfo>this.info;
       if (instanceInfo.superName) {
-        var result = <TraitsType>Type.fromName(instanceInfo.superName, this.domain).instanceType();
+        let result = <TraitsType>Type.fromName(instanceInfo.superName, this.domain).instanceType();
         release || assert(result instanceof TraitsType && result.info instanceof InstanceInfo);
         return result;
       }
@@ -423,14 +423,14 @@ module Shumway.AVM2.Verifier {
     }
 
     findTraitByName(traits: Trait [], mn: any, isSetter: boolean) {
-      var isGetter = !isSetter;
-      var trait;
+      let isGetter = !isSetter;
+      let trait;
       if (!Multiname.isQName(mn)) {
         release || assert(mn instanceof Multiname);
-        var multiname = <Multiname>mn;
-        var dy;
-        for (var i = 0; i < multiname.namespaces.length; i++) {
-          var qname = multiname.getQName(i);
+        let multiname = <Multiname>mn;
+        let dy;
+        for (let i = 0; i < multiname.namespaces.length; i++) {
+          let qname = multiname.getQName(i);
           if (mn.namespaces[i].isDynamic()) {
             dy = qname;
           } else {
@@ -443,8 +443,8 @@ module Shumway.AVM2.Verifier {
           return this.findTraitByName(traits, dy, isSetter);
         }
       } else {
-        var qn = Multiname.getQualifiedName(mn);
-        for (var i = 0; i < traits.length; i++) {
+        let qn = Multiname.getQualifiedName(mn);
+        for (let i = 0; i < traits.length; i++) {
           trait = traits[i];
           if (Multiname.getQualifiedName(trait.name) === qn) {
             if (isSetter && trait.isGetter() || isGetter && trait.isSetter()) {
@@ -460,14 +460,14 @@ module Shumway.AVM2.Verifier {
       if (mn.isMultinameType()) {
         return null;
       }
-      var mnValue = mn.getConstantValue();
+      let mnValue = mn.getConstantValue();
       if (mnValue.isAttribute()) {
         return null;
       }
       if (followSuperType && (this.isInstanceInfo() || this.isClassInfo())) {
-        var node = this;
+        let node = this;
         do {
-          var trait = node.getTrait(mn, isSetter, false);
+          let trait = node.getTrait(mn, isSetter, false);
           if (!trait) {
             node = node.super();
           }
@@ -479,8 +479,8 @@ module Shumway.AVM2.Verifier {
     }
 
     getTraitAt(slotId: number) {
-      var traits = this.info.traits;
-      for (var i = traits.length - 1; i >= 0; i--) {
+      let traits = this.info.traits;
+      for (let i = traits.length - 1; i >= 0; i--) {
         if (traits[i].slotId === slotId) {
           return traits[i];
         }
@@ -501,12 +501,12 @@ module Shumway.AVM2.Verifier {
           return Type.Number;
         }
         if (this.isInstanceInfo() && other.isInstanceInfo()) {
-          var path = [];
-          for (var curr = this; curr; curr = curr.super()) {
+          let path = [];
+          for (let curr = this; curr; curr = curr.super()) {
             path.push(curr);
           }
-          for (var curr = <TraitsType>other; curr; curr = curr.super()) {
-            for (var i = 0; i < path.length; i++) {
+          for (let curr = <TraitsType>other; curr; curr = curr.super()) {
+            for (let i = 0; i < path.length; i++) {
               if (path[i].equals(curr)) {
                 return curr;
               }
@@ -546,10 +546,10 @@ module Shumway.AVM2.Verifier {
       if (this.info instanceof ScriptInfo) {
         return "SI";
       } else if (this.info instanceof ClassInfo) {
-        var classInfo = <ClassInfo>this.info;
+        let classInfo = <ClassInfo>this.info;
         return "CI:" + classInfo.instanceInfo.name.name;
       } else if (this.info instanceof InstanceInfo) {
-        var instanceInfo = <InstanceInfo>this.info;
+        let instanceInfo = <InstanceInfo>this.info;
         return "II:" + instanceInfo.name.name;
       } else if (this.info instanceof MethodInfo) {
         return "MI";
@@ -635,7 +635,7 @@ module Shumway.AVM2.Verifier {
       this.local = [];
     }
     clone(): State {
-      var s = new State();
+      let s = new State();
       s.originalId = this.id;
       s.stack = this.stack.slice(0);
       s.scope = this.scope.slice(0);
@@ -660,7 +660,7 @@ module Shumway.AVM2.Verifier {
       if(a.length != b.length) {
         return false;
       }
-      for (var i = a.length - 1; i >= 0; i--) {
+      for (let i = a.length - 1; i >= 0; i--) {
         if (!a[i].equals(b[i])) {
           return false;
         }
@@ -676,7 +676,7 @@ module Shumway.AVM2.Verifier {
       if(a.length != b.length) {
         return false;
       }
-      for (var i = a.length - 1; i >= 0; i--) {
+      for (let i = a.length - 1; i >= 0; i--) {
         if (a[i] === b[i] || a[i].equals(b[i])) {
           continue;
         }
@@ -693,7 +693,7 @@ module Shumway.AVM2.Verifier {
     }
     private static _mergeArrays(a: Type [], b: Type []) {
       release || assert(a.length === b.length, "a: " + a + " b: " + b);
-      for (var i = a.length - 1; i >= 0; i--) {
+      for (let i = a.length - 1; i >= 0; i--) {
         release || assert((a[i] !== undefined) && (b[i] !== undefined));
         if (a[i] === b[i]) {
           continue;
@@ -726,7 +726,7 @@ module Shumway.AVM2.Verifier {
     }
 
     verify() {
-      var methodInfo = this.methodInfo;
+      let methodInfo = this.methodInfo;
       if (this.writer) {
         this.methodInfo.trace(this.writer);
       }
@@ -735,19 +735,19 @@ module Shumway.AVM2.Verifier {
     }
 
     private _prepareEntryState(): State {
-      var entryState = new State();
-      var methodInfo = this.methodInfo;
+      let entryState = new State();
+      let methodInfo = this.methodInfo;
       this.thisType = methodInfo.holder ? Type.from(methodInfo.holder, this.domain) : Type.Any;
       entryState.local.push(this.thisType);
 
       // Initialize entry state with parameter types.
-      var parameters = methodInfo.parameters;
-      for (var i = 0; i < parameters.length; i++) {
+      let parameters = methodInfo.parameters;
+      for (let i = 0; i < parameters.length; i++) {
         entryState.local.push(Type.fromName(parameters[i].type, this.domain).instanceType());
       }
 
       // Push the |rest| or |arguments| array type in the locals.
-      var remainingLocals = methodInfo.localCount - methodInfo.parameters.length - 1;
+      let remainingLocals = methodInfo.localCount - methodInfo.parameters.length - 1;
 
       if (methodInfo.needsRest() || methodInfo.needsArguments()) {
         entryState.local.push(Type.Array);
@@ -755,7 +755,7 @@ module Shumway.AVM2.Verifier {
       }
 
       // Initialize locals with Type.Atom.Undefined.
-      for (var i = 0; i < remainingLocals; i++) {
+      for (let i = 0; i < remainingLocals; i++) {
         entryState.local.push(Type.Undefined);
       }
 
@@ -765,9 +765,9 @@ module Shumway.AVM2.Verifier {
     }
 
     private _verifyBlocks(entryState: State) {
-      var writer = this.writer;
+      let writer = this.writer;
 
-      var blocks: Bytecode [] = this.methodInfo.analysis.blocks;
+      let blocks: Bytecode [] = this.methodInfo.analysis.blocks;
 
       /**
        * To avoid revisiting the same block more than necessary while iterating to a fixed point,
@@ -778,7 +778,7 @@ module Shumway.AVM2.Verifier {
        * blocks array and assign an id (bdo = blockDominatorOrder) that gives the dominator order
        * for the que insert.
        */
-      for (var i = 0; i < blocks.length; i++) {
+      for (let i = 0; i < blocks.length; i++) {
         blocks[i].bdo = i;
       }
 
@@ -787,7 +787,7 @@ module Shumway.AVM2.Verifier {
        * list and uses a liniar search to find the right insertion position and keep the list
        * sorted. The push operation takes O(n), the pull operations takes O(1).
        */
-      var worklist = new Shumway.SortedList<Bytecode>(function compare(a: Bytecode, b: Bytecode) {
+      let worklist = new Shumway.SortedList<Bytecode>(function compare(a: Bytecode, b: Bytecode) {
         return a.bdo - b.bdo;
       });
 
@@ -797,8 +797,8 @@ module Shumway.AVM2.Verifier {
 
       while (!worklist.isEmpty()) {
 
-        var block = worklist.pop();
-        var exitState = block.verifierEntryState.clone();
+        let block = worklist.pop();
+        let exitState = block.verifierEntryState.clone();
 
         this._verifyBlock(block, exitState);
 
@@ -848,15 +848,15 @@ module Shumway.AVM2.Verifier {
     }
 
     private _verifyBlock(block: Bytecode, state: State) {
-      var self = this;
-      var writer = this.writer;
-      var methodInfo = this.methodInfo;
-      var bytecodes = <Bytecode []>(methodInfo.analysis.bytecodes);
+      let self = this;
+      let writer = this.writer;
+      let methodInfo = this.methodInfo;
+      let bytecodes = <Bytecode []>(methodInfo.analysis.bytecodes);
 
-      var local = state.local;
-      var stack = state.stack;
-      var scope = state.scope;
-      var bc: Bytecode;
+      let local = state.local;
+      let stack = state.stack;
+      let scope = state.scope;
+      let bc: Bytecode;
 
       function ti() {
         return bc.ti || (bc.ti = new TypeInformation());
@@ -881,15 +881,15 @@ module Shumway.AVM2.Verifier {
       }
 
       function popMultiname(): Type {
-        var mn = self.multinames[bc.index];
+        let mn = self.multinames[bc.index];
         if (mn.isRuntime()) {
-          var name: Type;
+          let name: Type;
           if (mn.isRuntimeName()) {
             name = pop();
           } else {
             name = ConstantType.from(mn.name);
           }
-          var namespaces: Type [];
+          let namespaces: Type [];
           if (mn.isRuntimeNamespace()) {
             namespaces = [pop()];
           } else {
@@ -912,8 +912,8 @@ module Shumway.AVM2.Verifier {
 
       function getProperty(object: Type, mn: Type): Type {
         if (object.isTraitsType() || object.isParameterizedType()) {
-          var traitsType = <TraitsType>object;
-          var trait = traitsType.getTrait(mn, false, true);
+          let traitsType = <TraitsType>object;
+          let trait = traitsType.getTrait(mn, false, true);
           if (trait) {
             writer && writer.debugLn("getProperty(" + mn + ") -> " + trait);
             ti().trait = trait;
@@ -927,7 +927,7 @@ module Shumway.AVM2.Verifier {
               return new MethodType(trait.methodInfo, self.domain);
             }
           } else if (isNumericMultiname(mn) && traitsType.isParameterizedType()) {
-            var parameter = traitsType.asParameterizedType().parameter;
+            let parameter = traitsType.asParameterizedType().parameter;
             writer && writer.debugLn("getProperty(" + mn + ") -> " + parameter);
             return parameter;
           } else if (traitsType === Type.Array) {
@@ -941,8 +941,8 @@ module Shumway.AVM2.Verifier {
 
       function setProperty(object: Type, mn: Type, value: Type) {
         if (object.isTraitsType() || object.isParameterizedType()) {
-          var traitsType = <TraitsType>object;
-          var trait = traitsType.getTrait(mn, true, true);
+          let traitsType = <TraitsType>object;
+          let trait = traitsType.getTrait(mn, true, true);
           if (trait) {
             writer && writer.debugLn("setProperty(" + mn + ") -> " + trait);
             ti().trait = trait;
@@ -961,18 +961,18 @@ module Shumway.AVM2.Verifier {
           return Type.Any;
         }
 
-        var savedScope = self.savedScope;
+        let savedScope = self.savedScope;
 
         /**
          * Try to find the property in the scope stack. For instance methods the scope
          * stack should already have the instance object.
          */
-        for (var i = scope.length - 1; i >= -savedScope.length; i--) {
-          var type = i >= 0 ? scope[i] : savedScope[savedScope.length + i];
+        for (let i = scope.length - 1; i >= -savedScope.length; i--) {
+          let type = i >= 0 ? scope[i] : savedScope[savedScope.length + i];
           if (type.isTraitsType()) {
-            var traitsType = <TraitsType>type;
+            let traitsType = <TraitsType>type;
             // TODO: Should we be looking for getter / setter traits?
-            var trait = traitsType.getTrait(mn, false, true);
+            let trait = traitsType.getTrait(mn, false, true);
             if (trait) {
               ti().scopeDepth = scope.length - i - 1;
               if (traitsType.isClassInfo() || traitsType.isScriptInfo()) {
@@ -987,10 +987,10 @@ module Shumway.AVM2.Verifier {
           }
         }
 
-        var resolved = self.domain.findDefiningScript(mn.getConstantValue(), false);
+        let resolved = self.domain.findDefiningScript(mn.getConstantValue(), false);
         if (resolved) {
           ti().object = Runtime.LazyInitializer.create(resolved.script);
-          var type = Type.from(resolved.script, self.domain);
+          let type = Type.from(resolved.script, self.domain);
           writer && writer.debugLn("findProperty(" + mn + ") -> " + type);
           return type;
         }
@@ -1001,8 +1001,8 @@ module Shumway.AVM2.Verifier {
 
       function accessSlot(object: Type): Type {
         if (object instanceof TraitsType) {
-          var traitsType = <TraitsType>object;
-          var trait = traitsType.getTraitAt(bc.index);
+          let traitsType = <TraitsType>object;
+          let trait = traitsType.getTraitAt(bc.index);
           writer && writer.debugLn("accessSlot() -> " + trait);
           if (trait) {
             ti().trait = trait;
@@ -1028,12 +1028,12 @@ module Shumway.AVM2.Verifier {
         }
       }
 
-      var globalScope = this.savedScope[0];
-      var value: Type, object: Type, a: Type, b: Type, object: Type, mn: Type, type: Type, returnType: Type;
+      let globalScope = this.savedScope[0];
+      let value: Type, object: Type, a: Type, b: Type, object: Type, mn: Type, type: Type, returnType: Type;
       
-      for (var bci = block.position, end = block.end.position; bci <= end; bci++) {
+      for (let bci = block.position, end = block.end.position; bci <= end; bci++) {
         bc = bytecodes[bci];
-        var op = bc.op;
+        let op = bc.op;
 
         /**
          * Skip debug ops.
@@ -1250,7 +1250,7 @@ module Shumway.AVM2.Verifier {
           case OP.returnvalue:
             type = pop();
             if (methodInfo.returnType) {
-              var coerceType = Type.fromName(methodInfo.returnType, this.domain).instanceType();
+              let coerceType = Type.fromName(methodInfo.returnType, this.domain).instanceType();
               if (coerceType.isSubtypeOf(type)) {
                 ti().noCoercionNeeded = true;
               }
@@ -1442,7 +1442,7 @@ module Shumway.AVM2.Verifier {
           case OP.coerce:
             // print("<<< " + multinames[bc.index] + " >>>");
             type = pop();
-            var coerceType = Type.fromName(this.multinames[bc.index], this.domain).instanceType();
+            let coerceType = Type.fromName(this.multinames[bc.index], this.domain).instanceType();
             if (coerceType.isSubtypeOf(type)) {
               ti().noCoercionNeeded = true;
             }
@@ -1457,7 +1457,7 @@ module Shumway.AVM2.Verifier {
             break;
           case OP.astype:
             type = pop();
-            var asType = Type.fromName(this.multinames[bc.index], this.domain).instanceType();
+            let asType = Type.fromName(this.multinames[bc.index], this.domain).instanceType();
             if (asType.isSubtypeOf(type)) {
               ti().noCoercionNeeded = true;
             }
@@ -1597,8 +1597,8 @@ module Shumway.AVM2.Verifier {
 
   export class Verifier {
     private _prepareScopeObjects(methodInfo: MethodInfo, scope: Scope): Type [] {
-      var domain = methodInfo.abc.applicationDomain;
-      var scopeObjects = scope.getScopeObjects();
+      let domain = methodInfo.abc.applicationDomain;
+      let scopeObjects = scope.getScopeObjects();
       return scopeObjects.map(function (object) {
         if (object instanceof Info) {
           return Type.from(object, domain);
@@ -1620,7 +1620,7 @@ module Shumway.AVM2.Verifier {
       });
     }
     verifyMethod(methodInfo: MethodInfo, scope: Scope) {
-      var scopeTypes = this._prepareScopeObjects(methodInfo, scope);
+      let scopeTypes = this._prepareScopeObjects(methodInfo, scope);
       new Verification(methodInfo, methodInfo.abc.applicationDomain, scopeTypes).verify();
     }
   }

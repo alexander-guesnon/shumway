@@ -32,7 +32,7 @@ module Shumway.GFX.Test {
 
     _onWindowMessage(data: any, async: boolean): any {
       release || Debug.assert(typeof data === 'object' && data !== null);
-      var type = data.type;
+      let type = data.type;
       switch (type) {
         case 'player':
           this._recorder.recordPlayerCommand(async, data.updates, data.assets);

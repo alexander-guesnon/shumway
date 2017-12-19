@@ -43,9 +43,9 @@ module Shumway.AVMX.AS.flash.text {
     applySymbol() {
       this._initializeFields();
       release || assert(this._symbol);
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       this._setFillAndLineBoundsFromSymbol(symbol);
-      var defaultTextFormat = this._textContent.defaultTextFormat;
+      let defaultTextFormat = this._textContent.defaultTextFormat;
       defaultTextFormat.color = symbol.color;
       defaultTextFormat.size = (symbol.size / 20) | 0;
       defaultTextFormat.font = symbol.face;
@@ -123,7 +123,7 @@ module Shumway.AVMX.AS.flash.text {
       this._useRichTextClipboard = false;
       this._lineMetricsData = null;
 
-      var defaultTextFormat = new this.sec.flash.text.TextFormat(
+      let defaultTextFormat = new this.sec.flash.text.TextFormat(
         this.sec.flash.text.Font.axClass.DEFAULT_FONT_SERIF,
         12,
         0,
@@ -195,7 +195,7 @@ module Shumway.AVMX.AS.flash.text {
     static isFontCompatible(fontName: string, fontStyle: string): boolean {
       fontName = axCoerceString(fontName);
       fontStyle = axCoerceString(fontStyle);
-      var font = Font.getByNameAndStyle(fontName, fontStyle);
+      let font = Font.getByNameAndStyle(fontName, fontStyle);
       if (!font) {
         return false;
       }
@@ -371,7 +371,7 @@ module Shumway.AVMX.AS.flash.text {
       if (isNullOrUndefined(format)) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'format');
       }
-      var defaultTextFormat = this._textContent.defaultTextFormat;
+      let defaultTextFormat = this._textContent.defaultTextFormat;
       defaultTextFormat.merge(format);
       if (defaultTextFormat.color === null) {
         defaultTextFormat.color = this._textColor;
@@ -648,12 +648,12 @@ module Shumway.AVMX.AS.flash.text {
       if (!this._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyTextContent)) {
         return;
       }
-      var serializer = this.sec.player;
-      var lineMetricsData = serializer.syncDisplayObject(this, false);
-      var textWidth = lineMetricsData.readInt();
-      var textHeight = lineMetricsData.readInt();
-      var offsetX = lineMetricsData.readInt();
-      var bounds = this._lineBounds;
+      let serializer = this.sec.player;
+      let lineMetricsData = serializer.syncDisplayObject(this, false);
+      let textWidth = lineMetricsData.readInt();
+      let textHeight = lineMetricsData.readInt();
+      let offsetX = lineMetricsData.readInt();
+      let bounds = this._lineBounds;
       if (this._autoSize !== TextFieldAutoSize.NONE) {
         bounds.xMin = offsetX;
         bounds.xMax = offsetX + textWidth + 80;
@@ -664,16 +664,16 @@ module Shumway.AVMX.AS.flash.text {
       this._numLines = lineMetricsData.readInt();
       this._lineMetricsData = lineMetricsData;
       if (this._textHeight > bounds.height) {
-        var maxScrollV = 1;
-        var bottomScrollV = 1;
+        let maxScrollV = 1;
+        let bottomScrollV = 1;
         lineMetricsData.position = 16;
-        var y = 0;
-        for (var i = 0; i < this._numLines; i++) {
+        let y = 0;
+        for (let i = 0; i < this._numLines; i++) {
           lineMetricsData.position += 8;
-          var ascent = lineMetricsData.readInt();
-          var descent = lineMetricsData.readInt();
-          var leading = lineMetricsData.readInt();
-          var height = ascent + descent + leading;
+          let ascent = lineMetricsData.readInt();
+          let descent = lineMetricsData.readInt();
+          let leading = lineMetricsData.readInt();
+          let height = ascent + descent + leading;
           if (y > bounds.height / 20) {
             maxScrollV++;
           } else {
@@ -698,7 +698,7 @@ module Shumway.AVMX.AS.flash.text {
     getCharBoundaries(charIndex: number /*int*/): flash.geom.Rectangle {
       charIndex = charIndex | 0;
       release || somewhatImplemented("public flash.text.TextField::getCharBoundaries");
-      var fakeCharHeight = this.textHeight, fakeCharWidth = fakeCharHeight * 0.75;
+      let fakeCharHeight = this.textHeight, fakeCharWidth = fakeCharHeight * 0.75;
       return new this.sec.flash.geom.Rectangle(charIndex * fakeCharWidth, 0,
                                                           fakeCharWidth, fakeCharHeight);
     }
@@ -729,28 +729,28 @@ module Shumway.AVMX.AS.flash.text {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
       this._ensureLineMetrics();
-      var lineMetricsData = this._lineMetricsData;
+      let lineMetricsData = this._lineMetricsData;
       lineMetricsData.position = 16 + lineIndex * 20;
       // The lines left position includes the gutter widths (it should also include the the margin
       // and indent, which we don't support yet).
-      var x = lineMetricsData.readInt() + this._lineBounds.xMin + 2;
-      var width = lineMetricsData.readInt();
-      var ascent = lineMetricsData.readInt();
-      var descent = lineMetricsData.readInt();
-      var leading = lineMetricsData.readInt();
-      var height = ascent + descent + leading;
+      let x = lineMetricsData.readInt() + this._lineBounds.xMin + 2;
+      let width = lineMetricsData.readInt();
+      let ascent = lineMetricsData.readInt();
+      let descent = lineMetricsData.readInt();
+      let leading = lineMetricsData.readInt();
+      let height = ascent + descent + leading;
       return new this.sec.flash.text.TextLineMetrics(x, width, height, ascent, descent,
                                                                 leading);
     }
 
     getLineOffset(lineIndex: number /*int*/): number /*int*/ {
       lineIndex = lineIndex | 0;
-      var lines = this._textContent.plainText.split('\r');
+      let lines = this._textContent.plainText.split('\r');
       if (lineIndex < 0 || lineIndex >= lines.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
-      var offset = 0;
-      for (var i = 0; i < lineIndex; i++) {
+      let offset = 0;
+      for (let i = 0; i < lineIndex; i++) {
         offset += lines[i].length + 1; // Length + `\r`
       }
       // TODO:  I've tried modifying the width of the text field so that lines wrap, but this doesn't seem
@@ -761,7 +761,7 @@ module Shumway.AVMX.AS.flash.text {
     }
     getLineText(lineIndex: number /*int*/): string {
       lineIndex = lineIndex | 0;
-      var lines = this._textContent.plainText.split('\r');
+      let lines = this._textContent.plainText.split('\r');
       if (lineIndex < 0 || lineIndex >= lines.length) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
@@ -778,8 +778,8 @@ module Shumway.AVMX.AS.flash.text {
      */
     getTextFormat(beginIndex: number /*int*/ = -1, endIndex: number /*int*/ = -1): flash.text.TextFormat {
       beginIndex = beginIndex | 0; endIndex = endIndex | 0;
-      var plainText = this._textContent.plainText;
-      var maxIndex = plainText.length;
+      let plainText = this._textContent.plainText;
+      let maxIndex = plainText.length;
       if (beginIndex < 0) {
         beginIndex = 0;
         if (endIndex < 0) {
@@ -793,10 +793,10 @@ module Shumway.AVMX.AS.flash.text {
       if (endIndex <= beginIndex || endIndex > maxIndex) {
         this.sec.throwError('RangeError', Errors.ParamRangeError);
       }
-      var format: TextFormat;
-      var textRuns = this._textContent.textRuns;
-      for (var i = 0; i < textRuns.length; i++) {
-        var run = textRuns[i];
+      let format: TextFormat;
+      let textRuns = this._textContent.textRuns;
+      for (let i = 0; i < textRuns.length; i++) {
+        let run = textRuns[i];
         if (run.intersects(beginIndex, endIndex)) {
           if (format) {
             format.intersect(run.textFormat);
@@ -809,10 +809,10 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     getTextRuns(beginIndex: number /*int*/ = 0, endIndex: number /*int*/ = 2147483647): ASArray {
-      var textRuns = this._textContent.textRuns;
-      var result = [];
-      for (var i = 0; i < textRuns.length; i++) {
-        var textRun = textRuns[i];
+      let textRuns = this._textContent.textRuns;
+      let result = [];
+      for (let i = 0; i < textRuns.length; i++) {
+        let textRun = textRuns[i];
         if (textRun.beginIndex >= beginIndex && textRun.endIndex <= endIndex) {
           result.push(textRun.clone());
         }
@@ -846,8 +846,8 @@ module Shumway.AVMX.AS.flash.text {
 
     setTextFormat(format: flash.text.TextFormat, beginIndex: number /*int*/ = -1, endIndex: number /*int*/ = -1): void {
       format = format; beginIndex = beginIndex | 0; endIndex = endIndex | 0;
-      var plainText = this._textContent.plainText;
-      var maxIndex = plainText.length;
+      let plainText = this._textContent.plainText;
+      let maxIndex = plainText.length;
       if (beginIndex < 0) {
         beginIndex = 0;
         if (endIndex < 0) {
@@ -864,7 +864,7 @@ module Shumway.AVMX.AS.flash.text {
       if (endIndex <= beginIndex) {
         return;
       }
-      var subText = plainText.substring(beginIndex, endIndex);
+      let subText = plainText.substring(beginIndex, endIndex);
       this._textContent.replaceText(beginIndex, endIndex, subText, format);
       this._invalidateContent();
       this._ensureLineMetrics();
@@ -906,15 +906,15 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     static FromTextData(data: any, loaderInfo: flash.display.LoaderInfo): TextSymbol {
-      var sec = loaderInfo.sec;
-      var symbol = new TextSymbol(data, sec);
+      let sec = loaderInfo.sec;
+      let symbol = new TextSymbol(data, sec);
       symbol._setBoundsFromData(data);
-      var tag = <TextTag>data.tag;
+      let tag = <TextTag>data.tag;
       if (data.static) {
         symbol.dynamic = false;
         symbol.symbolClass = sec.flash.text.StaticText.axClass;
         if (tag.initialText) {
-          var textContent = new Shumway.TextContent(sec);
+          let textContent = new Shumway.TextContent(sec);
           textContent.bounds = symbol.lineBounds;
           textContent.parseHtml(tag.initialText, null, false);
           textContent.matrix = new sec.flash.geom.Matrix();
@@ -929,7 +929,7 @@ module Shumway.AVMX.AS.flash.text {
       if (tag.flags & TextFlags.HasFont) {
         symbol.size = tag.fontHeight;
         // Requesting the font symbol guarantees that it's loaded and initialized.
-        var fontSymbol = <flash.text.FontSymbol>loaderInfo.getSymbolById(tag.fontId);
+        let fontSymbol = <flash.text.FontSymbol>loaderInfo.getSymbolById(tag.fontId);
         if (fontSymbol) {
           symbol.face = tag.flags & TextFlags.UseOutlines ?
                         fontSymbol.name :
@@ -978,22 +978,22 @@ module Shumway.AVMX.AS.flash.text {
      * available as symbols, which isn't the case in the SWF parser.
      */
     static FromLabelData(data: any, loaderInfo: flash.display.LoaderInfo): TextSymbol {
-      var bounds = data.fillBounds;
-      var records: TextRecord[] = data.records;
-      var coords = data.coords = [];
-      var htmlText = '';
-      var size = 12;
-      var face = 'Times Roman';
-      var bold = false;
-      var italic = false;
-      var color = 0;
-      var x = 0;
-      var y = 0;
-      var codes: number[];
-      for (var i = 0; i < records.length; i++) {
-        var record = records[i];
+      let bounds = data.fillBounds;
+      let records: TextRecord[] = data.records;
+      let coords = data.coords = [];
+      let htmlText = '';
+      let size = 12;
+      let face = 'Times Roman';
+      let bold = false;
+      let italic = false;
+      let color = 0;
+      let x = 0;
+      let y = 0;
+      let codes: number[];
+      for (let i = 0; i < records.length; i++) {
+        let record = records[i];
         if (record.flags & TextRecordFlags.HasFont) {
-          var fontSymbol = <flash.text.FontSymbol>loaderInfo.getSymbolById(record.fontId);
+          let fontSymbol = <flash.text.FontSymbol>loaderInfo.getSymbolById(record.fontId);
           if (fontSymbol) {
             codes = fontSymbol.codes;
             size = record.fontHeight;
@@ -1016,14 +1016,14 @@ module Shumway.AVMX.AS.flash.text {
         if (record.flags & TextRecordFlags.HasMoveY) {
           y = record.moveY;
         }
-        var text = '';
-        var entries = record.entries;
-        var j = 0;
-        var entry;
+        let text = '';
+        let entries = record.entries;
+        let j = 0;
+        let entry;
         while ((entry = entries[j++])) {
-          var code = codes[entry.glyphIndex];
+          let code = codes[entry.glyphIndex];
           release || assert(code, 'undefined label glyph');
-          var char = String.fromCharCode(code);
+          let char = String.fromCharCode(code);
           text += charEscapeMap[char] || char;
           coords.push(x, y);
           x += entry.advance;
@@ -1042,6 +1042,6 @@ module Shumway.AVMX.AS.flash.text {
     }
   }
 
-  var charEscapeMap = {'<': '&lt;', '>': '&gt;', '&' : '&amp;'};
+  let charEscapeMap = {'<': '&lt;', '>': '&gt;', '&' : '&amp;'};
 
 }

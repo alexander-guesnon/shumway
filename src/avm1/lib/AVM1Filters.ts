@@ -28,7 +28,7 @@ module Shumway.AVM1.Lib {
     }
 
     alConstruct(args?: any[]): AVM1Object {
-      var obj = new AVM1Object(this.context);
+      let obj = new AVM1Object(this.context);
       obj.alPrototype = this.alGetPrototypeProperty();
       return obj;
     }
@@ -52,7 +52,7 @@ module Shumway.AVM1.Lib {
     }
 
     clone(): AVM1Object {
-      var obj = new AVM1Object(this.context);
+      let obj = new AVM1Object(this.context);
       obj.alPrototype = this.alGetPrototypeProperty();
       return obj;
     }
@@ -69,10 +69,10 @@ module Shumway.AVM1.Lib {
                              name: string, fields: string[]): void {
     // Simple constructor for the class function.
     function construct(args?: any[]): AVM1Object {
-      var as2Object = new AVM1Object(context);
+      let as2Object = new AVM1Object(context);
       as2Object.alPrototype = wrappedProto;
       if (args) {
-        for (var i = 0; i < args.length; i++) {
+        for (let i = 0; i < args.length; i++) {
           as2Object.alPut(fields[i << 1], args[i]);
         }
       }
@@ -80,9 +80,9 @@ module Shumway.AVM1.Lib {
     }
 
     function clone(): AVM1Object {
-      var as2Object = new AVM1Object(context);
+      let as2Object = new AVM1Object(context);
       as2Object.alPrototype = wrappedProto;
-      for (var i = 0; i < fields.length; i += 2) {
+      for (let i = 0; i < fields.length; i += 2) {
         as2Object.alPut(fields[i], this.alGet(fields[i]));
       }
       return as2Object;
@@ -94,10 +94,10 @@ module Shumway.AVM1.Lib {
     }
 
     function toAS3Filter(as2Object: AVM1Object): ASObject {
-      var as3Object: ASObject = <any> getAS3Class().axConstruct([]);
+      let as3Object: ASObject = <any> getAS3Class().axConstruct([]);
       // Just copying all defined properties.
-      for (var i = 0; i < fields.length; i += 2) {
-        var as2Value = as2Object.alGet(fields[i]);
+      for (let i = 0; i < fields.length; i += 2) {
+        let as2Value = as2Object.alGet(fields[i]);
         if (as2Value === undefined) {
           continue; // skipping undefined
         }
@@ -108,9 +108,9 @@ module Shumway.AVM1.Lib {
     }
 
     function fromAS3Filter(as3Object: ASObject): AVM1Object {
-      var as2Object = new AVM1Object(context);
+      let as2Object = new AVM1Object(context);
       as2Object.alPrototype = wrappedProto;
-      for (var i = 0; i < fields.length; i += 2) {
+      for (let i = 0; i < fields.length; i += 2) {
         as2Object.alPut(fields[i],
           convertFromAS3Field(context, as3Object.axGetPublicProperty(fields[i]), fields[i + 1]));
       }
@@ -118,12 +118,12 @@ module Shumway.AVM1.Lib {
     }
 
     // Creates new prototype object and function for the class.
-    var proto = base.alGetPrototypeProperty();
-    var wrappedProto: AVM1BitmapFilterPrototype = Object.create(AVM1BitmapFilterPrototype.prototype);
+    let proto = base.alGetPrototypeProperty();
+    let wrappedProto: AVM1BitmapFilterPrototype = Object.create(AVM1BitmapFilterPrototype.prototype);
     AVM1Object.call(wrappedProto, context);
     wrappedProto.alPrototype = proto;
 
-    var wrapped: AVM1BitmapFilterFunction = Object.create(AVM1BitmapFilterFunction.prototype);
+    let wrapped: AVM1BitmapFilterFunction = Object.create(AVM1BitmapFilterFunction.prototype);
     AVM1Function.call(wrapped, context);
     wrapped.alSetOwnPrototypeProperty(wrappedProto);
     wrapped.alConstruct = construct;
@@ -150,8 +150,8 @@ module Shumway.AVM1.Lib {
   }
 
   export function createFiltersClasses(context: AVM1Context): AVM1Object {
-    var filters = alNewObject(context);
-    var base = new AVM1BitmapFilterFunction(context);
+    let filters = alNewObject(context);
+    let base = new AVM1BitmapFilterFunction(context);
     filters.alPut('BitmapFilter', base);
     // TODO make field types non-string
     createFilterClass(context, filters, base, 'BevelFilter',
@@ -199,9 +199,9 @@ module Shumway.AVM1.Lib {
       case 'Number':
         return alToNumber(context, value);
       case 'Numbers':
-        var arr = [];
+        let arr = [];
         if (value) {
-          for (var i = 0, length = value.alGet('length'); i < length; i++) {
+          for (let i = 0, length = value.alGet('length'); i < length; i++) {
             arr[i] = alToNumber(context, value.alGet(i));
           }
         }
@@ -222,9 +222,9 @@ module Shumway.AVM1.Lib {
       case 'Number':
         return value;
       case 'Numbers':
-        var arr = [];
+        let arr = [];
         if (value) {
-          for (var i = 0, length = value.value.length; i < length; i++) {
+          for (let i = 0, length = value.value.length; i < length; i++) {
             arr[i] = +value.value[i];
           }
         }
@@ -238,12 +238,12 @@ module Shumway.AVM1.Lib {
     }
   }
 
-  var knownFilters: string[] = ['BevelFilter', 'BlurFilter', 'ColorMatrixFilter',
+  let knownFilters: string[] = ['BevelFilter', 'BlurFilter', 'ColorMatrixFilter',
     'ConvolutionFilter', 'DisplacementMapFilter', 'DropShadowFilter', 'GlowFilter',
     'GradientBevelFilter', 'GradientGlowFilter'];
 
   export function convertToAS3Filter(context: AVM1Context, as2Filter: AVM1Object): ASObject {
-    var proto = as2Filter ? as2Filter.alPrototype : null;
+    let proto = as2Filter ? as2Filter.alPrototype : null;
     while (proto && !(<AVM1BitmapFilterPrototype>proto).asFilterConverter) {
       proto = proto.alPrototype;
     }
@@ -254,10 +254,10 @@ module Shumway.AVM1.Lib {
   }
 
   export function convertToAS3Filters(context: AVM1Context, as2Filters: AVM1Object): ASObject {
-    var arr = [];
+    let arr = [];
     if (as2Filters) {
-      for (var i = 0, length = as2Filters.alGet('length'); i < length; i++) {
-        var as3Filter = convertToAS3Filter(context, as2Filters.alGet(i));
+      for (let i = 0, length = as2Filters.alGet('length'); i < length; i++) {
+        let as3Filter = convertToAS3Filter(context, as2Filters.alGet(i));
         if (as3Filter) {
           arr.push(as3Filter);
         }
@@ -267,16 +267,16 @@ module Shumway.AVM1.Lib {
   }
 
   export function convertFromAS3Filters(context: AVM1Context, as3Filters: ASObject): AVM1Object {
-    var arr = [];
+    let arr = [];
     if (as3Filters) {
 
-      var classes = context.globals.filters;
-      for (var i = 0, length = as3Filters.axGetPublicProperty('length'); i < length; i++) {
-        var as3Filter = as3Filters.axGetPublicProperty(i);
+      let classes = context.globals.filters;
+      for (let i = 0, length = as3Filters.axGetPublicProperty('length'); i < length; i++) {
+        let as3Filter = as3Filters.axGetPublicProperty(i);
         // TODO inefficient search, refactor
         knownFilters.forEach((filterName: string) => {
-          var filterClass = classes.alGet(filterName);
-          var proto: AVM1BitmapFilterPrototype = filterClass.alGetPrototypeProperty();
+          let filterClass = classes.alGet(filterName);
+          let proto: AVM1BitmapFilterPrototype = filterClass.alGetPrototypeProperty();
           if (proto.asFilterConverter && proto.asFilterConverter.getAS3Class().axIsType(as3Filter)) {
             arr.push(proto.asFilterConverter.fromAS3Filter(as3Filter));
           }

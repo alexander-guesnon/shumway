@@ -76,8 +76,8 @@ module Shumway.ArrayUtilities {
     }
   }
 
-  var bitMasks = new Uint32Array(33);
-  for (var i = 1, mask = 0; i <= 32; i++) {
+  let bitMasks = new Uint32Array(33);
+  for (let i = 1, mask = 0; i <= 32; i++) {
     bitMasks[i] = mask = (mask << 1) | 1;
   }
 
@@ -123,7 +123,7 @@ module Shumway.ArrayUtilities {
     }
 
     static FromArrayBuffer(buffer: ArrayBuffer, length: number = -1) : DataBuffer {
-      var dataBuffer: DataBuffer = Object.create(DataBuffer.prototype);
+      let dataBuffer: DataBuffer = Object.create(DataBuffer.prototype);
       dataBuffer._buffer = buffer;
       dataBuffer._length = length === -1 ? buffer.byteLength : length;
       dataBuffer._position = 0;
@@ -135,7 +135,7 @@ module Shumway.ArrayUtilities {
     }
 
     static FromPlainObject(source: PlainObjectDataBuffer): DataBuffer {
-      var dataBuffer = DataBuffer.FromArrayBuffer(source.buffer, source.length);
+      let dataBuffer = DataBuffer.FromArrayBuffer(source.buffer, source.length);
       dataBuffer._littleEndian = source.littleEndian;
       return dataBuffer;
     }
@@ -152,7 +152,7 @@ module Shumway.ArrayUtilities {
      * its elements is excruiciatingly slow.
      */
     clone(): DataBuffer {
-      var clone = DataBuffer.FromArrayBuffer(new Uint8Array(this._u8).buffer, this._length);
+      let clone = DataBuffer.FromArrayBuffer(new Uint8Array(this._u8).buffer, this._length);
       clone._position = this._position;
       clone._littleEndian = this._littleEndian;
       clone._bitBuffer = this._bitBuffer;
@@ -190,11 +190,11 @@ module Shumway.ArrayUtilities {
     }
 
     private _ensureCapacity(length: number) {
-      var currentBuffer = this._buffer;
+      let currentBuffer = this._buffer;
       if (currentBuffer.byteLength >= length) {
         return;
       }
-      var newLength = Math.max(currentBuffer.byteLength, 1);
+      let newLength = Math.max(currentBuffer.byteLength, 1);
       while (newLength < length) {
         newLength *= 2;
       }
@@ -202,15 +202,15 @@ module Shumway.ArrayUtilities {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('RangeError', Errors.ParamRangeError);
       }
-      var newBuffer = DataBuffer._arrayBufferPool.acquire(newLength);
-      var curentView = this._u8;
+      let newBuffer = DataBuffer._arrayBufferPool.acquire(newLength);
+      let curentView = this._u8;
       this._buffer = newBuffer;
       this._resetViews();
       this._u8.set(curentView);
-      var u8 = this._u8;
+      let u8 = this._u8;
       // Zero out the rest of the buffer, since the arrayBufferPool doesn't
       // always give us a empty buffer.
-      for (var i = curentView.length; i < u8.length; i++) {
+      for (let i = curentView.length; i < u8.length; i++) {
         u8[i] = 0;
       }
       DataBuffer._arrayBufferPool.release(currentBuffer);
@@ -238,7 +238,7 @@ module Shumway.ArrayUtilities {
     }
 
     readBytes(bytes: DataBuffer, offset?: number /*uint*/, length?: number /*uint*/): void {
-      var position = this._position;
+      let position = this._position;
       offset = offset >>> 0;
       length = length >>> 0;
       if (length === 0) {
@@ -261,29 +261,29 @@ module Shumway.ArrayUtilities {
     }
 
     readUnsignedShort(): number /*uint*/ {
-      var u8 = this._u8;
-      var position = this._position;
+      let u8 = this._u8;
+      let position = this._position;
       if (position + 2 > this._length) {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('flash.errors.EOFError', Errors.EOFError);
       }
-      var a = u8[position + 0];
-      var b = u8[position + 1];
+      let a = u8[position + 0];
+      let b = u8[position + 1];
       this._position = position + 2;
       return this._littleEndian ? (b << 8) | a : (a << 8) | b;
     }
 
     readInt(): number /*int*/ {
-      var u8 = this._u8;
-      var position = this._position;
+      let u8 = this._u8;
+      let position = this._position;
       if (position + 4 > this._length) {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('flash.errors.EOFError', Errors.EOFError);
       }
-      var a = u8[position + 0];
-      var b = u8[position + 1];
-      var c = u8[position + 2];
-      var d = u8[position + 3];
+      let a = u8[position + 0];
+      let b = u8[position + 1];
+      let c = u8[position + 2];
+      let d = u8[position + 3];
       this._position = position + 4;
       return this._littleEndian ?
         (d << 24) | (c << 16) | (b << 8) | a :
@@ -295,7 +295,7 @@ module Shumway.ArrayUtilities {
     }
 
     readFloat(): number {
-      var position = this._position;
+      let position = this._position;
       if (position + 4 > this._length) {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('flash.errors.EOFError', Errors.EOFError);
@@ -305,8 +305,8 @@ module Shumway.ArrayUtilities {
       if (this._littleEndian && (position & 0x3) === 0 && this._f32) {
         return this._f32[position >> 2];
       } else {
-        var u8 = this._u8;
-        var t8 = IntegerUtilities.u8;
+        let u8 = this._u8;
+        let t8 = IntegerUtilities.u8;
         if (this._littleEndian) {
           t8[0] = u8[position + 0];
           t8[1] = u8[position + 1];
@@ -323,13 +323,13 @@ module Shumway.ArrayUtilities {
     }
 
     readDouble(): number {
-      var u8 = this._u8;
-      var position = this._position;
+      let u8 = this._u8;
+      let position = this._position;
       if (position + 8 > this._length) {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('flash.errors.EOFError', Errors.EOFError);
       }
-      var t8 = IntegerUtilities.u8;
+      let t8 = IntegerUtilities.u8;
       if (this._littleEndian) {
         t8[0] = u8[position + 0];
         t8[1] = u8[position + 1];
@@ -358,7 +358,7 @@ module Shumway.ArrayUtilities {
     }
 
     writeByte(value: number /*int*/): void {
-      var length = this._position + 1;
+      let length = this._position + 1;
       this._ensureCapacity(length);
       this._u8[this._position++] = value;
       if (length > this._length) {
@@ -367,7 +367,7 @@ module Shumway.ArrayUtilities {
     }
 
     writeUnsignedByte(value: number /*uint*/): void {
-      var length = this._position + 1;
+      let length = this._position + 1;
       this._ensureCapacity(length);
       this._u8[this._position++] = value;
       if (length > this._length) {
@@ -376,7 +376,7 @@ module Shumway.ArrayUtilities {
     }
 
     writeRawBytes(bytes: Uint8Array): void {
-      var length = this._position + bytes.length;
+      let length = this._position + bytes.length;
       this._ensureCapacity(length);
       this._u8.set(bytes, this._position);
       this._position = length;
@@ -414,9 +414,9 @@ module Shumway.ArrayUtilities {
     }
 
     writeUnsignedShort(value: number /*uint*/): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 2);
-      var u8 = this._u8;
+      let u8 = this._u8;
       if (this._littleEndian) {
         u8[position + 0] = value;
         u8[position + 1] = value >> 8;
@@ -444,13 +444,13 @@ module Shumway.ArrayUtilities {
     }
 
     writeUnsignedInt(value: number /*uint*/): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 4);
       this._requestViews(TypedArrayViewFlags.I32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._i32) {
         this._i32[position >> 2] = value;
       } else {
-        var u8 = this._u8;
+        let u8 = this._u8;
         if (this._littleEndian) {
           u8[position + 0] = value;
           u8[position + 1] = value >> 8;
@@ -471,7 +471,7 @@ module Shumway.ArrayUtilities {
     }
 
     write2UnsignedInts(a: number, b: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 8);
       this._requestViews(TypedArrayViewFlags.I32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._i32) {
@@ -489,7 +489,7 @@ module Shumway.ArrayUtilities {
     }
 
     write4UnsignedInts(a: number, b: number, c: number, d: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 16);
       this._requestViews(TypedArrayViewFlags.I32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._i32) {
@@ -511,15 +511,15 @@ module Shumway.ArrayUtilities {
     }
 
     writeFloat(value: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 4);
       this._requestViews(TypedArrayViewFlags.F32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._f32) {
         this._f32[position >> 2] = value;
       } else {
-        var u8 = this._u8;
+        let u8 = this._u8;
         IntegerUtilities.f32[0] = value;
-        var t8 = IntegerUtilities.u8;
+        let t8 = IntegerUtilities.u8;
         if (this._littleEndian) {
           u8[position + 0] = t8[0];
           u8[position + 1] = t8[1];
@@ -540,7 +540,7 @@ module Shumway.ArrayUtilities {
     }
 
     write2Floats(a: number, b: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 8);
       this._requestViews(TypedArrayViewFlags.F32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._f32) {
@@ -558,7 +558,7 @@ module Shumway.ArrayUtilities {
     }
 
     write6Floats(a: number, b: number, c: number, d: number, e: number, f: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 24);
       this._requestViews(TypedArrayViewFlags.F32);
       if (this._littleEndian === DataBuffer._nativeLittleEndian && (position & 0x3) === 0 && this._f32) {
@@ -584,11 +584,11 @@ module Shumway.ArrayUtilities {
     }
 
     writeDouble(value: number): void {
-      var position = this._position;
+      let position = this._position;
       this._ensureCapacity(position + 8);
-      var u8 = this._u8;
+      let u8 = this._u8;
       IntegerUtilities.f64[0] = value;
-      var t8 = IntegerUtilities.u8;
+      let t8 = IntegerUtilities.u8;
       if (this._littleEndian) {
         u8[position + 0] = t8[0];
         u8[position + 1] = t8[1];
@@ -621,14 +621,14 @@ module Shumway.ArrayUtilities {
 
     writeUTF(value: string): void {
       value = axCoerceString(value);
-      var bytes = utf8decode(value);
+      let bytes = utf8decode(value);
       this.writeShort(bytes.length);
       this.writeRawBytes(bytes);
     }
 
     writeUTFBytes(value: string): void {
       value = axCoerceString(value);
-      var bytes = utf8decode(value);
+      let bytes = utf8decode(value);
       this.writeRawBytes(bytes);
     }
 
@@ -638,7 +638,7 @@ module Shumway.ArrayUtilities {
 
     readUTFBytes(length: number /*uint*/): string {
       length = length >>> 0;
-      var pos = this._position;
+      let pos = this._position;
       if (pos + length > this._length) {
         release || assert((<any>this).sec);
         (<any>this).sec.throwError('flash.errors.EOFError', Errors.EOFError);
@@ -653,7 +653,7 @@ module Shumway.ArrayUtilities {
 
     set length(value: number /*uint*/) {
       value = value >>> 0;
-      var capacity = this._buffer.byteLength;
+      let capacity = this._buffer.byteLength;
       /* XXX: Do we need to zero the difference if length <= cap? */
       if (value > capacity) {
         this._ensureCapacity(value);
@@ -737,7 +737,7 @@ module Shumway.ArrayUtilities {
 
     setValue(name: number, value: any) {
       name = name | 0;
-      var length = name + 1;
+      let length = name + 1;
       this._ensureCapacity(length);
       this._u8[name] = value;
       if (length > this._length) {
@@ -754,10 +754,10 @@ module Shumway.ArrayUtilities {
     }
 
     readFloat16(): number {
-      var uint16 = this.readUnsignedShort();
-      var sign = uint16 >> 15 ? -1 : 1;
-      var exponent = (uint16 & 0x7c00) >> 10;
-      var fraction = uint16 & 0x03ff;
+      let uint16 = this.readUnsignedShort();
+      let sign = uint16 >> 15 ? -1 : 1;
+      let exponent = (uint16 & 0x7c00) >> 10;
+      let fraction = uint16 & 0x03ff;
       if (!exponent) {
         return sign * Math.pow(2, -14) * (fraction / 1024);
       }
@@ -768,7 +768,7 @@ module Shumway.ArrayUtilities {
     }
 
     readEncodedU32(): number {
-      var value = this.readUnsignedByte();
+      let value = this.readUnsignedByte();
       if (!(value & 0x080)) {
         return value;
       }
@@ -792,14 +792,14 @@ module Shumway.ArrayUtilities {
     }
 
     readUnsignedBits(size: number): number {
-      var buffer = this._bitBuffer;
-      var length = this._bitLength;
+      let buffer = this._bitBuffer;
+      let length = this._bitLength;
       while (size > length) {
         buffer = (buffer << 8) | this.readUnsignedByte();
         length += 8;
       }
       length -= size;
-      var value = (buffer >>> length) & bitMasks[size];
+      let value = (buffer >>> length) & bitMasks[size];
       this._bitBuffer = buffer;
       this._bitLength = length;
       return value;
@@ -810,7 +810,7 @@ module Shumway.ArrayUtilities {
     }
 
     readString(length?: number): string {
-      var position = this._position;
+      let position = this._position;
       if (length) {
         if (position + length > this._length) {
           release || assert((<any>this).sec);
@@ -819,7 +819,7 @@ module Shumway.ArrayUtilities {
         this._position += length;
       } else {
         length = 0;
-        for (var i = position; i < this._length && this._u8[i]; i++) {
+        for (let i = position; i < this._length && this._u8[i]; i++) {
           length++;
         }
         this._position += length + 1;
@@ -847,7 +847,7 @@ module Shumway.ArrayUtilities {
         algorithm = axCoerceString(algorithm);
       }
 
-      var deflate: Deflate;
+      let deflate: Deflate;
       switch (algorithm) {
         case 'zlib':
           deflate = new Deflate(true);
@@ -859,7 +859,7 @@ module Shumway.ArrayUtilities {
           return;
       }
 
-      var output = new DataBuffer();
+      let output = new DataBuffer();
       deflate.onData = output.writeRawBytes.bind(output);
       deflate.push(this._u8.subarray(0, this._length));
       deflate.close();
@@ -877,7 +877,7 @@ module Shumway.ArrayUtilities {
         algorithm = axCoerceString(algorithm);
       }
 
-      var inflate: IDataDecoder;
+      let inflate: IDataDecoder;
       switch (algorithm) {
         case 'zlib':
           inflate = Inflate.create(true);
@@ -892,8 +892,8 @@ module Shumway.ArrayUtilities {
           return;
       }
 
-      var output = new DataBuffer();
-      var error;
+      let output = new DataBuffer();
+      let error;
       inflate.onData = output.writeRawBytes.bind(output);
       inflate.onError = (e) => error = e;
       inflate.push(this._u8.subarray(0, this._length));

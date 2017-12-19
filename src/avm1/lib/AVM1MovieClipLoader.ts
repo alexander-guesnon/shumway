@@ -35,9 +35,9 @@ module Shumway.AVM1.Lib {
     }
 
     public loadClip(url: string, target):Boolean {
-      var loadLevel: boolean = typeof target === 'number';
-      var level: number;
-      var target_mc: AVM1MovieClip;
+      let loadLevel: boolean = typeof target === 'number';
+      let level: number;
+      let target_mc: AVM1MovieClip;
       if (loadLevel) {
         level = <number>target;
         if (level === 0) {
@@ -51,11 +51,11 @@ module Shumway.AVM1.Lib {
         }
       }
 
-      var loaderHelper = new AVM1LoaderHelper(this.context);
+      let loaderHelper = new AVM1LoaderHelper(this.context);
       this._loaderHelper = loaderHelper;
       this._target = null;
 
-      var loaderInfo = loaderHelper.loaderInfo;
+      let loaderInfo = loaderHelper.loaderInfo;
       loaderInfo.addEventListener(flash.events.Event.OPEN, this.openHandler.bind(this));
       loaderInfo.addEventListener(flash.events.ProgressEvent.PROGRESS, this.progressHandler.bind(this));
       loaderInfo.addEventListener(flash.events.IOErrorEvent.IO_ERROR, this.ioErrorHandler.bind(this));
@@ -63,16 +63,16 @@ module Shumway.AVM1.Lib {
       loaderInfo.addEventListener(flash.events.Event.INIT, this.initHandler.bind(this));
 
       loaderHelper.load(url, null).then(function () {
-        var newChild = loaderHelper.content;
+        let newChild = loaderHelper.content;
         this._target = getAVM1Object(newChild, this.context);
 
         if (loadLevel) {
-          var avm1LevelHolder = this.context.levelsContainer;
+          let avm1LevelHolder = this.context.levelsContainer;
           avm1LevelHolder._addRoot(level, newChild);
         } else {
           // TODO fix newChild name to match target_mc
-          var parent = target_mc._as3Object.parent;
-          var depth = target_mc._as3Object._depth;
+          let parent = target_mc._as3Object.parent;
+          let depth = target_mc._as3Object._depth;
           parent.removeChild(target_mc._as3Object);
           parent.addTimelineObjectAtDepth(newChild, depth);
         }
@@ -84,17 +84,17 @@ module Shumway.AVM1.Lib {
       if (!this._loaderHelper) {
         return false; // nothing was loaded by this loader
       }
-      var loadLevel: boolean = typeof target === 'number';
-      var level: number;
-      var target_mc: AVM1MovieClip;
-      var originalLoader = this._loaderHelper.loader;
+      let loadLevel: boolean = typeof target === 'number';
+      let level: number;
+      let target_mc: AVM1MovieClip;
+      let originalLoader = this._loaderHelper.loader;
       if (loadLevel) {
         level = <number>target;
         if (level === 0) {
           release || Debug.notImplemented('MovieClipLoader.unloadClip at _level0');
           return false;
         }
-        var avm1LevelHolder = this.context.levelsContainer;
+        let avm1LevelHolder = this.context.levelsContainer;
         if (avm1LevelHolder._getRootForLevel(level) !== originalLoader.content) {
           return false; // did not load this root
         }
@@ -140,13 +140,13 @@ module Shumway.AVM1.Lib {
     }
 
     private initHandler(event: flash.events.Event):void {
-      var exitFrameCallback = function () {
+      let exitFrameCallback = function () {
         targetAS3Object.removeEventListener(flash.events.Event.EXIT_FRAME, exitFrameCallback);
         this._broadcastMessage('onLoadInit', [this._target]);
       }.bind(this);
       // MovieClipLoader's init event is dispatched after all frame scripts of the AVM1 instance
       // have run for one additional iteration.
-      var targetAS3Object = this._loaderHelper.content;
+      let targetAS3Object = this._loaderHelper.content;
       targetAS3Object.addEventListener(flash.events.Event.EXIT_FRAME, exitFrameCallback)
     }
   }

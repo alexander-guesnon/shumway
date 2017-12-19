@@ -21,9 +21,9 @@ module Shumway.AVM2.ABC {
   import isObject = Shumway.isObject;
   import assert = Shumway.Debug.assert;
 
-  declare var TextDecoder;
+  declare let TextDecoder;
 
-  var textDecoder: any = null;
+  let textDecoder: any = null;
   if (typeof TextDecoder !== "undefined") {
     textDecoder = new TextDecoder();
   }
@@ -68,14 +68,14 @@ module Shumway.AVM2.ABC {
     }
 
     readU8s(count: number) {
-      var b = new Uint8Array(count);
+      let b = new Uint8Array(count);
       b.set(this._bytes.subarray(this._position, this._position + count), 0);
       this._position += count;
       return b;
     }
 
     viewU8s(count: number) {
-      var view = this._bytes.subarray(this._position, this._position + count);
+      let view = this._bytes.subarray(this._position, this._position + count);
       this._position += count;
       return view;
     }
@@ -89,7 +89,7 @@ module Shumway.AVM2.ABC {
     }
 
     readU30(): number {
-      var result = this.readU32();
+      let result = this.readU32();
       if (result & 0xc0000000) {
         // TODO: Spec says this is a corrupt ABC file, but it seems that some content
         // has this, e.g. 1000-0.abc
@@ -116,7 +116,7 @@ module Shumway.AVM2.ABC {
      * read? Who knows, here we'll just stay true to the Tamarin implementation.
      */
     readS32(): number {
-      var result = this.readU8();
+      let result = this.readU8();
       if (result & 0x80) {
         result = result & 0x7f | this.readU8() << 7;
         if (result & 0x4000) {
@@ -134,18 +134,18 @@ module Shumway.AVM2.ABC {
     }
 
     readWord(): number {
-      var result = this._view.getUint32(this._position, true);
+      let result = this._view.getUint32(this._position, true);
       this._position += 4;
       return result;
     }
 
     readS24(): number {
-      var u = this.readU8() | (this.readU8() << 8) | (this.readU8() << 16);
+      let u = this.readU8() | (this.readU8() << 8) | (this.readU8() << 16);
       return (u << 8) >> 8;
     }
 
     readDouble(): number {
-      var result = this._view.getFloat64(this._position, true);
+      let result = this._view.getFloat64(this._position, true);
       this._position += 8;
       return result;
     }
@@ -156,22 +156,22 @@ module Shumway.AVM2.ABC {
        * http://encoding.spec.whatwg.org/#concept-encoding-get
        */
       if (textDecoder) {
-        var position = this._position;
+        let position = this._position;
         this._position += length;
         return textDecoder.decode(this._bytes.subarray(position, position + length));
       }
 
-      var pos = this._position;
-      var end = pos + length;
-      var bytes = this._bytes;
-      var i = 0;
-      var result = AbcStream._getResultBuffer(length * 2);
+      let pos = this._position;
+      let end = pos + length;
+      let bytes = this._bytes;
+      let i = 0;
+      let result = AbcStream._getResultBuffer(length * 2);
       while (pos < end) {
-        var c = bytes[pos++];
+        let c = bytes[pos++];
         if (c <= 0x7f) {
           result[i++] = c;
         } else if (c >= 0xc0) { // multibyte
-          var code = 0;
+          let code = 0;
           if (c < 0xe0) { // 2 bytes
             code = ((c & 0x1f) << 6) | (bytes[pos++] & 0x3f);
           } else if (c < 0xf0) { // 3 bytes

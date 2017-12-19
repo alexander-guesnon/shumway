@@ -50,8 +50,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public static FromBounds(bounds: Bounds): Rectangle {
-      var xMin = bounds.xMin;
-      var yMin = bounds.yMin;
+      let xMin = bounds.xMin;
+      let yMin = bounds.yMin;
       return new this.sec.flash.geom.Rectangle(xMin / 20, yMin / 20,
                                                (bounds.xMax - xMin) / 20,
                                                (bounds.yMax - yMin) / 20);
@@ -208,10 +208,10 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public containsRect(rect: Rectangle): boolean {
-      var r1 = rect.x + rect.width;
-      var b1 = rect.y + rect.height;
-      var r2 = this.x + this.width;
-      var b2 = this.y + this.height;
+      let r1 = rect.x + rect.width;
+      let b1 = rect.y + rect.height;
+      let r2 = this.x + this.width;
+      let b2 = this.y + this.height;
       return (rect.x >= this.x) &&
              (rect.x < r2)      &&
              (rect.y >= this.y) &&
@@ -232,15 +232,15 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public intersectInPlace(clipRect: Rectangle): Rectangle {
-      var x0 = this.x;
-      var y0 = this.y;
-      var x1 = clipRect.x;
-      var y1 = clipRect.y;
-      var l = Math.max(x0, x1);
-      var r = Math.min(x0 + this.width, x1 + clipRect.width);
+      let x0 = this.x;
+      let y0 = this.y;
+      let x1 = clipRect.x;
+      let y1 = clipRect.y;
+      let l = Math.max(x0, x1);
+      let r = Math.min(x0 + this.width, x1 + clipRect.width);
       if (l <= r) {
-        var t = Math.max(y0, y1);
-        var b = Math.min(y0 + this.height, y1 + clipRect.height);
+        let t = Math.max(y0, y1);
+        let b = Math.min(y0 + this.height, y1 + clipRect.height);
         if (t <= b) {
           this.setTo(l, t, r - l, b - t);
           return this;
@@ -251,19 +251,19 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public intersectInPlaceInt32(clipRect: Rectangle): Rectangle {
-      var x0 = this.x | 0;
-      var y0 = this.y | 0;
-      var w0 = this.width | 0;
-      var h0 = this.height | 0;
-      var x1 = clipRect.x | 0;
-      var w1 = clipRect.width | 0;
-      var l = Math.max(x0, x1) | 0;
-      var r = Math.min(x0 + w0 | 0, x1 + w1 | 0) | 0;
+      let x0 = this.x | 0;
+      let y0 = this.y | 0;
+      let w0 = this.width | 0;
+      let h0 = this.height | 0;
+      let x1 = clipRect.x | 0;
+      let w1 = clipRect.width | 0;
+      let l = Math.max(x0, x1) | 0;
+      let r = Math.min(x0 + w0 | 0, x1 + w1 | 0) | 0;
       if (l <= r) {
-        var y1 = clipRect.y | 0;
-        var h1 = clipRect.height | 0;
-        var t = Math.max(y0, y1) | 0;
-        var b = Math.min(y0 + h0 | 0, y1 + h1 | 0);
+        let y1 = clipRect.y | 0;
+        let h1 = clipRect.height | 0;
+        let t = Math.max(y0, y1) | 0;
+        let b = Math.min(y0 + h0 | 0, y1 + h1 | 0);
         if (t <= b) {
           this.setTo(l, t, r - l, b - t);
           return this;
@@ -285,8 +285,8 @@ module Shumway.AVMX.AS.flash.geom {
         this.copyFrom(toUnion);
         return this;
       }
-      var l: number = Math.min(this.x, toUnion.x);
-      var t: number = Math.min(this.y, toUnion.y);
+      let l: number = Math.min(this.x, toUnion.x);
+      let t: number = Math.min(this.y, toUnion.y);
       this.setTo(l, t,
         Math.max(this.right, toUnion.right) - l,
         Math.max(this.bottom, toUnion.bottom) - t);
@@ -322,14 +322,14 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public getBaseWidth(angle: number) {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return u * this.width + v * this.height;
     }
 
     public getBaseHeight(angle: number) {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return v * this.width + u * this.height;
     }
 
@@ -342,8 +342,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public snapInPlace(): Rectangle  {
-      var x1 = Math.ceil(this.x + this.width);
-      var y1 = Math.ceil(this.y + this.height);
+      let x1 = Math.ceil(this.x + this.width);
+      let y1 = Math.ceil(this.y + this.height);
       this.x = Math.floor(this.x);
       this.y = Math.floor(this.y);
       this.width = x1 - this.x;
@@ -352,8 +352,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public roundInPlace(): Rectangle  {
-      var x1 = Math.round(this.x + this.width);
-      var y1 = Math.round(this.y + this.height);
+      let x1 = Math.round(this.x + this.width);
+      let y1 = Math.round(this.y + this.height);
       this.x = Math.round(this.x);
       this.y = Math.round(this.y);
       this.width = x1 - this.x;
@@ -366,7 +366,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public hashCode(): number {
-      var hash = 0;
+      let hash = 0;
       hash += this.x * 20 | 0;      hash *= 37;
       hash += this.y * 20 | 0;      hash *= 37;
       hash += this.width * 20 | 0;  hash *= 37;

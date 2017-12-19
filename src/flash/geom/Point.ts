@@ -63,13 +63,13 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public static interpolate(p1: Point, p2: Point, f: number): Point {
-      var f1: number = 1 - f;
+      let f1: number = 1 - f;
       return new this.sec.flash.geom.Point(p1.x * f + p2.x * f1, p1.y * f + p2.y * f1);
     }
 
     public static distance(p1: Point, p2: Point): number {
-      var dx = p2.x - p1.x;
-      var dy = p2.y - p1.y;
+      let dx = p2.x - p1.x;
+      let dy = p2.y - p1.y;
       return (dx === 0) ? Math.abs(dy) : (dy === 0) ? Math.abs(dx) : Math.sqrt(dx * dx + dy * dy);
     }
 
@@ -103,7 +103,7 @@ module Shumway.AVMX.AS.flash.geom {
 
     public normalize(thickness: number): void {
       if (this.x !== 0 || this.y !== 0) {
-        var relativeThickness: number = +thickness / this.length;
+        let relativeThickness: number = +thickness / this.length;
         this.x *= relativeThickness;
         this.y *= relativeThickness;
       }

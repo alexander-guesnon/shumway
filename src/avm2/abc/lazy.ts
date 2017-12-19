@@ -2,7 +2,7 @@ module Shumway.AVMX {
   import assert = Shumway.Debug.assert;
   import AbcStream = Shumway.AVM2.ABC.AbcStream;
 
-  var writer = new IndentingWriter();
+  let writer = new IndentingWriter();
 
   /**
    * Naming Conventions:
@@ -54,7 +54,7 @@ module Shumway.AVMX {
     ClassProtectedNs   = 0x08
   }
 
-  var CONSTANTNames = ["Undefined","Utf8|ClassSealed","Float|ClassFinal","Int","UInt|ClassInterface","PrivateNs","Double","QName","Namespace|ClassProtectedNs","Multiname","False","True","Null","QNameA","MultinameA","RTQName","RTQNameA","RTQNameL","RTQNameLA","NameL","NameLA","NamespaceSet","PackageNamespace","PackageInternalNs","ProtectedNamespace","ExplicitNamespace","StaticProtectedNs","MultinameL","MultinameLA","TypeName"];
+  let CONSTANTNames = ["Undefined","Utf8|ClassSealed","Float|ClassFinal","Int","UInt|ClassInterface","PrivateNs","Double","QName","Namespace|ClassProtectedNs","Multiname","False","True","Null","QNameA","MultinameA","RTQName","RTQNameA","RTQNameL","RTQNameLA","NameL","NameLA","NamespaceSet","PackageNamespace","PackageInternalNs","ProtectedNamespace","ExplicitNamespace","StaticProtectedNs","MultinameL","MultinameLA","TypeName"];
 
   export function getCONSTANTName(constant: CONSTANT): string {
     return release ? String(constant) : CONSTANTNames[constant];
@@ -87,7 +87,7 @@ module Shumway.AVMX {
     GetterSetter       = 7 // This is a runtime addition, not a valid ABC Trait type.
   }
 
-  var TRAITNames = ["Slot", "Method", "Getter", "Setter", "Class", "Function", "Const", "GetterSetter"];
+  let TRAITNames = ["Slot", "Method", "Getter", "Setter", "Class", "Function", "Const", "GetterSetter"];
 
   export function getTRAITName(trait: TRAIT): string {
     return release ? String(trait) : TRAITNames[trait];
@@ -108,7 +108,7 @@ module Shumway.AVMX {
     StaticProtected = 5
   }
 
-  var namespaceTypeNames = ["Public", "Protected", "PackageInternal", "Private", "Explicit", "StaticProtected"];
+  let namespaceTypeNames = ["Public", "Protected", "PackageInternal", "Private", "Explicit", "StaticProtected"];
 
   export function getNamespaceTypeName(namespaceType: NamespaceType): string {
     return release ? String(namespaceType) : namespaceTypeNames[namespaceType];
@@ -148,7 +148,7 @@ module Shumway.AVMX {
     }
 
     getValue(key: string): string {
-      for (var i = 0; i < this.keys.length; i++) {
+      for (let i = 0; i < this.keys.length; i++) {
         if (this.abc.getString(this.keys[i]) === key) {
           return this.abc.getString(this.values[i]);
         }
@@ -174,14 +174,14 @@ module Shumway.AVMX {
       if (this._resolved) {
         return;
       }
-      for (var i = 0; i < this.traits.length; i++) {
+      for (let i = 0; i < this.traits.length; i++) {
         this.traits[i].resolve();
       }
       this._resolved = true;
     }
 
     attachHolder(holder: Info) {
-      for (var i = 0; i < this.traits.length; i++) {
+      for (let i = 0; i < this.traits.length; i++) {
         release || assert(!this.traits[i].holder);
         this.traits[i].holder = holder;
       }
@@ -197,15 +197,15 @@ module Shumway.AVMX {
      */
     private indexOf(mn: Multiname): number {
       release || assert(this._resolved);
-      var mnName = mn.name;
-      var nss = mn.namespaces;
-      var traits = this.traits;
-      for (var i = 0; i < traits.length; i++) {
-        var trait = traits[i];
-        var traitMn = <Multiname>trait.name;
+      let mnName = mn.name;
+      let nss = mn.namespaces;
+      let traits = this.traits;
+      for (let i = 0; i < traits.length; i++) {
+        let trait = traits[i];
+        let traitMn = <Multiname>trait.name;
         if (traitMn.name === mnName) {
-          var ns = traitMn.namespaces[0];
-          for (var j = 0; j < nss.length; j++) {
+          let ns = traitMn.namespaces[0];
+          for (let j = 0; j < nss.length; j++) {
             if (ns === nss[j]) {
               return i;
             }
@@ -216,7 +216,7 @@ module Shumway.AVMX {
     }
 
     getTrait(mn: Multiname): TraitInfo {
-      var i = this.indexOf(mn);
+      let i = this.indexOf(mn);
       return i >= 0 ? this.traits[i] : null;
     }
 
@@ -248,14 +248,14 @@ module Shumway.AVMX {
       // Resolve traits so that indexOf works out.
       this.resolve();
 
-      var protectedNsMappings = Object.create(superTraits ? superTraits.protectedNsMappings : null);
-      var result = new RuntimeTraits(superTraits, protectedNs, protectedNsMappings);
+      let protectedNsMappings = Object.create(superTraits ? superTraits.protectedNsMappings : null);
+      let result = new RuntimeTraits(superTraits, protectedNs, protectedNsMappings);
 
       // Add all of the child traits, replacing or extending parent traits where necessary.
-      for (var i = 0; i < this.traits.length; i++) {
-        var trait = this.traits[i];
-        var name = <Multiname>trait.name;
-        var runtimeTrait = new RuntimeTraitInfo(name, trait.kind, trait.abc);
+      for (let i = 0; i < this.traits.length; i++) {
+        let trait = this.traits[i];
+        let name = <Multiname>trait.name;
+        let runtimeTrait = new RuntimeTraitInfo(name, trait.kind, trait.abc);
         if (name.namespaces[0].type === NamespaceType.Protected) {
           // Names for protected traits get canonicalized to the name of the type that initially
           // introduces the trait.
@@ -265,11 +265,11 @@ module Shumway.AVMX {
           result.protectedNsMappings[name.name] = runtimeTrait;
         }
 
-        var currentTrait = result.addTrait(runtimeTrait);
+        let currentTrait = result.addTrait(runtimeTrait);
 
         switch (trait.kind) {
           case TRAIT.Method:
-            var method = createMethodForTrait(<MethodTraitInfo>trait, scope);
+            let method = createMethodForTrait(<MethodTraitInfo>trait, scope);
             runtimeTrait.value = method;
             break;
           case TRAIT.Getter:
@@ -291,7 +291,7 @@ module Shumway.AVMX {
           case TRAIT.Class:
             // Only non-const slots need to be writable. Everything else is fixed.
             runtimeTrait.writable = true;
-            var slotTrait = <SlotTraitInfo>trait;
+            let slotTrait = <SlotTraitInfo>trait;
             runtimeTrait.slot = slotTrait.slot;
             runtimeTrait.value = slotTrait.getDefaultValue();
             runtimeTrait.typeName = <Multiname>slotTrait.typeName;
@@ -307,15 +307,15 @@ module Shumway.AVMX {
     if (methodTraitInfo.method) {
       return methodTraitInfo.method;
     }
-    var methodInfo = methodTraitInfo.getMethodInfo();
-    var method;
+    let methodInfo = methodTraitInfo.getMethodInfo();
+    let method;
     if (methodInfo.flags & METHOD.Native) {
-      var metadata = methodInfo.getNativeMetadata();
+      let metadata = methodInfo.getNativeMetadata();
       if (metadata || methodTraitInfo.holder instanceof ScriptInfo) {
         if (metadata) {
           method = AS.getNative(metadata.getValueAt(0));
         } else {
-          var mn = methodTraitInfo.getName();
+          let mn = methodTraitInfo.getName();
           method = AS.getNative(mn.uri + '.' + mn.name);
         }
         method = createGlobalNative(method, scope.object.sec);
@@ -330,7 +330,7 @@ module Shumway.AVMX {
       }
     } else {
       method = function () {
-        var self = this === jsGlobal ? scope.global.object : this;
+        let self = this === jsGlobal ? scope.global.object : this;
         return interpret(self, methodInfo, scope, <any>arguments, null);
       };
       if (!release) {
@@ -342,8 +342,8 @@ module Shumway.AVMX {
     }
     if (!release && flashlog && methodInfo.trait) {
       method = (function (wrapped, methodInfo) {
-        var traceMsg = methodInfo.toFlashlogString();
-        var result: any = function () {
+        let traceMsg = methodInfo.toFlashlogString();
+        let result: any = function () {
           flashlog.writeAS3Trace(traceMsg);
           return wrapped.apply(this, arguments);
         };
@@ -375,8 +375,8 @@ module Shumway.AVMX {
         case 2: return native(sec, arguments[0], arguments[1]);
         case 3: return native(sec, arguments[0], arguments[1], arguments[2]);
         default:
-          var args: any[] = [sec];
-          for (var i = 0; i < arguments.length; i++) {
+          let args: any[] = [sec];
+          for (let i = 0; i < arguments.length; i++) {
             args.push(arguments[i]);
           }
           return native.apply(this, args);
@@ -402,8 +402,8 @@ module Shumway.AVMX {
         return null;
       }
       if (this.metadata instanceof Uint32Array) {
-        var metadata = new Array(this.metadata.length);
-        for (var i = 0; i < this.metadata.length; i++) {
+        let metadata = new Array(this.metadata.length);
+        for (let i = 0; i < this.metadata.length; i++) {
           metadata[i] = this.abc.getMetadataInfo(<number>this.metadata[i]);
         }
         this.metadata = metadata;
@@ -468,12 +468,12 @@ module Shumway.AVMX {
 
     constructor(public superTraits: RuntimeTraits,
                 public protectedNs: Namespace, public protectedNsMappings: any) {
-      var traits = this._traits = Object.create(null);
+      let traits = this._traits = Object.create(null);
       if (!superTraits) {
         return;
       }
-      var superMappings = superTraits._traits;
-      for (var key in superMappings) {
+      let superMappings = superTraits._traits;
+      for (let key in superMappings) {
         traits[key] = Object.create(superMappings[key]);
       }
     }
@@ -484,19 +484,19 @@ module Shumway.AVMX {
      * See the comment for `Trait#resolveRuntimeTraits` for an explanation of the lookup scheme.
      */
     public addTrait(trait: RuntimeTraitInfo): RuntimeTraitInfo {
-      var mn = trait.name;
-      var mappings = this._traits[mn.name];
+      let mn = trait.name;
+      let mappings = this._traits[mn.name];
       if (!mappings) {
         mappings = this._traits[mn.name] = Object.create(null);
       }
-      var nsName = mn.namespaces[0].mangledName;
-      var current = mappings[nsName];
+      let nsName = mn.namespaces[0].mangledName;
+      let current = mappings[nsName];
       mappings[nsName] = trait;
       return current;
     }
 
     public addSlotTrait(trait: RuntimeTraitInfo) {
-      var slot = trait.slot;
+      let slot = trait.slot;
       if (!slot) {
         slot = trait.slot = this._nextSlotID++;
       } else {
@@ -513,19 +513,19 @@ module Shumway.AVMX {
      */
     getTrait(namespaces: Namespace[], name: string): RuntimeTraitInfo {
       release || assert(typeof name === 'string');
-      var mappings = this._traits[name];
+      let mappings = this._traits[name];
       if (!mappings) {
         return null;
       }
-      var trait: RuntimeTraitInfo;
-      for (var i = 0; i < namespaces.length; i++) {
-        var ns = namespaces[i];
+      let trait: RuntimeTraitInfo;
+      for (let i = 0; i < namespaces.length; i++) {
+        let ns = namespaces[i];
         trait = mappings[ns.mangledName];
         if (trait) {
           return trait;
         }
         if (ns.type === NamespaceType.Protected) {
-          var protectedScope = this;
+          let protectedScope = this;
           while (protectedScope) {
             if (protectedScope.protectedNs === ns) {
               trait = protectedScope.protectedNsMappings[name];
@@ -541,11 +541,11 @@ module Shumway.AVMX {
     }
 
     getTraitsList() {
-      var list = [];
-      var names = this._traits;
-      for (var name in names) {
-        var mappings = names[name];
-        for (var nsName in mappings) {
+      let list = [];
+      let names = this._traits;
+      for (let name in names) {
+        let mappings = names[name];
+        for (let nsName in mappings) {
           list.push(mappings[nsName]);
         }
       }
@@ -553,10 +553,10 @@ module Shumway.AVMX {
     }
 
     getSlotPublicTraitNames(): string [] {
-      var slots = this.slots;
-      var names = [];
-      for (var i = 1; i < slots.length; i++) {
-        var slot = slots[i];
+      let slots = this.slots;
+      let names = [];
+      for (let i = 1; i < slots.length; i++) {
+        let slot = slots[i];
         if (!(<Multiname>slot.name).namespace.isPublic()) {
           continue;
         }
@@ -594,12 +594,12 @@ module Shumway.AVMX {
       if (this.typeName === null) {
         return this._type = null;
       }
-      var type = this.abc.applicationDomain.getClass(this.typeName);
+      let type = this.abc.applicationDomain.getClass(this.typeName);
       return this._type = (type && type.axCoerce) ? type : null;
     }
   }
 
-  var typeDefaultValues = {
+  let typeDefaultValues = {
     __proto__: null,
     $BgNumber: NaN,
     $Bgint: 0,
@@ -637,7 +637,7 @@ module Shumway.AVMX {
         if (this.typeName === null) {
           return undefined;
         }
-        var value = typeDefaultValues[(<Multiname>this.typeName).getMangledName()];
+        let value = typeDefaultValues[(<Multiname>this.typeName).getMangledName()];
         return value === undefined ? null : value;
       }
       return this.abc.getConstant(this.defaultValueKind, this.defaultValueIndex);
@@ -716,7 +716,7 @@ module Shumway.AVMX {
     }
 
     toString() {
-      var str = "";
+      let str = "";
       if (this.name) {
         str += this.getName();
       } else {
@@ -771,7 +771,7 @@ module Shumway.AVMX {
     }
 
     getClassName(): string {
-      var name = this.getName();
+      let name = this.getName();
       if (name.namespaces[0].uri) {
         return name.namespaces[0].uri + "." + name.name;
       }
@@ -790,18 +790,18 @@ module Shumway.AVMX {
         return this._interfaces;
       }
 
-      var superClassInterfaces;
-      var superClass = ownerClass.superClass;
+      let superClassInterfaces;
+      let superClass = ownerClass.superClass;
       if (superClass) {
         superClassInterfaces = superClass.classInfo.instanceInfo.getInterfaces(superClass);
       }
-      var SetCtor: any = Set;
-      var interfaces = this._interfaces = new SetCtor(superClassInterfaces);
-      for (var i = 0; i < this.interfaceNameIndices.length; i++) {
-        var mn = this.abc.getMultiname(this.interfaceNameIndices[i]);
-        var type = this.abc.applicationDomain.getClass(mn);
+      let SetCtor: any = Set;
+      let interfaces = this._interfaces = new SetCtor(superClassInterfaces);
+      for (let i = 0; i < this.interfaceNameIndices.length; i++) {
+        let mn = this.abc.getMultiname(this.interfaceNameIndices[i]);
+        let type = this.abc.applicationDomain.getClass(mn);
         interfaces.add(type);
-        var implementedInterfaces = type.classInfo.instanceInfo.getInterfaces(type);
+        let implementedInterfaces = type.classInfo.instanceInfo.getInterfaces(type);
         implementedInterfaces.forEach((iface) => interfaces.add(iface));
       }
       return interfaces;
@@ -873,11 +873,11 @@ module Shumway.AVMX {
       if (!this.trait) {
         return null;
       }
-      var metadata = this.trait.getMetadata();
+      let metadata = this.trait.getMetadata();
       if (!metadata) {
         return null;
       }
-      for (var i = 0; i < metadata.length; i++) {
+      for (let i = 0; i < metadata.length; i++) {
         if (metadata[i].getName() === "native") {
           return metadata[i];
         }
@@ -926,7 +926,7 @@ module Shumway.AVMX {
 
     getTraits(): Traits {
       if (!this._traits) {
-        var traits = [];
+        let traits = [];
         if (this.varName) {
           traits.push(new SlotTraitInfo(this.abc, TRAIT.Slot, this.varName, 1, this.type, 0, 0));
         }
@@ -953,7 +953,7 @@ module Shumway.AVMX {
 
     trace(writer: IndentingWriter) {
       writer.writeLn("Code: " + this.code.length);
-      var stream = new BytecodeStream(this.code);
+      let stream = new BytecodeStream(this.code);
       while (stream.currentBytecode() !== Bytecode.END) {
         writer.writeLn(stream.currentBCI + ": " + getBytecodeName(stream.currentBytecode()));
         stream.next();
@@ -983,11 +983,11 @@ module Shumway.AVMX {
       if (!this.trait) {
         return null;
       }
-      var metadata = this.trait.getMetadata();
+      let metadata = this.trait.getMetadata();
       if (!metadata) {
         return null;
       }
-      for (var i = 0; i < metadata.length; i++) {
+      for (let i = 0; i < metadata.length; i++) {
         if (metadata[i].getName() === "native") {
           return metadata[i];
         }
@@ -1006,7 +1006,7 @@ module Shumway.AVMX {
       if (this.returnTypeNameIndex === 0) {
         this._returnType = null;
       } else {
-        var mn = this.abc.getMultiname(this.returnTypeNameIndex);
+        let mn = this.abc.getMultiname(this.returnTypeNameIndex);
         this._returnType = this.abc.applicationDomain.getClass(mn);
       }
       return this._returnType;
@@ -1023,7 +1023,7 @@ module Shumway.AVMX {
     }
 
     toString() {
-      var str = "anonymous";
+      let str = "anonymous";
       if (this.name) {
         str = this.abc.getString(this.name);
       }
@@ -1035,12 +1035,12 @@ module Shumway.AVMX {
     }
 
     toFlashlogString(): string {
-      var trait = this.trait;
-      var prefix = trait.kind === TRAIT.Getter ? 'get ' :
+      let trait = this.trait;
+      let prefix = trait.kind === TRAIT.Getter ? 'get ' :
                    trait.kind === TRAIT.Setter ? 'set ' : '';
-      var name = trait.toFlashlogString();
-      var holder = trait.holder;
-      var holderName;
+      let name = trait.toFlashlogString();
+      let holder = trait.holder;
+      let holderName;
       if (holder && holder instanceof InstanceInfo) {
         holderName = (<InstanceInfo>holder).toFlashlogString();
         prefix = holderName + '/' + prefix;
@@ -1049,7 +1049,7 @@ module Shumway.AVMX {
         holderName = (<ClassInfo>holder).trait.toFlashlogString();
         prefix = holderName + '$/' + prefix;
       }
-      var prefixPos;
+      let prefixPos;
       if (holderName && (prefixPos = name.indexOf('::')) > 0 &&
           holderName.indexOf(name.substring(0, prefixPos + 2)) === 0) {
         name = name.substring(prefixPos + 2);
@@ -1086,10 +1086,10 @@ module Shumway.AVMX {
     }
 
     public static FromFQNString(fqn: string, nsType: NamespaceType) {
-      var lastDot = fqn.lastIndexOf('.');
-      var uri = lastDot === -1 ? '' : fqn.substr(0, lastDot);
-      var name = lastDot === -1 ? fqn : fqn.substr(lastDot + 1);
-      var ns = internNamespace(nsType, uri);
+      let lastDot = fqn.lastIndexOf('.');
+      let uri = lastDot === -1 ? '' : fqn.substr(0, lastDot);
+      let name = lastDot === -1 ? fqn : fqn.substr(lastDot + 1);
+      let ns = internNamespace(nsType, uri);
       return new Multiname(null, 0, CONSTANT.RTQName, [ns], name);
     }
 
@@ -1150,8 +1150,8 @@ module Shumway.AVMX {
     }
 
     public isQName(): boolean {
-      var kind = this.kind;
-      var result = kind === CONSTANT.TypeName ||
+      let kind = this.kind;
+      let result = kind === CONSTANT.TypeName ||
                    kind === CONSTANT.QName || kind === CONSTANT.QNameA ||
                    kind >= CONSTANT.RTQName && kind <= CONSTANT.RTQNameLA;
       release || assert(!(result && this.namespaces.length !== 1));
@@ -1175,7 +1175,7 @@ module Shumway.AVMX {
 
     public set prefix(prefix: string) {
       release || assert(this.isQName());
-      var ns = this.namespaces[0];
+      let ns = this.namespaces[0];
       if (ns.prefix === prefix) {
         return;
       }
@@ -1189,15 +1189,15 @@ module Shumway.AVMX {
 
     public matches(mn: Multiname): boolean {
       release || assert(this.isQName());
-      var anyName = mn.isAnyName();
+      let anyName = mn.isAnyName();
       if (anyName && !mn.isQName()) {
         return true;
       }
       if (!anyName && this.name !== mn.name) {
         return false;
       }
-      var uri = this.namespaces[0].uri;
-      for (var i = mn.namespaces.length; i--;) {
+      let uri = this.namespaces[0].uri;
+      for (let i = mn.namespaces.length; i--;) {
         if (mn.namespaces[i].uri === uri) {
           return true;
         }
@@ -1223,7 +1223,7 @@ module Shumway.AVMX {
 
     private _mangleName() {
       release || assert(!this._mangledName);
-      var mangledName = "$" + this.namespaces[0].mangledName + axCoerceString(this.name);
+      let mangledName = "$" + this.namespaces[0].mangledName + axCoerceString(this.name);
       if (!this.isRuntime()) {
         this._mangledName = mangledName;
       }
@@ -1250,7 +1250,7 @@ module Shumway.AVMX {
 
     public toFQNString(useColons: boolean) {
       release || assert(this.isQName());
-      var prefix = this.namespaces[0].uri;
+      let prefix = this.namespaces[0].uri;
       if (prefix.length) {
         prefix += (useColons ? '::' : '.');
       }
@@ -1258,10 +1258,10 @@ module Shumway.AVMX {
     }
 
     public toString() {
-      var str = getCONSTANTName(this.kind) + " ";
+      let str = getCONSTANTName(this.kind) + " ";
       str += this.isAttribute() ? "@" : "";
       if (this.isRuntimeNamespace()) {
-        var namespaces = this.namespaces ? this.namespaces.map(x => String(x)).join(", ") : null;
+        let namespaces = this.namespaces ? this.namespaces.map(x => String(x)).join(", ") : null;
         str += "[" + namespaces + "]::" + this._nameToString();
       } else if (this.isQName()) {
         str += this.namespaces[0] + "::";
@@ -1277,7 +1277,7 @@ module Shumway.AVMX {
     }
 
     toFlashlogString(): string {
-      var namespaceUri = this.uri;
+      let namespaceUri = this.uri;
       return namespaceUri ? namespaceUri + "::" + this.name : this.name;
     }
 
@@ -1292,26 +1292,26 @@ module Shumway.AVMX {
     }
 
     public static FromSimpleName(simpleName: string): Multiname {
-      var nameIndex = simpleName.lastIndexOf(".");
+      let nameIndex = simpleName.lastIndexOf(".");
       if (nameIndex <= 0) {
         nameIndex = simpleName.lastIndexOf(" ");
       }
 
-      var uri = '';
-      var name;
+      let uri = '';
+      let name;
       if (nameIndex > 0 && nameIndex < simpleName.length - 1) {
         name = simpleName.substring(nameIndex + 1).trim();
         uri = simpleName.substring(0, nameIndex).trim();
       } else {
         name = simpleName;
       }
-      var ns = internNamespace(NamespaceType.Public, uri);
+      let ns = internNamespace(NamespaceType.Public, uri);
       return new Multiname(null, 0, CONSTANT.RTQName, [ns], name);
     }
   }
 
   // Used in _hashNamespace so we don't need to allocate a new buffer each time.
-  var namespaceHashingBuffer = new Int32Array(100);
+  let namespaceHashingBuffer = new Int32Array(100);
 
   export class Namespace {
     public mangledName: string = null;
@@ -1334,18 +1334,18 @@ module Shumway.AVMX {
     private static _hashNamespace(type: NamespaceType, uri: string, prefix: string) {
       uri = uri + '';
       prefix = prefix + '';
-      var index = Namespace._knownNames.indexOf(uri);
+      let index = Namespace._knownNames.indexOf(uri);
       if (index >= 0) {
         return type << 2 | index;
       }
-      var length = 1 + uri.length + prefix.length;
-      var data = length < 101 ? namespaceHashingBuffer : new Int32Array(length);
-      var j = 0;
+      let length = 1 + uri.length + prefix.length;
+      let data = length < 101 ? namespaceHashingBuffer : new Int32Array(length);
+      let j = 0;
       data[j++] = type;
-      for (var i = 0; i < uri.length; i++) {
+      for (let i = 0; i < uri.length; i++) {
         data[j++] = uri.charCodeAt(i);
       }
-      for (var i = 0; i < prefix.length; i++) {
+      for (let i = 0; i < prefix.length; i++) {
         data[j++] = prefix.charCodeAt(i);
       }
       return Shumway.HashUtilities.hashBytesTo32BitsMD5(data, 0, j);
@@ -1356,7 +1356,7 @@ module Shumway.AVMX {
         this.mangledName = 'Bg';
         return;
       }
-      var nsHash = Namespace._hashNamespace(this.type, this.uri, this.prefix);
+      let nsHash = Namespace._hashNamespace(this.type, this.uri, this.prefix);
       this.mangledName = Shumway.StringUtilities.variableLengthEncodeInt32(nsHash);
     }
 
@@ -1373,16 +1373,16 @@ module Shumway.AVMX {
     public static PUBLIC: Namespace;
   }
 
-  var _namespaces: MapObject<Namespace> = {};
+  let _namespaces: MapObject<Namespace> = {};
 
   export function internNamespace(type: NamespaceType, uri: string) {
-    var key = type + uri;
+    let key = type + uri;
     return _namespaces[key] || (_namespaces[key] = new Namespace(type, uri, ''));
   }
 
   export function internPrefixedNamespace(type: NamespaceType, uri: string, prefix: string) {
-    var key = type + uri + prefix;
-    var ns = _namespaces[key];
+    let key = type + uri + prefix;
+    let ns = _namespaces[key];
     if (!ns) {
       ns = _namespaces[key] = new Namespace(type, uri, prefix);
     }
@@ -1459,59 +1459,59 @@ module Shumway.AVMX {
     }
 
     private _parseNumericConstants() {
-      var n = 0, s = this._stream;
+      let n = 0, s = this._stream;
 
       // Parse Signed Integers
       n = s.readU30();
-      var ints = new Int32Array(n);
+      let ints = new Int32Array(n);
       ints[0] = 0;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         ints[i] = s.readS32();
       }
       this.ints = ints;
 
       // Parse Unsigned Integers
       n = s.readU30();
-      var uints = new Uint32Array(n);
+      let uints = new Uint32Array(n);
       uints[0] = 0;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         uints[i] = s.readS32();
       }
       this.uints = uints;
 
       // Parse Doubles
       n = s.readU30();
-      var doubles = new Float64Array(n);
+      let doubles = new Float64Array(n);
       doubles[0] = NaN;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         doubles[i] = s.readDouble();
       }
       this.doubles = doubles;
     }
 
     private _parseStringConstants() {
-      var n = 0, s = this._stream;
+      let n = 0, s = this._stream;
       n = s.readU30();
       this._strings = new Array(n);
       this._strings[0] = null;
 
       // Record the offset of each string in |stringOffsets|. This array has one extra
       // element so that we can compute the length of the last string.
-      var stringOffsets = this._stringOffsets = new Uint32Array(n);
+      let stringOffsets = this._stringOffsets = new Uint32Array(n);
       stringOffsets[0] = -1;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         stringOffsets[i] = s.position;
         s.advance(s.readU30());
       }
     }
 
     private _parseNamespaces() {
-      var s = this._stream;
-      var n = s.readU30();
+      let s = this._stream;
+      let n = s.readU30();
       this._namespaces = new Array(n);
-      var namespaceOffsets = this._namespaceOffsets = new Uint32Array(n);
+      let namespaceOffsets = this._namespaceOffsets = new Uint32Array(n);
       namespaceOffsets[0] = -1;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         namespaceOffsets[i] = s.position;
         s.readU8(); // Kind
         s.readU30(); // String
@@ -1519,23 +1519,23 @@ module Shumway.AVMX {
     }
 
     private _parseNamespaceSets() {
-      var s = this._stream;
-      var n = s.readU30();
+      let s = this._stream;
+      let n = s.readU30();
       this._namespaceSets = new Array(n);
-      var namespaceSetOffsets = this._namespaceSetOffsets = new Uint32Array(n);
+      let namespaceSetOffsets = this._namespaceSetOffsets = new Uint32Array(n);
       namespaceSetOffsets[0] = -1;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         namespaceSetOffsets[i] = s.position;
-        var c = s.readU30(); // Count
-        for (var j = 0; j < c; j++) {
+        let c = s.readU30(); // Count
+        for (let j = 0; j < c; j++) {
           s.readU30(); // Namespace
         }
       }
     }
 
     private _consumeMultiname() {
-      var s = this._stream;
-      var kind = s.readU8();
+      let s = this._stream;
+      let kind = s.readU8();
       switch (kind) {
         case CONSTANT.QName: case CONSTANT.QNameA:
           s.readU30();
@@ -1555,7 +1555,7 @@ module Shumway.AVMX {
           break;
         case CONSTANT.TypeName:
           s.readU32();
-          var typeParameterCount = s.readU32();
+          let typeParameterCount = s.readU32();
           release || assert(typeParameterCount === 1); // This is probably the number of type
                                                        // parameters.
           s.readU32();
@@ -1567,26 +1567,26 @@ module Shumway.AVMX {
     }
 
     private _parseMultinames() {
-      var s = this._stream;
-      var n = s.readU30();
+      let s = this._stream;
+      let n = s.readU30();
       this._multinames = new Array(n);
-      var multinameOffsets = this._multinameOffsets = new Uint32Array(n);
+      let multinameOffsets = this._multinameOffsets = new Uint32Array(n);
       multinameOffsets[0] = -1;
-      for (var i = 1; i < n; i++) {
+      for (let i = 1; i < n; i++) {
         multinameOffsets[i] = s.position;
         this._consumeMultiname();
       }
     }
 
     private _parseMultiname(i: number): Multiname {
-      var stream = this._stream;
+      let stream = this._stream;
 
-      var namespaceIsRuntime = false;
-      var namespaceIndex;
-      var useNamespaceSet = true;
-      var nameIndex = 0;
+      let namespaceIsRuntime = false;
+      let namespaceIndex;
+      let useNamespaceSet = true;
+      let nameIndex = 0;
 
-      var kind = stream.readU8();
+      let kind = stream.readU8();
       switch (kind) {
         case CONSTANT.QName:
         case CONSTANT.QNameA:
@@ -1616,14 +1616,14 @@ module Shumway.AVMX {
          * This is undocumented, looking at Tamarin source for this one.
          */
         case CONSTANT.TypeName:
-          var mn = stream.readU32();
-          var typeParameterCount = stream.readU32();
+          let mn = stream.readU32();
+          let typeParameterCount = stream.readU32();
           if (!release && typeParameterCount !== 1) {
             // TODO: figure out what to do in this case. What would Tamarin do?
             Debug.warning("Invalid multiname: bad type parameter count " + typeParameterCount);
           }
-          var typeParameter = this.getMultiname(stream.readU32());
-          var factory = this.getMultiname(mn);
+          let typeParameter = this.getMultiname(stream.readU32());
+          let factory = this.getMultiname(mn);
           return new Multiname(this, i, kind, factory.namespaces, factory.name, typeParameter);
         default:
           Shumway.Debug.unexpected();
@@ -1631,8 +1631,8 @@ module Shumway.AVMX {
       }
 
       // A name index of 0 means that it's a runtime name.
-      var name = nameIndex === 0 ? null : this.getString(nameIndex);
-      var namespaces;
+      let name = nameIndex === 0 ? null : this.getString(nameIndex);
+      let namespaces;
       if (namespaceIsRuntime) {
         namespaces = null;
       } else {
@@ -1645,8 +1645,8 @@ module Shumway.AVMX {
     }
 
     private _checkMagic() {
-      var magic = this._stream.readWord();
-      var flashPlayerBrannan = 46 << 16 | 15;
+      let magic = this._stream.readWord();
+      let flashPlayerBrannan = 46 << 16 | 15;
       if (magic < flashPlayerBrannan) {
         this.env.app.sec.throwError('VerifierError', Errors.InvalidMagicError, magic >> 16,
                                     magic & 0xffff);
@@ -1657,12 +1657,12 @@ module Shumway.AVMX {
      * String duplicates exist in practice but are extremely rare.
      */
     private _checkForDuplicateStrings(): boolean {
-      var a = [];
-      for (var i = 0; i < this._strings.length; i++) {
+      let a = [];
+      for (let i = 0; i < this._strings.length; i++) {
         a.push(this.getString(i));
       }
       a.sort();
-      for (var i = 0; i < a.length - 1; i++) {
+      for (let i = 0; i < a.length - 1; i++) {
         if (a[i] === a[i + 1]) {
           return true;
         }
@@ -1675,11 +1675,11 @@ module Shumway.AVMX {
      */
     public getString(i: number): string {
       release || assert(i >= 0 && i < this._stringOffsets.length);
-      var str = this._strings[i];
+      let str = this._strings[i];
       if (str === undefined) {
-        var s = this._stream;
+        let s = this._stream;
         s.seek(this._stringOffsets[i]);
-        var l = s.readU30();
+        let l = s.readU30();
         str = this._strings[i] = s.readUTFString(l);
       }
       return str;
@@ -1697,9 +1697,9 @@ module Shumway.AVMX {
       if (i === 0) {
         return null;
       }
-      var mn = this._multinames[i];
+      let mn = this._multinames[i];
       if (mn === undefined) {
-        var s = this._stream;
+        let s = this._stream;
         s.seek(this._multinameOffsets[i]);
         mn = this._multinames[i] = this._parseMultiname(i);
       }
@@ -1717,16 +1717,16 @@ module Shumway.AVMX {
       if (i === 0) {
         return Namespace.PUBLIC;
       }
-      var ns = this._namespaces[i];
+      let ns = this._namespaces[i];
       if (ns !== undefined) {
         return ns;
       }
-      var s = this._stream;
+      let s = this._stream;
       s.seek(this._namespaceOffsets[i]);
-      var kind = s.readU8();
-      var uriIndex = s.readU30();
-      var uri = uriIndex ? this.getString(uriIndex) : undefined;
-      var type: NamespaceType;
+      let kind = s.readU8();
+      let uriIndex = s.readU30();
+      let uri = uriIndex ? this.getString(uriIndex) : undefined;
+      let type: NamespaceType;
       switch (kind) {
         case CONSTANT.Namespace:
         case CONSTANT.PackageNamespace:
@@ -1775,17 +1775,17 @@ module Shumway.AVMX {
       if (i === 0) {
         return null;
       }
-      var nss = this._namespaceSets[i];
+      let nss = this._namespaceSets[i];
       if (nss === undefined) {
-        var s = this._stream;
-        var o = this._namespaceSetOffsets[i];
+        let s = this._stream;
+        let o = this._namespaceSetOffsets[i];
         s.seek(o);
-        var c = s.readU30(); // Count
+        let c = s.readU30(); // Count
         nss = this._namespaceSets[i] = new Array(c);
         o = s.position;
-        for (var j = 0; j < c; j++) {
+        for (let j = 0; j < c; j++) {
           s.seek(o);
-          var x = s.readU30();
+          let x = s.readU30();
           o = s.position; // The call to |getNamespace| can change our current position.
           nss[j] = this.getNamespace(x);
         }
@@ -1794,63 +1794,63 @@ module Shumway.AVMX {
     }
 
     private _parseMethodInfos() {
-      var s = this._stream;
-      var n = s.readU30();
+      let s = this._stream;
+      let n = s.readU30();
       this._methods = new Array(n);
       this._methodInfoOffsets = new Uint32Array(n);
-      for (var i = 0; i < n; ++i) {
+      for (let i = 0; i < n; ++i) {
         this._methodInfoOffsets[i] = s.position;
         this._consumeMethodInfo();
       }
     }
 
     private _consumeMethodInfo() {
-      var s = this._stream;
-      var parameterCount = s.readU30();
+      let s = this._stream;
+      let parameterCount = s.readU30();
       s.readU30(); // Return Type
-      var parameterOffset = s.position;
-      for (var i = 0; i < parameterCount; i++) {
+      let parameterOffset = s.position;
+      for (let i = 0; i < parameterCount; i++) {
         s.readU30();
       }
-      var nm = s.readU30();
-      var flags = s.readU8();
+      let nm = s.readU30();
+      let flags = s.readU8();
       if (flags & METHOD.HasOptional) {
-        var optionalCount = s.readU30();
+        let optionalCount = s.readU30();
         release || assert(parameterCount >= optionalCount);
-        for (var i = parameterCount - optionalCount; i < parameterCount; i++) {
+        for (let i = parameterCount - optionalCount; i < parameterCount; i++) {
           s.readU30(); // Value Index
           s.readU8(); // Value Kind
         }
       }
       if (flags & METHOD.HasParamNames) {
-        for (var i = 0; i < parameterCount; i++) {
+        for (let i = 0; i < parameterCount; i++) {
           s.readU30();
         }
       }
     }
 
     private _parseMethodInfo(j: number) {
-      var s = this._stream;
-      var parameterCount = s.readU30();
-      var returnType = s.readU30();
-      var parameterOffset = s.position;
-      var parameters = new Array<ParameterInfo>(parameterCount);
-      for (var i = 0; i < parameterCount; i++) {
+      let s = this._stream;
+      let parameterCount = s.readU30();
+      let returnType = s.readU30();
+      let parameterOffset = s.position;
+      let parameters = new Array<ParameterInfo>(parameterCount);
+      for (let i = 0; i < parameterCount; i++) {
         parameters[i] = new ParameterInfo(this, s.readU30(), 0, -1, -1);
       }
-      var name = s.readU30();
-      var flags = s.readU8();
-      var optionalCount = 0;
+      let name = s.readU30();
+      let flags = s.readU8();
+      let optionalCount = 0;
       if (flags & METHOD.HasOptional) {
         optionalCount = s.readU30();
         release || assert(parameterCount >= optionalCount);
-        for (var i = parameterCount - optionalCount; i < parameterCount; i++) {
+        for (let i = parameterCount - optionalCount; i < parameterCount; i++) {
           parameters[i].optionalValueIndex = s.readU30();
           parameters[i].optionalValueKind = s.readU8();
         }
       }
       if (flags & METHOD.HasParamNames) {
-        for (var i = 0; i < parameterCount; i++) {
+        for (let i = 0; i < parameterCount; i++) {
           // NOTE: We can't get the parameter name as described in the spec because some SWFs have
           // invalid parameter names. Tamarin ignores parameter names and so do we.
           parameters[i].name = s.readU30();
@@ -1864,9 +1864,9 @@ module Shumway.AVMX {
      */
     public getMethodInfo(i: number) {
       release || assert(i >= 0 && i < this._methodInfoOffsets.length);
-      var mi = this._methods[i];
+      let mi = this._methods[i];
       if (mi === undefined) {
-        var s = this._stream;
+        let s = this._stream;
         s.seek(this._methodInfoOffsets[i]);
         mi = this._methods[i] = this._parseMethodInfo(i);
       }
@@ -1878,15 +1878,15 @@ module Shumway.AVMX {
     }
 
     private _parseMetaData() {
-      var s = this._stream;
-      var n = s.readU30();
+      let s = this._stream;
+      let n = s.readU30();
       this._metadata = new Array(n);
-      var metadataInfoOffsets = this._metadataInfoOffsets = new Uint32Array(n);
-      for (var i = 0; i < n; i++) {
+      let metadataInfoOffsets = this._metadataInfoOffsets = new Uint32Array(n);
+      for (let i = 0; i < n; i++) {
         metadataInfoOffsets[i] = s.position;
         s.readU30(); // Name
-        var itemCount = s.readU30(); // Item Count
-        for (var j = 0; j < itemCount; j++) {
+        let itemCount = s.readU30(); // Item Count
+        for (let j = 0; j < itemCount; j++) {
           s.readU30();
           s.readU30();
         }
@@ -1895,18 +1895,18 @@ module Shumway.AVMX {
 
     public getMetadataInfo(i: number): MetadataInfo {
       release || assert(i >= 0 && i < this._metadata.length);
-      var mi = this._metadata[i];
+      let mi = this._metadata[i];
       if (mi === undefined) {
-        var s = this._stream;
+        let s = this._stream;
         s.seek(this._metadataInfoOffsets[i]);
-        var name = s.readU30(); // Name
-        var itemCount = s.readU30(); // Item Count
-        var keys = new Uint32Array(itemCount);
-        for (var j = 0; j < itemCount; j++) {
+        let name = s.readU30(); // Name
+        let itemCount = s.readU30(); // Item Count
+        let keys = new Uint32Array(itemCount);
+        for (let j = 0; j < itemCount; j++) {
           keys[j] = s.readU30();
         }
-        var values = new Uint32Array(itemCount);
-        for (var j = 0; j < itemCount; j++) {
+        let values = new Uint32Array(itemCount);
+        for (let j = 0; j < itemCount; j++) {
           values[j] = s.readU30();
         }
         mi = this._metadata[i] = new MetadataInfo(this, name, keys, values);
@@ -1915,68 +1915,68 @@ module Shumway.AVMX {
     }
 
     private _parseInstanceAndClassInfos() {
-      var s = this._stream;
-      var n = s.readU30();
-      var instances = this.instances = new Array(n);
-      for (var i = 0; i < n; i++) {
+      let s = this._stream;
+      let n = s.readU30();
+      let instances = this.instances = new Array(n);
+      for (let i = 0; i < n; i++) {
         instances[i] = this._parseInstanceInfo();
       }
       this._parseClassInfos(n);
-      var o = s.position;
-      for (var i = 0; i < n; i++) {
+      let o = s.position;
+      for (let i = 0; i < n; i++) {
         instances[i].classInfo = this.classes[i];
       }
       s.seek(o);
     }
 
     private _parseInstanceInfo(): InstanceInfo {
-      var s = this._stream;
-      var name = s.readU30();
-      var superName = s.readU30();
-      var flags = s.readU8();
-      var protectedNsIndex = 0;
+      let s = this._stream;
+      let name = s.readU30();
+      let superName = s.readU30();
+      let flags = s.readU8();
+      let protectedNsIndex = 0;
       if (flags & CONSTANT.ClassProtectedNs) {
         protectedNsIndex = s.readU30();
       }
-      var interfaceCount = s.readU30();
-      var interfaces = [];
-      for (var i = 0; i < interfaceCount; i++) {
+      let interfaceCount = s.readU30();
+      let interfaces = [];
+      for (let i = 0; i < interfaceCount; i++) {
         interfaces[i] = s.readU30();
       }
-      var initializer = s.readU30();
-      var traits = this._parseTraits();
-      var instanceInfo = new InstanceInfo(this, name, superName, flags, protectedNsIndex,
+      let initializer = s.readU30();
+      let traits = this._parseTraits();
+      let instanceInfo = new InstanceInfo(this, name, superName, flags, protectedNsIndex,
                                           interfaces, initializer, traits);
       traits.attachHolder(instanceInfo);
       return instanceInfo;
     }
 
     private _parseTraits() {
-      var s = this._stream;
-      var n = s.readU30();
-      var traits = [];
-      for (var i = 0; i < n; i++) {
+      let s = this._stream;
+      let n = s.readU30();
+      let traits = [];
+      for (let i = 0; i < n; i++) {
         traits.push(this._parseTrait());
       }
       return new Traits(traits);
     }
 
     private _parseTrait() {
-      var s = this._stream;
-      var name = s.readU30();
-      var tag = s.readU8();
+      let s = this._stream;
+      let name = s.readU30();
+      let tag = s.readU8();
 
-      var kind = tag & 0x0F;
-      var attributes = (tag >> 4) & 0x0F;
+      let kind = tag & 0x0F;
+      let attributes = (tag >> 4) & 0x0F;
 
-      var trait: TraitInfo;
+      let trait: TraitInfo;
       switch (kind) {
         case TRAIT.Slot:
         case TRAIT.Const:
-          var slot = s.readU30();
-          var type = s.readU30();
-          var valueIndex = s.readU30();
-          var valueKind = -1;
+          let slot = s.readU30();
+          let type = s.readU30();
+          let valueIndex = s.readU30();
+          let valueKind = -1;
           if (valueIndex !== 0) {
             valueKind = s.readU8();
           }
@@ -1985,16 +1985,16 @@ module Shumway.AVMX {
         case TRAIT.Method:
         case TRAIT.Getter:
         case TRAIT.Setter:
-          var dispID = s.readU30(); // Tamarin optimization.
-          var methodInfoIndex = s.readU30();
-          var o = s.position;
-          var methodInfo = this.getMethodInfo(methodInfoIndex);
+          let dispID = s.readU30(); // Tamarin optimization.
+          let methodInfoIndex = s.readU30();
+          let o = s.position;
+          let methodInfo = this.getMethodInfo(methodInfoIndex);
           trait = methodInfo.trait = new MethodTraitInfo(this, kind, name, methodInfo);
           s.seek(o);
           break;
         case TRAIT.Class:
-          var slot = s.readU30();
-          var classInfo = this.classes[s.readU30()];
+          let slot = s.readU30();
+          let classInfo = this.classes[s.readU30()];
           trait = classInfo.trait = new ClassTraitInfo(this, kind, name, slot, classInfo);
           break;
         default:
@@ -2003,9 +2003,9 @@ module Shumway.AVMX {
       }
 
       if (attributes & ATTR.Metadata) {
-        var n = s.readU30();
-        var metadata = new Uint32Array(n);
-        for (var i = 0; i < n; i++) {
+        let n = s.readU30();
+        let metadata = new Uint32Array(n);
+        for (let i = 0; i < n; i++) {
           metadata[i] = s.readU30();
         }
         trait.metadata = metadata;
@@ -2014,71 +2014,71 @@ module Shumway.AVMX {
     }
 
     private _parseClassInfos(n: number) {
-      var s = this._stream;
-      var classes = this.classes = new Array(n);
-      for (var i = 0; i < n; i++) {
+      let s = this._stream;
+      let classes = this.classes = new Array(n);
+      for (let i = 0; i < n; i++) {
         classes[i] = this._parseClassInfo(i);
       }
     }
 
     private _parseClassInfo(i: number) {
-      var s = this._stream;
-      var initializer = s.readU30();
-      var traits = this._parseTraits();
-      var classInfo = new ClassInfo(this, this.instances[i], initializer, traits);
+      let s = this._stream;
+      let initializer = s.readU30();
+      let traits = this._parseTraits();
+      let classInfo = new ClassInfo(this, this.instances[i], initializer, traits);
       traits.attachHolder(classInfo);
       return classInfo;
     }
 
     private _parseScriptInfos() {
-      var s = this._stream;
-      var n = s.readU30();
-      var scripts = this.scripts = new Array(n);
-      for (var i = 0; i < n; i++) {
+      let s = this._stream;
+      let n = s.readU30();
+      let scripts = this.scripts = new Array(n);
+      for (let i = 0; i < n; i++) {
         scripts[i] = this._parseScriptInfo();
       }
     }
 
     private _parseScriptInfo() {
-      var s = this._stream;
-      var initializer = s.readU30();
-      var traits = this._parseTraits();
-      var scriptInfo = new ScriptInfo(this, initializer, traits);
+      let s = this._stream;
+      let initializer = s.readU30();
+      let traits = this._parseTraits();
+      let scriptInfo = new ScriptInfo(this, initializer, traits);
       traits.attachHolder(scriptInfo);
       return scriptInfo;
     }
 
     private _parseMethodBodyInfos() {
-      var s = this._stream;
-      var methodBodies = this._methodBodies = new Array(this._methods.length);
-      var n = s.readU30();
-      var o = s.position;
-      for (var i = 0; i < n; i++) {
-        var methodInfo = s.readU30();
-        var maxStack = s.readU30();
-        var localCount = s.readU30();
-        var initScopeDepth = s.readU30();
-        var maxScopeDepth = s.readU30();
-        var code = s.viewU8s(s.readU30());
+      let s = this._stream;
+      let methodBodies = this._methodBodies = new Array(this._methods.length);
+      let n = s.readU30();
+      let o = s.position;
+      for (let i = 0; i < n; i++) {
+        let methodInfo = s.readU30();
+        let maxStack = s.readU30();
+        let localCount = s.readU30();
+        let initScopeDepth = s.readU30();
+        let maxScopeDepth = s.readU30();
+        let code = s.viewU8s(s.readU30());
 
-        var e = s.readU30();
-        var exceptions = new Array(e);
-        for (var j = 0; j < e; ++j) {
+        let e = s.readU30();
+        let exceptions = new Array(e);
+        for (let j = 0; j < e; ++j) {
           exceptions[j] = this._parseException();
         }
-        var traits = this._parseTraits();
+        let traits = this._parseTraits();
         methodBodies[methodInfo] = new MethodBodyInfo(maxStack, localCount, initScopeDepth, maxScopeDepth, code, exceptions, traits);
         traits.attachHolder(methodBodies[methodInfo]);
       }
     }
 
     private _parseException() {
-      var s = this._stream;
-      var start = s.readU30();
-      var end = s.readU30();
-      var target = s.readU30();
-      var type = s.readU30();
-      var varName = s.readU30();
+      let s = this._stream;
+      let start = s.readU30();
+      let end = s.readU30();
+      let target = s.readU30();
+      let type = s.readU30();
+      let varName = s.readU30();
       return new ExceptionInfo(this, start, end, target, type, varName);
     }
 
@@ -2121,16 +2121,16 @@ module Shumway.AVMX {
     }
 
     stress() {
-      for (var i = 0; i < this._multinames.length; i++) {
+      for (let i = 0; i < this._multinames.length; i++) {
         this.getMultiname(i);
       }
-      for (var i = 0; i < this._namespaceSets.length; i++) {
+      for (let i = 0; i < this._namespaceSets.length; i++) {
         this.getNamespaceSet(i);
       }
-      for (var i = 0; i < this._namespaces.length; i++) {
+      for (let i = 0; i < this._namespaces.length; i++) {
         this.getNamespace(i);
       }
-      for (var i = 0; i < this._strings.length; i++) {
+      for (let i = 0; i < this._strings.length; i++) {
         this.getString(i);
       }
     }
@@ -2139,7 +2139,7 @@ module Shumway.AVMX {
       writer.writeLn("Multinames: " + this._multinames.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this._multinames.length; i++) {
+        for (let i = 0; i < this._multinames.length; i++) {
           writer.writeLn(i + " " + this.getMultiname(i));
         }
         writer.outdent();
@@ -2148,7 +2148,7 @@ module Shumway.AVMX {
       writer.writeLn("Namespace Sets: " + this._namespaceSets.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this._namespaceSets.length; i++) {
+        for (let i = 0; i < this._namespaceSets.length; i++) {
           writer.writeLn(i + " " + this.getNamespaceSet(i));
         }
         writer.outdent();
@@ -2157,7 +2157,7 @@ module Shumway.AVMX {
       writer.writeLn("Namespaces: " + this._namespaces.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this._namespaces.length; i++) {
+        for (let i = 0; i < this._namespaces.length; i++) {
           writer.writeLn(i + " " + this.getNamespace(i));
         }
         writer.outdent();
@@ -2166,7 +2166,7 @@ module Shumway.AVMX {
       writer.writeLn("Strings: " + this._strings.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this._strings.length; i++) {
+        for (let i = 0; i < this._strings.length; i++) {
           writer.writeLn(i + " " + this.getString(i));
         }
         writer.outdent();
@@ -2175,7 +2175,7 @@ module Shumway.AVMX {
       writer.writeLn("MethodInfos: " + this._methods.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this._methods.length; i++) {
+        for (let i = 0; i < this._methods.length; i++) {
           writer.writeLn(i + " " + this.getMethodInfo(i));
           if (this._methodBodies[i]) {
             this._methodBodies[i].trace(writer);
@@ -2187,7 +2187,7 @@ module Shumway.AVMX {
       writer.writeLn("InstanceInfos: " + this.instances.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this.instances.length; i++) {
+        for (let i = 0; i < this.instances.length; i++) {
           writer.writeLn(i + " " + this.instances[i]);
           this.instances[i].trace(writer);
         }
@@ -2197,7 +2197,7 @@ module Shumway.AVMX {
       writer.writeLn("ClassInfos: " + this.classes.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this.classes.length; i++) {
+        for (let i = 0; i < this.classes.length; i++) {
           this.classes[i].trace(writer);
         }
         writer.outdent();
@@ -2206,7 +2206,7 @@ module Shumway.AVMX {
       writer.writeLn("ScriptInfos: " + this.scripts.length);
       if (true) {
         writer.indent();
-        for (var i = 0; i < this.scripts.length; i++) {
+        for (let i = 0; i < this.scripts.length; i++) {
           this.scripts[i].trace(writer);
         }
         writer.outdent();
@@ -2225,13 +2225,13 @@ module Shumway.AVMX {
       this.map = ObjectUtilities.createMap<Shumway.MapObject<string>>();
       this.abcs = abcs;
       this.scripts = ObjectUtilities.createMap<string>();
-      for (var i = 0; i < index.length; i++) {
-        var abc = index[i];
+      for (let i = 0; i < index.length; i++) {
+        let abc = index[i];
         this.scripts[abc.name] = abc;
         release || assert(Array.isArray(abc.defs));
-        for (var j = 0; j < abc.defs.length; j++) {
-          var def = abc.defs[j].split(':');
-          var nameMappings = this.map[def[1]];
+        for (let j = 0; j < abc.defs.length; j++) {
+          let def = abc.defs[j].split(':');
+          let nameMappings = this.map[def[1]];
           if (!nameMappings) {
             nameMappings = this.map[def[1]] = Object.create(null);
           }
@@ -2241,23 +2241,23 @@ module Shumway.AVMX {
     }
 
     getABCByScriptName(scriptName: string): ABCFile {
-      var entry = this.scripts[scriptName];
+      let entry = this.scripts[scriptName];
       if (!entry) {
         return null;
       }
-      var env = {url: scriptName, app: this.app};
+      let env = {url: scriptName, app: this.app};
       return new ABCFile(env, this.abcs.subarray(entry.offset, entry.offset + entry.length));
     }
 
     getABCByMultiname(mn: Multiname): ABCFile {
-      var mappings = this.map[mn.name];
+      let mappings = this.map[mn.name];
       if (!mappings) {
         return null;
       }
-      var namespaces = mn.namespaces;
-      for (var i = 0; i < namespaces.length; i++) {
-        var ns = namespaces[i];
-        var scriptName = mappings[ns.uri];
+      let namespaces = mn.namespaces;
+      for (let i = 0; i < namespaces.length; i++) {
+        let ns = namespaces[i];
+        let scriptName = mappings[ns.uri];
         if (scriptName) {
           return this.getABCByScriptName(scriptName);
         }

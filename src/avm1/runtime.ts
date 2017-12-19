@@ -63,7 +63,7 @@ module Shumway.AVM1 {
     }
   }
 
-  var DEBUG_PROPERTY_PREFIX = '$Bg';
+  let DEBUG_PROPERTY_PREFIX = '$Bg';
 
   export interface IAVM1Builtins {
     Object: AVM1Object;
@@ -104,13 +104,13 @@ module Shumway.AVM1 {
       this._ownProperties = Object.create(null);
       this._prototype = null;
 
-      var self = this;
+      let self = this;
       // Using IAVM1Callable here to avoid circular calls between AVM1Object and
       // AVM1Function during constructions.
       // TODO do we need to support __proto__ for all SWF versions?
-      var getter = { alCall: function (thisArg: any, args?: any[]): any { return self.alPrototype; }};
-      var setter = { alCall: function (thisArg: any, args?: any[]): any { self.alPrototype = args[0]; }};
-      var desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
+      let getter = { alCall: function (thisArg: any, args?: any[]): any { return self.alPrototype; }};
+      let setter = { alCall: function (thisArg: any, args?: any[]): any { self.alPrototype = args[0]; }};
+      let desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
                                             AVM1PropertyFlags.DONT_DELETE |
                                             AVM1PropertyFlags.DONT_ENUM,
                                             null,
@@ -125,7 +125,7 @@ module Shumway.AVM1 {
 
     set alPrototype(v: AVM1Object) {
       // checking for circular references
-      var p = v;
+      let p = v;
       while (p) {
         if (p === this) {
           return; // possible loop in __proto__ chain is found
@@ -158,8 +158,8 @@ module Shumway.AVM1 {
     }
 
     _debugEscapeProperty(p: any): string {
-      var context = this.context;
-      var name = alToString(context, p);
+      let context = this.context;
+      let name = alToString(context, p);
       if (!context.isPropertyCaseSensitive) {
         name = name.toLowerCase();
       }
@@ -176,7 +176,7 @@ module Shumway.AVM1 {
     }
 
     public alSetOwnProperty(p, desc: AVM1PropertyDescriptor): void {
-      var name = this.context.normalizeName(p);
+      let name = this.context.normalizeName(p);
       if (!desc.originalName && !this.context.isPropertyCaseSensitive) {
         desc.originalName = p;
       }
@@ -197,12 +197,12 @@ module Shumway.AVM1 {
     }
 
     public alHasOwnProperty(p): boolean  {
-      var name = this.context.normalizeName(p);
+      let name = this.context.normalizeName(p);
       return !!this._ownProperties[name];
     }
 
     public alDeleteOwnProperty(p) {
-      var name = this.context.normalizeName(p);
+      let name = this.context.normalizeName(p);
       delete this._ownProperties[name];
       if (!release) {
         delete this[this._debugEscapeProperty(p)];
@@ -210,18 +210,18 @@ module Shumway.AVM1 {
     }
 
     public alGetOwnPropertiesKeys(): string[] {
-      var keys: string[] = [];
+      let keys: string[] = [];
       if (!this.context.isPropertyCaseSensitive) {
-        for (var name in this._ownProperties) {
-          var desc = this._ownProperties[name];
+        for (let name in this._ownProperties) {
+          let desc = this._ownProperties[name];
           release || Debug.assert("originalName" in desc);
           if (!(desc.flags & AVM1PropertyFlags.DONT_ENUM)) {
             keys.push(desc.originalName);
           }
         }
       } else {
-        for (var name in this._ownProperties) {
-          var desc = this._ownProperties[name];
+        for (let name in this._ownProperties) {
+          let desc = this._ownProperties[name];
           if (!(desc.flags & AVM1PropertyFlags.DONT_ENUM)) {
             keys.push(name);
           }
@@ -231,7 +231,7 @@ module Shumway.AVM1 {
     }
 
     public alGetProperty(p): AVM1PropertyDescriptor {
-      var desc = this.alGetOwnProperty(p);
+      let desc = this.alGetOwnProperty(p);
       if (desc) {
         return desc;
       }
@@ -243,7 +243,7 @@ module Shumway.AVM1 {
 
     public alGet(p): any {
       name = this.context.normalizeName(p);
-      var desc = this.alGetProperty(name);
+      let desc = this.alGetProperty(name);
       if (!desc) {
         return undefined;
       }
@@ -251,7 +251,7 @@ module Shumway.AVM1 {
         return desc.value;
       }
       release || Debug.assert((desc.flags & AVM1PropertyFlags.ACCESSOR));
-      var getter = desc.get;
+      let getter = desc.get;
       if (!getter) {
         return undefined;
       }
@@ -259,7 +259,7 @@ module Shumway.AVM1 {
     }
 
     public alCanPut(p): boolean {
-      var desc = this.alGetOwnProperty(p);
+      let desc = this.alGetOwnProperty(p);
       if (desc) {
         if ((desc.flags & AVM1PropertyFlags.ACCESSOR)) {
           return !!desc.set;
@@ -267,7 +267,7 @@ module Shumway.AVM1 {
           return !(desc.flags & AVM1PropertyFlags.READ_ONLY);
         }
       }
-      var proto = this._prototype;
+      let proto = this._prototype;
       if (!proto) {
         return true;
       }
@@ -277,12 +277,12 @@ module Shumway.AVM1 {
     public alPut(p, v) {
       // Perform all lookups with the canonicalized name, but keep the original name around to
       // pass it to `alSetOwnProperty`, which stores it on the descriptor.
-      var originalName = p;
+      let originalName = p;
       p = this.context.normalizeName(p);
       if (!this.alCanPut(p)) {
         return;
       }
-      var ownDesc = this.alGetOwnProperty(p);
+      let ownDesc = this.alGetOwnProperty(p);
       if (ownDesc && (ownDesc.flags & AVM1PropertyFlags.DATA)) {
         if (ownDesc.watcher) {
           v = ownDesc.watcher.callback.alCall(this,
@@ -296,14 +296,14 @@ module Shumway.AVM1 {
         }
         return;
       }
-      var desc = this.alGetProperty(p);
+      let desc = this.alGetProperty(p);
       if (desc && (desc.flags & AVM1PropertyFlags.ACCESSOR)) {
         if (desc.watcher) {
-          var oldValue = desc.get ? desc.get.alCall(this) : undefined;
+          let oldValue = desc.get ? desc.get.alCall(this) : undefined;
           v = desc.watcher.callback.alCall(this,
             [desc.watcher.name, oldValue, v, desc.watcher.userData]);
         }
-        var setter = desc.set;
+        let setter = desc.set;
         release || Debug.assert(setter);
         setter.alCall(this, [v]);
       } else {
@@ -312,18 +312,18 @@ module Shumway.AVM1 {
           v = desc.watcher.callback.alCall(this,
             [desc.watcher.name, desc.value, v, desc.watcher.userData]);
         }
-        var newDesc = new AVM1PropertyDescriptor(desc ? desc.flags : AVM1PropertyFlags.DATA, v);
+        let newDesc = new AVM1PropertyDescriptor(desc ? desc.flags : AVM1PropertyFlags.DATA, v);
         this.alSetOwnProperty(originalName, newDesc);
       }
     }
 
     public alHasProperty(p): boolean  {
-      var desc = this.alGetProperty(p);
+      let desc = this.alGetProperty(p);
       return !!desc;
     }
 
     public alDeleteProperty(p): boolean {
-      var desc = this.alGetOwnProperty(p);
+      let desc = this.alGetOwnProperty(p);
       if (!desc) {
         return true;
       }
@@ -336,7 +336,7 @@ module Shumway.AVM1 {
 
     public alAddPropertyWatcher(p: any, callback: IAVM1Callable, userData: any): boolean {
       // TODO verify/test this functionality to match ActionScript
-      var desc = this.alGetProperty(p);
+      let desc = this.alGetProperty(p);
       if (!desc) {
         return false;
       }
@@ -349,7 +349,7 @@ module Shumway.AVM1 {
     }
 
     public alRemotePropertyWatcher(p: any): boolean {
-      var desc = this.alGetProperty(p);
+      let desc = this.alGetProperty(p);
       if (!desc || !desc.watcher) {
         return false;
       }
@@ -360,26 +360,26 @@ module Shumway.AVM1 {
 
     public alDefaultValue(hint: AVM1DefaultValueHint = AVM1DefaultValueHint.NUMBER): any {
       if (hint === AVM1DefaultValueHint.STRING) {
-        var toString = this.alGet(this.context.normalizeName('toString'));
+        let toString = this.alGet(this.context.normalizeName('toString'));
         if (alIsFunction(toString)) {
-          var str = toString.alCall(this);
+          let str = toString.alCall(this);
           return str;
         }
-        var valueOf = this.alGet(this.context.normalizeName('valueOf'));
+        let valueOf = this.alGet(this.context.normalizeName('valueOf'));
         if (alIsFunction(valueOf)) {
-          var val = valueOf.alCall(this);
+          let val = valueOf.alCall(this);
           return val;
         }
       } else {
         release || Debug.assert(hint === AVM1DefaultValueHint.NUMBER);
-        var valueOf = this.alGet(this.context.normalizeName('valueOf'));
+        let valueOf = this.alGet(this.context.normalizeName('valueOf'));
         if (alIsFunction(valueOf)) {
-          var val = valueOf.alCall(this);
+          let val = valueOf.alCall(this);
           return val;
         }
-        var toString = this.alGet(this.context.normalizeName('toString'));
+        let toString = this.alGet(this.context.normalizeName('toString'));
         if (alIsFunction(toString)) {
-          var str = toString.alCall(this);
+          let str = toString.alCall(this);
           return str;
         }
       }
@@ -388,32 +388,32 @@ module Shumway.AVM1 {
     }
 
     public alGetKeys(): string[] {
-      var ownKeys = this.alGetOwnPropertiesKeys();
-      var proto = this._prototype;
+      let ownKeys = this.alGetOwnPropertiesKeys();
+      let proto = this._prototype;
       if (!proto) {
         return ownKeys;
       }
 
-      var otherKeys = proto.alGetKeys();
+      let otherKeys = proto.alGetKeys();
       if (ownKeys.length === 0) {
         return otherKeys;
       }
 
       // Merging two keys sets
       // TODO check if we shall worry about __proto__ usage here
-      var context = this.context;
+      let context = this.context;
       // If the context is case-insensitive, names only differing in their casing overwrite each
       // other. Iterating over the keys returns the first original, case-preserved key that was
       // ever used for the property, though.
       if (!context.isPropertyCaseSensitive) {
-        var keyLists = [ownKeys, otherKeys];
-        var canonicalKeysMap = Object.create(null);
-        var keys = [];
-        for (var k = 0; k < keyLists.length; k++) {
-          var keyList = keyLists[k];
-          for (var i = keyList.length; i--;) {
-            var key = keyList[i];
-            var canonicalKey = context.normalizeName(key);
+        let keyLists = [ownKeys, otherKeys];
+        let canonicalKeysMap = Object.create(null);
+        let keys = [];
+        for (let k = 0; k < keyLists.length; k++) {
+          let keyList = keyLists[k];
+          for (let i = keyList.length; i--;) {
+            let key = keyList[i];
+            let canonicalKey = context.normalizeName(key);
             if (canonicalKeysMap[canonicalKey]) {
               continue;
             }
@@ -423,11 +423,11 @@ module Shumway.AVM1 {
         }
         return keys;
       } else {
-        var processed = Object.create(null);
-        for (var i = 0; i < ownKeys.length; i++) {
+        let processed = Object.create(null);
+        for (let i = 0; i < ownKeys.length; i++) {
           processed[ownKeys[i]] = true;
         }
-        for (var i = 0; i < otherKeys.length; i++) {
+        for (let i = 0; i < otherKeys.length; i++) {
           processed[otherKeys[i]] = true;
         }
         return Object.getOwnPropertyNames(processed);
@@ -457,10 +457,10 @@ module Shumway.AVM1 {
      * @returns {Function} a JavaScript function.
      */
     public toJSFunction(thisArg: AVM1Object = null): Function {
-      var fn = this;
-      var context = this.context;
+      let fn = this;
+      let context = this.context;
       return function () {
-        var args = Array.prototype.slice.call(arguments, 0);
+        let args = Array.prototype.slice.call(arguments, 0);
         return context.executeFunction(fn, thisArg, args);
       };
     }
@@ -508,7 +508,7 @@ module Shumway.AVM1 {
   export class AVM1EvalFunction extends AVM1Function {
     public constructor(context: IAVM1Context) {
       super(context);
-      var proto = new AVM1Object(context);
+      let proto = new AVM1Object(context);
       proto.alPrototype = context.builtins.Object.alGetPrototypeProperty();
       proto.alSetOwnProperty('constructor', new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA |
                                                                        AVM1PropertyFlags.DONT_ENUM |
@@ -516,14 +516,14 @@ module Shumway.AVM1 {
       this.alSetOwnPrototypeProperty(proto);
     }
     public alConstruct(args?: any[]): AVM1Object  {
-      var obj = new AVM1Object(this.context);
-      var objPrototype = this.alGetPrototypeProperty();
+      let obj = new AVM1Object(this.context);
+      let objPrototype = this.alGetPrototypeProperty();
       if (!(objPrototype instanceof AVM1Object)) {
         objPrototype = this.context.builtins.Object.alGetPrototypeProperty();
       }
       obj.alPrototype = objPrototype;
       obj.alSetOwnConstructorProperty(this);
-      var result = this.alCall(obj, args);
+      let result = this.alCall(obj, args);
       return result instanceof AVM1Object ? result : obj;
     }
   }
@@ -538,7 +538,7 @@ module Shumway.AVM1 {
     if (!(v instanceof AVM1Object)) {
       return v;
     }
-    var obj: AVM1Object = v;
+    let obj: AVM1Object = v;
     return preferredType !== undefined ? obj.alDefaultValue(preferredType) : obj.alDefaultValue();
   }
 
@@ -585,7 +585,7 @@ module Shumway.AVM1 {
   }
 
   export function alToInteger(context: IAVM1Context, v): number {
-    var n = alToNumber(context, v);
+    let n = alToNumber(context, v);
     if (isNaN(n)) {
       return 0;
     }
@@ -596,7 +596,7 @@ module Shumway.AVM1 {
   }
 
   export function alToInt32(context: IAVM1Context, v): number  {
-    var n = alToNumber(context, v);
+    let n = alToNumber(context, v);
     return n | 0;
   }
 
@@ -654,7 +654,7 @@ module Shumway.AVM1 {
   }
 
   export function alNewObject(context: IAVM1Context): AVM1Object {
-    var obj = new AVM1Object(context);
+    let obj = new AVM1Object(context);
     obj.alPrototype = context.builtins.Object.alGetPrototypeProperty();
     obj.alSetOwnConstructorProperty(context.builtins.Object);
     return obj;
@@ -704,7 +704,7 @@ module Shumway.AVM1 {
   }
 
   export function alCallProperty(obj: AVM1Object, p, args?: any[]): any {
-    var callable: IAVM1Callable = obj.alGet(p);
+    let callable: IAVM1Callable = obj.alGet(p);
     callable.alCall(obj, args);
   }
 
@@ -715,8 +715,8 @@ module Shumway.AVM1 {
     if (!(cls instanceof AVM1Object)) {
       return false;
     }
-    var proto = cls.alGetPrototypeProperty();
-    for (var i = obj; i; i = i.alPrototype) {
+    let proto = cls.alGetPrototypeProperty();
+    for (let i = obj; i; i = i.alPrototype) {
       if (i === proto) {
         return true;
       }
@@ -732,7 +732,7 @@ module Shumway.AVM1 {
     if (!(v instanceof AVM1Object)) {
       return false;
     }
-    var length = alToInteger(context, v.alGet('length'));
+    let length = alToInteger(context, v.alGet('length'));
     if (isNaN(length) || length < 0 || length >= 4294967296) {
       return false;
     }
@@ -741,11 +741,11 @@ module Shumway.AVM1 {
 
   export function alIterateArray(context: IAVM1Context, arr: AVM1Object,
                                  fn: (obj: any, index?: number) => void, thisArg: any = null): void {
-    var length = alToInteger(context, arr.alGet('length'));
+    let length = alToInteger(context, arr.alGet('length'));
     if (isNaN(length) || length >= 4294967296) {
       return;
     }
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       fn.call(thisArg, arr.alGet(i), i);
     }
   }
@@ -755,11 +755,11 @@ module Shumway.AVM1 {
   }
 
   export function alDefineObjectProperties(obj: AVM1Object, descriptors: any): void {
-    var context = obj.context;
+    let context = obj.context;
     Object.getOwnPropertyNames(descriptors).forEach(function (name) {
-      var desc = descriptors[name];
-      var value, getter, setter;
-      var flags: AVM1PropertyFlags = 0;
+      let desc = descriptors[name];
+      let value, getter, setter;
+      let flags: AVM1PropertyFlags = 0;
       if (typeof desc === 'object') {
         if (desc.get || desc.set) {
           getter = desc.get ? new AVM1NativeFunction(context, desc.get) : undefined;

@@ -228,7 +228,7 @@ module Shumway {
     }
 
     static FromPlainObject(source: PlainObjectShapeData): ShapeData {
-      var data = new ShapeData(false);
+      let data = new ShapeData(false);
       data.commands = source.commands;
       data.coordinates = source.coordinates;
       data.morphCoordinates = source.morphCoordinates;
@@ -310,7 +310,7 @@ module Shumway {
       this.ensurePathCapacities(2, 0);
       this.commands[this.commandsPosition++] = PathCommand.LineStyleSolid;
       this.coordinates[this.coordinatesPosition++] = thickness;
-      var styles: DataBuffer = this.styles;
+      let styles: DataBuffer = this.styles;
       styles.writeUnsignedInt(color);
       styles.writeBoolean(pixelHinting);
       styles.writeUnsignedByte(scaleMode);
@@ -337,7 +337,7 @@ module Shumway {
              pathCommand === PathCommand.LineStyleBitmap);
       this.ensurePathCapacities(1, 0);
       this.commands[this.commandsPosition++] = pathCommand;
-      var styles: DataBuffer = this.styles;
+      let styles: DataBuffer = this.styles;
       styles.writeUnsignedInt(bitmapId);
       this._writeStyleMatrix(matrix, false);
       styles.writeBoolean(repeat);
@@ -363,14 +363,14 @@ module Shumway {
 
       this.ensurePathCapacities(1, 0);
       this.commands[this.commandsPosition++] = pathCommand;
-      var styles: DataBuffer = this.styles;
+      let styles: DataBuffer = this.styles;
       styles.writeUnsignedByte(gradientType);
       release || assert(focalPointRatio === (focalPointRatio|0));
       styles.writeShort(focalPointRatio);
       this._writeStyleMatrix(matrix, false);
-      var colorStops = colors.length;
+      let colorStops = colors.length;
       styles.writeByte(colorStops);
-      for (var i = 0; i < colorStops; i++) {
+      for (let i = 0; i < colorStops; i++) {
         // Ratio must be valid, otherwise we'd have bailed above.
         styles.writeUnsignedByte(ratios[i]);
         // Colors are coerced to uint32, with the highest byte stripped.
@@ -383,8 +383,8 @@ module Shumway {
 
     writeMorphGradient(colors: number[], ratios: number[], matrix: ShapeMatrix) {
       this._writeStyleMatrix(matrix, true);
-      var styles: DataBuffer = this.morphStyles;
-      for (var i = 0; i < colors.length; i++) {
+      let styles: DataBuffer = this.morphStyles;
+      for (let i = 0; i < colors.length; i++) {
         // Ratio must be valid, otherwise we'd have bailed above.
         styles.writeUnsignedByte(ratios[i]);
         // Colors are coerced to uint32, with the highest byte stripped.
@@ -426,7 +426,7 @@ module Shumway {
     }
 
     clone(): ShapeData {
-      var copy = new ShapeData(false);
+      let copy = new ShapeData(false);
       copy.commands = new Uint8Array(this.commands);
       copy.commandsPosition = this.commandsPosition;
       copy.coordinates = new Int32Array(this.coordinates);
@@ -454,7 +454,7 @@ module Shumway {
     }
 
     public get buffers(): ArrayBuffer[] {
-      var buffers = [this.commands.buffer, this.coordinates.buffer, this.styles.buffer];
+      let buffers = [this.commands.buffer, this.coordinates.buffer, this.styles.buffer];
       if (this.morphCoordinates) {
         buffers.push(this.morphCoordinates.buffer);
       }
@@ -466,7 +466,7 @@ module Shumway {
 
     private _writeStyleMatrix(matrix: ShapeMatrix, isMorph: boolean)
     {
-      var styles: DataBuffer = isMorph ? this.morphStyles : this.styles;
+      let styles: DataBuffer = isMorph ? this.morphStyles : this.styles;
       styles.write6Floats(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
     }
 

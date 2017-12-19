@@ -34,26 +34,26 @@ module Shumway.Player.Window {
     }
 
     update(updates: DataBuffer, assets: any[]): void {
-      var bytes = updates.getBytes();
-      var message = {
+      let bytes = updates.getBytes();
+      let message = {
         type: 'player',
         updates: bytes,
         assets: assets,
         result: undefined
       };
-      var transferList = [bytes.buffer];
+      let transferList = [bytes.buffer];
       this._peer.postAsyncMessage(message, transferList);
     }
 
     updateAndGet(updates: DataBuffer, assets: any[]): any {
-      var bytes = updates.getBytes();
-      var message = {
+      let bytes = updates.getBytes();
+      let message = {
         type: 'player',
         updates: bytes,
         assets: assets,
         result: undefined
       };
-      var result = this._peer.sendSyncMessage(message);
+      let result = this._peer.sendSyncMessage(message);
       return DataBuffer.FromPlainObject(result);
     }
 
@@ -64,7 +64,7 @@ module Shumway.Player.Window {
     }
 
     videoControl(id: number, eventType: VideoControlEvent, data: any): any {
-      var message = {
+      let message = {
         type: 'videoControl',
         id: id,
         eventType: eventType,
@@ -75,10 +75,10 @@ module Shumway.Player.Window {
     }
 
     registerFont(syncId: number, data: Uint8Array): Promise<any> {
-      var requestId = this._assetDecodingRequests.length;
-      var result = new PromiseWrapper<any>();
+      let requestId = this._assetDecodingRequests.length;
+      let result = new PromiseWrapper<any>();
       this._assetDecodingRequests[requestId] = result;
-      var message = {
+      let message = {
         type: 'registerFont',
         syncId: syncId,
         data: data,
@@ -93,10 +93,10 @@ module Shumway.Player.Window {
 
     registerImage(syncId: number, symbolId: number, imageType: ImageType,
                   data: Uint8Array, alphaData: Uint8Array): Promise<any> {
-      var requestId = this._assetDecodingRequests.length;
-      var result = new PromiseWrapper<any>();
+      let requestId = this._assetDecodingRequests.length;
+      let result = new PromiseWrapper<any>();
       this._assetDecodingRequests[requestId] = result;
-      var message = {
+      let message = {
         type: 'registerImage',
         syncId: syncId,
         symbolId: symbolId,
@@ -121,8 +121,8 @@ module Shumway.Player.Window {
       if (typeof data === 'object' && data !== null) {
         switch (data.type) {
           case 'gfx':
-            var DataBuffer = Shumway.ArrayUtilities.DataBuffer;
-            var updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
+            let DataBuffer = Shumway.ArrayUtilities.DataBuffer;
+            let updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
             this.processUpdates(updates, data.assets);
             break;
           case 'videoPlayback':
@@ -133,7 +133,7 @@ module Shumway.Player.Window {
             break;
           case 'registerFontResponse':
           case 'registerImageResponse':
-            var request = this._assetDecodingRequests[data.requestId];
+            let request = this._assetDecodingRequests[data.requestId];
             release || Debug.assert(request);
             delete this._assetDecodingRequests[data.requestId];
             request.resolve(data.result);

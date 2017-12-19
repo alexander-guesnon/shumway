@@ -34,18 +34,18 @@ module Shumway.GFX {
     Verbose,
   }
 
-  var counter = Shumway.Metrics.Counter.instance;
-  export var frameCounter = new Shumway.Metrics.Counter(true);
+  let counter = Shumway.Metrics.Counter.instance;
+  export let frameCounter = new Shumway.Metrics.Counter(true);
 
-  export var traceLevel = TraceLevel.Verbose;
-  export var writer: IndentingWriter = null;
+  export let traceLevel = TraceLevel.Verbose;
+  export let writer: IndentingWriter = null;
 
   export function frameCount(name) {
     counter.count(name);
     frameCounter.count(name);
   }
 
-  export var timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("GFX") : null;
+  export let timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("GFX") : null;
 
   export function enterTimeline(name: string, data?: any) {
     profile && timelineBuffer && timelineBuffer.enter(name, data);
@@ -55,9 +55,9 @@ module Shumway.GFX {
     profile && timelineBuffer && timelineBuffer.leave(name, data);
   }
 
-  var nativeAddColorStop = null;
-  var nativeCreateLinearGradient = null;
-  var nativeCreateRadialGradient = null;
+  let nativeAddColorStop = null;
+  let nativeCreateLinearGradient = null;
+  let nativeCreateRadialGradient = null;
 
   /**
    * Transforms a fill or stroke style by the given color matrix.
@@ -68,7 +68,7 @@ module Shumway.GFX {
     }
     if (typeof style === "string") {
       // Parse CSS color styles and transform them.
-      var rgba = Shumway.ColorUtilities.cssStyleToRGBA(style);
+      let rgba = Shumway.ColorUtilities.cssStyleToRGBA(style);
       return Shumway.ColorUtilities.rgbaToCSSStyle(colorMatrix.transformRGBA(rgba));
     } else if (style instanceof CanvasGradient) {
       if (style._template) {
@@ -84,7 +84,7 @@ module Shumway.GFX {
    * Whether to polyfill color transforms. This adds a |globalColorMatrix| property on |CanvasRenderingContext2D|
    * that is used to transform all stroke and fill styles before a drawing operation happens.
    */
-  var polyfillColorTransform = true;
+  let polyfillColorTransform = true;
 
   /**
    * Gradients are opaque objects and their properties cannot be inspected. Here we hijack gradient style constructors
@@ -97,12 +97,12 @@ module Shumway.GFX {
     nativeCreateRadialGradient = CanvasRenderingContext2D.prototype.createRadialGradient;
 
     CanvasRenderingContext2D.prototype.createLinearGradient = function (x0: number, y0: number, x1: number, y1: number) {
-      var gradient = new CanvasLinearGradient(x0, y0, x1, y1);
+      let gradient = new CanvasLinearGradient(x0, y0, x1, y1);
       return gradient.createCanvasGradient(this, null);
     };
 
     CanvasRenderingContext2D.prototype.createRadialGradient = function (x0: number, y0: number, r0: number, x1: number, y1: number, r1: number) {
-      var gradient = new CanvasRadialGradient(x0, y0, r0, x1, y1, r1);
+      let gradient = new CanvasRadialGradient(x0, y0, r0, x1, y1, r1);
       return gradient.createCanvasGradient(this, null);
     };
 
@@ -133,12 +133,12 @@ module Shumway.GFX {
       this.colorStops.push(new ColorStop(offset, color));
     }
     createCanvasGradient(context: CanvasRenderingContext2D, colorMatrix: Shumway.GFX.ColorMatrix): CanvasGradient {
-      var gradient = nativeCreateLinearGradient.call(context, this.x0, this.y0, this.x1, this.y1);
-      var colorStops = this.colorStops;
-      for (var i = 0; i < colorStops.length; i++) {
-        var colorStop = colorStops[i];
-        var offset = colorStop.offset;
-        var color = colorStop.color;
+      let gradient = nativeCreateLinearGradient.call(context, this.x0, this.y0, this.x1, this.y1);
+      let colorStops = this.colorStops;
+      for (let i = 0; i < colorStops.length; i++) {
+        let colorStop = colorStops[i];
+        let offset = colorStop.offset;
+        let color = colorStop.color;
         color = colorMatrix ? transformStyle(context, color, colorMatrix) : color;
         nativeAddColorStop.call(gradient, offset, color);
       }
@@ -163,12 +163,12 @@ module Shumway.GFX {
       this.colorStops.push(new ColorStop(offset, color));
     }
     createCanvasGradient(context: CanvasRenderingContext2D, colorMatrix: Shumway.GFX.ColorMatrix): CanvasGradient {
-      var gradient = nativeCreateRadialGradient.call(context, this.x0, this.y0, this.r0, this.x1, this.y1, this.r1);
-      var colorStops = this.colorStops;
-      for (var i = 0; i < colorStops.length; i++) {
-        var colorStop = colorStops[i];
-        var offset = colorStop.offset;
-        var color = colorStop.color;
+      let gradient = nativeCreateRadialGradient.call(context, this.x0, this.y0, this.r0, this.x1, this.y1, this.r1);
+      let colorStops = this.colorStops;
+      for (let i = 0; i < colorStops.length; i++) {
+        let colorStop = colorStops[i];
+        let offset = colorStop.offset;
+        let color = colorStop.color;
         color = colorMatrix ? transformStyle(context, color, colorMatrix) : color;
         nativeAddColorStop.call(gradient, offset, color);
       }
@@ -208,12 +208,12 @@ module Shumway.GFX {
      * Takes a |Path2D| instance and a 2d context to replay the recorded drawing commands.
      */
     static _apply(path: Path, context: CanvasRenderingContext2D) {
-      var commands = path._commands;
-      var d = path._data;
-      var i = 0;
-      var j = 0;
+      let commands = path._commands;
+      let d = path._data;
+      let i = 0;
+      let j = 0;
       context.beginPath();
-      var commandPosition = path._commandPosition;
+      let commandPosition = path._commandPosition;
       while (i < commandPosition) {
         switch (commands[i++]) {
           case PathCommand.ClosePath:
@@ -281,13 +281,13 @@ module Shumway.GFX {
     }
 
     private _writeData(a: number, b: number, c?: number, d?: number, e?: number, f?: number) {
-      var argc = arguments.length;
+      let argc = arguments.length;
       release || assert(argc <= 6 && (argc % 2 === 0 || argc === 5));
       if (this._dataPosition + argc >= this._data.length) {
         this._ensureDataCapacity(this._dataPosition + argc);
       }
-      var data = this._data;
-      var p = this._dataPosition;
+      let data = this._data;
+      let p = this._dataPosition;
       data[p] = a;
       data[p + 1] = b;
       if (argc > 2) {
@@ -360,25 +360,25 @@ module Shumway.GFX {
       }
 
       // Copy commands.
-      var newCommandPosition = this._commandPosition + path._commandPosition;
+      let newCommandPosition = this._commandPosition + path._commandPosition;
       if (newCommandPosition >= this._commands.length) {
         this._ensureCommandCapacity(newCommandPosition);
       }
-      var commands = this._commands;
-      var pathCommands = path._commands;
-      for (var i = this._commandPosition, j = 0; i < newCommandPosition; i++) {
+      let commands = this._commands;
+      let pathCommands = path._commands;
+      for (let i = this._commandPosition, j = 0; i < newCommandPosition; i++) {
         commands[i] = pathCommands[j++];
       }
       this._commandPosition = newCommandPosition;
 
       // Copy data.
-      var newDataPosition = this._dataPosition + path._dataPosition;
+      let newDataPosition = this._dataPosition + path._dataPosition;
       if (newDataPosition >= this._data.length) {
         this._ensureDataCapacity(newDataPosition);
       }
-      var data = this._data;
-      var pathData = path._data;
-      for (var i = this._dataPosition, j = 0; i < newDataPosition; i++) {
+      let data = this._data;
+      let pathData = path._data;
+      for (let i = this._dataPosition, j = 0; i < newDataPosition; i++) {
         data[i] = pathData[j++];
       }
       this._dataPosition = newDataPosition;
@@ -397,7 +397,7 @@ module Shumway.GFX {
      * of its arguments, so that we can apply all recorded drawing commands before calling the
      * original function.
      */
-    var nativeFill = CanvasRenderingContext2D.prototype.fill;
+    let nativeFill = CanvasRenderingContext2D.prototype.fill;
     CanvasRenderingContext2D.prototype.fill = <any>(function (path?: any, fillRule?: any) {
       if (arguments.length) {
         if (path instanceof Path) {
@@ -412,7 +412,7 @@ module Shumway.GFX {
         nativeFill.call(this);
       }
     });
-    var nativeStroke = CanvasRenderingContext2D.prototype.stroke;
+    let nativeStroke = CanvasRenderingContext2D.prototype.stroke;
     CanvasRenderingContext2D.prototype.stroke = <any>(function (path?: any, fillRule?: any) {
       if (arguments.length) {
         if (path instanceof Path) {
@@ -427,7 +427,7 @@ module Shumway.GFX {
         nativeStroke.call(this);
       }
     });
-    var nativeClip = CanvasRenderingContext2D.prototype.clip;
+    let nativeClip = CanvasRenderingContext2D.prototype.clip;
     CanvasRenderingContext2D.prototype.clip = <any>(function (path?: any, fillRule?: any) {
       if (arguments.length) {
         if (path instanceof Path) {
@@ -469,8 +469,8 @@ module Shumway.GFX {
       if (!CanvasGradient.prototype.setTransform) {
         CanvasGradient.prototype.setTransform = setTransform;
       }
-      var originalFill = CanvasRenderingContext2D.prototype.fill;
-      var originalStroke = CanvasRenderingContext2D.prototype.stroke;
+      let originalFill = CanvasRenderingContext2D.prototype.fill;
+      let originalStroke = CanvasRenderingContext2D.prototype.stroke;
 
       /**
        * If the current fillStyle is a |CanvasPattern| or |CanvasGradient| that has a SVGMatrix transformed applied to it, we
@@ -478,11 +478,11 @@ module Shumway.GFX {
        * inverse fillStyle transform applied to it so that it is drawn in the expected original location.
        */
       CanvasRenderingContext2D.prototype.fill = <any>(function fill(path: Path2D, fillRule?: string): void {
-        var supportsStyle = this.fillStyle instanceof CanvasPattern || this.fillStyle instanceof CanvasGradient;
-        var hasStyleTransformation = !!this.fillStyle._transform;
+        let supportsStyle = this.fillStyle instanceof CanvasPattern || this.fillStyle instanceof CanvasGradient;
+        let hasStyleTransformation = !!this.fillStyle._transform;
         if (supportsStyle && hasStyleTransformation && path instanceof Path2D) {
-          var m = this.fillStyle._transform;
-          var i;
+          let m = this.fillStyle._transform;
+          let i;
           try {
             i = m.inverse();
           } catch (e) {
@@ -491,7 +491,7 @@ module Shumway.GFX {
           // Transform the context by the style transform ...
           this.transform(m.a, m.b, m.c, m.d, m.e, m.f);
           // transform the path by the inverse of the style transform ...
-          var transformedPath = new Path2D();
+          let transformedPath = new Path2D();
           transformedPath.addPath(path, i);
           // draw the transformed path, which should render it in its original position but with a transformed style.
           originalFill.call(this, transformedPath, fillRule);
@@ -511,11 +511,11 @@ module Shumway.GFX {
        * Same as for |fill| above.
        */
       CanvasRenderingContext2D.prototype.stroke = <any>(function stroke(path: Path2D): void {
-        var supportsStyle = this.strokeStyle instanceof CanvasPattern || this.strokeStyle instanceof CanvasGradient;
-        var hasStyleTransformation = !!this.strokeStyle._transform;
+        let supportsStyle = this.strokeStyle instanceof CanvasPattern || this.strokeStyle instanceof CanvasGradient;
+        let hasStyleTransformation = !!this.strokeStyle._transform;
         if (supportsStyle && hasStyleTransformation && path instanceof Path2D) {
-          var m = this.strokeStyle._transform;
-          var i;
+          let m = this.strokeStyle._transform;
+          let i;
           try {
             i = m.inverse();
           } catch (e) {
@@ -524,10 +524,10 @@ module Shumway.GFX {
           // Transform the context by the style transform ...
           this.transform(m.a, m.b, m.c, m.d, m.e, m.f);
           // transform the path by the inverse of the style transform ...
-          var transformedPath = new Path2D();
+          let transformedPath = new Path2D();
           transformedPath.addPath(path, i);
           // Scale the lineWidth down since it will be scaled up by the current transform.
-          var oldLineWidth = this.lineWidth;
+          let oldLineWidth = this.lineWidth;
           this.lineWidth *= Math.sqrt((i.a + i.c) * (i.a + i.c) +
                             (i.d + i.b) * (i.d + i.b)) * Math.SQRT1_2;
           // draw the transformed path, which should render it in its original position but with a transformed style.
@@ -550,14 +550,14 @@ module Shumway.GFX {
       /**
        * Flash does not go below this number.
        */
-      var MIN_LINE_WIDTH = 1;
+      let MIN_LINE_WIDTH = 1;
 
       /**
        * Arbitrarily chosen large number.
        */
-      var MAX_LINE_WIDTH = 1024;
+      let MAX_LINE_WIDTH = 1024;
 
-      var hasCurrentTransform = 'currentTransform' in CanvasRenderingContext2D.prototype;
+      let hasCurrentTransform = 'currentTransform' in CanvasRenderingContext2D.prototype;
 
       /**
        * There's an impedance mismatch between Flash's vector drawing model and that of Canvas2D[1]: Flash applies scaling
@@ -581,11 +581,11 @@ module Shumway.GFX {
           return;
         }
 
-        var m = this.currentTransform;
-        var transformedPath = new Path2D();
+        let m = this.currentTransform;
+        let transformedPath = new Path2D();
         // Transform the path by the current transform ...
         transformedPath.addPath(path, m);
-        var oldLineWidth = this.lineWidth;
+        let oldLineWidth = this.lineWidth;
         this.setTransform(1, 0, 0, 1, 0, 0);
         // We need to scale the |lineWidth| based on the current transform.
         // If we scale square 1x1 using this transform, it will fit into a
@@ -595,16 +595,16 @@ module Shumway.GFX {
           case LineScaleMode.None:
             break;
           case LineScaleMode.Normal:
-            var scale = Math.sqrt((m.a + m.c) * (m.a + m.c) +
+            let scale = Math.sqrt((m.a + m.c) * (m.a + m.c) +
                                   (m.d + m.b) * (m.d + m.b)) * Math.SQRT1_2;
             this.lineWidth = clamp(oldLineWidth * scale, MIN_LINE_WIDTH, MAX_LINE_WIDTH);
             break;
           case LineScaleMode.Vertical:
-            var scaleHeight = m.d + m.b;
+            let scaleHeight = m.d + m.b;
             this.lineWidth = clamp(oldLineWidth * scaleHeight, MIN_LINE_WIDTH, MAX_LINE_WIDTH);
             break;
           case LineScaleMode.Horizontal:
-            var scaleWidth = m.a + m.c;
+            let scaleWidth = m.a + m.c;
             this.lineWidth = clamp(oldLineWidth * scaleWidth, MIN_LINE_WIDTH, MAX_LINE_WIDTH);
             break;
         }
@@ -626,9 +626,9 @@ module Shumway.GFX {
           });
           hasCurrentTransform = true;
         } else {
-          var nativeSetTransform = CanvasRenderingContext2D.prototype.setTransform;
+          let nativeSetTransform = CanvasRenderingContext2D.prototype.setTransform;
           CanvasRenderingContext2D.prototype.setTransform = <any>(function setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void {
-            var transform = this.currentTransform;
+            let transform = this.currentTransform;
             transform.a = a;
             transform.b = b;
             transform.c = c;
@@ -656,10 +656,10 @@ module Shumway.GFX {
    * Polyfill |globalColorMatrix| on |CanvasRenderingContext2D|.
    */
   if (typeof CanvasRenderingContext2D !== 'undefined' && CanvasRenderingContext2D.prototype.globalColorMatrix === undefined) {
-    var previousFill = CanvasRenderingContext2D.prototype.fill;
-    var previousStroke = CanvasRenderingContext2D.prototype.stroke;
-    var previousFillText = CanvasRenderingContext2D.prototype.fillText;
-    var previousStrokeText = CanvasRenderingContext2D.prototype.strokeText;
+    let previousFill = CanvasRenderingContext2D.prototype.fill;
+    let previousStroke = CanvasRenderingContext2D.prototype.stroke;
+    let previousFillText = CanvasRenderingContext2D.prototype.fillText;
+    let previousStrokeText = CanvasRenderingContext2D.prototype.strokeText;
 
     Object.defineProperty(CanvasRenderingContext2D.prototype, "globalColorMatrix", {
       get: function (): ColorMatrix {
@@ -687,7 +687,7 @@ module Shumway.GFX {
      * Intercept calls to |fill| and transform fill style if a |globalColorMatrix| is set.
      */
     CanvasRenderingContext2D.prototype.fill = <any>(function (a?: any, b?: any) {
-      var oldFillStyle = null;
+      let oldFillStyle = null;
       if (this._globalColorMatrix) {
         oldFillStyle = this.fillStyle;
         this.fillStyle = transformStyle(this, this.fillStyle, this._globalColorMatrix);
@@ -708,7 +708,7 @@ module Shumway.GFX {
      * Same as |fill| above.
      */
     CanvasRenderingContext2D.prototype.stroke = <any>(function (a?: any, b?: any) {
-      var oldStrokeStyle = null;
+      let oldStrokeStyle = null;
       if (this._globalColorMatrix) {
         oldStrokeStyle = this.strokeStyle;
         this.strokeStyle = transformStyle(this, this.strokeStyle, this._globalColorMatrix);
@@ -727,7 +727,7 @@ module Shumway.GFX {
      * Same as |fill| above.
      */
     CanvasRenderingContext2D.prototype.fillText = <any>(function (text: string, x: number, y: number, maxWidth?: number) {
-      var oldFillStyle = null;
+      let oldFillStyle = null;
       if (this._globalColorMatrix) {
         oldFillStyle = this.fillStyle;
         this.fillStyle = transformStyle(this, this.fillStyle, this._globalColorMatrix);
@@ -748,7 +748,7 @@ module Shumway.GFX {
      * Same as |fill| above.
      */
     CanvasRenderingContext2D.prototype.strokeText = <any>(function (text: string, x: number, y: number, maxWidth?: number) {
-      var oldStrokeStyle = null;
+      let oldStrokeStyle = null;
       if (this._globalColorMatrix) {
         oldStrokeStyle = this.strokeStyle;
         this.strokeStyle = transformStyle(this, this.strokeStyle, this._globalColorMatrix);

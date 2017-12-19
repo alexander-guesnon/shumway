@@ -36,16 +36,16 @@ interface ISecurityDomain extends Shumway.AVMX.AXSecurityDomain {
 /**
  * Make Shumway bug-for-bug compatible with Tamarin.
  */
-var as3Compatibility = true;
+let as3Compatibility = true;
 
 
 /**
  * AS3 has a bug when converting a certain character range to lower case.
  */
 function as3ToLowerCase(value: string) {
-  var chars: string [] = null;
-  for (var i = 0; i < value.length; i++) {
-    var charCode = value.charCodeAt(i);
+  let chars: string [] = null;
+  for (let i = 0; i < value.length; i++) {
+    let charCode = value.charCodeAt(i);
     if (charCode >= 0x10A0 && charCode <= 0x10C5) {
       if (!chars) {
         chars = new Array(value.length);
@@ -55,8 +55,8 @@ function as3ToLowerCase(value: string) {
   }
   if (chars) {
     // Fill in remaining chars if the bug needs to be emulated.
-    for (var i = 0; i < chars.length; i++) {
-      var char = chars[i];
+    for (let i = 0; i < chars.length; i++) {
+      let char = chars[i];
       if (!char) {
         chars[i] = value.charAt(i).toLocaleString();
       }
@@ -88,7 +88,7 @@ module Shumway.AVMX.AS {
 
   import Multiname = Shumway.AVMX.Multiname;
 
-  var writer = new IndentingWriter();
+  let writer = new IndentingWriter();
 
   function wrapJSGlobalFunction(fun) {
     return function(sec, ...args) {
@@ -103,7 +103,7 @@ module Shumway.AVMX.AS {
 
     export function print(sec: AXSecurityDomain, expression: any, arg1?: any, arg2?: any,
                           arg3?: any, arg4?: any) {
-      var args = Array.prototype.slice.call(arguments, 1);
+      let args = Array.prototype.slice.call(arguments, 1);
       jsGlobal.print.apply(null, args);
     }
 
@@ -152,23 +152,23 @@ module Shumway.AVMX.AS {
         sec.throwError('URIError', Errors.InvalidURIError, 'encodeURIComponent');
       }
     }
-    export var isNaN: (number: number) => boolean = wrapJSGlobalFunction(jsGlobal.isNaN);
-    export var isFinite: (number: number) => boolean = wrapJSGlobalFunction(jsGlobal.isFinite);
-    export var parseInt: (s: string, radix?: number) => number = wrapJSGlobalFunction(jsGlobal.parseInt);
-    export var parseFloat: (string: string) => number = wrapJSGlobalFunction(jsGlobal.parseFloat);
-    export var escape: (x: any) => any = wrapJSGlobalFunction(jsGlobal.escape);
-    export var unescape: (x: any) => any = wrapJSGlobalFunction(jsGlobal.unescape);
-    export var isXMLName: (x: any) => boolean = function () {
+    export let isNaN: (number: number) => boolean = wrapJSGlobalFunction(jsGlobal.isNaN);
+    export let isFinite: (number: number) => boolean = wrapJSGlobalFunction(jsGlobal.isFinite);
+    export let parseInt: (s: string, radix?: number) => number = wrapJSGlobalFunction(jsGlobal.parseInt);
+    export let parseFloat: (string: string) => number = wrapJSGlobalFunction(jsGlobal.parseFloat);
+    export let escape: (x: any) => any = wrapJSGlobalFunction(jsGlobal.escape);
+    export let unescape: (x: any) => any = wrapJSGlobalFunction(jsGlobal.unescape);
+    export let isXMLName: (x: any) => boolean = function () {
       return false; // "FIX ME";
     };
-    export var notImplemented: (x: any) => void = wrapJSGlobalFunction(jsGlobal.Shumway.Debug.notImplemented);
+    export let notImplemented: (x: any) => void = wrapJSGlobalFunction(jsGlobal.Shumway.Debug.notImplemented);
 
     /**
      * Returns the fully qualified class name of an object.
      */
     export function getQualifiedClassName(_: AXSecurityDomain, value: any):string {
       release || checkValue(value);
-      var valueType = typeof value;
+      let valueType = typeof value;
       switch (valueType) {
         case 'undefined':
           return 'void';
@@ -198,7 +198,7 @@ module Shumway.AVMX.AS {
       value = sec.box(value);
       // The value might be from another domain, so don't use passed-in the current
       // AXSecurityDomain.
-      var axClass = value.sec.AXClass.axIsType(value) ?
+      let axClass = value.sec.AXClass.axIsType(value) ?
                     (<AXClass>value).superClass :
                     value.axClass.superClass;
       return getQualifiedClassName(sec, axClass);
@@ -208,7 +208,7 @@ module Shumway.AVMX.AS {
      */
     export function getDefinitionByName(sec: AXSecurityDomain, name: string): AXClass {
       name = axCoerceString(name).replace("::", ".");
-      var mn = Multiname.FromFQNString(name, NamespaceType.Public);
+      let mn = Multiname.FromFQNString(name, NamespaceType.Public);
       return getCurrentABC().env.app.getClass(mn);
     }
 
@@ -221,16 +221,16 @@ module Shumway.AVMX.AS {
     }
   }
 
-  var nativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
-  var nativeFunctions: Shumway.MapObject<Function> = Shumway.ObjectUtilities.createMap<Function>();
+  let nativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
+  let nativeFunctions: Shumway.MapObject<Function> = Shumway.ObjectUtilities.createMap<Function>();
 
   /**
    * Searches for natives using a string path "a.b.c...".
    */
   export function getNative(path: string): Function {
-    var chain = path.split(".");
-    var v: any = Natives;
-    for (var i = 0, j = chain.length; i < j; i++) {
+    let chain = path.split(".");
+    let v: any = Natives;
+    for (let i = 0, j = chain.length; i < j; i++) {
       v = v && v[chain[i]];
     }
     if (!v) {
@@ -240,10 +240,10 @@ module Shumway.AVMX.AS {
     return v;
   }
 
-  var rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
+  let rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
 
   export function makeMultiname(v: any, namespace?: Namespace) {
-    var rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
+    let rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
     rn.namespaces = namespace ? [namespace] : [Namespace.PUBLIC];
     rn.name = v;
     return rn;
@@ -335,8 +335,8 @@ module Shumway.AVMX.AS {
     static native_setPropertyIsEnumerable: (nm: string, enumerable?: boolean) => boolean;
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASObject.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASObject.prototype;
       addPrototypeFunctionAlias(proto, "$BghasOwnProperty", asProto.native_hasOwnProperty);
       addPrototypeFunctionAlias(proto, "$BgpropertyIsEnumerable",
                                 asProto.native_propertyIsEnumerable);
@@ -374,23 +374,23 @@ module Shumway.AVMX.AS {
     }
 
     native_propertyIsEnumerable(nm: string): boolean {
-      var descriptor = Object.getOwnPropertyDescriptor(this, qualifyPublicName(axCoerceString(nm)));
+      let descriptor = Object.getOwnPropertyDescriptor(this, qualifyPublicName(axCoerceString(nm)));
       return !!descriptor && descriptor.enumerable;
     }
 
     native_setPropertyIsEnumerable(nm: string, enumerable: boolean = true): void {
-      var qualifiedName = qualifyPublicName(axCoerceString(nm));
+      let qualifiedName = qualifyPublicName(axCoerceString(nm));
       enumerable = !!enumerable;
-      var instanceInfo = this.axClass.classInfo.instanceInfo;
+      let instanceInfo = this.axClass.classInfo.instanceInfo;
       if (instanceInfo.isSealed() && this !== this.axClass.dPrototype) {
         this.sec.throwError('ReferenceError', Errors.WriteSealedError, nm, instanceInfo.name.name);
       }
       // Silently ignore trait properties.
-      var descriptor = Object.getOwnPropertyDescriptor(this.axClass.tPrototype, qualifiedName);
+      let descriptor = Object.getOwnPropertyDescriptor(this.axClass.tPrototype, qualifiedName);
       if (descriptor && this !== this.axClass.dPrototype) {
         return;
       }
-      var descriptor = Object.getOwnPropertyDescriptor(this, qualifiedName);
+      let descriptor = Object.getOwnPropertyDescriptor(this, qualifiedName);
       // ... and non-existent properties.
       if (!descriptor) {
         return;
@@ -402,12 +402,12 @@ module Shumway.AVMX.AS {
     }
 
     axResolveMultiname(mn: Multiname): any {
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         release || assert(mn.isRuntimeName());
         return +name;
       }
-      var t = this.traits.getTrait(mn.namespaces, name);
+      let t = this.traits.getTrait(mn.namespaces, name);
       return t ? t.name.getMangledName() : '$Bg' + name;
     }
 
@@ -417,23 +417,23 @@ module Shumway.AVMX.AS {
 
     axHasPublicProperty(nm: any): boolean {
       rn.name = nm;
-      var result = this.axHasProperty(rn);
+      let result = this.axHasProperty(rn);
       release || assert(rn.name === nm || isNaN(rn.name) && isNaN(nm));
       return result;
     }
 
     axSetProperty(mn: Multiname, value: any, bc: Bytecode) {
       release || checkValue(value);
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         release || assert(mn.isRuntimeName());
         this[+name] = value;
         return;
       }
-      var freeze = false;
-      var t = this.traits.getTrait(mn.namespaces, name);
+      let freeze = false;
+      let t = this.traits.getTrait(mn.namespaces, name);
       if (t) {
-        var mangledName = t.name.getMangledName();
+        let mangledName = t.name.getMangledName();
         switch (t.kind) {
           case TRAIT.Method:
             this.sec.throwError('ReferenceError', Errors.CannotAssignToMethodError, name,
@@ -458,7 +458,7 @@ module Shumway.AVMX.AS {
             freeze = true;
             break;
         }
-        var type = t.getType();
+        let type = t.getType();
         if (type) {
           value = type.axCoerce(value);
         }
@@ -472,8 +472,8 @@ module Shumway.AVMX.AS {
     }
 
     axGetProperty(mn: Multiname): any {
-      var name = this.axResolveMultiname(mn);
-      var value = this[name];
+      let name = this.axResolveMultiname(mn);
+      let value = this[name];
       if (typeof value === 'function') {
         return this.axGetMethod(name);
       }
@@ -485,12 +485,12 @@ module Shumway.AVMX.AS {
 
     axGetMethod(name: string): AXFunction {
       release || assert(typeof this[name] === 'function');
-      var cache = this._methodClosureCache;
+      let cache = this._methodClosureCache;
       if (!cache) {
         Object.defineProperty(this, '_methodClosureCache', {value: Object.create(null)});
         cache = this._methodClosureCache;
       }
-      var method = cache[name];
+      let method = cache[name];
       if (!method) {
         method = cache[name] = this.sec.AXMethodClosure.Create(<any>this, this[name]);
       }
@@ -498,14 +498,14 @@ module Shumway.AVMX.AS {
     }
 
     axGetSuper(mn: Multiname, scope: Scope): any {
-      var name = axCoerceName(mn.name);
-      var namespaces = mn.namespaces;
-      var trait = (<AXClass>scope.parent.object).tPrototype.traits.getTrait(namespaces, name);
-      var value;
+      let name = axCoerceName(mn.name);
+      let namespaces = mn.namespaces;
+      let trait = (<AXClass>scope.parent.object).tPrototype.traits.getTrait(namespaces, name);
+      let value;
       if (trait.kind === TRAIT.Getter || trait.kind === TRAIT.GetterSetter) {
         value = trait.get.call(this);
       } else {
-        var mangledName = trait.name.getMangledName();
+        let mangledName = trait.name.getMangledName();
         value = this[mangledName];
         if (typeof value === 'function') {
           return this.axGetMethod(mangledName);
@@ -517,10 +517,10 @@ module Shumway.AVMX.AS {
 
     axSetSuper(mn: Multiname, scope: Scope, value: any) {
       release || checkValue(value);
-      var name = axCoerceName(mn.name);
-      var namespaces = mn.namespaces;
-      var trait = (<AXClass>scope.parent.object).tPrototype.traits.getTrait(namespaces, name);
-      var type = trait.getType();
+      let name = axCoerceName(mn.name);
+      let namespaces = mn.namespaces;
+      let trait = (<AXClass>scope.parent.object).tPrototype.traits.getTrait(namespaces, name);
+      let type = trait.getType();
       if (type) {
         value = type.axCoerce(value);
       }
@@ -533,8 +533,8 @@ module Shumway.AVMX.AS {
 
     axDeleteProperty(mn: Multiname): any {
       // Cannot delete traits.
-      var name = axCoerceName(mn.name);
-      var namespaces = mn.namespaces;
+      let name = axCoerceName(mn.name);
+      let namespaces = mn.namespaces;
       if (this.traits.getTrait(namespaces, name)) {
         return false;
       }
@@ -542,21 +542,21 @@ module Shumway.AVMX.AS {
     }
 
     axCallProperty(mn: Multiname, args: any [], isLex: boolean): any {
-      var name = this.axResolveMultiname(mn);
-      var fun = this[name];
+      let name = this.axResolveMultiname(mn);
+      let fun = this[name];
       validateCall(this.sec, fun, args.length);
       return fun.axApply(isLex ? null : this, args);
     }
 
     axCallSuper(mn: Multiname, scope: Scope, args: any []): any {
-      var name = this.axResolveMultiname(mn);
-      var fun = (<AXClass>scope.parent.object).tPrototype[name];
+      let name = this.axResolveMultiname(mn);
+      let fun = (<AXClass>scope.parent.object).tPrototype[name];
       validateCall(this.sec, fun, args.length);
       return fun.axApply(this, args);
     }
     axConstructProperty(mn: Multiname, args: any []): any {
-      var name = this.axResolveMultiname(mn);
-      var ctor = this[name];
+      let name = this.axResolveMultiname(mn);
+      let ctor = this[name];
       validateConstruct(this.sec, ctor, args.length);
       return ctor.axConstruct(args);
     }
@@ -566,7 +566,7 @@ module Shumway.AVMX.AS {
     }
 
     axHasOwnProperty(mn: Multiname): boolean {
-      var name = this.axResolveMultiname(mn);
+      let name = this.axResolveMultiname(mn);
       // We have to check for trait properties too if a simple hasOwnProperty fails.
       // This is different to JavaScript's hasOwnProperty behaviour where hasOwnProperty returns
       // false for properties defined on the property chain and not on the instance itself.
@@ -577,18 +577,18 @@ module Shumway.AVMX.AS {
       if (this.sec.isPrimitive(this)) {
         return [];
       }
-      var tPrototype = Object.getPrototypeOf(this);
-      var keys = Object.keys(this);
-      var result = [];
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
+      let tPrototype = Object.getPrototypeOf(this);
+      let keys = Object.keys(this);
+      let result = [];
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
         if (isNumeric(key)) {
           result.push(key);
         } else {
           if (tPrototype.hasOwnProperty(key)) {
             continue;
           }
-          var name = Multiname.stripPublicMangledName(key);
+          let name = Multiname.stripPublicMangledName(key);
           if (name !== undefined) {
             result.push(name);
           }
@@ -615,17 +615,17 @@ module Shumway.AVMX.AS {
     }
 
     axGetSlot(i: number): any {
-      var t = this.traits.getSlot(i);
-      var value = this[t.name.getMangledName()];
+      let t = this.traits.getSlot(i);
+      let value = this[t.name.getMangledName()];
       release || checkValue(value);
       return value;
     }
 
     axSetSlot(i: number, value: any) {
       release || checkValue(value);
-      var t = this.traits.getSlot(i);
-      var name = t.name.getMangledName();
-      var type = t.getType();
+      let t = this.traits.getSlot(i);
+      let name = t.name.getMangledName();
+      let type = t.getType();
       this[name] = type ? type.axCoerce(value) : value;
     }
 
@@ -634,12 +634,12 @@ module Shumway.AVMX.AS {
      * index, but rather an indicator to start the iteration.
      */
     axNextNameIndex(index: number): number {
-      var self: AXObject = <any>this;
+      let self: AXObject = <any>this;
       if (index === 0) {
         // Gather all enumerable keys since we're starting a new iteration.
         defineNonEnumerableProperty(self, "axEnumerableKeys", self.axGetEnumerableKeys());
       }
-      var axEnumerableKeys = self.axEnumerableKeys;
+      let axEnumerableKeys = self.axEnumerableKeys;
       while (index < axEnumerableKeys.length) {
         rn.name = axEnumerableKeys[index];
         if (self.axHasPropertyInternal(rn)) {
@@ -656,8 +656,8 @@ module Shumway.AVMX.AS {
      * be index + 1, but it's actually index - 1;
      */
     axNextName(index: number): any {
-      var self: AXObject = <any>this;
-      var axEnumerableKeys = self.axEnumerableKeys;
+      let self: AXObject = <any>this;
+      let axEnumerableKeys = self.axEnumerableKeys;
       release || assert(axEnumerableKeys && index > 0 && index < axEnumerableKeys.length + 1);
       return axEnumerableKeys[index - 1];
     }
@@ -710,7 +710,7 @@ module Shumway.AVMX.AS {
 
   function createArrayValueFromArgs(sec: AXSecurityDomain, args: any[]) {
     if (args.length === 1 && typeof args[0] === 'number') {
-      var len = args[0];
+      let len = args[0];
       try {
         return new Array(len);
       } catch (e) {
@@ -728,8 +728,8 @@ module Shumway.AVMX.AS {
   }
   export class ASArray extends ASObject {
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASArray.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASArray.prototype;
 
       // option flags for sort and sortOn
       defineNonEnumerableProperty(this, '$BgCASEINSENSITIVE', 1);
@@ -775,7 +775,7 @@ module Shumway.AVMX.AS {
 
     native_propertyIsEnumerable(nm: string): boolean {
       if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
-        var descriptor = Object.getOwnPropertyDescriptor(this.value, nm);
+        let descriptor = Object.getOwnPropertyDescriptor(this.value, nm);
         return !!descriptor && descriptor.enumerable;
       }
       super.native_propertyIsEnumerable(nm);
@@ -796,8 +796,8 @@ module Shumway.AVMX.AS {
       // Amazingly, AS3 doesn't throw an error if `push` would make the argument too large.
       // Instead, it just replaces the last element.
       if (this.value.length + arguments.length > 0xffffffff) {
-        var limit = 0xffffffff - this.value.length;
-        for (var i = 0; i < limit; i++) {
+        let limit = 0xffffffff - this.value.length;
+        for (let i = 0; i < limit; i++) {
           this.value.push(arguments[i]);
         }
         return 0xffffffff;
@@ -810,8 +810,8 @@ module Shumway.AVMX.AS {
         return this.push.apply(this, arguments);
       }
 
-      var n = this.axGetPublicProperty('length') >>> 0;
-      for (var i = 0; i < arguments.length; i++) {
+      let n = this.axGetPublicProperty('length') >>> 0;
+      for (let i = 0; i < arguments.length; i++) {
         this.axSetNumericProperty(n++, arguments[i]);
       }
       this.axSetPublicProperty('length', n);
@@ -826,13 +826,13 @@ module Shumway.AVMX.AS {
         return this.value.pop();
       }
 
-      var len = this.axGetPublicProperty('length') >>> 0;
+      let len = this.axGetPublicProperty('length') >>> 0;
       if (!len) {
         this.axSetPublicProperty('length', 0);
         return;
       }
 
-      var retVal = this.axGetNumericProperty(len - 1);
+      let retVal = this.axGetNumericProperty(len - 1);
       rn.name = len - 1;
       rn.namespaces = [Namespace.PUBLIC];
       this.axDeleteProperty(rn);
@@ -851,7 +851,7 @@ module Shumway.AVMX.AS {
       return this.value.unshift.apply(this.value, arguments);
     }
     generic_unshift() {
-      var self = coerceArray(this);
+      let self = coerceArray(this);
       return self.value.unshift.apply(self.value, arguments);
     }
 
@@ -864,9 +864,9 @@ module Shumway.AVMX.AS {
     }
 
     concat() {
-      var value = this.value.slice();
-      for (var i = 0; i < arguments.length; i++) {
-        var a = arguments[i];
+      let value = this.value.slice();
+      for (let i = 0; i < arguments.length; i++) {
+        let a = arguments[i];
         // Treat all objects with a `sec` property and a value that's an Array as
         // concat-spreadable.
         // TODO: verify that this is correct.
@@ -890,7 +890,7 @@ module Shumway.AVMX.AS {
     }
 
     splice(): any[] {
-      var o = this.value;
+      let o = this.value;
       if (arguments.length === 0) {
         return undefined;
       }
@@ -933,8 +933,8 @@ module Shumway.AVMX.AS {
         return true;
       }
       thisArg = ensureBoxedReceiver(this.sec, thisArg, callbackfn);
-      var o = this.value;
-      for (var i = 0; i < o.length; i++) {
+      let o = this.value;
+      for (let i = 0; i < o.length; i++) {
         if (callbackfn.value.call(thisArg, o[i], i, this) !== true) {
           return false;
         }
@@ -950,7 +950,7 @@ module Shumway.AVMX.AS {
         return false;
       }
       thisArg = ensureBoxedReceiver(this.sec, thisArg, callbackfn);
-      var self = this;
+      let self = this;
       return this.value.some(function (currentValue, index, array) {
         return callbackfn.value.call(thisArg, currentValue, index, self);
       });
@@ -964,7 +964,7 @@ module Shumway.AVMX.AS {
         return;
       }
       thisArg = ensureBoxedReceiver(this.sec, thisArg, callbackfn);
-      var self = this;
+      let self = this;
       this.value.forEach(function (currentValue, index) {
         callbackfn.value.call(thisArg, currentValue, index, self);
       });
@@ -978,7 +978,7 @@ module Shumway.AVMX.AS {
         return this.sec.createArrayUnsafe([]);
       }
       thisArg = ensureBoxedReceiver(this.sec, thisArg, callbackfn);
-      var self = this;
+      let self = this;
       return this.sec.createArrayUnsafe(this.value.map(function (currentValue, index) {
         return callbackfn.value.call(thisArg, currentValue, index, self);
       }));
@@ -992,9 +992,9 @@ module Shumway.AVMX.AS {
         return this.sec.createArrayUnsafe([]);
       }
       thisArg = ensureBoxedReceiver(this.sec, thisArg, callbackfn);
-      var result = [];
-      var o = this.value;
-      for (var i = 0; i < o.length; i++) {
+      let result = [];
+      let o = this.value;
+      for (let i = 0; i < o.length; i++) {
         if (callbackfn.value.call(thisArg, o[i], i, this) === true) {
           result.push(o[i]);
         }
@@ -1006,11 +1006,11 @@ module Shumway.AVMX.AS {
     }
 
     toLocaleString(): string {
-      var value = this.sec.AXArray.axCoerce(this).value;
+      let value = this.sec.AXArray.axCoerce(this).value;
 
-      var out: string = "";
-      for (var i = 0, n = value.length; i < n; i++) {
-        var val = value[i];
+      let out: string = "";
+      for (let i = 0, n = value.length; i < n; i++) {
+        let val = value[i];
         if (val !== null && val !== undefined) {
           out += val.toLocaleString();
         }
@@ -1022,13 +1022,13 @@ module Shumway.AVMX.AS {
     }
 
     sort(): any {
-      var o = this.value;
+      let o = this.value;
       if (arguments.length === 0) {
         o.sort();
         return this;
       }
-      var compareFunction;
-      var options = 0;
+      let compareFunction;
+      let options = 0;
       if (this.sec.AXFunction.axIsInstanceOf(arguments[0])) {
         compareFunction = arguments[0].value;
       } else if (isNumber(arguments[0])) {
@@ -1045,7 +1045,7 @@ module Shumway.AVMX.AS {
       if (!compareFunction) {
         compareFunction = axDefaultCompareFunction;
       }
-      var sortOrder = options & SORT.DESCENDING ? -1 : 1;
+      let sortOrder = options & SORT.DESCENDING ? -1 : 1;
       o.sort(function (a, b) {
         return axCompare(a, b, options, sortOrder, compareFunction);
       });
@@ -1063,34 +1063,34 @@ module Shumway.AVMX.AS {
                    "Array/http://adobe.com/AS3/2006/builtin::sortOn()", "1", "0");
       }
       // The following oddities in how the arguments are used are gleaned from Tamarin, so hush.
-      var o = this.value;
+      let o = this.value;
       // The options we'll end up using.
-      var optionsList: number[] = [];
+      let optionsList: number[] = [];
       if (isString(names)) {
         names = [Multiname.getPublicMangledName(names)];
         // If the name is a string, coerce `options` to int.
         optionsList = [options | 0];
       } else if (names && Array.isArray(names.value)) {
         names = names.value;
-        for (var i = 0; i < names.length; i++) {
+        for (let i = 0; i < names.length; i++) {
           names[i] = Multiname.getPublicMangledName(names[i]);
         }
         if (options && Array.isArray(options.value)) {
           options = options.value;
           // Use the options Array only if it's the same length as names.
           if (options.length === names.length) {
-            for (var i = 0; i < options.length; i++) {
+            for (let i = 0; i < options.length; i++) {
               optionsList[i] = options[i] | 0;
             }
             // Otherwise, use 0 for all options.
           } else {
-            for (var i = 0; i < names.length; i++) {
+            for (let i = 0; i < names.length; i++) {
               optionsList[i] = 0;
             }
           }
         } else {
-          var optionsVal = options | 0;
-          for (var i = 0; i < names.length; i++) {
+          let optionsVal = options | 0;
+          for (let i = 0; i < names.length; i++) {
             optionsList[i] = optionsVal;
           }
         }
@@ -1100,7 +1100,7 @@ module Shumway.AVMX.AS {
       }
       release || assert(optionsList.length === names.length);
       // For use with uniqueSort and returnIndexedArray once we support them.
-      var optionsVal: number = optionsList[0];
+      let optionsVal: number = optionsList[0];
       release || Shumway.Debug.assertNotImplemented(!(optionsVal & SORT.UNIQUESORT), "UNIQUESORT");
       release || Shumway.Debug.assertNotImplemented(!(optionsVal & SORT.RETURNINDEXEDARRAY),
                                                     "RETURNINDEXEDARRAY");
@@ -1123,13 +1123,13 @@ module Shumway.AVMX.AS {
 
     axGetEnumerableKeys(): any [] {
       // Get the numeric Array keys first ...
-      var keys = Object.keys(this.value);
+      let keys = Object.keys(this.value);
       // ... then the keys that live on the array object.
       return keys.concat(super.axGetEnumerableKeys());
     }
 
     axHasPropertyInternal(mn: Multiname): boolean {
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         release || assert(mn.isRuntimeName());
         return name in this.value;
@@ -1141,7 +1141,7 @@ module Shumway.AVMX.AS {
     }
 
     axHasOwnProperty(mn: Multiname): boolean {
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         release || assert(mn.isRuntimeName());
         return this.value.hasOwnProperty(name);
@@ -1150,7 +1150,7 @@ module Shumway.AVMX.AS {
     }
 
     axGetProperty(mn: Multiname): any {
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         return this.value[name];
       }
@@ -1159,7 +1159,7 @@ module Shumway.AVMX.AS {
 
     axSetProperty(mn: Multiname, value: any, bc: Bytecode) {
       release || checkValue(value);
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         this.value[name] = value;
         return;
@@ -1168,7 +1168,7 @@ module Shumway.AVMX.AS {
     }
 
     axDeleteProperty(mn: Multiname): any {
-      var name = mn.name;
+      let name = mn.name;
       if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
         return delete this.value[name];
       }
@@ -1198,8 +1198,8 @@ module Shumway.AVMX.AS {
 
   export class ASFunction extends ASObject {
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASFunction.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASFunction.prototype;
       addPrototypeFunctionAlias(proto, "$BgtoString", asProto.toString);
       addPrototypeFunctionAlias(proto, "$Bgcall", asProto.call);
       addPrototypeFunctionAlias(proto, "$Bgapply", asProto.apply);
@@ -1213,7 +1213,7 @@ module Shumway.AVMX.AS {
     protected methodInfo: MethodInfo;
 
     axConstruct(args: any[]) {
-      var prototype = this.prototype;
+      let prototype = this.prototype;
       // AS3 allows setting null/undefined prototypes. In order to make our value checking work,
       // we need to set a null-prototype that has the right inheritance chain. Since AS3 doesn't
       // have `__proto__` or `getPrototypeOf`, this is completely hidden from content.
@@ -1222,7 +1222,7 @@ module Shumway.AVMX.AS {
       }
       release || assert(typeof prototype === 'object');
       release || checkValue(prototype);
-      var object = Object.create(prototype);
+      let object = Object.create(prototype);
       object.__ctorFunction = this;
       this.value.apply(object, args);
       return object;
@@ -1286,13 +1286,13 @@ module Shumway.AVMX.AS {
 
   export class ASMethodClosure extends ASFunction {
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASMethodClosure.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASMethodClosure.prototype;
       defineNonEnumerableProperty(proto, '$Bgcall', asProto.call);
       defineNonEnumerableProperty(proto, '$Bgapply', asProto.apply);
     }
     static Create(receiver: AXObject, method: AXCallable) {
-      var closure: ASMethodClosure = Object.create(this.sec.AXMethodClosure.tPrototype);
+      let closure: ASMethodClosure = Object.create(this.sec.AXMethodClosure.tPrototype);
       closure.receiver = <any>receiver;
       closure.value = method;
       closure.methodInfo = method.methodInfo;
@@ -1327,8 +1327,8 @@ module Shumway.AVMX.AS {
 
   export class ASBoolean extends ASObject {
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASBoolean.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASBoolean.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
     }
@@ -1347,8 +1347,8 @@ module Shumway.AVMX.AS {
     static classNatives: any [] = [String];
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASString.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASString.prototype;
       addPrototypeFunctionAlias(proto, '$BgindexOf', asProto.generic_indexOf);
       addPrototypeFunctionAlias(proto, '$BglastIndexOf', asProto.generic_lastIndexOf);
       addPrototypeFunctionAlias(proto, '$BgcharAt', asProto.generic_charAt);
@@ -1399,14 +1399,14 @@ module Shumway.AVMX.AS {
         this.sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
                             'Function/<anonymous>()', 0, 2);
       }
-      var value = this.value;
+      let value = this.value;
       release || assert(typeof this.value === 'string');
       other = String(other);
       if (other === value) {
         return 0;
       }
-      var len = Math.min(value.length, other.length);
-      for (var j = 0; j < len; j++) {
+      let len = Math.min(value.length, other.length);
+      for (let j = 0; j < len; j++) {
         if (value[j] !== other[j]) {
           return value.charCodeAt(j) - other.charCodeAt(j);
         }
@@ -1419,7 +1419,7 @@ module Shumway.AVMX.AS {
       } else {
         pattern = axCoerceString(pattern);
       }
-      var result = this.value.match(<any>pattern);
+      let result = this.value.match(<any>pattern);
       if (!result) {
         return null;
       }
@@ -1500,27 +1500,27 @@ module Shumway.AVMX.AS {
     // different.
 
     generic_indexOf(char: string, i?: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.indexOf.call(receiver, char, i);
     }
     generic_lastIndexOf(char: string, i?: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.lastIndexOf.call(receiver, char, i);
     }
     generic_charAt(index: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.charAt.call(receiver, index);
     }
     generic_charCodeAt(index: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.charCodeAt.call(receiver, index);
     }
     generic_concat() {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.concat.apply(receiver, arguments);
     }
     generic_localeCompare(other: string) {
-      var receiver = this.sec.AXString.axBox(String(this));
+      let receiver = this.sec.AXString.axBox(String(this));
       return receiver.localeCompare.apply(receiver, arguments);
     }
     generic_match(pattern) {
@@ -1533,7 +1533,7 @@ module Shumway.AVMX.AS {
       return this.sec.AXString.axBox(String(this)).search(pattern);
     }
     generic_slice(start?: number, end?: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.slice.call(receiver, start, end);
     }
     generic_split(separator: string, limit?: number) {
@@ -1541,22 +1541,22 @@ module Shumway.AVMX.AS {
       return this.sec.AXString.axBox(String(this)).split(separator, limit);
     }
     generic_substring(start: number, end?: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.substring.call(receiver, start, end);
     }
     generic_substr(from: number, length?: number) {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.substr.call(receiver, from, length);
     }
     generic_toLowerCase() {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       if (as3Compatibility) {
         return as3ToLowerCase(String(receiver));
       }
       String.prototype.toLowerCase.call(receiver);
     }
     generic_toUpperCase() {
-      var receiver = this == undefined ? '' : this;
+      let receiver = this == undefined ? '' : this;
       return String.prototype.toUpperCase.call(receiver);
     }
 
@@ -1598,8 +1598,8 @@ module Shumway.AVMX.AS {
     static classNatives: any [] = [Math];
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASNumber.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASNumber.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgtoLocaleString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
@@ -1693,7 +1693,7 @@ module Shumway.AVMX.AS {
 
     // https://bugzilla.mozilla.org/show_bug.cgi?id=564839
     static convertStringToDouble(s: string): number {
-      var i = s.indexOf(String.fromCharCode(0));
+      let i = s.indexOf(String.fromCharCode(0));
       if (i >= 0) {
         return +s.substring(0, i);
       }
@@ -1706,8 +1706,8 @@ module Shumway.AVMX.AS {
     public static instanceNatives: any [] = [ASNumber.prototype];
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASInt.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASInt.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgtoLocaleString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
@@ -1747,8 +1747,8 @@ module Shumway.AVMX.AS {
     public static instanceNatives: any [] = [ASNumber.prototype];
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASUint.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASUint.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgtoLocaleString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
@@ -1801,8 +1801,8 @@ module Shumway.AVMX.AS {
     private static UNMATCHABLE_PATTERN = '^(?!)$';
 
     static classInitializer: any = function() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASRegExp.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASRegExp.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.ecmaToString);
       addPrototypeFunctionAlias(proto, '$Bgexec', asProto.exec);
       addPrototypeFunctionAlias(proto, '$Bgtest', asProto.test);
@@ -1820,7 +1820,7 @@ module Shumway.AVMX.AS {
       this._dotall = false;
       this._extended = false;
       this._captureNames = [];
-      var source;
+      let source;
       if (pattern === undefined) {
         pattern = source = '';
       } else if (this.sec.AXRegExp.axIsType(pattern)) {
@@ -1834,10 +1834,10 @@ module Shumway.AVMX.AS {
         // Escape all forward slashes.
         source = pattern.replace(/(^|^[\/]|(?:\\\\)+)\//g, '$1\\/');
         if (flags) {
-          var f = flags;
+          let f = flags;
           flags = '';
-          for (var i = 0; i < f.length; i++) {
-            var flag = f[i];
+          for (let i = 0; i < f.length; i++) {
+            let flag = f[i];
             switch (flag) {
               case 's':
                 // With the s flag set, . will match the newline character.
@@ -1873,12 +1873,12 @@ module Shumway.AVMX.AS {
     // Parses and sanitizes a AS3 RegExp pattern to be used in JavaScript. Silently fails and
     // returns an unmatchable pattern of the source turns out to be invalid.
     private _parse(pattern: string): string {
-      var result = '';
-      var captureNames = this._captureNames;
-      var parens = [];
-      var atoms = 0;
-      for (var i = 0; i < pattern.length; i++) {
-        var char = pattern[i];
+      let result = '';
+      let captureNames = this._captureNames;
+      let parens = [];
+      let atoms = 0;
+      for (let i = 0; i < pattern.length; i++) {
+        let char = pattern[i];
         switch (char) {
           case '(':
             result += char;
@@ -1894,7 +1894,7 @@ module Shumway.AVMX.AS {
                   break;
                 default:
                   if (/\(\?P<([\w$]+)>/.exec(pattern.substr(i))) {
-                    var name = RegExp.$1;
+                    let name = RegExp.$1;
                     if (name !== 'length') {
                       captureNames.push(name);
                     }
@@ -1999,7 +1999,7 @@ module Shumway.AVMX.AS {
     }
 
     ecmaToString(): string {
-      var out = "/" + this._source + "/";
+      let out = "/" + this._source + "/";
       if (this.value.global)     out += "g";
       if (this.value.ignoreCase) out += "i";
       if (this.value.multiline)  out += "m";
@@ -2049,18 +2049,18 @@ module Shumway.AVMX.AS {
     }
 
     exec(str: string = ''): ASArray {
-      var result = this.value.exec(str);
+      let result = this.value.exec(str);
       if (!result) {
         return null;
       }
-      var axResult = transformJStoASRegExpMatchArray(this.sec, result);
-      var captureNames = this._captureNames;
+      let axResult = transformJStoASRegExpMatchArray(this.sec, result);
+      let captureNames = this._captureNames;
       if (captureNames) {
-        for (var i = 0; i < captureNames.length; i++) {
-          var name = captureNames[i];
+        for (let i = 0; i < captureNames.length; i++) {
+          let name = captureNames[i];
           if (name !== null) {
             // In AS3, non-matched named capturing groups return an empty string.
-            var value = result[i + 1] || '';
+            let value = result[i + 1] || '';
             result[name] = value;
             axResult.axSetPublicProperty(name, value);
           }
@@ -2079,12 +2079,12 @@ module Shumway.AVMX.AS {
     public static getErrorMessage = Shumway.AVMX.getErrorMessage;
 
     public static throwError(type: ASClass, id: number /*, ...rest */) {
-      var info = getErrorInfo(id);
-      var args = [info];
-      for (var i = 2; i < arguments.length; i++) {
+      let info = getErrorInfo(id);
+      let args = [info];
+      for (let i = 2; i < arguments.length; i++) {
         args.push(arguments[i]);
       }
-      var message = formatErrorMessage.apply(null, args);
+      let message = formatErrorMessage.apply(null, args);
       throw type.axConstruct([message, id]);
     }
 
@@ -2168,10 +2168,10 @@ module Shumway.AVMX.AS {
       return value;
     }
     if (Array.isArray(value)) {
-      var list = [];
-      for (var i = 0; i < value.length; i++) {
-        var entry = value[i];
-        var axValue = deep ? transformJSValueToAS(sec, entry, true) : entry;
+      let list = [];
+      for (let i = 0; i < value.length; i++) {
+        let entry = value[i];
+        let axValue = deep ? transformJSValueToAS(sec, entry, true) : entry;
         list.push(axValue);
       }
       return sec.createArray(list);
@@ -2190,25 +2190,25 @@ module Shumway.AVMX.AS {
       return value;
     }
     if (sec.AXArray.axIsType(value)) {
-      var resultList = [];
-      var list = value.value;
-      for (var i = 0; i < list.length; i++) {
-        var entry = list[i];
-        var jsValue = deep ? transformASValueToJS(sec, entry, true) : entry;
+      let resultList = [];
+      let list = value.value;
+      for (let i = 0; i < list.length; i++) {
+        let entry = list[i];
+        let jsValue = deep ? transformASValueToJS(sec, entry, true) : entry;
         resultList.push(jsValue);
       }
       return resultList;
     }
-    var keys = Object.keys(value);
-    var resultObject = {};
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var jsKey = key;
+    let keys = Object.keys(value);
+    let resultObject = {};
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      let jsKey = key;
       if (!isNumeric(key)) {
         release || assert(key.indexOf('$Bg') === 0);
         jsKey = key.substr(3);
       }
-      var v = value[key];
+      let v = value[key];
       if (deep) {
         v = transformASValueToJS(sec, v, true);
       }
@@ -2218,18 +2218,18 @@ module Shumway.AVMX.AS {
   }
 
   function transformJStoASRegExpMatchArray(sec: AXSecurityDomain, value: RegExpMatchArray): ASArray {
-    var result = sec.createArray(value);
+    let result = sec.createArray(value);
     result.axSetPublicProperty('index', value.index);
     result.axSetPublicProperty('input', value.input);
     return result;
   }
 
   function walk(sec: AXSecurityDomain, holder: any, name: string, reviver: Function) {
-    var val = holder[name];
+    let val = holder[name];
     if (Array.isArray(val)) {
-      var v: any[] = <any>val;
-      for (var i = 0, limit = v.length; i < limit; i++) {
-        var newElement = walk(sec, v, axCoerceString(i), reviver);
+      let v: any[] = <any>val;
+      for (let i = 0, limit = v.length; i < limit; i++) {
+        let newElement = walk(sec, v, axCoerceString(i), reviver);
         if (newElement === undefined) {
           delete v[i];
         } else {
@@ -2240,11 +2240,11 @@ module Shumway.AVMX.AS {
                typeof val !== 'string')
     {
 
-      for (var p in val) {
+      for (let p in val) {
         if (!val.hasOwnProperty(p) || !Multiname.isPublicQualifiedName(p)) {
           break;
         }
-        var newElement = walk(sec, val, p, reviver);
+        let newElement = walk(sec, val, p, reviver);
         if (newElement === undefined) {
           delete val[p];
         } else {
@@ -2265,7 +2265,7 @@ module Shumway.AVMX.AS {
       }
 
       try {
-        var unfiltered: Object = transformJSValueToAS(this.sec, JSON.parse(text), true);
+        let unfiltered: Object = transformJSValueToAS(this.sec, JSON.parse(text), true);
       } catch (e) {
         this.sec.throwError('SyntaxError', Errors.JSONInvalidParseInput);
       }
@@ -2280,13 +2280,13 @@ module Shumway.AVMX.AS {
       // We deliberately deviate from ECMA-262 and throw on
       // invalid replacer parameter.
       if (replacer !== null) {
-        var sec = typeof replacer === 'object' ? replacer.sec : null;
+        let sec = typeof replacer === 'object' ? replacer.sec : null;
         if (!sec || !(sec.AXFunction.axIsType(replacer) || sec.AXArray.axIsType(replacer))) {
           this.sec.throwError('TypeError', Errors.JSONInvalidReplacer);
         }
       }
 
-      var gap;
+      let gap;
       if (typeof space === 'string') {
         gap = space.length > 10 ? space.substring(0, 10) : space;
       } else if (typeof space === 'number') {
@@ -2308,14 +2308,14 @@ module Shumway.AVMX.AS {
 
     // ECMA-262 5th ed, section 15.12.3 stringify, step 4.b
     private static computePropertyList(r: any[]): string[] {
-      var propertyList = [];
-      var alreadyAdded = Object.create(null);
-      for (var i = 0, length = r.length; i < length; i++) {
+      let propertyList = [];
+      let alreadyAdded = Object.create(null);
+      for (let i = 0, length = r.length; i < length; i++) {
         if (!r.hasOwnProperty(<any>i)) {
           continue;
         }
-        var v = r[i];
-        var item: string = null;
+        let v = r[i];
+        let item: string = null;
 
         if (typeof v === 'string') {
           item = v;
@@ -2344,9 +2344,9 @@ module Shumway.AVMX.AS {
     }
   }
 
-  var builtinNativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
-  var nativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
-  var nativeClassLoaderNames: {
+  let builtinNativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
+  let nativeClasses: Shumway.MapObject<ASClass> = Shumway.ObjectUtilities.createMap<ASClass>();
+  let nativeClassLoaderNames: {
     name: string;
     alias: string;
     nsType: NamespaceType
@@ -2430,7 +2430,7 @@ module Shumway.AVMX.AS {
   registerNativeClass("__AS3__.vec.Vector$double", Float64Vector, 'Float64Vector', NamespaceType.PackageInternal);
 
   function FlashUtilScript_getDefinitionByName(sec: AXSecurityDomain, name: string): ASClass {
-    var simpleName = String(name).replace("::", ".");
+    let simpleName = String(name).replace("::", ".");
     return <any>getCurrentABC().env.app.getClass(Multiname.FromSimpleName(simpleName));
   }
 
@@ -2442,16 +2442,16 @@ module Shumway.AVMX.AS {
     if (request === null || request === undefined) {
       sec.throwError('TypeError', Errors.NullPointerError, 'request');
     }
-    var RequestClass = (<any>sec).flash.net.URLRequest.axClass;
+    let RequestClass = (<any>sec).flash.net.URLRequest.axClass;
     if (!RequestClass.axIsType(request)) {
       sec.throwError('TypeError', Errors.CheckTypeFailedError, request, 'flash.net.URLRequest');
     }
-    var url = request.url;
+    let url = request.url;
     if (isNullOrUndefined(url)) {
       sec.throwError('TypeError', Errors.NullPointerError, 'url');
     }
     if (url.toLowerCase().indexOf('fscommand:') === 0) {
-      var fscommand = (<any>sec).flash.system.fscommand.value;
+      let fscommand = (<any>sec).flash.system.fscommand.value;
       fscommand(sec, url.substring('fscommand:'.length), window_);
       return;
     }
@@ -2463,11 +2463,11 @@ module Shumway.AVMX.AS {
     if (isNullOrUndefined(request)) {
       sec.throwError('TypeError', Errors.NullPointerError, 'request');
     }
-    var RequestClass = (<any>sec).flash.net.URLRequest.axClass;
+    let RequestClass = (<any>sec).flash.net.URLRequest.axClass;
     if (!RequestClass.axIsType(request)) {
       sec.throwError('TypeError', Errors.CheckTypeFailedError, request, 'flash.net.URLRequest');
     }
-    var session = FileLoadingService.instance.createSession();
+    let session = FileLoadingService.instance.createSession();
     session.onprogress = function () {
       // ...
     };
@@ -2492,7 +2492,7 @@ module Shumway.AVMX.AS {
       sec.throwError('TypeError', Errors.NullPointerError, 'aliasName');
     }
 
-    var axClass = sec.classAliases.getClassByAlias(aliasName);
+    let axClass = sec.classAliases.getClassByAlias(aliasName);
     if (!axClass) {
       sec.throwError('ReferenceError', Errors.ClassNotFoundError, aliasName);
     }
@@ -2515,22 +2515,22 @@ module Shumway.AVMX.AS {
   registerNativeFunction('Toplevel::getClassByAlias', Toplevel_getClassByAlias);
 
   export function getNativesForTrait(trait: TraitInfo): Object [] {
-    var className = null;
-    var natives: Object [];
+    let className = null;
+    let natives: Object [];
 
     if (trait.holder instanceof InstanceInfo) {
-      var instanceInfo = <InstanceInfo>trait.holder;
+      let instanceInfo = <InstanceInfo>trait.holder;
       className = instanceInfo.getClassName();
-      var native = builtinNativeClasses[className] || nativeClasses[className];
+      let native = builtinNativeClasses[className] || nativeClasses[className];
       release || assert (native, "Class native is not defined: " + className);
       natives = [native.prototype];
       if (native.instanceNatives) {
         pushMany(natives, native.instanceNatives);
       }
     } else if (trait.holder instanceof ClassInfo) {
-      var classInfo = <ClassInfo>trait.holder;
+      let classInfo = <ClassInfo>trait.holder;
       className = classInfo.instanceInfo.getClassName();
-      var native = builtinNativeClasses[className] || nativeClasses[className];
+      let native = builtinNativeClasses[className] || nativeClasses[className];
       release || assert (native, "Class native is not defined: " + className);
       natives = [native];
       if (native.classNatives) {
@@ -2543,9 +2543,9 @@ module Shumway.AVMX.AS {
   }
 
   export function getNativeInitializer(classInfo: ClassInfo): AXCallable {
-    var methodInfo = classInfo.instanceInfo.getInitializer();
-    var className = classInfo.instanceInfo.getClassName();
-    var asClass = builtinNativeClasses[className] || nativeClasses[className];
+    let methodInfo = classInfo.instanceInfo.getInitializer();
+    let className = classInfo.instanceInfo.getClassName();
+    let asClass = builtinNativeClasses[className] || nativeClasses[className];
     if (methodInfo.isNative()) {
       // Use TS constructor as the initializer function.
       return <any>asClass;
@@ -2561,20 +2561,20 @@ module Shumway.AVMX.AS {
    * Searches for a native property in a list of native holders.
    */
   export function getMethodOrAccessorNative(trait: TraitInfo): any {
-    var natives = getNativesForTrait(trait);
-    var name = trait.getName().name;
-    for (var i = 0; i < natives.length; i++) {
-      var native = natives[i];
-      var fullName = name;
+    let natives = getNativesForTrait(trait);
+    let name = trait.getName().name;
+    for (let i = 0; i < natives.length; i++) {
+      let native = natives[i];
+      let fullName = name;
       // We prefix methods that should not be exported with "native_", check to see
       // if a method exists with that prefix first when looking for native methods.
       if (!hasOwnProperty(native, name) && hasOwnProperty(native, "native_" + name)) {
         fullName = "native_" + name;
       }
       if (hasOwnProperty(native, fullName)) {
-        var value;
+        let value;
         if (trait.isAccessor()) {
-          var pd = Object.getOwnPropertyDescriptor(native, fullName);
+          let pd = Object.getOwnPropertyDescriptor(native, fullName);
           if (trait.isGetter()) {
             value = pd.get;
           } else {
@@ -2594,8 +2594,8 @@ module Shumway.AVMX.AS {
   }
 
   export function tryLinkNativeClass(axClass: AXClass) {
-    var className = axClass.classInfo.instanceInfo.getClassName();
-    var asClass = builtinNativeClasses[className] || nativeClasses[className];
+    let className = axClass.classInfo.instanceInfo.getClassName();
+    let asClass = builtinNativeClasses[className] || nativeClasses[className];
     if (asClass) {
       linkClass(axClass, asClass);
     }
@@ -2606,10 +2606,10 @@ module Shumway.AVMX.AS {
    * followed by the  "!" suffix are available in release builds.
    */
   function containsSymbol(symbols: string [], name: string) {
-    for (var i = 0; i < symbols.length; i++) {
-      var symbol = symbols[i];
+    for (let i = 0; i < symbols.length; i++) {
+      let symbol = symbols[i];
       if (symbol.indexOf(name) >= 0) {
-        var releaseSymbol = symbol[symbol.length - 1] === "!";
+        let releaseSymbol = symbol[symbol.length - 1] === "!";
         if (releaseSymbol) {
           symbol = symbol.slice(0, symbol.length - 1);
         }
@@ -2626,8 +2626,8 @@ module Shumway.AVMX.AS {
   }
 
   function linkSymbols(symbols: string [], traits: Traits, object) {
-    for (var i = 0; i < traits.traits.length; i++) {
-      var trait = traits.traits[i];
+    for (let i = 0; i < traits.traits.length; i++) {
+      let trait = traits.traits[i];
       if (!containsSymbol(symbols, trait.getName().name)) {
         continue;
       }
@@ -2636,8 +2636,8 @@ module Shumway.AVMX.AS {
         release || release || notImplemented("Don't link against const traits.");
         return;
       }
-      var name = trait.getName().name;
-      var qn = trait.getName().getMangledName();
+      let name = trait.getName().name;
+      let qn = trait.getName().getMangledName();
       if (trait.isSlot()) {
         Object.defineProperty(object, name, {
           get: <() => any>new Function("", "return this." + qn +
@@ -2661,7 +2661,7 @@ module Shumway.AVMX.AS {
     return propertyName.indexOf("native_") !== 0;
   }
 
-  var axTrapNames = [
+  let axTrapNames = [
     "axResolveMultiname",
     "axHasProperty",
     "axDeleteProperty",
@@ -2720,7 +2720,7 @@ module Shumway.AVMX.AS {
 
     // Copy class methods and properties.
     if (asClass.classNatives) {
-      for (var i = 0; i < asClass.classNatives.length; i++) {
+      for (let i = 0; i < asClass.classNatives.length; i++) {
         copyOwnPropertyDescriptors(axClass, asClass.classNatives[i], filter);
       }
     }
@@ -2737,7 +2737,7 @@ module Shumway.AVMX.AS {
 
     // Copy instance methods and properties.
     if (asClass.instanceNatives) {
-      for (var i = 0; i < asClass.instanceNatives.length; i++) {
+      for (let i = 0; i < asClass.instanceNatives.length; i++) {
         copyOwnPropertyDescriptors(axClass.dPrototype, asClass.instanceNatives[i], filter);
       }
     }
@@ -2762,11 +2762,11 @@ module Shumway.AVMX.AS {
   function traceASClass(axClass: AXClass, asClass: ASClass) {
     runtimeWriter.enter("Class: " + axClass.classInfo);
     runtimeWriter.enter("Traps:");
-    for (var k in asClass.prototype) {
+    for (let k in asClass.prototype) {
       if (k.indexOf("ax") !== 0) {
         continue;
       }
-      var hasOwn = asClass.hasOwnProperty(k);
+      let hasOwn = asClass.hasOwnProperty(k);
       runtimeWriter.writeLn((hasOwn ? "Own" : "Inherited") + " trap: " + k);
     }
     runtimeWriter.leave();
@@ -2782,10 +2782,10 @@ module Shumway.AVMX.AS {
     Object.defineProperty(container, classAlias, {
       get: function () {
         runtimeWriter && runtimeWriter.writeLn("Running Memoizer: " + mn.name);
-        var axClass = applicationDomain.getClass(mn);
+        let axClass = applicationDomain.getClass(mn);
         release || assert(axClass, "Class " + mn + " is not found.");
         release || assert(axClass.axConstruct);
-        var loader: any = function () {
+        let loader: any = function () {
           return axClass.axConstruct(<any>arguments);
         };
         loader.axIsType = function (value: any) {
@@ -2802,8 +2802,8 @@ module Shumway.AVMX.AS {
     });
   }
 
-  var createContainersFromPath = function (pathTokens, container) {
-    for (var i = 0, j = pathTokens.length; i < j; i++) {
+  let createContainersFromPath = function (pathTokens, container) {
+    for (let i = 0, j = pathTokens.length; i < j; i++) {
       if (!container[pathTokens[i]]) {
         container[pathTokens[i]] = Object.create(null);
       }
@@ -2815,10 +2815,10 @@ module Shumway.AVMX.AS {
   function makeClassLoader(applicationDomain: AXApplicationDomain, container: Object,
                            classPath: string, aliasPath: string, nsType: NamespaceType) {
     runtimeWriter && runtimeWriter.writeLn("Defining Memoizer: " + classPath);
-    var aliasPathTokens = aliasPath.split(".");
-    var aliasClassName = aliasPathTokens.pop();
+    let aliasPathTokens = aliasPath.split(".");
+    let aliasClassName = aliasPathTokens.pop();
     container = createContainersFromPath(aliasPathTokens, container);
-    var mn = Multiname.FromFQNString(classPath, nsType);
+    let mn = Multiname.FromFQNString(classPath, nsType);
     defineClassLoader(applicationDomain, container, mn, aliasClassName);
   }
 
@@ -2826,10 +2826,10 @@ module Shumway.AVMX.AS {
    * Installs class loaders for all the previously registered native classes.
    */
   export function installClassLoaders(applicationDomain: AXApplicationDomain, container: Object) {
-    for (var i = 0; i < nativeClassLoaderNames.length; i++) {
-      var loaderName = nativeClassLoaderNames[i].name;
-      var loaderAlias = nativeClassLoaderNames[i].alias;
-      var nsType = nativeClassLoaderNames[i].nsType;
+    for (let i = 0; i < nativeClassLoaderNames.length; i++) {
+      let loaderName = nativeClassLoaderNames[i].name;
+      let loaderAlias = nativeClassLoaderNames[i].alias;
+      let nsType = nativeClassLoaderNames[i].nsType;
       makeClassLoader(applicationDomain, container, loaderName, loaderAlias, nsType);
     }
   }
@@ -2840,10 +2840,10 @@ module Shumway.AVMX.AS {
    * Note that this doesn't use memoizers and doesn't run the functions' AS3 script.
    */
   export function installNativeFunctions(sec: AXSecurityDomain) {
-    for (var i in nativeFunctions) {
-      var pathTokens = i.split('.');
-      var funName = pathTokens.pop();
-      var container = createContainersFromPath(pathTokens, sec);
+    for (let i in nativeFunctions) {
+      let pathTokens = i.split('.');
+      let funName = pathTokens.pop();
+      let container = createContainersFromPath(pathTokens, sec);
       container[funName] = sec.boxFunction(nativeFunctions[i]);
     }
   }

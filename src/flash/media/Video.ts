@@ -28,7 +28,7 @@ module Shumway.AVMX.AS.flash.media {
     _symbol: VideoSymbol;
     applySymbol() {
       this._initializeFields();
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       this._deblocking = symbol.deblocking;
       this._smoothing = symbol.smoothing;
       this._setFillAndLineBoundsFromWidthAndHeight(symbol.width * 20, symbol.height * 20);
@@ -134,7 +134,7 @@ module Shumway.AVMX.AS.flash.media {
     }
 
     static FromData(data: any, loaderInfo: display.LoaderInfo): VideoSymbol {
-      var symbol = new VideoSymbol(data, loaderInfo.sec);
+      let symbol = new VideoSymbol(data, loaderInfo.sec);
       symbol.width = data.width;
       symbol.height = data.height;
       symbol.deblocking = data.deblocking;

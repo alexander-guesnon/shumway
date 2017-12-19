@@ -20,8 +20,8 @@ module Shumway.AVM1.Lib {
   import flash = Shumway.AVMX.AS.flash;
 
   export function toAS3Rectangle(v: AVM1Object): flash.geom.Rectangle {
-    var context = v.context;
-    var x, y, width, height;
+    let context = v.context;
+    let x, y, width, height;
     if (v instanceof AVM1Object) {
       x = alCoerceNumber(context, v.alGet('x'));
       y = alCoerceNumber(context, v.alGet('y'));
@@ -236,7 +236,7 @@ module Shumway.AVM1.Lib {
     }
 
     public clone(): AVM1Rectangle {
-      var result = new AVM1Rectangle(this.context);
+      let result = new AVM1Rectangle(this.context);
       if (this instanceof AVM1Object) {
         result.alPut('x', this.alGet('x'));
         result.alPut('y', this.alGet('y'));
@@ -249,46 +249,46 @@ module Shumway.AVM1.Lib {
     public contains(x: number, y: number): boolean {
       x = alToNumber(this.context, x);
       y = alToNumber(this.context, y);
-      var r = toAS3Rectangle(this);
+      let r = toAS3Rectangle(this);
       return r.contains(x, y);
     }
 
     public containsPoint(pt: AVM1Point): boolean {
-      var r = toAS3Rectangle(this), p = toAS3Point(pt);
+      let r = toAS3Rectangle(this), p = toAS3Point(pt);
       return r.containsPoint(p);
     }
 
     public containsRectangle(rect: AVM1Rectangle): boolean {
-      var r = toAS3Rectangle(this), other = toAS3Rectangle(rect);
+      let r = toAS3Rectangle(this), other = toAS3Rectangle(rect);
       return r.containsRect(other);
     }
 
     public equals(toCompare: AVM1Rectangle): boolean {
-      var r = toAS3Rectangle(this), other = toAS3Rectangle(toCompare);
+      let r = toAS3Rectangle(this), other = toAS3Rectangle(toCompare);
       return r.equals(other);
     }
 
     public inflate(dx: number, dy: number): void {
       dx = alToNumber(this.context, dx);
       dy = alToNumber(this.context, dy);
-      var r = toAS3Rectangle(this);
+      let r = toAS3Rectangle(this);
       r.inflate(dx, dy);
       copyAS3RectangleTo(r, this);
     }
 
     public inflatePoint(pt: AVM1Point): void {
-      var r = toAS3Rectangle(this), p = toAS3Point(pt);
+      let r = toAS3Rectangle(this), p = toAS3Point(pt);
       r.inflatePoint(p);
       copyAS3RectangleTo(r, this);
     }
 
     public intersection(toIntersect: AVM1Rectangle): AVM1Rectangle {
-      var r = toAS3Rectangle(this), other = toAS3Rectangle(toIntersect);
+      let r = toAS3Rectangle(this), other = toAS3Rectangle(toIntersect);
       return AVM1Rectangle.fromAS3Rectangle(this.context, r.intersection(other));
     }
 
     public intersects(toIntersect: AVM1Rectangle): boolean {
-      var r = toAS3Rectangle(this), other = toAS3Rectangle(toIntersect);
+      let r = toAS3Rectangle(this), other = toAS3Rectangle(toIntersect);
       return r.intersects(other);
     }
 
@@ -299,13 +299,13 @@ module Shumway.AVM1.Lib {
     public offset(dx: number, dy: number): void {
       dx = alToNumber(this.context, dx);
       dy = alToNumber(this.context, dy);
-      var r = toAS3Rectangle(this);
+      let r = toAS3Rectangle(this);
       r.offset(dx, dy);
       copyAS3RectangleTo(r, this);
     }
 
     public offsetPoint(pt: AVM1Point): void {
-      var r = toAS3Rectangle(this), p = toAS3Point(pt);
+      let r = toAS3Rectangle(this), p = toAS3Point(pt);
       r.offsetPoint(p);
       copyAS3RectangleTo(r, this);
     }
@@ -323,7 +323,7 @@ module Shumway.AVM1.Lib {
     }
 
     public union(toUnion: AVM1Rectangle): AVM1Rectangle {
-      var r = toAS3Rectangle(this), other = toAS3Rectangle(toUnion);
+      let r = toAS3Rectangle(this), other = toAS3Rectangle(toUnion);
       return AVM1Rectangle.fromAS3Rectangle(this.context, r.union(other));
     }
   }

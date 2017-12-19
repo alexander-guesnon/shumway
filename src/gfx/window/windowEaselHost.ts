@@ -38,7 +38,7 @@ module Shumway.GFX.Window {
     }
 
     onSendUpdates(updates: DataBuffer, assets: Array<DataBuffer>) {
-      var bytes = updates.getBytes();
+      let bytes = updates.getBytes();
       this._peer.postAsyncMessage({
         type: 'gfx',
         updates: bytes,
@@ -79,14 +79,14 @@ module Shumway.GFX.Window {
     }
 
     _onWindowMessage(data: any, async: boolean): any {
-      var result;
+      let result;
       if (typeof data === 'object' && data !== null) {
         if (data.type === 'player') {
-          var updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
+          let updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
           if (async) {
             this.processUpdates(updates, data.assets);
           } else {
-            var output = new DataBuffer();
+            let output = new DataBuffer();
             this.processUpdates(updates, data.assets, output);
             result = output.toPlainObject();
           }

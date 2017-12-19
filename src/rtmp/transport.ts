@@ -17,18 +17,18 @@
 module RtmpJs {
   import flash = Shumway.AVMX.AS.flash;
 
-  var TRANSPORT_ENCODING = 0;
+  let TRANSPORT_ENCODING = 0;
 
-  var MAIN_CHUNKED_STREAM_ID = 3;
-  var CONNECT_TRANSACTION_ID = 1;
-  var DEFAULT_STREAM_ID = 0;
+  let MAIN_CHUNKED_STREAM_ID = 3;
+  let CONNECT_TRANSACTION_ID = 1;
+  let DEFAULT_STREAM_ID = 0;
 
-  var COMMAND_MESSAGE_AMF0_ID = 20;
-  var COMMAND_MESSAGE_AMF3_ID = 17;
+  let COMMAND_MESSAGE_AMF0_ID = 20;
+  let COMMAND_MESSAGE_AMF3_ID = 17;
 
-  var SET_BUFFER_CONTROL_MESSAGE_ID = 3;
-  var PING_REQUEST_CONTROL_MESSAGE_ID = 6;
-  var PING_RESPONSE_CONTROL_MESSAGE_ID = 7;
+  let SET_BUFFER_CONTROL_MESSAGE_ID = 3;
+  let PING_REQUEST_CONTROL_MESSAGE_ID = 6;
+  let PING_RESPONSE_CONTROL_MESSAGE_ID = 7;
 
   export interface ITransportConnectedParameters {
     properties;
@@ -75,10 +75,10 @@ module RtmpJs {
     }
 
     _initChannel(properties: any, args?: any) {
-      var channel = new ChunkedChannel();
-      var transport = this;
+      let channel = new ChunkedChannel();
+      let transport = this;
       channel.oncreated = function () {
-        var ba = new flash.utils.ByteArray();
+        let ba = new flash.utils.ByteArray();
         ba.objectEncoding = TRANSPORT_ENCODING;
         ba.writeObject('connect');
         ba.writeObject(CONNECT_TRANSACTION_ID);
@@ -103,29 +103,29 @@ module RtmpJs {
 
         if (message.typeId === COMMAND_MESSAGE_AMF0_ID ||
           message.typeId === COMMAND_MESSAGE_AMF3_ID) {
-          var ba = new flash.utils.ByteArray();
+          let ba = new flash.utils.ByteArray();
           ba.writeRawBytes(message.data);
           ba.position = 0;
           ba.objectEncoding = message.typeId === COMMAND_MESSAGE_AMF0_ID ? 0 : 3;
-          var commandName = ba.readObject();
+          let commandName = ba.readObject();
           if (commandName === undefined) { // ??? not sure what specification says and what real stuff are
             ba.objectEncoding = 0;
             commandName = ba.readObject();
           }
-          var transactionId = ba.readObject();
+          let transactionId = ba.readObject();
           if (commandName === '_result' || commandName === '_error') {
-            var isError = commandName === '_error';
+            let isError = commandName === '_error';
             if (transactionId === CONNECT_TRANSACTION_ID) {
-              var properties = ba.readObject();
-              var information = ba.readObject();
+              let properties = ba.readObject();
+              let information = ba.readObject();
               if (transport.onconnected) {
                 transport.onconnected({properties: properties, information: information, isError: isError});
               }
             } else {
-              var commandObject = ba.readObject();
-              var streamId = ba.readObject();
+              let commandObject = ba.readObject();
+              let streamId = ba.readObject();
               if (transport.onstreamcreated) {
-                var stream = new NetStream(transport, streamId);
+                let stream = new NetStream(transport, streamId);
                 transport._streams[streamId] = stream;
                 transport.onstreamcreated({transactionId: transactionId, commandObject: commandObject, streamId: streamId, stream: stream, isError: isError});
               }
@@ -135,8 +135,8 @@ module RtmpJs {
             transport.sendCommandOrResponse('_error', transactionId, null,
               { code: 'NetConnection.Call.Failed', level: 'error' });
           } else {
-            var commandObject = ba.readObject();
-            var response = ba.position < ba.length ? ba.readObject() : undefined;
+            let commandObject = ba.readObject();
+            let response = ba.position < ba.length ? ba.readObject() : undefined;
             if (transport.onresponse) {
               transport.onresponse({commandName: commandName, transactionId: transactionId, commandObject: commandObject, response: response});
             }
@@ -159,9 +159,9 @@ module RtmpJs {
     }
 
     call(procedureName: string, transactionId: number, commandObject, args) {
-      var channel = this.channel;
+      let channel = this.channel;
 
-      var ba = new flash.utils.ByteArray();
+      let ba = new flash.utils.ByteArray();
       ba.objectEncoding = TRANSPORT_ENCODING;
       ba.writeObject(procedureName);
       ba.writeObject(transactionId);
@@ -179,9 +179,9 @@ module RtmpJs {
     }
 
     sendCommandOrResponse(commandName: string, transactionId: number, commandObject, response?) {
-      var channel = this.channel;
+      let channel = this.channel;
 
-      var ba = new flash.utils.ByteArray();
+      let ba = new flash.utils.ByteArray();
       ba.writeByte(0); // ???
       ba.objectEncoding = 0; // TRANSPORT_ENCODING;
       ba.writeObject(commandName);
@@ -197,7 +197,7 @@ module RtmpJs {
       });
 
       /*     // really weird that this does not work
-       var ba = new flash.utils.ByteArray();
+       let ba = new flash.utils.ByteArray();
        ba.objectEncoding = TRANSPORT_ENCODING;
        ba.writeObject('createStream');
        ba.writeObject(transactionId);
@@ -232,7 +232,7 @@ module RtmpJs {
     }
   }
 
-  var DEFAULT_BUFFER_LENGTH = 100; // ms
+  let DEFAULT_BUFFER_LENGTH = 100; // ms
 
   export interface INetStreamData {
     typeId: number;
@@ -262,7 +262,7 @@ module RtmpJs {
     }
 
     public play(name: string, start?: number, duration?: number, reset?: boolean) {
-      var ba = new flash.utils.ByteArray();
+      let ba = new flash.utils.ByteArray();
       ba.objectEncoding = TRANSPORT_ENCODING;
       ba.writeObject('play');
       ba.writeObject(0);
@@ -292,8 +292,8 @@ module RtmpJs {
           break;
         case 18:
         case 20:
-          var args = [];
-          var ba = new flash.utils.ByteArray();
+          let args = [];
+          let ba = new flash.utils.ByteArray();
           ba.writeRawBytes(message.data);
           ba.position = 0;
           ba.objectEncoding = 0;
@@ -321,27 +321,27 @@ module RtmpJs {
   export function parseConnectionString(s: string): RtmpConnectionString {
     // The s has to have the following format:
     //   protocol:[//host][:port]/appname[/instanceName]
-    var protocolSeparatorIndex = s.indexOf(':');
+    let protocolSeparatorIndex = s.indexOf(':');
     if (protocolSeparatorIndex < 0) {
       return null; // no protocol
     }
     if (s[protocolSeparatorIndex + 1] !== '/') {
       return null; // shall have '/' after protocol
     }
-    var protocol = s.substring(0, protocolSeparatorIndex).toLocaleLowerCase();
+    let protocol = s.substring(0, protocolSeparatorIndex).toLocaleLowerCase();
     if (protocol !== 'rtmp' && protocol !== 'rtmpt' && protocol !== 'rtmps' &&
         protocol !== 'rtmpe' && protocol !== 'rtmpte' && protocol !== 'rtmfp') {
       return null;
     }
-    var host, port;
-    var appnameSeparator = protocolSeparatorIndex + 1;
+    let host, port;
+    let appnameSeparator = protocolSeparatorIndex + 1;
     if (s[protocolSeparatorIndex + 2] === '/') {
       // has host
       appnameSeparator = s.indexOf('/', protocolSeparatorIndex + 3);
       if (appnameSeparator < 0) {
         return undefined; // has host but no appname
       }
-      var portSeparator = s.indexOf(':', protocolSeparatorIndex + 1);
+      let portSeparator = s.indexOf(':', protocolSeparatorIndex + 1);
       if (portSeparator >= 0 && portSeparator < appnameSeparator) {
         host = s.substring(protocolSeparatorIndex + 3, portSeparator);
         port = +s.substring(portSeparator + 1, appnameSeparator);
@@ -349,7 +349,7 @@ module RtmpJs {
         host = s.substring(protocolSeparatorIndex + 3, appnameSeparator);
       }
     }
-    var app = s.substring(appnameSeparator + 1);
+    let app = s.substring(appnameSeparator + 1);
     return {
       protocol: protocol,
       host: host,

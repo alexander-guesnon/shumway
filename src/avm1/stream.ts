@@ -29,7 +29,7 @@ module Shumway.AVM1 {
       this.readANSI = swfVersion < 6;
 
       // endianess sanity check
-      var buffer = new ArrayBuffer(4);
+      let buffer = new ArrayBuffer(4);
       (new Int32Array(buffer))[0] = 1;
       if (!(new Uint8Array(buffer))[0]) {
         throw new Error("big-endian platform");
@@ -39,29 +39,29 @@ module Shumway.AVM1 {
       return this.array[this.position++];
     }
     readUI16(): number {
-      var position = this.position, array = this.array;
-      var value = (array[position + 1] << 8) | array[position];
+      let position = this.position, array = this.array;
+      let value = (array[position + 1] << 8) | array[position];
       this.position = position + 2;
       return value;
     }
     readSI16(): number {
-      var position = this.position, array = this.array;
-      var value = (array[position + 1] << 8) | array[position];
+      let position = this.position, array = this.array;
+      let value = (array[position + 1] << 8) | array[position];
       this.position = position + 2;
       return value < 0x8000 ? value : (value - 0x10000);
     }
     readInteger(): number {
-      var position = this.position, array = this.array;
-      var value = array[position] | (array[position + 1] << 8) |
+      let position = this.position, array = this.array;
+      let value = array[position] | (array[position + 1] << 8) |
         (array[position + 2] << 16) | (array[position + 3] << 24);
       this.position = position + 4;
       return value;
     }
     readFloat(): number {
-      var position = this.position;
-      var array = this.array;
-      var buffer = new ArrayBuffer(4);
-      var bytes = new Uint8Array(buffer);
+      let position = this.position;
+      let array = this.array;
+      let buffer = new ArrayBuffer(4);
+      let bytes = new Uint8Array(buffer);
       bytes[0] = array[position];
       bytes[1] = array[position + 1];
       bytes[2] = array[position + 2];
@@ -70,10 +70,10 @@ module Shumway.AVM1 {
       return (new Float32Array(buffer))[0];
     }
     readDouble(): number {
-      var position = this.position;
-      var array = this.array;
-      var buffer = new ArrayBuffer(8);
-      var bytes = new Uint8Array(buffer);
+      let position = this.position;
+      let array = this.array;
+      let buffer = new ArrayBuffer(8);
+      let bytes = new Uint8Array(buffer);
       bytes[4] = array[position];
       bytes[5] = array[position + 1];
       bytes[6] = array[position + 2];
@@ -89,16 +89,16 @@ module Shumway.AVM1 {
       return !!this.readUI8();
     }
     readANSIString(): string {
-      var value = '';
-      var ch;
+      let value = '';
+      let ch;
       while ((ch = this.readUI8())) {
         value += String.fromCharCode(ch);
       }
       return value;
     }
     readUTF8String(): string {
-      var value = '';
-      var ch;
+      let value = '';
+      let ch;
       while ((ch = this.readUI8())) {
         if (ch < 0x80) {
           value += String.fromCharCode(ch);
@@ -111,11 +111,11 @@ module Shumway.AVM1 {
           continue;
         }
 
-        var lastPosition = this.position - 1; // in case if we need to recover
-        var currentPrefix = 0xC0;
-        var validBits = 5;
+        let lastPosition = this.position - 1; // in case if we need to recover
+        let currentPrefix = 0xC0;
+        let validBits = 5;
         do {
-          var mask = (currentPrefix >> 1) | 0x80;
+          let mask = (currentPrefix >> 1) | 0x80;
           if ((ch & mask) === currentPrefix) {
             break;
           }
@@ -123,12 +123,12 @@ module Shumway.AVM1 {
           --validBits;
         } while (validBits >= 0);
 
-        var code = (ch & ((1 << validBits) - 1));
-        for (var i = 5; i >= validBits; --i) {
+        let code = (ch & ((1 << validBits) - 1));
+        for (let i = 5; i >= validBits; --i) {
           ch = this.readUI8();
           if ((ch & 0xC0) !== 0x80) {
             // Invalid UTF8 encoding: bad chars in the tail, using previous chars as is
-            var skipToPosition = this.position - 1;
+            let skipToPosition = this.position - 1;
             this.position = lastPosition;
             while (this.position < skipToPosition) {
               value += String.fromCharCode(this.readUI8());
@@ -151,12 +151,12 @@ module Shumway.AVM1 {
       return this.readANSI ? this.readANSIString() : this.readUTF8String();
     }
     readBytes(length): Uint8Array {
-      var position = this.position;
-      var remaining = Math.max(this.end - position, 0);
+      let position = this.position;
+      let remaining = Math.max(this.end - position, 0);
       if (remaining < length) {
         length = remaining;
       }
-      var subarray = this.array.subarray(position, position + length);
+      let subarray = this.array.subarray(position, position + length);
       this.position = position + length;
       return subarray;
     }

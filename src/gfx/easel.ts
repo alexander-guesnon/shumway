@@ -24,7 +24,7 @@ module Shumway.GFX {
 
   import DisplayParameters = Shumway.Remoting.DisplayParameters;
 
-  declare var GUI;
+  declare let GUI;
 
   export interface IState {
     onMouseUp(easel: Easel, event: MouseEvent);
@@ -96,11 +96,11 @@ module Shumway.GFX {
   }
 
   function normalizeWheelSpeed(event: any): number {
-    var normalized;
+    let normalized;
     if (event.wheelDelta) {
       normalized = (event.wheelDelta % 120 - 0) == -0 ? event.wheelDelta / 120 : event.wheelDelta / 12;
     } else {
-      var rawAmmount = event.deltaY ? event.deltaY : event.detail;
+      let rawAmmount = event.deltaY ? event.deltaY : event.detail;
       normalized = -(rawAmmount % 3 ? rawAmmount * 10 : rawAmmount / 3);
     }
     return normalized;
@@ -125,12 +125,12 @@ module Shumway.GFX {
     }
 
     onMouseWheel(easel: Easel, event: any) {
-      var ticks = (event.type === 'DOMMouseScroll') ? -event.detail : event.wheelDelta / 40;
+      let ticks = (event.type === 'DOMMouseScroll') ? -event.detail : event.wheelDelta / 40;
       if (event.altKey) {
         event.preventDefault();
-        var p = easel.getMousePosition(event, null);
-        var m = easel.worldView.getTransform().getMatrix(true);
-        var s = 1 + ticks / 1000;
+        let p = easel.getMousePosition(event, null);
+        let m = easel.worldView.getTransform().getMatrix(true);
+        let s = 1 + ticks / 1000;
         m.translate(-p.x, -p.y);
         m.scale(s, s);
         m.translate(p.x, p.y);
@@ -142,7 +142,7 @@ module Shumway.GFX {
       if (!event.altKey) {
         return;
       }
-      var code = event.keyCode || event.which;
+      let code = event.keyCode || event.which;
       console.info("onKeyPress Code: " + code);
       switch (code) {
         case 248: // O
@@ -190,7 +190,7 @@ module Shumway.GFX {
     private _update(easel: Easel) {
       easel.paused = this._paused;
       if (easel.getOption("paintViewport")) {
-        var w = viewportLoupeDiameter.value, h = viewportLoupeDiameter.value;
+        let w = viewportLoupeDiameter.value, h = viewportLoupeDiameter.value;
         easel.viewport = new Rectangle(this._mousePosition.x - w / 2, this._mousePosition.y - h / 2, w, h);
       } else {
         easel.viewport = null;
@@ -205,7 +205,7 @@ module Shumway.GFX {
       if (Date.now() - this._startTime < 10) {
         return;
       }
-      var node = easel.queryNodeUnderMouse(event);
+      let node = easel.queryNodeUnderMouse(event);
       if (node) {
         easel.state = new DragState(node, easel.getMousePosition(event, null), node.getTransform().getMatrix(true));
       }
@@ -229,7 +229,7 @@ module Shumway.GFX {
     }
     onMouseMove(easel: Easel, event: MouseEvent) {
       event.preventDefault();
-      var p = easel.getMousePosition(event, null);
+      let p = easel.getMousePosition(event, null);
       p.sub(this._startPosition);
       this._target.getTransform().setMatrix(this._startMatrix.clone().translate(p.x, p.y));
       easel.state = this;
@@ -298,7 +298,7 @@ module Shumway.GFX {
       this._disableHiDPI = disableHiDPI;
 
       // Create stage container.
-      var stageContainer = document.createElement("div");
+      let stageContainer = document.createElement("div");
       stageContainer.style.position = "absolute";
       stageContainer.style.width = "100%";
       stageContainer.style.height = "100%";
@@ -307,12 +307,12 @@ module Shumway.GFX {
 
       // Create hud container, that lives on top of the stage.
       if (hud.value && Shumway.Tools) {
-        var hudContainer = document.createElement("div");
+        let hudContainer = document.createElement("div");
         hudContainer.style.position = "absolute";
         hudContainer.style.width = "100%";
         hudContainer.style.height = "100%";
         hudContainer.style.pointerEvents = "none";
-        var fpsContainer = document.createElement("div");
+        let fpsContainer = document.createElement("div");
         fpsContainer.style.position = "absolute";
         fpsContainer.style.width = "100%";
         fpsContainer.style.height = "20px";
@@ -324,10 +324,10 @@ module Shumway.GFX {
         this._fps = null;
       }
 
-      var transparent = backgroundColor === 0;
+      let transparent = backgroundColor === 0;
       this.transparent = transparent;
 
-      var cssBackgroundColor = backgroundColor === undefined ? "#14171a" :
+      let cssBackgroundColor = backgroundColor === undefined ? "#14171a" :
                                backgroundColor === 0 ? 'transparent' :
                                Shumway.ColorUtilities.rgbaToCSSStyle(backgroundColor);
 
@@ -340,7 +340,7 @@ module Shumway.GFX {
       this._onMouseDown = this._onMouseDown.bind(this);
       this._onMouseMove = this._onMouseMove.bind(this);
 
-      var self = this;
+      let self = this;
 
       window.addEventListener("mouseup", function (event) {
         self._state.onMouseUp(self, event);
@@ -387,11 +387,11 @@ module Shumway.GFX {
     }
 
     private _listenForContainerSizeChanges() {
-      var pollInterval = 1000;
-      var w = this._containerWidth;
-      var h = this._containerHeight;
+      let pollInterval = 1000;
+      let w = this._containerWidth;
+      let h = this._containerHeight;
       this._onContainerSizeChanged();
-      var self = this;
+      let self = this;
       setInterval(function () {
         if (w !== self._containerWidth || h !== self._containerHeight) {
           self._onContainerSizeChanged();
@@ -402,9 +402,9 @@ module Shumway.GFX {
     }
 
     private _onContainerSizeChanged() {
-      var ratio = this.getRatio();
-      var sw = Math.ceil(this._containerWidth * ratio);
-      var sh = Math.ceil(this._containerHeight * ratio);
+      let ratio = this.getRatio();
+      let sw = Math.ceil(this._containerWidth * ratio);
+      let sh = Math.ceil(this._containerHeight * ratio);
 
       this._stage.setBounds(new Rectangle(0, 0, sw, sh));
       this._stage.content.setBounds(new Rectangle(0, 0, sw, sh));
@@ -423,11 +423,11 @@ module Shumway.GFX {
     }
 
     private _dispatchEvent(type: string) {
-      var listeners = this._eventListeners[type];
+      let listeners = this._eventListeners[type];
       if (!listeners) {
         return;
       }
-      for (var i = 0; i < listeners.length; i++) {
+      for (let i = 0; i < listeners.length; i++) {
         listeners[i]();
       }
     }
@@ -438,7 +438,7 @@ module Shumway.GFX {
       }
       this._isRendering = true;
 
-      var self = this;
+      let self = this;
       this._rAF = requestAnimationFrame(function tick() {
         self.render();
         self._rAF = requestAnimationFrame(tick);
@@ -462,10 +462,10 @@ module Shumway.GFX {
 
     private _render() {
       RenderableVideo.checkForVideoUpdates();
-      var mustRender = (this._stage.readyToRender() || forcePaint.value) && !this.paused;
-      var renderTime = 0;
+      let mustRender = (this._stage.readyToRender() || forcePaint.value) && !this.paused;
+      let renderTime = 0;
       if (mustRender) {
-        var renderer = this._renderer;
+        let renderer = this._renderer;
         if (this.viewport) {
           renderer.viewport = this.viewport;
         } else {
@@ -505,7 +505,7 @@ module Shumway.GFX {
     }
 
     getDisplayParameters(): DisplayParameters {
-      var ratio = this.getRatio();
+      let ratio = this.getRatio();
       return {
         stageWidth: this._containerWidth,
         stageHeight: this._containerHeight,
@@ -516,7 +516,7 @@ module Shumway.GFX {
     }
 
     public toggleOption(name: string) {
-      var option = this._options;
+      let option = this._options;
       option[name] = !option[name];
     }
 
@@ -525,9 +525,9 @@ module Shumway.GFX {
     }
 
     public getRatio(): number {
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = 1;
-      var ratio = 1;
+      let devicePixelRatio = window.devicePixelRatio || 1;
+      let backingStoreRatio = 1;
+      let ratio = 1;
       if (devicePixelRatio !== backingStoreRatio &&
         !this._disableHiDPI) {
         ratio = devicePixelRatio / backingStoreRatio;
@@ -548,7 +548,7 @@ module Shumway.GFX {
     }
 
     selectNodeUnderMouse(event: MouseEvent) {
-      var frame = this.queryNodeUnderMouse(event);
+      let frame = this.queryNodeUnderMouse(event);
       if (frame) {
         this._selectedNodes.push(frame);
       }
@@ -556,16 +556,16 @@ module Shumway.GFX {
     }
 
     getMousePosition(event: MouseEvent, coordinateSpace: Node): Point {
-      var container = this._container;
-      var bRect = container.getBoundingClientRect();
-      var ratio = this.getRatio();
-      var x = ratio * (event.clientX - bRect.left) * (container.scrollWidth / bRect.width);
-      var y = ratio * (event.clientY - bRect.top) * (container.scrollHeight / bRect.height);
-      var p = new Point(x, y);
+      let container = this._container;
+      let bRect = container.getBoundingClientRect();
+      let ratio = this.getRatio();
+      let x = ratio * (event.clientX - bRect.left) * (container.scrollWidth / bRect.width);
+      let y = ratio * (event.clientY - bRect.top) * (container.scrollHeight / bRect.height);
+      let p = new Point(x, y);
       if (!coordinateSpace) {
         return p;
       }
-      var m = Matrix.createIdentity();
+      let m = Matrix.createIdentity();
       coordinateSpace.getTransform().getConcatenatedMatrix().inverse(m);
       m.transformPoint(p);
       return p;

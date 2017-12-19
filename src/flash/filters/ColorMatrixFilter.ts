@@ -23,7 +23,7 @@ module Shumway.AVMX.AS.flash.filters {
     static classInitializer: any = null;
 
     public static FromUntyped(obj: {matrix: number[]}) {
-      var filter = Object.create(this.sec.flash.filters.ColorMatrixFilter.axClass.tPrototype);
+      let filter = Object.create(this.sec.flash.filters.ColorMatrixFilter.axClass.tPrototype);
       filter._matrix = obj.matrix;
       return filter;
     }
@@ -43,10 +43,10 @@ module Shumway.AVMX.AS.flash.filters {
     }
 
     _serialize(message) {
-      var matrix: number[] = this._matrix;
+      let matrix: number[] = this._matrix;
       message.ensureAdditionalCapacity((matrix.length + 1) * 4);
       message.writeIntUnsafe(6);
-      for (var i: number = 0; i < matrix.length; i++) {
+      for (let i: number = 0; i < matrix.length; i++) {
         message.writeFloatUnsafe(matrix[i]);
       }
     }
@@ -60,14 +60,14 @@ module Shumway.AVMX.AS.flash.filters {
       if (isNullOrUndefined(value_)) {
         this.sec.throwError("TypeError", Errors.NullPointerError, "matrix");
       }
-      var matrix = [
+      let matrix = [
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
       ];
-      var value = value_.value;
-      for (var i = 0, n = Math.min(value.length, 20); i < n; i++) {
+      let value = value_.value;
+      for (let i = 0, n = Math.min(value.length, 20); i < n; i++) {
         matrix[i] = toNumber(value[i]);
       }
       this._matrix = matrix;

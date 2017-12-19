@@ -62,10 +62,10 @@ module Shumway.Tools.Profiler {
     }
 
     draw() {
-      var context = this._context;
-      var ratio = window.devicePixelRatio;
-      var width = this._width;
-      var height = this._height;
+      let context = this._context;
+      let ratio = window.devicePixelRatio;
+      let width = this._width;
+      let height = this._height;
 
       context.save();
       context.scale(ratio, ratio);
@@ -84,12 +84,12 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawSelection() {
-      var context = this._context;
-      var height = this._height;
-      var ratio = window.devicePixelRatio;
-      var left = this._selection ? this._selection.left : this._toPixels(this._windowStart);
-      var right = this._selection ? this._selection.right : this._toPixels(this._windowEnd);
-      var theme = this._controller.theme;
+      let context = this._context;
+      let height = this._height;
+      let ratio = window.devicePixelRatio;
+      let left = this._selection ? this._selection.left : this._toPixels(this._windowStart);
+      let right = this._selection ? this._selection.right : this._toPixels(this._windowEnd);
+      let theme = this._controller.theme;
 
       context.save();
       context.scale(ratio, ratio);
@@ -118,9 +118,9 @@ module Shumway.Tools.Profiler {
       context.stroke();
 
       // Draw info labels
-      var start = this._selection ? this._toTime(this._selection.left) : this._windowStart;
-      var end = this._selection ? this._toTime(this._selection.right) : this._windowEnd;
-      var time = Math.abs(end - start);
+      let start = this._selection ? this._toTime(this._selection.left) : this._windowStart;
+      let end = this._selection ? this._toTime(this._selection.right) : this._windowEnd;
+      let time = Math.abs(end - start);
       context.fillStyle = theme.selectionText(0.5); //"rgba(255, 255, 255, 0.5)";
       context.font = '8px sans-serif';
       context.textBaseline = "alphabetic";
@@ -133,33 +133,33 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawChart() {
-      var ratio = window.devicePixelRatio;
-      var width = this._width;
-      var height = this._height;
-      var profile = this._controller.activeProfile;
-      var samplesPerPixel = 4;
-      var samplesCount = width * samplesPerPixel;
-      var sampleTimeInterval = profile.totalTime / samplesCount;
-      var contextOverview = this._overviewContext;
-      var overviewChartColor: string = this._controller.theme.blueHighlight(1);
+      let ratio = window.devicePixelRatio;
+      let width = this._width;
+      let height = this._height;
+      let profile = this._controller.activeProfile;
+      let samplesPerPixel = 4;
+      let samplesCount = width * samplesPerPixel;
+      let sampleTimeInterval = profile.totalTime / samplesCount;
+      let contextOverview = this._overviewContext;
+      let overviewChartColor: string = this._controller.theme.blueHighlight(1);
 
       contextOverview.save();
       contextOverview.translate(0, ratio * height);
-      var yScale = -ratio * height / (profile.maxDepth - 1);
+      let yScale = -ratio * height / (profile.maxDepth - 1);
       contextOverview.scale(ratio / samplesPerPixel, yScale);
       contextOverview.clearRect(0, 0, samplesCount, profile.maxDepth - 1);
       if (this._mode == FlameChartOverviewMode.STACK) {
         contextOverview.scale(1, 1 / profile.snapshotCount);
       }
-      for (var i = 0, n = profile.snapshotCount; i < n; i++) {
-        var snapshot = profile.getSnapshotAt(i);
+      for (let i = 0, n = profile.snapshotCount; i < n; i++) {
+        let snapshot = profile.getSnapshotAt(i);
         if (snapshot) {
-          var deepestFrame = null;
-          var depth = 0;
+          let deepestFrame = null;
+          let depth = 0;
           contextOverview.beginPath();
           contextOverview.moveTo(0, 0);
-          for (var x = 0; x < samplesCount; x++) {
-            var time = profile.startTime + x * sampleTimeInterval;
+          for (let x = 0; x < samplesCount; x++) {
+            let time = profile.startTime + x * sampleTimeInterval;
             if (!deepestFrame) {
               deepestFrame = snapshot.query(time);
             } else {
@@ -198,11 +198,11 @@ module Shumway.Tools.Profiler {
 
     private _getDragTargetUnderCursor(x: number, y:number): FlameChartDragTarget {
       if (y >= 0 && y < this._height) {
-        var left = this._toPixels(this._windowStart);
-        var right = this._toPixels(this._windowEnd);
-        var radius = 2 + (FlameChartBase.DRAGHANDLE_WIDTH) / 2;
-        var leftHandle = (x >= left - radius && x <= left + radius);
-        var rightHandle = (x >= right - radius && x <= right + radius);
+        let left = this._toPixels(this._windowStart);
+        let right = this._toPixels(this._windowEnd);
+        let radius = 2 + (FlameChartBase.DRAGHANDLE_WIDTH) / 2;
+        let leftHandle = (x >= left - radius && x <= left + radius);
+        let rightHandle = (x >= right - radius && x <= right + radius);
         if (leftHandle && rightHandle) {
           return FlameChartDragTarget.HANDLE_BOTH;
         } else if (leftHandle) {
@@ -217,7 +217,7 @@ module Shumway.Tools.Profiler {
     }
 
     onMouseDown(x: number, y: number) {
-      var dragTarget = this._getDragTargetUnderCursor(x, y);
+      let dragTarget = this._getDragTargetUnderCursor(x, y);
       if (dragTarget === FlameChartDragTarget.NONE) {
         this._selection = { left: x, right: x };
         this.draw();
@@ -234,8 +234,8 @@ module Shumway.Tools.Profiler {
     }
 
     onMouseMove(x: number, y: number) {
-      var cursor = MouseCursor.DEFAULT;
-      var dragTarget = this._getDragTargetUnderCursor(x, y);
+      let cursor = MouseCursor.DEFAULT;
+      let dragTarget = this._getDragTargetUnderCursor(x, y);
       if (dragTarget !== FlameChartDragTarget.NONE && !this._selection) {
         cursor = (dragTarget === FlameChartDragTarget.WINDOW) ? MouseCursor.GRAB : MouseCursor.EW_RESIZE;
       }
@@ -255,7 +255,7 @@ module Shumway.Tools.Profiler {
         this._selection = { left: startX, right: clamp(currentX, 0, this._width - 1) };
         this.draw();
       } else {
-        var dragInfo = this._dragInfo;
+        let dragInfo = this._dragInfo;
         if (dragInfo.target === FlameChartDragTarget.HANDLE_BOTH) {
           if (deltaX !== 0) {
             dragInfo.target = (deltaX < 0) ? FlameChartDragTarget.HANDLE_LEFT : FlameChartDragTarget.HANDLE_RIGHT;
@@ -263,9 +263,9 @@ module Shumway.Tools.Profiler {
             return;
           }
         }
-        var windowStart = this._windowStart;
-        var windowEnd = this._windowEnd;
-        var delta = this._toTimeRelative(deltaX);
+        let windowStart = this._windowStart;
+        let windowEnd = this._windowEnd;
+        let delta = this._toTimeRelative(deltaX);
         switch (dragInfo.target) {
           case FlameChartDragTarget.WINDOW:
             windowStart = dragInfo.windowStartInitial + delta;
@@ -297,7 +297,7 @@ module Shumway.Tools.Profiler {
       this._dragInfo = null;
       this._selection = null;
       if (!this._windowEqRange()) {
-        var dragTarget = this._getDragTargetUnderCursor(x, y);
+        let dragTarget = this._getDragTargetUnderCursor(x, y);
         if (dragTarget === FlameChartDragTarget.NONE) {
           this._controller.moveWindowTo(this._toTime(x));
         }

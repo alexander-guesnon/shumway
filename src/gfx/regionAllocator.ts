@@ -85,7 +85,7 @@ module Shumway.GFX {
       allocate(w: number, h: number): Region {
         w = Math.ceil(w); h = Math.ceil(h);
         release || assert (w > 0 && h > 0);
-        var result = this._root.insert(w, h);
+        let result = this._root.insert(w, h);
         if (result) {
           result.allocator = this;
           result.allocated = true;
@@ -94,7 +94,7 @@ module Shumway.GFX {
       }
 
       free(region: Region) {
-        var cell = <CompactCell>region;
+        let cell = <CompactCell>region;
         release || assert (cell.allocator === this);
         cell.clear();
         region.allocated = false;
@@ -128,7 +128,7 @@ module Shumway.GFX {
           return;
         }
         if (!this._children) {
-          var orientation = !this._horizontal;
+          let orientation = !this._horizontal;
           if (CompactAllocator.RANDOM_ORIENTATION) {
             orientation = Math.random() >= 0.5;
           }
@@ -143,14 +143,14 @@ module Shumway.GFX {
               new CompactCell(this.x + w, this.y, this.w - w, this.h, orientation),
             ];
           }
-          var first = this._children[0];
+          let first = this._children[0];
           if (first.w === w && first.h === h) {
             first.allocated = true;
             return first;
           }
           return this._insert(w, h, depth + 1);
         } else {
-          var result;
+          let result;
           result = this._children[0]._insert(w, h, depth + 1);
           if (result) {
             return result;
@@ -188,24 +188,24 @@ module Shumway.GFX {
       allocate(w: number, h: number): Region {
         w = Math.ceil(w); h = Math.ceil(h);
         release || assert (w > 0 && h > 0);
-        var sizeW = this._sizeW;
-        var sizeH = this._sizeH;
+        let sizeW = this._sizeW;
+        let sizeH = this._sizeH;
         if (w > sizeW || h > sizeH) {
           return null;
         }
-        var freeList = this._freeList;
-        var index = this._index;
+        let freeList = this._freeList;
+        let index = this._index;
         if (freeList.length > 0) {
-          var cell = freeList.pop();
+          let cell = freeList.pop();
           release || assert (cell.allocated === false);
           cell.w = w;
           cell.h = h;
           cell.allocated = true;
           return cell;
         } else if (index < this._total) {
-          var y = (index / this._columns) | 0;
-          var x = index - (y * this._columns);
-          var cell = new GridCell(x * sizeW, y * sizeH, w, h);
+          let y = (index / this._columns) | 0;
+          let x = index - (y * this._columns);
+          let cell = new GridCell(x * sizeW, y * sizeH, w, h);
           cell.index = index;
           cell.allocator = this;
           cell.allocated = true;
@@ -216,7 +216,7 @@ module Shumway.GFX {
       }
 
       free(region: Region) {
-        var cell = <GridCell>region;
+        let cell = <GridCell>region;
         release || assert (cell.allocator === this);
         cell.allocated = false;
         this._freeList.push(cell);
@@ -267,16 +267,16 @@ module Shumway.GFX {
       allocate(w: number, h: number): Region {
         w = Math.ceil(w); h = Math.ceil(h);
         release || assert (w > 0 && h > 0);
-        var size = Math.max(w, h);
+        let size = Math.max(w, h);
         if (w > this._w || h > this._h) {
           // Too big, cannot allocate this.
           return null;
         }
-        var region = null;
-        var bucket;
-        var buckets = this._buckets;
+        let region = null;
+        let bucket;
+        let buckets = this._buckets;
         do {
-          for (var i = 0; i < buckets.length; i++) {
+          for (let i = 0; i < buckets.length; i++) {
             if (buckets[i].size >= size) {
               bucket = buckets[i];
               region = bucket.allocator.allocate(w, h);
@@ -286,21 +286,21 @@ module Shumway.GFX {
             }
           }
           if (!region) {
-            var remainingSpace = this._h - this._filled;
+            let remainingSpace = this._h - this._filled;
             if (remainingSpace < h) {
               // Couldn't allocate region and there is no more vertical space to allocate
               // a new bucket that can fit the requested size. So give up.
               return null;
             }
-            var gridSize = roundToMultipleOfPowerOfTwo(size, 8);
-            var bucketHeight = gridSize * 2;
+            let gridSize = roundToMultipleOfPowerOfTwo(size, 8);
+            let bucketHeight = gridSize * 2;
             if (bucketHeight > remainingSpace) {
               bucketHeight = remainingSpace;
             }
             if (bucketHeight < gridSize) {
               return null;
             }
-            var bucketRegion = new Rectangle(0, this._filled, this._w, bucketHeight);
+            let bucketRegion = new Rectangle(0, this._filled, this._w, bucketHeight);
             this._buckets.push (
               new Bucket(gridSize, bucketRegion, new GridAllocator(bucketRegion.w, bucketRegion.h, gridSize, gridSize))
             );
@@ -354,7 +354,7 @@ module Shumway.GFX {
       }
 
       private _createNewSurface(w: number, h: number): ISurface {
-        var surface = this._createSurface(w, h);
+        let surface = this._createSurface(w, h);
         this._surfaces.push(surface);
         return surface;
       }
@@ -364,12 +364,12 @@ module Shumway.GFX {
       }
 
       allocate(w: number, h: number, excludeSurface: ISurface): ISurfaceRegion {
-        for (var i = 0; i < this._surfaces.length; i++) {
-          var surface = this._surfaces[i];
+        for (let i = 0; i < this._surfaces.length; i++) {
+          let surface = this._surfaces[i];
           if (surface === excludeSurface) {
             continue;
           }
-          var region = surface.allocate(w, h);
+          let region = surface.allocate(w, h);
           if (region) {
             return region;
           }

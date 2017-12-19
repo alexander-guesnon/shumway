@@ -342,7 +342,7 @@ module Shumway.AVMX.AS.flash.display {
     _constructFrame(): void;
   }
 
-  var displayObjectSyncID = 0;
+  let displayObjectSyncID = 0;
 
   export class DisplayObject extends flash.events.EventDispatcher implements IBitmapDrawable, Shumway.Remoting.IRemotable {
 
@@ -387,14 +387,14 @@ module Shumway.AVMX.AS.flash.display {
     createAnimatedDisplayObject(symbol: Shumway.Timeline.DisplaySymbol,
                                 placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag,
                                 callConstructor: boolean): DisplayObject {
-      var symbolClass = symbol.symbolClass;
+      let symbolClass = symbol.symbolClass;
 
-      var bitmapDataClass = this.sec.flash.display.BitmapData.axClass;
+      let bitmapDataClass = this.sec.flash.display.BitmapData.axClass;
       if (symbolClass === bitmapDataClass ||
           bitmapDataClass.dPrototype.isPrototypeOf(symbolClass.dPrototype)) {
         symbolClass = this.sec.flash.display.Bitmap.axClass;
       }
-      var instance: DisplayObject = constructClassFromSymbol(symbol, symbolClass);
+      let instance: DisplayObject = constructClassFromSymbol(symbol, symbolClass);
       if (placeObjectTag.flags & PlaceObjectFlags.HasName) {
         instance._name = placeObjectTag.name;
       }
@@ -471,9 +471,9 @@ module Shumway.AVMX.AS.flash.display {
         // Of course, nothing guarantees that there isn't content that accidentally does, so it'd
         // be nice to eventually get this right.
         enterTimeline("DisplayObject.EnqueueFrameScripts");
-        var displayObjectContainerClass = this.sec.flash.display.DisplayObjectContainer.axClass;
+        let displayObjectContainerClass = this.sec.flash.display.DisplayObjectContainer.axClass;
         this._advancableInstances.forEach(function (value) {
-          var container: any = value;
+          let container: any = value;
           if (displayObjectContainerClass.axIsType(container) && !container.parent) {
             container._enqueueFrameScripts();
           }
@@ -481,7 +481,7 @@ module Shumway.AVMX.AS.flash.display {
         this._stage._enqueueFrameScripts();
         leaveTimeline();
         enterTimeline("DisplayObject.RunFrameScript");
-        var movieClipClass = this.sec.flash.display.MovieClip.axClass;
+        let movieClipClass = this.sec.flash.display.MovieClip.axClass;
         if (movieClipClass.frameNavigationModel === FrameNavigationModel.SWF1) {
           movieClipClass.runAvm1FrameScripts();
         } else {
@@ -504,8 +504,8 @@ module Shumway.AVMX.AS.flash.display {
      * Dispatches a frame event on all instances of DisplayObjects.
      */
     static _broadcastFrameEvent(type: string): void {
-      var eventsPackage = this.sec.flash.events;
-      var event = eventsPackage.Event.axClass.getBroadcastInstance(type);
+      let eventsPackage = this.sec.flash.events;
+      let event = eventsPackage.Event.axClass.getBroadcastInstance(type);
       eventsPackage.EventDispatcher.axClass.broadcastEventDispatchQueue.dispatchEvent(event);
     }
 
@@ -567,7 +567,7 @@ module Shumway.AVMX.AS.flash.display {
       this._lineBounds = new Bounds(0, 0, 0, 0);
       this._clipDepth = -1;
 
-      var matrixClass = this.sec.flash.geom.Matrix;
+      let matrixClass = this.sec.flash.geom.Matrix;
       this._concatenatedMatrix = new matrixClass();
       this._invertedConcatenatedMatrix = new matrixClass();
       this._matrix = new matrixClass();
@@ -576,7 +576,7 @@ module Shumway.AVMX.AS.flash.display {
       this._perspectiveProjectionFOV = geom.DefaultPerspectiveProjection.FOV;
       this._perspectiveProjectionCenterX = geom.DefaultPerspectiveProjection.CenterX;
       this._perspectiveProjectionCenterY = geom.DefaultPerspectiveProjection.CenterY;
-      var colorTransformClass = this.sec.flash.geom.ColorTransform;
+      let colorTransformClass = this.sec.flash.geom.ColorTransform;
       this._colorTransform = new colorTransformClass();
       this._concatenatedColorTransform = new colorTransformClass();
 
@@ -603,13 +603,13 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     _setParent(parent: DisplayObjectContainer, depth: number) {
-      var oldParent = this._parent;
+      let oldParent = this._parent;
       release || assert(parent !== this);
       this._parent = parent;
       this._setDepth(depth);
       if (parent) {
         this._addReference();
-        var bubblingFlags = DisplayObjectFlags.None;
+        let bubblingFlags = DisplayObjectFlags.None;
         if (this._hasFlags(DisplayObjectFlags.HasFrameScriptPending)) {
           bubblingFlags |= DisplayObjectFlags.ContainsFrameScriptPendingChildren;
         }
@@ -714,7 +714,7 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
       this._setFlags(flags);
-      var parent = this._parent;
+      let parent = this._parent;
       if (parent) {
         parent._propagateFlagsUp(flags);
       }
@@ -846,7 +846,7 @@ module Shumway.AVMX.AS.flash.display {
      * Finds the nearest ancestor with a given set of flags that are either turned on or off.
      */
     private _findNearestAncestor(flags: DisplayObjectFlags, on: boolean): DisplayObject {
-      var node = this;
+      let node = this;
       while (node) {
         if (node._hasFlags(flags) === on) {
           return node;
@@ -857,7 +857,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     _findFurthestAncestorOrSelf(): DisplayObject {
-      var node = this;
+      let node = this;
       while (node) {
         if (!node._parent) {
           return node;
@@ -870,7 +870,7 @@ module Shumway.AVMX.AS.flash.display {
      * Tests if this display object is an ancestor of the specified display object.
      */
     _isAncestor(child: DisplayObject): boolean {
-      var node = child;
+      let node = child;
       while (node) {
         if (node === this) {
           return true;
@@ -902,7 +902,7 @@ module Shumway.AVMX.AS.flash.display {
      * Return's a list of ancestors excluding the |last|, the return list is reused.
      */
     private static _getAncestors(node: DisplayObject, last: DisplayObject) {
-      var path = DisplayObject._path;
+      let path = DisplayObject._path;
       path.length = 0;
       while (node && node !== last) {
         path.push(node);
@@ -943,7 +943,7 @@ module Shumway.AVMX.AS.flash.display {
         // No need to dirty the matrix if it's equal to the current matrix.
         return;
       }
-      var m = this._matrix;
+      let m = this._matrix;
       m.copyFrom(matrix);
       if (toTwips) {
         m.toTwipsInPlace();
@@ -988,14 +988,14 @@ module Shumway.AVMX.AS.flash.display {
       }
       // Compute the concatenated color transforms for this node and all of its ancestors.
       if (this._hasFlags(DisplayObjectFlags.InvalidConcatenatedColorTransform)) {
-        var ancestor = this._findNearestAncestor(DisplayObjectFlags.InvalidConcatenatedColorTransform, false);
-        var path = DisplayObject._getAncestors(this, ancestor);
-        var i = path.length - 1;
-        var stageClass = this.sec.flash.display.Stage;
+        let ancestor = this._findNearestAncestor(DisplayObjectFlags.InvalidConcatenatedColorTransform, false);
+        let path = DisplayObject._getAncestors(this, ancestor);
+        let i = path.length - 1;
+        let stageClass = this.sec.flash.display.Stage;
         if (stageClass.axIsType(path[i])) {
           i--;
         }
-        var m = ancestor && !stageClass.axIsType(ancestor) ?
+        let m = ancestor && !stageClass.axIsType(ancestor) ?
                 ancestor._concatenatedColorTransform.clone() :
                 new this.sec.flash.geom.ColorTransform();
         while (i >= 0) {
@@ -1043,8 +1043,8 @@ module Shumway.AVMX.AS.flash.display {
      */
     _getContentBounds(includeStrokes: boolean = true): Bounds {
       // Tobias: What about filters?
-      var invalidFlag: number;
-      var bounds: Bounds;
+      let invalidFlag: number;
+      let bounds: Bounds;
       if (includeStrokes) {
         invalidFlag = DisplayObjectFlags.InvalidLineBounds;
         bounds = this._lineBounds;
@@ -1053,7 +1053,7 @@ module Shumway.AVMX.AS.flash.display {
         bounds = this._fillBounds;
       }
       if (this._hasFlags(invalidFlag)) {
-        var graphics: Graphics = this._getGraphics();
+        let graphics: Graphics = this._getGraphics();
         if (graphics) {
           bounds.copyFrom(graphics._getContentBounds(includeStrokes));
         } else {
@@ -1083,14 +1083,14 @@ module Shumway.AVMX.AS.flash.display {
      * If the |targetCoordinateSpace| is |null| then assume the identity coordinate space.
      */
     _getTransformedBounds(targetCoordinateSpace: DisplayObject, includeStroke: boolean): Bounds {
-      var bounds = this._getContentBounds(includeStroke).clone();
+      let bounds = this._getContentBounds(includeStroke).clone();
       if (targetCoordinateSpace === this || bounds.isEmpty()) {
         return bounds;
       }
-      var m;
+      let m;
       if (targetCoordinateSpace) {
         m = this.sec.flash.geom.Matrix.axClass.TEMP_MATRIX;
-        var invertedTargetMatrix = targetCoordinateSpace._getInvertedConcatenatedMatrix();
+        let invertedTargetMatrix = targetCoordinateSpace._getInvertedConcatenatedMatrix();
         invertedTargetMatrix.preMultiplyInto(this._getConcatenatedMatrix(), m);
       } else {
         m = this._getConcatenatedMatrix();
@@ -1134,10 +1134,10 @@ module Shumway.AVMX.AS.flash.display {
     _animate(placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag): void {
       release || assert(this._hasFlags(DisplayObjectFlags.AnimatedByTimeline));
 
-      var reset = !(placeObjectTag.flags & PlaceObjectFlags.Move) &&
+      let reset = !(placeObjectTag.flags & PlaceObjectFlags.Move) &&
                   placeObjectTag.flags & PlaceObjectFlags.HasCharacter;
 
-      var matrixClass = this.sec.flash.geom.Matrix.axClass;
+      let matrixClass = this.sec.flash.geom.Matrix.axClass;
       if (placeObjectTag.flags & PlaceObjectFlags.HasMatrix) {
         matrixClass.TEMP_MATRIX.copyFromUntyped(placeObjectTag.matrix);
         this._setMatrix(matrixClass.TEMP_MATRIX, false);
@@ -1145,7 +1145,7 @@ module Shumway.AVMX.AS.flash.display {
         this._setMatrix(matrixClass.FROZEN_IDENTITY_MATRIX, false);
       }
 
-      var colorTransformClass = this.sec.flash.geom.ColorTransform.axClass;
+      let colorTransformClass = this.sec.flash.geom.ColorTransform.axClass;
       if (placeObjectTag.flags & PlaceObjectFlags.HasColorTransform) {
         colorTransformClass.TEMP_COLOR_TRANSFORM.copyFromUntyped(placeObjectTag.cxform);
         this._setColorTransform(colorTransformClass.TEMP_COLOR_TRANSFORM);
@@ -1154,7 +1154,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasRatio || reset) {
-        var ratio = placeObjectTag.ratio | 0;
+        let ratio = placeObjectTag.ratio | 0;
         if (ratio !== this._ratio) {
           release || assert(ratio >= 0 && ratio <= 0xffff);
           this._ratio = ratio;
@@ -1163,7 +1163,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasClipDepth || reset) {
-        var clipDepth = placeObjectTag.clipDepth === undefined ? -1 : placeObjectTag.clipDepth;
+        let clipDepth = placeObjectTag.clipDepth === undefined ? -1 : placeObjectTag.clipDepth;
         if (clipDepth !== this._clipDepth) {
           this._clipDepth = clipDepth;
           this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyClipDepth);
@@ -1171,12 +1171,12 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasFilterList) {
-        var filtersPackage = this.sec.flash.filters;
-        var filters: filters.BitmapFilter[] = [];
-        var swfFilters = placeObjectTag.filters;
-        for (var i = 0; i < swfFilters.length; i++) {
-          var obj = swfFilters[i];
-          var filter: filters.BitmapFilter;
+        let filtersPackage = this.sec.flash.filters;
+        let filters: filters.BitmapFilter[] = [];
+        let swfFilters = placeObjectTag.filters;
+        for (let i = 0; i < swfFilters.length; i++) {
+          let obj = swfFilters[i];
+          let filter: filters.BitmapFilter;
           switch (obj.type) {
             case 0:
               filter = filtersPackage.DropShadowFilter.axClass.FromUntyped(obj);
@@ -1215,7 +1215,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasBlendMode || reset) {
-        var blendMode = flash.display.BlendMode.fromNumber(placeObjectTag.blendMode === undefined ?
+        let blendMode = flash.display.BlendMode.fromNumber(placeObjectTag.blendMode === undefined ?
                                                             1 : placeObjectTag.blendMode);
         if (blendMode !== this._blendMode) {
           this._blendMode = blendMode;
@@ -1224,7 +1224,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasCacheAsBitmap || reset) {
-        var cacheAsBitmap = placeObjectTag.bmpCache > 0;
+        let cacheAsBitmap = placeObjectTag.bmpCache > 0;
         if (cacheAsBitmap !== this._hasFlags(DisplayObjectFlags.CacheAsBitmap)) {
           this._toggleFlags(DisplayObjectFlags.CacheAsBitmap, cacheAsBitmap);
           this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyMiscellaneousProperties);
@@ -1232,7 +1232,7 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       if (placeObjectTag.flags & PlaceObjectFlags.HasVisible || reset) {
-        var visible = placeObjectTag.visibility === undefined || placeObjectTag.visibility;
+        let visible = placeObjectTag.visibility === undefined || placeObjectTag.visibility;
         if (visible !== this._hasFlags(DisplayObjectFlags.Visible)) {
           this._toggleFlags(DisplayObjectFlags.Visible, visible);
           this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyMiscellaneousProperties);
@@ -1254,9 +1254,9 @@ module Shumway.AVMX.AS.flash.display {
       return this._getX();
     }
     _getX(): number {
-      var value = this._matrix.tx;
+      let value = this._matrix.tx;
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         value += bounds.xMin;
       }
       return value / 20;
@@ -1266,7 +1266,7 @@ module Shumway.AVMX.AS.flash.display {
       value = (value * 20) | 0;
       this._stopTimelineAnimation();
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         value -= bounds.xMin;
       }
       if (value === this._matrix.tx) {
@@ -1282,9 +1282,9 @@ module Shumway.AVMX.AS.flash.display {
       return this._getY();
     }
     _getY(): number {
-      var value = this._matrix.ty;
+      let value = this._matrix.ty;
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         value += bounds.yMin;
       }
       return value / 20;
@@ -1294,7 +1294,7 @@ module Shumway.AVMX.AS.flash.display {
       value = (value * 20) | 0;
       this._stopTimelineAnimation();
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         value -= bounds.yMin;
       }
       if (value === this._matrix.ty) {
@@ -1359,8 +1359,8 @@ module Shumway.AVMX.AS.flash.display {
       if (value === this._rotation) {
         return;
       }
-      var delta = value - this._rotation;
-      var angle = delta / 180 * Math.PI;
+      let delta = value - this._rotation;
+      let angle = delta / 180 * Math.PI;
       this._skewX += angle;
       this._skewY += angle;
       this._rotation = value;
@@ -1423,19 +1423,19 @@ module Shumway.AVMX.AS.flash.display {
       if (value < 0) {
         return;
       }
-      var contentBounds = this._getContentBounds(true);
+      let contentBounds = this._getContentBounds(true);
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         this._setFillAndLineBoundsFromWidthAndHeight(value, contentBounds.height);
         return;
       }
-      var bounds = this._getTransformedBounds(this._parent, true);
-      var angle = this._rotation / 180 * Math.PI;
-      var baseWidth = contentBounds.getBaseWidth(angle);
+      let bounds = this._getTransformedBounds(this._parent, true);
+      let angle = this._rotation / 180 * Math.PI;
+      let baseWidth = contentBounds.getBaseWidth(angle);
       if (!baseWidth) {
         return;
       }
-      var baseHeight = contentBounds.getBaseHeight(angle);
+      let baseHeight = contentBounds.getBaseHeight(angle);
       this._scaleY = bounds.height / baseHeight;
       this._scaleX = value / baseWidth;
       this._invalidateMatrix();
@@ -1449,7 +1449,7 @@ module Shumway.AVMX.AS.flash.display {
     }
     // `get height` is overriden in `Stage` and has to be able to call this.
     _getHeight(): number {
-      var bounds = this._getTransformedBounds(this._parent, true);
+      let bounds = this._getTransformedBounds(this._parent, true);
       return bounds.height / 20;
     }
 
@@ -1468,19 +1468,19 @@ module Shumway.AVMX.AS.flash.display {
       if (value < 0) {
         return;
       }
-      var contentBounds = this._getContentBounds(true);
+      let contentBounds = this._getContentBounds(true);
       if (this._canHaveTextContent()) {
-        var bounds = this._getContentBounds();
+        let bounds = this._getContentBounds();
         this._setFillAndLineBoundsFromWidthAndHeight(contentBounds.width, value);
         return;
       }
-      var bounds = this._getTransformedBounds(this._parent, true);
-      var angle = this._rotation / 180 * Math.PI;
-      var baseHeight = contentBounds.getBaseHeight(angle);
+      let bounds = this._getTransformedBounds(this._parent, true);
+      let angle = this._rotation / 180 * Math.PI;
+      let baseHeight = contentBounds.getBaseHeight(angle);
       if (!baseHeight) {
         return;
       }
-      var baseWidth = contentBounds.getBaseWidth(angle);
+      let baseWidth = contentBounds.getBaseWidth(angle);
       this._scaleY = value / baseHeight;
       this._scaleX = bounds.width / baseWidth;
       this._invalidateMatrix();
@@ -1538,7 +1538,7 @@ module Shumway.AVMX.AS.flash.display {
      * the main timeline object and a Loader's content.
      */
     get root(): DisplayObject {
-      var node = this;
+      let node = this;
       do {
         if (node._root === node) {
           return node;
@@ -1553,7 +1553,7 @@ module Shumway.AVMX.AS.flash.display {
      * |_stage| property points to itself.
      */
     get stage(): flash.display.Stage {
-      var node = this;
+      let node = this;
       do {
         if (node._stage === node) {
           release || assert(this.sec.flash.display.Stage.axIsType(node));
@@ -1621,7 +1621,7 @@ module Shumway.AVMX.AS.flash.display {
       return this._getScale9Grid();
     }
     _getScale9Grid() {
-      var rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+      let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
       return this._scale9Grid ? rectangleClass.FromBounds(this._scale9Grid) : null;
     }
 
@@ -1658,23 +1658,23 @@ module Shumway.AVMX.AS.flash.display {
       return this._getFilters();
     }
     _getFilters() {
-      var filters = this._filters ? this._filters.map(function (x: flash.filters.BitmapFilter) {
+      let filters = this._filters ? this._filters.map(function (x: flash.filters.BitmapFilter) {
         return x.clone();
       }) : [];
       return this.sec.createArray(filters);
     }
 
     set filters(value_: ASArray) {
-      var value: flash.filters.BitmapFilter [] = value_ ? value_.value : null;
+      let value: flash.filters.BitmapFilter [] = value_ ? value_.value : null;
       if (!this._filters) {
         this._filters = [];
       }
-      var changed = false;
+      let changed = false;
       if (isNullOrUndefined(value)) {
         changed = this._filters.length > 0;
         this._filters.length = 0;
       } else {
-        var bitmapFilterClass = this.sec.flash.filters.BitmapFilter.axClass;
+        let bitmapFilterClass = this.sec.flash.filters.BitmapFilter.axClass;
         this._filters = value.map(function (x: flash.filters.BitmapFilter) {
           if (!bitmapFilterClass.axIsType(x)) {
             this.sec.throwError('TypeError', Errors.ParamTypeError, '0', 'Filter');
@@ -1716,13 +1716,13 @@ module Shumway.AVMX.AS.flash.display {
 
     getBounds(targetCoordinateSpace: DisplayObject): flash.geom.Rectangle {
       targetCoordinateSpace = targetCoordinateSpace || this;
-      var rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+      let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
       return rectangleClass.FromBounds(this._getTransformedBounds(targetCoordinateSpace, true));
     }
 
     getRect(targetCoordinateSpace: DisplayObject): flash.geom.Rectangle {
       targetCoordinateSpace = targetCoordinateSpace || this;
-      var rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+      let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
       return rectangleClass.FromBounds(this._getTransformedBounds(targetCoordinateSpace, false));
     }
 
@@ -1730,8 +1730,8 @@ module Shumway.AVMX.AS.flash.display {
      * Converts a point from the global coordinate space into the local coordinate space.
      */
     globalToLocal(point: flash.geom.Point): flash.geom.Point {
-      var m = this._getInvertedConcatenatedMatrix();
-      var p = m.transformPointInPlace(point.clone().toTwips()).round();
+      let m = this._getInvertedConcatenatedMatrix();
+      let p = m.transformPointInPlace(point.clone().toTwips()).round();
       return p.toPixels();
     }
 
@@ -1739,8 +1739,8 @@ module Shumway.AVMX.AS.flash.display {
      * Converts a point form the local coordinate sapce into the global coordinate space.
      */
     localToGlobal(point: flash.geom.Point): flash.geom.Point {
-      var m = this._getConcatenatedMatrix();
-      var p = m.transformPointInPlace(point.clone().toTwips()).round();
+      let m = this._getConcatenatedMatrix();
+      let p = m.transformPointInPlace(point.clone().toTwips()).round();
       return p.toPixels();
     }
 
@@ -1763,25 +1763,25 @@ module Shumway.AVMX.AS.flash.display {
      * Tree visitor that lets you skip nodes or return early.
      */
     public visit(visitor: (DisplayObject) => VisitorFlags, visitorFlags: VisitorFlags, displayObjectFlags: DisplayObjectFlags = DisplayObjectFlags.None) {
-      var stack: DisplayObject [];
-      var displayObject: DisplayObject;
-      var displayObjectContainer: DisplayObjectContainer;
-      var frontToBack = visitorFlags & VisitorFlags.FrontToBack;
+      let stack: DisplayObject [];
+      let displayObject: DisplayObject;
+      let displayObjectContainer: DisplayObjectContainer;
+      let frontToBack = visitorFlags & VisitorFlags.FrontToBack;
       stack = [this];
       while (stack.length > 0) {
         displayObject = stack.pop();
-        var flags = VisitorFlags.None;
+        let flags = VisitorFlags.None;
         if (visitorFlags & VisitorFlags.Filter && !displayObject._hasAnyFlags(displayObjectFlags)) {
           flags = VisitorFlags.Skip;
         } else {
           flags = visitor(displayObject);
         }
         if (flags === VisitorFlags.Continue) {
-          var children = displayObject._children;
+          let children = displayObject._children;
           if (children) {
-            var length = children.length;
-            for (var i = 0; i < length; i++) {
-              var child = children[frontToBack ? i : length - 1 - i];
+            let length = children.length;
+            for (let i = 0; i < length; i++) {
+              let child = children[frontToBack ? i : length - 1 - i];
               stack.push(child);
             }
           }
@@ -1795,7 +1795,7 @@ module Shumway.AVMX.AS.flash.display {
      * Returns the loader info for this display object's root.
      */
     get loaderInfo(): flash.display.LoaderInfo {
-      var root = this.root;
+      let root = this.root;
       if (root) {
         release || assert(root._loaderInfo, "No LoaderInfo object found on root.");
         return root._loaderInfo;
@@ -1855,7 +1855,7 @@ module Shumway.AVMX.AS.flash.display {
       release || assert(!symbol.dynamic);
       if (symbol instanceof flash.display.ShapeSymbol) {
         release || assert(this._canHaveGraphics());
-        var newGraphics = (<flash.display.ShapeSymbol>symbol).graphics;
+        let newGraphics = (<flash.display.ShapeSymbol>symbol).graphics;
         if (this._graphics === newGraphics) {
           return;
         }
@@ -1863,7 +1863,7 @@ module Shumway.AVMX.AS.flash.display {
         this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyGraphics);
       } else if (symbol instanceof flash.text.TextSymbol) {
         release || assert(this.sec.flash.text.StaticText.axIsType(this));
-        var newTextContent = (<flash.text.TextSymbol>symbol).textContent;
+        let newTextContent = (<flash.text.TextSymbol>symbol).textContent;
         if ((<flash.text.StaticText>this)._textContent === newTextContent) {
           return;
         }
@@ -1883,9 +1883,9 @@ module Shumway.AVMX.AS.flash.display {
      */
     hitTestObject(other: DisplayObject): boolean {
       release || assert (other && this.sec.flash.display.DisplayObject.axIsType(other));
-      var a = this, b = other;
-      var aBounds = a._getContentBounds(false).clone();
-      var bBounds = b._getContentBounds(false).clone();
+      let a = this, b = other;
+      let aBounds = a._getContentBounds(false).clone();
+      let bBounds = b._getContentBounds(false).clone();
       a._getConcatenatedMatrix().transformBounds(aBounds);
       b._getConcatenatedMatrix().transformBounds(bBounds);
       return aBounds.intersects(bBounds);
@@ -1902,7 +1902,7 @@ module Shumway.AVMX.AS.flash.display {
       globalX = +globalX * 20 | 0;
       globalY = +globalY * 20 | 0;
       shapeFlag = !!shapeFlag;
-      var testingType = shapeFlag ?
+      let testingType = shapeFlag ?
                         HitTestingType.HitTestShape :
                         HitTestingType.HitTestBounds;
       return !!this._containsGlobalPoint(globalX, globalY, testingType, null);
@@ -1929,13 +1929,13 @@ module Shumway.AVMX.AS.flash.display {
      */
     _containsPoint(globalX: number, globalY: number, localX: number, localY: number,
                    testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
-      var result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
+      let result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
       // We're done if either we don't have a hit, or if we're only interested in matching bounds
       // or bounds + mask. That is true for HitTestPoint without shapeFlag set.
       if (result === HitTestingResult.None || testingType < HitTestingType.HitTestShape) {
         return result;
       }
-      var containsPoint = this._containsPointDirectly(localX, localY, globalX, globalY);
+      let containsPoint = this._containsPointDirectly(localX, localY, globalX, globalY);
       if (containsPoint && objects) {
         if (testingType === HitTestingType.Drop) {
           // For Drop, replace previous hit with current one.
@@ -1953,9 +1953,9 @@ module Shumway.AVMX.AS.flash.display {
 
     _containsGlobalPoint(globalX: number, globalY: number,
                          testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
-      var matrix = this._getInvertedConcatenatedMatrix();
-      var localX = matrix.transformX(globalX, globalY);
-      var localY = matrix.transformY(globalX, globalY);
+      let matrix = this._getInvertedConcatenatedMatrix();
+      let localX = matrix.transformX(globalX, globalY);
+      let localY = matrix.transformY(globalX, globalY);
       return this._containsPoint(globalX, globalY, localX, localY, testingType, objects);
     }
 
@@ -2036,8 +2036,8 @@ module Shumway.AVMX.AS.flash.display {
      * Returns the distance between this object and a given ancestor.
      */
     private _getDistance(ancestor: DisplayObject): number {
-      var d = 0;
-      var node = this;
+      let d = 0;
+      let node = this;
       while (node && node !== ancestor) {
         d++;
         node = node._parent;
@@ -2052,9 +2052,9 @@ module Shumway.AVMX.AS.flash.display {
       if (!node) {
         return null;
       }
-      var ancestor = this;
-      var d1 = ancestor._getDistance(null);
-      var d2 = node._getDistance(null);
+      let ancestor = this;
+      let d1 = ancestor._getDistance(null);
+      let d2 = node._getDistance(null);
       while (d1 > d2) {
         ancestor = ancestor._parent;
         d1--;
@@ -2074,7 +2074,7 @@ module Shumway.AVMX.AS.flash.display {
      * Returns the current mouse position relative to this object.
      */
     _getLocalMousePosition(): flash.geom.Point {
-      var position = this.sec.flash.ui.Mouse.axClass._currentPosition;
+      let position = this.sec.flash.ui.Mouse.axClass._currentPosition;
       return this.globalToLocal(position);
     }
 
@@ -2087,10 +2087,10 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     public debugName(withFlags: boolean = false): string {
-      var name = this._id + " [" + this._depth + "]: (" + this._referenceCount + ") " + this;
+      let name = this._id + " [" + this._depth + "]: (" + this._referenceCount + ") " + this;
       if (withFlags) {
-        var flagNames = [];
-        for (var i = 0; i < 32; i++) {
+        let flagNames = [];
+        for (let i = 0; i < 32; i++) {
           if (this._hasFlags(1 << i)) {
             flagNames.push(String([1 << i]));
           }
@@ -2113,13 +2113,13 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     public debugTrace(writer = new IndentingWriter(), maxDistance = 1024, name = "") {
-      var self = this;
+      let self = this;
       this.visit(function (node) {
-        var distance = node._getDistance(self);
+        let distance = node._getDistance(self);
         if (distance > maxDistance) {
           return VisitorFlags.Skip;
         }
-        var prefix = name + Shumway.StringUtilities.multiple(" ", distance);
+        let prefix = name + Shumway.StringUtilities.multiple(" ", distance);
         writer.writeLn(prefix + node.debugNameShort() + ", bounds: " + node.getBounds(null).toString());
         return VisitorFlags.Continue;
       }, VisitorFlags.None);
@@ -2136,8 +2136,8 @@ module Shumway.AVMX.AS.flash.display {
       if (this._referenceCount !== 0 || !this._children) {
         return;
       }
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
         children[i]._removeReference();
       }
     }
@@ -2151,7 +2151,7 @@ module Shumway.AVMX.AS.flash.display {
       if (!this._parent) {
         return [];
       }
-      var result = this._parent._getScriptPrecedence();
+      let result = this._parent._getScriptPrecedence();
       if (this._placeObjectTag) {
         result.push(this._placeObjectTag.actionBlocksPrecedence);
       }

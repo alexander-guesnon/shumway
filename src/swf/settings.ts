@@ -4,9 +4,9 @@ module Shumway.SWF {
 
   import shumwayOptions = Shumway.Settings.shumwayOptions;
 
-  export var parserOptions = shumwayOptions.register(new OptionSet("Parser Options"));
+  export let parserOptions = shumwayOptions.register(new OptionSet("Parser Options"));
 
-  export var traceLevel = parserOptions.register(new Option("parsertracelevel",
+  export let traceLevel = parserOptions.register(new Option("parsertracelevel",
                                                             "Parser Trace Level", "number", 0,
                                                             "Parser Trace Level"));
 }

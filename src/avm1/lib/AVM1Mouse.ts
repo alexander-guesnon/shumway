@@ -22,7 +22,7 @@ module Shumway.AVM1.Lib {
 
   export class AVM1Mouse extends AVM1Object {
     public static createAVM1Class(context: AVM1Context): AVM1Object {
-      var wrapped = wrapAVM1NativeClass(context, false, AVM1Mouse, ['show', 'hide'], []);
+      let wrapped = wrapAVM1NativeClass(context, false, AVM1Mouse, ['show', 'hide'], []);
       return wrapped;
     }
 

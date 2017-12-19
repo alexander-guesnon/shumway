@@ -23,7 +23,7 @@ module Shumway.AVMX.AS {
 
   export class BaseVector extends ASObject {
     axGetProperty(mn: Multiname): any {
-      var nm = mn.name;
+      let nm = mn.name;
       nm = typeof nm === 'number' ? nm : axCoerceName(nm);
       if ((<any>nm | 0) === nm || isNumeric(nm)) {
         release || assert(mn.isRuntimeName());
@@ -34,7 +34,7 @@ module Shumway.AVMX.AS {
 
     axSetProperty(mn: Multiname, value: any, bc: Bytecode) {
       release || checkValue(value);
-      var nm = mn.name;
+      let nm = mn.name;
       nm = typeof nm === 'number' ? nm : axCoerceName(nm);
       if ((<any>nm | 0) === nm || isNumeric(nm)) {
         release || assert(mn.isRuntimeName());
@@ -74,7 +74,7 @@ module Shumway.AVMX.AS {
       if (isNullOrUndefined(callback)) {
         return false;
       }
-      var sec = this.sec;
+      let sec = this.sec;
       if (!axIsCallable(callback)) {
         sec.throwError("TypeError", Errors.CheckTypeFailedError, callback, 'Function');
       }
@@ -107,8 +107,8 @@ module Shumway.AVMX.AS {
     static NUMERIC = 16;
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var tProto: any = this.tPrototype;
+      let proto: any = this.dPrototype;
+      let tProto: any = this.tPrototype;
 
       // Fix up MOP handlers to not apply to the dynamic prototype, which is a plain object.
       tProto.axGetProperty = proto.axGetProperty;
@@ -129,7 +129,7 @@ module Shumway.AVMX.AS {
       proto.axNextNameIndex = ASObject.prototype.axNextNameIndex;
       proto.axNextValue = ASObject.prototype.axNextValue;
 
-      var asProto: any = GenericVector.prototype;
+      let asProto: any = GenericVector.prototype;
       defineNonEnumerableProperty(proto, '$Bgjoin', asProto.join);
       // Same as join, see VectorImpl.as in Tamarin repository.
       defineNonEnumerableProperty(proto, '$BgtoString', asProto.join);
@@ -160,14 +160,14 @@ module Shumway.AVMX.AS {
     }
 
     static axApply(_: AXObject, args: any[]) {
-      var object = args[0];
+      let object = args[0];
       if (this.axIsType(object)) {
         return object;
       }
-      var length = object.axGetPublicProperty("length");
+      let length = object.axGetPublicProperty("length");
       if (length !== undefined) {
-        var v = this.axConstruct([length, false]);
-        for (var i = 0; i < length; i++) {
+        let v = this.axConstruct([length, false]);
+        for (let i = 0; i < length; i++) {
           v.axSetNumericProperty(i, object.axGetPublicProperty(i));
         }
         return v;
@@ -183,7 +183,7 @@ module Shumway.AVMX.AS {
       release || assertNotImplemented (!(options & GenericVector.CASEINSENSITIVE), "CASEINSENSITIVE");
       release || assertNotImplemented (!(options & GenericVector.UNIQUESORT), "UNIQUESORT");
       release || assertNotImplemented (!(options & GenericVector.RETURNINDEXEDARRAY), "RETURNINDEXEDARRAY");
-      var result = 0;
+      let result = 0;
       if (!compareFunction) {
         compareFunction = GenericVector.defaultCompareFunction;
       }
@@ -217,7 +217,7 @@ module Shumway.AVMX.AS {
     }
 
     private _fill(index: number, length: number, value: any) {
-      for (var i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         this._buffer[index + i] = value;
       }
     }
@@ -226,18 +226,18 @@ module Shumway.AVMX.AS {
      * Can't use Array.prototype.toString because it doesn't print |null|s the same way as AS3.
      */
     toString() {
-      var result = [];
-      for (var i = 0; i < this._buffer.length; i++) {
-        var entry = this._buffer[i];
+      let result = [];
+      for (let i = 0; i < this._buffer.length; i++) {
+        let entry = this._buffer[i];
         result.push(entry === null ? 'null' : (entry + ''));
       }
       return result.join(',');
     }
 
     toLocaleString() {
-      var result = [];
-      for (var i = 0; i < this._buffer.length; i++) {
-        var entry = this._buffer[i];
+      let result = [];
+      for (let i = 0; i < this._buffer.length; i++) {
+        let entry = this._buffer[i];
         if (entry && typeof entry === 'object') {
           result.push(entry.$BgtoLocaleString());
         } else {
@@ -256,7 +256,7 @@ module Shumway.AVMX.AS {
         this._buffer.sort(<(a: any, b: any) => number>sortBehavior.value);
         return this;
       }
-      var options = sortBehavior|0;
+      let options = sortBehavior|0;
       release || assertNotImplemented (!(options & Int32Vector.UNIQUESORT), "UNIQUESORT");
       release || assertNotImplemented (!(options & Int32Vector.RETURNINDEXEDARRAY), "RETURNINDEXEDARRAY");
       if (options & GenericVector.NUMERIC) {
@@ -294,7 +294,7 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return true;
       }
-      for (var i = 0; i < this._buffer.length; i++) {
+      for (let i = 0; i < this._buffer.length; i++) {
         if (!callback.axCall(thisObject, this.axGetNumericProperty(i), i, this)) {
           return false;
         }
@@ -308,11 +308,11 @@ module Shumway.AVMX.AS {
      * |thisObject| as |this| for each of the elements in the vector.
      */
     filter(callback, thisObject) {
-      var v = <GenericVector><any>this.axClass.axConstruct([0, false]);
+      let v = <GenericVector><any>this.axClass.axConstruct([0, false]);
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return v;
       }
-      for (var i = 0; i < this._buffer.length; i++) {
+      for (let i = 0; i < this._buffer.length; i++) {
         if (callback.call(thisObject, this.axGetNumericProperty(i), i, this)) {
           v.push(this.axGetNumericProperty(i));
         }
@@ -321,11 +321,11 @@ module Shumway.AVMX.AS {
     }
 
     map(callback, thisObject) {
-      var v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
+      let v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return v;
       }
-      for (var i = 0; i < this._buffer.length; i++) {
+      for (let i = 0; i < this._buffer.length; i++) {
         v.push(this._coerce(callback.call(thisObject, this.axGetNumericProperty(i), i, this)));
       }
       return v;
@@ -335,7 +335,7 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return false;
       }
-      for (var i = 0; i < this._buffer.length; i++) {
+      for (let i = 0; i < this._buffer.length; i++) {
         if (callback.call(thisObject, this.axGetNumericProperty(i), i, this)) {
           return true;
         }
@@ -347,16 +347,16 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return;
       }
-      for (var i = 0; i < this._buffer.length; i++) {
+      for (let i = 0; i < this._buffer.length; i++) {
         callback.call(thisObject, this.axGetNumericProperty(i), i, this);
       }
     }
 
     join(separator: string = ',') {
-      var buffer = this._buffer;
-      var limit = this._buffer.length;
-      var result = "";
-      for (var i = 0; i < limit - 1; i++) {
+      let buffer = this._buffer;
+      let limit = this._buffer.length;
+      let result = "";
+      for (let i = 0; i < limit - 1; i++) {
         result += buffer[i] + separator;
       }
       if (limit > 0) {
@@ -375,7 +375,7 @@ module Shumway.AVMX.AS {
 
     push(arg1?, arg2?, arg3?, arg4?, arg5?, arg6?, arg7?, arg8?/*...rest*/) {
       this._checkFixed();
-      for (var i = 0; i < arguments.length; i++) {
+      for (let i = 0; i < arguments.length; i++) {
         this._buffer.push(this._coerce(arguments[i]));
       }
     }
@@ -390,12 +390,12 @@ module Shumway.AVMX.AS {
 
     concat() {
       // TODO: need to type check the arguments, but isType doesn't exist.
-      var buffers = [];
-      for (var i = 0; i < arguments.length; i++) {
+      let buffers = [];
+      for (let i = 0; i < arguments.length; i++) {
         buffers.push(this._coerce(arguments[i])._buffer);
       }
-      var buffer = this._buffer.concat.apply(this._buffer, buffers);
-      var result = (<any>this).axClass.axConstruct([]);
+      let buffer = this._buffer.concat.apply(this._buffer, buffers);
+      let result = (<any>this).axClass.axConstruct([]);
       result._buffer = buffer;
       return result;
     }
@@ -422,36 +422,36 @@ module Shumway.AVMX.AS {
         return;
       }
       this._checkFixed();
-      for (var i = 0; i < arguments.length; i++) {
+      for (let i = 0; i < arguments.length; i++) {
         this._buffer.unshift(this._coerce(arguments[i]));
       }
     }
 
     slice(start = 0, end = 0x7fffffff) {
-      var buffer = this._buffer;
-      var length = buffer.length;
-      var first = Math.min(Math.max(start, 0), length);
-      var last = Math.min(Math.max(end, first), length);
-      var result = <GenericVector><any>this.axClass.axConstruct([last - first, this.fixed]);
+      let buffer = this._buffer;
+      let length = buffer.length;
+      let first = Math.min(Math.max(start, 0), length);
+      let last = Math.min(Math.max(end, first), length);
+      let result = <GenericVector><any>this.axClass.axConstruct([last - first, this.fixed]);
       result._buffer = buffer.slice(first, last);
       return result;
     }
 
     splice(start: number, deleteCount_: number /*, ...items */) {
-      var buffer = this._buffer;
-      var length = buffer.length;
-      var first = Math.min(Math.max(start, 0), length);
+      let buffer = this._buffer;
+      let length = buffer.length;
+      let first = Math.min(Math.max(start, 0), length);
 
-      var deleteCount = Math.min(Math.max(deleteCount_, 0), length - first);
-      var insertCount = arguments.length - 2;
+      let deleteCount = Math.min(Math.max(deleteCount_, 0), length - first);
+      let insertCount = arguments.length - 2;
       if (deleteCount !== insertCount) {
         this._checkFixed();
       }
-      var items = [first, deleteCount];
-      for (var i = 2; i < insertCount + 2; i++) {
+      let items = [first, deleteCount];
+      for (let i = 2; i < insertCount + 2; i++) {
         items[i] = this._coerce(arguments[i]);
       }
-      var result =<GenericVector><any>this.axClass.axConstruct([deleteCount, this.fixed]);
+      let result =<GenericVector><any>this.axClass.axConstruct([deleteCount, this.fixed]);
       result._buffer = buffer.splice.apply(buffer, items);
       return result;
     }
@@ -463,7 +463,7 @@ module Shumway.AVMX.AS {
     set length(value: number) {
       value = value >>> 0;
       if (value > this._buffer.length) {
-        for (var i = this._buffer.length; i < value; i++) {
+        for (let i = this._buffer.length; i < value; i++) {
           this._buffer[i] = this.axClass.defaultValue;
         }
       } else {
@@ -488,7 +488,7 @@ module Shumway.AVMX.AS {
 
     axGetNumericProperty(nm: number) {
       release || assert(isNumeric(nm));
-      var idx = nm | 0;
+      let idx = nm | 0;
       if (idx < 0 || idx >= this._buffer.length || idx != nm) {
         this.sec.throwError("RangeError", Errors.OutOfRangeError, nm,
                                        this._buffer.length);
@@ -497,8 +497,8 @@ module Shumway.AVMX.AS {
     }
     axSetNumericProperty(nm: number, v: any) {
       release || assert(isNumeric(nm));
-      var length = this._buffer.length;
-      var idx = nm | 0;
+      let length = this._buffer.length;
+      let idx = nm | 0;
       if (idx < 0 || idx > length || idx != nm || (idx === length && this._fixed)) {
         this.sec.throwError("RangeError", Errors.OutOfRangeError, nm, length);
       }
@@ -511,9 +511,9 @@ module Shumway.AVMX.AS {
         release || assert(mn.isRuntimeName());
         return mn.name >= 0 && mn.name < this._buffer.length;
       }
-      var name = axCoerceName(mn.name);
+      let name = axCoerceName(mn.name);
       if (mn.isRuntimeName() && isIndex(name)) {
-        var index = <any>name >>> 0;
+        let index = <any>name >>> 0;
         return index >= 0 && index < this._buffer.length;
       }
       return this.axResolveMultiname(mn) in this;
@@ -524,7 +524,7 @@ module Shumway.AVMX.AS {
     }
 
     axNextNameIndex(index: number): number {
-      var nextNameIndex = index + 1;
+      let nextNameIndex = index + 1;
       if (nextNameIndex <= this._buffer.length) {
         return nextNameIndex;
       }

@@ -25,7 +25,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     static Create(x: number, y: number, z: number, w: number) {
-      var v: Vector3D = Object.create(this.tPrototype);
+      let v: Vector3D = Object.create(this.tPrototype);
       v.x = x;
       v.y = y;
       v.z = z;
@@ -114,7 +114,7 @@ module Shumway.AVMX.AS.flash.geom {
                                               1.0);
     }
     normalize(): number {
-      var length = this.length;
+      let length = this.length;
       if (length !== 0) {
         this.x /= length;
         this.y /= length;

@@ -34,11 +34,11 @@ module Shumway.GFX {
     }
 
     private _listenForContainerSizeChanges() {
-      var pollInterval = 10;
-      var w = this._containerWidth;
-      var h = this._containerHeight;
+      let pollInterval = 10;
+      let w = this._containerWidth;
+      let h = this._containerHeight;
       this._onContainerSizeChanged();
-      var self = this;
+      let self = this;
       setInterval(function () {
         if (w !== self._containerWidth || h !== self._containerHeight) {
           self._onContainerSizeChanged();
@@ -49,9 +49,9 @@ module Shumway.GFX {
     }
 
     private _getRatio(): number {
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = 1;
-      var ratio = 1;
+      let devicePixelRatio = window.devicePixelRatio || 1;
+      let backingStoreRatio = 1;
+      let ratio = 1;
       if (devicePixelRatio !== backingStoreRatio) {
         ratio = devicePixelRatio / backingStoreRatio;
       }
@@ -59,10 +59,10 @@ module Shumway.GFX {
     }
 
     private _onContainerSizeChanged() {
-      var ratio = this._getRatio();
-      var w = Math.ceil(this._containerWidth * ratio);
-      var h = Math.ceil(this._containerHeight * ratio);
-      var canvas = this._canvas;
+      let ratio = this._getRatio();
+      let w = Math.ceil(this._containerWidth * ratio);
+      let h = Math.ceil(this._containerHeight * ratio);
+      let canvas = this._canvas;
       if (ratio > 0) {
         canvas.width = w * ratio;
         canvas.height = h * ratio;
@@ -83,7 +83,7 @@ module Shumway.GFX {
     }
 
     public render() {
-      var context = this._context;
+      let context = this._context;
       context.save();
 
       context.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -95,24 +95,24 @@ module Shumway.GFX {
     }
 
     _renderNodeSimple(context: CanvasRenderingContext2D, root: Node, transform: Matrix) {
-      var self = this;
+      let self = this;
       context.save();
-      var fontHeight = 16;
+      let fontHeight = 16;
       context.font = fontHeight + "px Arial";
       context.fillStyle = "white";
-      var x = 0, y = 0;
-      var w = 20, h = fontHeight, hPadding = 2, wColPadding = 8;
-      var colX = 0;
-      var maxX = 0;
+      let x = 0, y = 0;
+      let w = 20, h = fontHeight, hPadding = 2, wColPadding = 8;
+      let colX = 0;
+      let maxX = 0;
       function visit(node: Node) {
-        var children = node.getChildren();
+        let children = node.getChildren();
         if (node.hasFlags(NodeFlags.Dirty)) {
           context.fillStyle = "red";
         } else {
           context.fillStyle = "white";
         }
 
-        var l = String(node.id);
+        let l = String(node.id);
 
         if (node instanceof RenderableText) {
           l = "T" + l;
@@ -128,13 +128,13 @@ module Shumway.GFX {
           l = l + " [" + (<any>node)._parents.length + "]";
         }
 
-        var t = context.measureText(l).width;
+        let t = context.measureText(l).width;
         // context.fillRect(x, y, t, h);
         context.fillText(l, x, y);
         if (children) {
           x += t + 4;
           maxX = Math.max(maxX, x + w);
-          for (var i = 0; i < children.length; i++) {
+          for (let i = 0; i < children.length; i++) {
             visit(children[i]);
             if (i < children.length - 1) {
               y += h + hPadding;

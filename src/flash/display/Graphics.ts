@@ -38,17 +38,17 @@ module Shumway.AVMX.AS.flash.display {
   import utils = flash.utils;
 
   function distanceSq(x1, y1, x2, y2) {
-    var dX = x2 - x1;
-    var dY = y2 - y1;
+    let dX = x2 - x1;
+    let dY = y2 - y1;
     return dX * dX + dY * dY;
   }
 
   function quadraticBezier(from: number, cp: number, to: number, t: number): number {
-    var inverseT = 1 - t;
+    let inverseT = 1 - t;
     return from * inverseT * inverseT + 2 * cp * inverseT * t + to * t * t;
   }
   function quadraticBezierExtreme(from: number, cp: number, to: number): number {
-    var t = (from - cp) / (from - 2 * cp + to);
+    let t = (from - cp) / (from - 2 * cp + to);
     if (t < 0) {
       return from;
     }
@@ -58,30 +58,30 @@ module Shumway.AVMX.AS.flash.display {
     return quadraticBezier(from, cp, to, t);
   }
   function cubicBezier(from: number, cp: number, cp2: number, to: number, t): number {
-    var tSq = t * t;
-    var inverseT = 1 - t;
-    var inverseTSq = inverseT * inverseT;
+    let tSq = t * t;
+    let inverseT = 1 - t;
+    let inverseTSq = inverseT * inverseT;
     return from * inverseT * inverseTSq + 3 * cp * t * inverseTSq +
            3 * cp2 * inverseT * tSq + to * t * tSq;
   }
 
   function cubicBezierExtremes(from: number, cp: number, cp2: number, to): number[] {
-    var d1 = cp - from;
-    var d2 = cp2 - cp;
+    let d1 = cp - from;
+    let d2 = cp2 - cp;
     // We only ever need d2 * 2
     d2 *= 2;
-    var d3 = to - cp2;
+    let d3 = to - cp2;
     // Prevent division by zero by very slightly changing d3 if that would happen
     if (d1 + d3 === d2) {
       d3 *= 1.0001;
     }
-    var fHead = 2 * d1 - d2;
-    var part1 = d2 - 2 * d1;
-    var fCenter = Math.sqrt(part1 * part1 - 4 * d1 * (d1 - d2 + d3));
-    var fTail = 2 * (d1 - d2 + d3);
-    var t1 = (fHead + fCenter) / fTail;
-    var t2 = (fHead - fCenter ) / fTail;
-    var result = [];
+    let fHead = 2 * d1 - d2;
+    let part1 = d2 - 2 * d1;
+    let fCenter = Math.sqrt(part1 * part1 - 4 * d1 * (d1 - d2 + d3));
+    let fTail = 2 * (d1 - d2 + d3);
+    let t1 = (fHead + fCenter) / fTail;
+    let t2 = (fHead - fCenter ) / fTail;
+    let result = [];
     if (t1 >= 0 && t1 <= 1) {
       result.push(Math.round(cubicBezier(from, cp, cp2, to, t1)));
     }
@@ -92,14 +92,14 @@ module Shumway.AVMX.AS.flash.display {
   }
 
   function cubicXAtY(x0, y0, cx, cy, cx1, cy1, x1, y1, y) {
-    var dX = 3.0 * (cx - x0);
-    var dY = 3.0 * (cy - y0);
+    let dX = 3.0 * (cx - x0);
+    let dY = 3.0 * (cy - y0);
 
-    var bX = 3.0 * (cx1 - cx) - dX;
-    var bY = 3.0 * (cy1 - cy) - dY;
+    let bX = 3.0 * (cx1 - cx) - dX;
+    let bY = 3.0 * (cy1 - cy) - dY;
 
-    var c3X = x1 - x0 - dX - bX;
-    var c3Y = y1 - y0 - dY - bY;
+    let c3X = x1 - x0 - dX - bX;
+    let c3Y = y1 - y0 - dY - bY;
     // Find one root - any root - then factor out (t-r) to get a quadratic poly.
     function f(t) {
       return t * (dY + t * (bY + t * c3Y)) + y0 - y;
@@ -119,7 +119,7 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
 
-      var middle = 0.5 * (l + r);
+      let middle = 0.5 * (l + r);
       if (f(l) * f(r) <= 0) {
         left = l;
         right = r;
@@ -130,38 +130,38 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     // some curves that loop around on themselves may require bisection
-    var left = 0;
-    var right = 1;
+    let left = 0;
+    let right = 1;
     bisectCubicBezierRange(f, 0, 1, 0.05);
 
     // experiment with tolerance - but not too tight :)
-    var t0 = findRoot(left, right, f, 50, 0.000001);
-    var evalResult = Math.abs(f(t0));
+    let t0 = findRoot(left, right, f, 50, 0.000001);
+    let evalResult = Math.abs(f(t0));
     if (evalResult > 0.00001) {
       return [];
     }
 
-    var result = [];
+    let result = [];
     if (t0 <= 1) {
       result.push(pointAt(t0));
     }
 
     // Factor theorem: t-r is a factor of the cubic polynomial if r is a root.
     // Use this to reduce to a quadratic poly. using synthetic division
-    var a = c3Y;
-    var b = t0 * a + bY;
-    var c = t0 * b + dY;
+    let a = c3Y;
+    let b = t0 * a + bY;
+    let c = t0 * b + dY;
 
     // Process the quadratic for the remaining two possible roots
-    var d = b * b - 4 * a * c;
+    let d = b * b - 4 * a * c;
     if (d < 0) {
       return result;
     }
 
     d = Math.sqrt(d);
     a = 1 / (a + a);
-    var t1 = (d - b) * a;
-    var t2 = (-b - d) * a;
+    let t1 = (d - b) * a;
+    let t2 = (-b - d) * a;
 
     if (t1 >= 0 && t1 <= 1) {
       result.push(pointAt(t1));
@@ -175,20 +175,20 @@ module Shumway.AVMX.AS.flash.display {
   }
 
   function findRoot(x0, x2, f, maxIterations, epsilon) {
-    var x1;
-    var y0;
-    var y1;
-    var y2;
-    var b;
-    var c;
-    var y10;
-    var y20;
-    var y21;
-    var xm;
-    var ym;
-    var temp;
+    let x1;
+    let y0;
+    let y1;
+    let y2;
+    let b;
+    let c;
+    let y10;
+    let y20;
+    let y21;
+    let xm;
+    let ym;
+    let temp;
 
-    var xmlast = x0;
+    let xmlast = x0;
     y0 = f(x0);
 
     if (y0 === 0) {
@@ -205,8 +205,8 @@ module Shumway.AVMX.AS.flash.display {
       return x0;
     }
 
-    var __iter = 0;
-    for (var i = 0; i < maxIterations; ++i) {
+    let __iter = 0;
+    for (let i = 0; i < maxIterations; ++i) {
       __iter++;
 
       x1 = 0.5 * (x2 + x0);
@@ -283,21 +283,21 @@ module Shumway.AVMX.AS.flash.display {
     // equation of the form y = ax^2 + bx + c for y.
     // See http://en.wikipedia.org/wiki/Quadratic_equation and
     // http://code.google.com/p/degrafa/source/browse/trunk/Degrafa/com/degrafa/geometry/AdvancedQuadraticBezier.as?r=613#394
-    var a = fromY - 2 * cpY + toY;
-    var c = fromY - y;
-    var b = 2 * (cpY - fromY);
+    let a = fromY - 2 * cpY + toY;
+    let c = fromY - y;
+    let b = 2 * (cpY - fromY);
 
-    var d = b * b - 4 * a * c;
+    let d = b * b - 4 * a * c;
     if (d < 0) {
       return false;
     }
 
     d = Math.sqrt(d);
     a = 1 / (a + a);
-    var t1 = (d - b) * a;
-    var t2 = (-b - d) * a;
+    let t1 = (d - b) * a;
+    let t2 = (-b - d) * a;
 
-    var crosses = false;
+    let crosses = false;
     if (t1 >= 0 && t1 <= 1 && quadraticBezier(fromX, cpX, toX, t1) > x) {
       crosses = !crosses;
     }
@@ -312,7 +312,7 @@ module Shumway.AVMX.AS.flash.display {
                                      cpX: number, cpY: number, cp2X: number, cp2Y: number,
                                      toX: number, toY: number): boolean
   {
-    var curveStartsAfterY = fromY > y;
+    let curveStartsAfterY = fromY > y;
     if ((cpY > y) === curveStartsAfterY && (cp2Y > y) === curveStartsAfterY &&
         (toY > y) === curveStartsAfterY) {
       return false;
@@ -320,9 +320,9 @@ module Shumway.AVMX.AS.flash.display {
     if (fromX < x && cpX < x && cp2X < x && toX < x) {
       return false;
     }
-    var crosses = false;
-    var roots = cubicXAtY(fromX, fromY, cpX, cpY, cp2X, cp2Y, toX, toY, y);
-    for (var i = roots.length; i; i--) {
+    let crosses = false;
+    let roots = cubicXAtY(fromX, fromY, cpX, cpY, cp2X, cp2Y, toX, toY, y);
+    for (let i = roots.length; i; i--) {
       if (roots[i] >= x) {
         crosses = !crosses;
       }
@@ -351,7 +351,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: any, loaderInfo: LoaderInfo): Graphics {
-      var graphics: Graphics = new loaderInfo.sec.flash.display.Graphics();
+      let graphics: Graphics = new loaderInfo.sec.flash.display.Graphics();
       graphics._graphicsData = ShapeData.FromPlainObject(data.shape);
       if (data.lineBounds) {
         graphics._lineBounds.copyFrom(data.lineBounds);
@@ -404,7 +404,7 @@ module Shumway.AVMX.AS.flash.display {
           this._bottomRightStrokeWidth = 2;
           break;
         default:
-          var half = Math.ceil(width * 0.5) | 0;
+          let half = Math.ceil(width * 0.5) | 0;
           this._topLeftStrokeWidth = half;
           this._bottomRightStrokeWidth = half;
           break;
@@ -518,19 +518,19 @@ module Shumway.AVMX.AS.flash.display {
       this._setStrokeWidth(thickness);
 
       // If `scaleMode` is invalid, "normal" is used.
-      var lineScaleMode = LineScaleMode.toNumber(axCoerceString(scaleMode));
+      let lineScaleMode = LineScaleMode.toNumber(axCoerceString(scaleMode));
       if (lineScaleMode < 0) {
         lineScaleMode = LineScaleMode.toNumber(LineScaleMode.NORMAL);
       }
 
       // If `caps` is invalid, "normal" is used.
-      var capsStyle = CapsStyle.toNumber(axCoerceString(caps));
+      let capsStyle = CapsStyle.toNumber(axCoerceString(caps));
       if (capsStyle < 0) {
         capsStyle = CapsStyle.toNumber(CapsStyle.ROUND);
       }
 
       // If `joints` is invalid, "normal" is used.
-      var jointStyle = JointStyle.toNumber(axCoerceString(joints));
+      let jointStyle = JointStyle.toNumber(axCoerceString(joints));
       if (jointStyle < 0) {
         jointStyle = JointStyle.toNumber(JointStyle.ROUND);
       }
@@ -558,8 +558,8 @@ module Shumway.AVMX.AS.flash.display {
     drawRect(x: number, y: number, width: number, height: number): void {
       x = x * 20 | 0;
       y = y * 20 | 0;
-      var x2 = x + (width * 20 | 0);
-      var y2 = y + (height * 20 | 0);
+      let x2 = x + (width * 20 | 0);
+      let y2 = y + (height * 20 | 0);
 
       if (x !== this._lastX || y !== this._lastY) {
         this._graphicsData.moveTo(x, y);
@@ -590,10 +590,10 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
 
-      var radiusX = (ellipseWidth / 2) | 0;
-      var radiusY = (ellipseHeight / 2) | 0;
-      var hw = width / 2;
-      var hh = height / 2;
+      let radiusX = (ellipseWidth / 2) | 0;
+      let radiusY = (ellipseHeight / 2) | 0;
+      let hw = width / 2;
+      let hh = height / 2;
       if (radiusX > hw) {
         radiusX = hw;
       }
@@ -616,12 +616,12 @@ module Shumway.AVMX.AS.flash.display {
       //
       // Drawing starts and stops at `D`. This is visible when the drawn shape forms part of a
       // larger shape, with which it is then connected at `D`.
-      var right = x + width;
-      var bottom = y + height;
-      var xlw = x + radiusX;
-      var xrw = right - radiusX;
-      var ytw = y + radiusY;
-      var ybw = bottom - radiusY;
+      let right = x + width;
+      let bottom = y + height;
+      let xlw = x + radiusX;
+      let xrw = right - radiusX;
+      let ytw = y + radiusY;
+      let ybw = bottom - radiusY;
       this.moveTo(right, ybw);
       this.curveTo(right, bottom, xrw, bottom);
       this.lineTo(xlw, bottom);
@@ -652,9 +652,9 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
 
-      var right = x + width;
-      var bottom = y + height;
-      var xtl = x + topLeftRadius;
+      let right = x + width;
+      let bottom = y + height;
+      let xtl = x + topLeftRadius;
       this.moveTo(right, bottom - bottomRightRadius);
       this.curveTo(right, bottom, right - bottomRightRadius, bottom);
       this.lineTo(x + bottomLeftRadius, bottom);
@@ -698,28 +698,28 @@ module Shumway.AVMX.AS.flash.display {
        *        ' - , _ 1 _ ,  '
        */
 
-      var rx = width / 2;
-      var ry = height / 2;
+      let rx = width / 2;
+      let ry = height / 2;
       // Move x, y to the middle of the ellipse.
       x += rx;
       y += ry;
-      var currentX = x + rx;
-      var currentY = y;
+      let currentX = x + rx;
+      let currentY = y;
       this.moveTo(currentX, currentY); // 0
-      var startAngle = 0;
-      var u = 1;
-      var v = 0;
-      for (var i = 0; i < 4; i++) {
-        var endAngle = startAngle + Math.PI / 2;
-        var kappa = (4 / 3) * Math.tan((endAngle - startAngle) / 4);
-        var cp1x = currentX - v * kappa * rx;
-        var cp1y = currentY + u * kappa * ry;
+      let startAngle = 0;
+      let u = 1;
+      let v = 0;
+      for (let i = 0; i < 4; i++) {
+        let endAngle = startAngle + Math.PI / 2;
+        let kappa = (4 / 3) * Math.tan((endAngle - startAngle) / 4);
+        let cp1x = currentX - v * kappa * rx;
+        let cp1y = currentY + u * kappa * ry;
         u = Math.cos(endAngle);
         v = Math.sin(endAngle);
         currentX = x + u * rx;
         currentY = y + v * ry;
-        var cp2x = currentX + v * kappa * rx;
-        var cp2y = currentY - u * kappa * ry;
+        let cp2x = currentX + v * kappa * rx;
+        let cp2y = currentY - u * kappa * ry;
         this.cubicCurveTo(
           cp1x,
           cp1y,
@@ -783,10 +783,10 @@ module Shumway.AVMX.AS.flash.display {
 
       this._graphicsData.cubicCurveTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
 
-      var extremes;
-      var i;
-      var fromX = this._lastX;
-      var fromY = this._lastY;
+      let extremes;
+      let i;
+      let fromX = this._lastX;
+      let fromY = this._lastY;
       if (controlX1 < fromX || controlX2 < fromX || controlX1 > anchorX || controlX2 > anchorX) {
         extremes = cubicBezierExtremes(fromX, controlX1, controlX2, anchorX);
         for (i = extremes.length; i--; ) {
@@ -847,13 +847,13 @@ module Shumway.AVMX.AS.flash.display {
      * Tests if the specified point is within this graphics path.
      */
     _containsPoint(x: number, y: number, includeLines: boolean, ratio: number): boolean {
-      var hasLines = this._graphicsData.hasLines;
+      let hasLines = this._graphicsData.hasLines;
       if (!ratio && !(includeLines && hasLines ? this._lineBounds : this._fillBounds).contains(x, y)) {
         return false;
       }
 
 //      enterTimeline("Graphics._containsPoint");
-      var containsPoint = false;
+      let containsPoint = false;
 
       // If we have any fills at all, tt's vastly more likely that the point is in a fill,
       // so test that first.
@@ -872,30 +872,30 @@ module Shumway.AVMX.AS.flash.display {
     private _fillContainsPoint(x: number, y: number, ratio: number): boolean {
 //      enterTimeline("Graphics._fillContainsPoint");
 
-      var data = this._graphicsData;
-      var commands = data.commands;
-      var commandsCount = data.commandsPosition;
-      var coordinates = data.coordinates;
-      var morphCoordinates = data.morphCoordinates;
-      var coordinatesIndex = 0;
-      var fromX = 0;
-      var fromY = 0;
-      var toX = 0;
-      var toY = 0;
-      var cpX: number;
-      var cpY: number;
-      var formOpen = false;
-      var fillActive = false;
-      var formOpenX = 0;
-      var formOpenY = 0;
-      var inside = false;
+      let data = this._graphicsData;
+      let commands = data.commands;
+      let commandsCount = data.commandsPosition;
+      let coordinates = data.coordinates;
+      let morphCoordinates = data.morphCoordinates;
+      let coordinatesIndex = 0;
+      let fromX = 0;
+      let fromY = 0;
+      let toX = 0;
+      let toY = 0;
+      let cpX: number;
+      let cpY: number;
+      let formOpen = false;
+      let fillActive = false;
+      let formOpenX = 0;
+      let formOpenY = 0;
+      let inside = false;
       // Description of serialization format can be found in ShapeData.
       // Rough outline of the algorithm's mode of operation:
       // from x,y an infinite ray to the right is "cast". All operations are then
       // tested for intersections with this ray, where each intersection means
       // switching between being outside and inside the shape.
-      for (var commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
-        var command = commands[commandIndex];
+      for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+        let command = commands[commandIndex];
         switch (command) {
           case PathCommand.MoveTo:
             release || assert(coordinatesIndex <= data.coordinatesPosition - 2);
@@ -944,8 +944,8 @@ module Shumway.AVMX.AS.flash.display {
             release || assert(coordinatesIndex <= data.coordinatesPosition - 6);
             cpX = coordinates[coordinatesIndex++];
             cpY = coordinates[coordinatesIndex++];
-            var cp2X = coordinates[coordinatesIndex++];
-            var cp2Y = coordinates[coordinatesIndex++];
+            let cp2X = coordinates[coordinatesIndex++];
+            let cp2Y = coordinates[coordinatesIndex++];
             toX = coordinates[coordinatesIndex++];
             toY = coordinates[coordinatesIndex++];
             if (ratio) {
@@ -1003,33 +1003,33 @@ module Shumway.AVMX.AS.flash.display {
     private _linesContainsPoint(x: number, y: number, ratio: number): boolean {
 //      enterTimeline("Graphics._lineContainsPoint");
 
-      var data = this._graphicsData;
-      var commands = data.commands;
-      var commandsCount = data.commandsPosition;
-      var coordinates = data.coordinates;
-      var morphCoordinates = data.morphCoordinates;
-      var coordinatesIndex = 0;
-      var fromX = 0;
-      var fromY = 0;
-      var toX = 0;
-      var toY = 0;
-      var cpX: number;
-      var cpY: number;
-      var curveX: number;
-      var curveY: number;
-      var t: number;
+      let data = this._graphicsData;
+      let commands = data.commands;
+      let commandsCount = data.commandsPosition;
+      let coordinates = data.coordinates;
+      let morphCoordinates = data.morphCoordinates;
+      let coordinatesIndex = 0;
+      let fromX = 0;
+      let fromY = 0;
+      let toX = 0;
+      let toY = 0;
+      let cpX: number;
+      let cpY: number;
+      let curveX: number;
+      let curveY: number;
+      let t: number;
 
-      var width = 0;
-      var halfWidth = 0;
-      var halfWidthSq = 0;
-      var minX = 0;
-      var maxX = 0;
-      var minY = 0;
-      var maxY = 0;
+      let width = 0;
+      let halfWidth = 0;
+      let halfWidthSq = 0;
+      let minX = 0;
+      let maxX = 0;
+      let minY = 0;
+      let maxY = 0;
 
       // Description of serialization format can be found in ShapeData.
-      for (var commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
-        var command = commands[commandIndex];
+      for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+        let command = commands[commandIndex];
         switch (command) {
           case PathCommand.MoveTo:
             release || assert(coordinatesIndex <= data.coordinatesPosition - 2);
@@ -1114,12 +1114,12 @@ module Shumway.AVMX.AS.flash.display {
               toY += (morphCoordinates[coordinatesIndex - 1] - toY) * ratio;
             }
             // Eliminate based on bounds
-            var extremeX = quadraticBezierExtreme(fromX, cpX, toX);
+            let extremeX = quadraticBezierExtreme(fromX, cpX, toX);
             if (maxX < fromX && maxX < extremeX && maxX < toX ||
                 minX > fromX && minX > extremeX && minX > toX) {
               break;
             }
-            var extremeY = quadraticBezierExtreme(fromY, cpY, toY);
+            let extremeY = quadraticBezierExtreme(fromY, cpY, toY);
             if (maxY < fromY && maxY < extremeY && maxY < toY ||
                 minY > fromY && minY > extremeY && minY > toY) {
               break;
@@ -1155,8 +1155,8 @@ module Shumway.AVMX.AS.flash.display {
             }
             cpX = coordinates[coordinatesIndex++];
             cpY = coordinates[coordinatesIndex++];
-            var cp2X = coordinates[coordinatesIndex++];
-            var cp2Y = coordinates[coordinatesIndex++];
+            let cp2X = coordinates[coordinatesIndex++];
+            let cp2Y = coordinates[coordinatesIndex++];
             toX = coordinates[coordinatesIndex++];
             toY = coordinates[coordinatesIndex++];
             if (ratio) {
@@ -1168,7 +1168,7 @@ module Shumway.AVMX.AS.flash.display {
               toY += (morphCoordinates[coordinatesIndex - 1] - toY) * ratio;
             }
             // Eliminate based on bounds
-            var extremesX = cubicBezierExtremes(fromX, cpX, cp2X, toX);
+            let extremesX = cubicBezierExtremes(fromX, cpX, cp2X, toX);
             while (extremesX.length < 2) {
               extremesX.push(toX);
             }
@@ -1178,7 +1178,7 @@ module Shumway.AVMX.AS.flash.display {
                 minX > extremesX[1]) {
               break;
             }
-            var extremesY = cubicBezierExtremes(fromY, cpY, cp2Y, toY);
+            let extremesY = cubicBezierExtremes(fromY, cpY, cp2Y, toY);
             while (extremesY.length < 2) {
               extremesY.push(toY);
             }
@@ -1270,7 +1270,7 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
 
-      var index = this._textures.length;
+      let index = this._textures.length;
       this._textures.push(bitmap);
       this._graphicsData.beginBitmap(pathCommand, index, matrix, repeat, smooth);
     }
@@ -1292,7 +1292,7 @@ module Shumway.AVMX.AS.flash.display {
       if (isNullOrUndefined(type)) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'type');
       }
-      var gradientType = GradientType.toNumber(axCoerceString(type));
+      let gradientType = GradientType.toNumber(axCoerceString(type));
       if (gradientType < 0) {
         this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "type");
       }
@@ -1300,11 +1300,11 @@ module Shumway.AVMX.AS.flash.display {
       if (isNullOrUndefined(colors_)) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'colors');
       }
-      var arrayClass = this.sec.AXArray;
+      let arrayClass = this.sec.AXArray;
       if (!arrayClass.axIsInstanceOf(colors_)) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'colors', 'Array');
       }
-      var colors: number[] = colors_.value;
+      let colors: number[] = colors_.value;
 
       if (isNullOrUndefined(alphas_)) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'alphas');
@@ -1312,7 +1312,7 @@ module Shumway.AVMX.AS.flash.display {
       if (!arrayClass.axIsInstanceOf(alphas_)) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'alphas', 'Array');
       }
-      var alphas: number[] = alphas_.value;
+      let alphas: number[] = alphas_.value;
 
       if (isNullOrUndefined(ratios_)) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'ratios');
@@ -1320,15 +1320,15 @@ module Shumway.AVMX.AS.flash.display {
       if (!arrayClass.axIsInstanceOf(ratios_)) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'ratios', 'Array');
       }
-      var ratios: number[] = ratios_.value;
+      let ratios: number[] = ratios_.value;
 
-      var colorsRGBA: number[] = [];
-      var coercedRatios: number[] = [];
-      var colorStops = colors.length;
-      var recordsValid = colorStops === alphas.length && colorStops === ratios.length;
+      let colorsRGBA: number[] = [];
+      let coercedRatios: number[] = [];
+      let colorStops = colors.length;
+      let recordsValid = colorStops === alphas.length && colorStops === ratios.length;
       if (recordsValid) {
-        for (var i = 0; i < colorStops; i++) {
-          var ratio: number = +ratios[i];
+        for (let i = 0; i < colorStops; i++) {
+          let ratio: number = +ratios[i];
           if (ratio > 0xff || ratio < 0) {
             recordsValid = false;
             break;
@@ -1355,19 +1355,19 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       // If `spreadMethod` is invalid, "pad" is used.
-      var spread = SpreadMethod.toNumber(axCoerceString(spreadMethod));
+      let spread = SpreadMethod.toNumber(axCoerceString(spreadMethod));
       if (spread < 0) {
         spread = SpreadMethod.toNumber(SpreadMethod.PAD);
       }
 
       // If `interpolationMethod` is invalid, "rgb" is used.
-      var interpolation = InterpolationMethod.toNumber(axCoerceString(interpolationMethod));
+      let interpolation = InterpolationMethod.toNumber(axCoerceString(interpolationMethod));
       if (interpolation < 0) {
         interpolation = InterpolationMethod.toNumber(InterpolationMethod.RGB);
       }
 
       // Matrix has to be transformed to ShapeMatrix because the scaling is totally different.
-      var scaledMatrix = {
+      let scaledMatrix = {
         a: matrix.a * 819.2, b: matrix.b * 819.2, c: matrix.c * 819.2,
         d: matrix.d * 819.2, tx: matrix.tx, ty: matrix.ty
       };
@@ -1385,7 +1385,7 @@ module Shumway.AVMX.AS.flash.display {
     private _extendBoundsByX(x: number): void {
       this._fillBounds.extendByX(x);
 
-      var bounds = this._lineBounds;
+      let bounds = this._lineBounds;
       if (bounds.xMin === 0x8000000) {
         bounds.xMin = x - this._topLeftStrokeWidth;
         bounds.xMax = x + this._bottomRightStrokeWidth;
@@ -1398,7 +1398,7 @@ module Shumway.AVMX.AS.flash.display {
     private _extendBoundsByY(y: number): void {
       this._fillBounds.extendByY(y);
 
-      var bounds = this._lineBounds;
+      let bounds = this._lineBounds;
       if (bounds.yMin === 0x8000000) {
         bounds.yMin = y - this._topLeftStrokeWidth;
         bounds.yMax = y + this._bottomRightStrokeWidth;

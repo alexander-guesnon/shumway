@@ -18,7 +18,7 @@ module Shumway.AVMX.AS.flash.display {
   import MP3DecoderSession = SWF.MP3DecoderSession;
   import DecodedSound = SWF.Parser.DecodedSound;
 
-  var MP3_MIME_TYPE = 'audio/mpeg';
+  let MP3_MIME_TYPE = 'audio/mpeg';
 
   interface ISoundStreamAdapter {
     currentTime: number;
@@ -48,7 +48,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     playFrom(time: number) {
-      var element = this._element;
+      let element = this._element;
       if (element.paused) {
         element.play();
         element.addEventListener('playing', function setTime(e) {
@@ -65,7 +65,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     set paused(value: boolean) {
-      var element = this._element;
+      let element = this._element;
       if (value) {
         if (!element.paused) {
           element.pause();
@@ -138,7 +138,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     private _openMediaSource() {
-      var sourceBuffer = this._mediaSource.addSourceBuffer(MP3_MIME_TYPE);
+      let sourceBuffer = this._mediaSource.addSourceBuffer(MP3_MIME_TYPE);
       sourceBuffer.addEventListener('update', function () {
         this._updating = false;
         this._appendSoundData();
@@ -171,15 +171,15 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     finish() {
-      var blob = new Blob(this._rawFrames);
+      let blob = new Blob(this._rawFrames);
       this.element.src = URL.createObjectURL(blob);
       this.createChannel();
     }
   }
 
   function syncTime(element, movieClip) {
-    var initialized = false;
-    var startMediaTime, startRealTime;
+    let initialized = false;
+    let startMediaTime, startRealTime;
     element.addEventListener('timeupdate', function (e) {
       if (!initialized) {
         startMediaTime = element.currentTime;
@@ -188,8 +188,8 @@ module Shumway.AVMX.AS.flash.display {
         //movieClip._stage._frameScheduler.startTrackDelta();
         return;
       }
-      var mediaDelta = element.currentTime - startMediaTime;
-      var realDelta = performance.now() - startRealTime;
+      let mediaDelta = element.currentTime - startMediaTime;
+      let realDelta = performance.now() - startRealTime;
       //movieClip._stage._frameScheduler.setDelta(realDelta - mediaDelta * 1000);
     });
     element.addEventListener('pause', function (e) {
@@ -244,8 +244,8 @@ module Shumway.AVMX.AS.flash.display {
 
     finish() {
       // TODO Start from some seek offset, stopping
-      var sound = flash.media.Sound.initializeFromPCMData(this._sec, this._data);
-      var channel = sound.play();
+      let sound = flash.media.Sound.initializeFromPCMData(this._sec, this._data);
+      let channel = sound.play();
       this._sound = sound;
       this._channel = channel;
     }
@@ -261,7 +261,7 @@ module Shumway.AVMX.AS.flash.display {
       this._decoderPosition = 0;
       this._decoderSession = new MP3DecoderSession();
       this._decoderSession.onframedata = function (frameData) {
-        var position = this._decoderPosition;
+        let position = this._decoderPosition;
         data.pcm.set(frameData, position);
         this._decoderPosition = position + frameData.length;
       }.bind(this);
@@ -309,10 +309,10 @@ module Shumway.AVMX.AS.flash.display {
       this.expectedFrame = 0;
       this.waitFor = 0;
 
-      var sec = movieClip.sec;
-      var isMP3 = streamInfo.format === 'mp3';
+      let sec = movieClip.sec;
+      let isMP3 = streamInfo.format === 'mp3';
       if (isMP3 && !webAudioMP3Option.value) {
-        var element = document.createElement('audio');
+        let element = document.createElement('audio');
         element.preload = 'metadata'; // for mobile devices
         element.loop = false;
         syncTime(element, movieClip);
@@ -334,15 +334,15 @@ module Shumway.AVMX.AS.flash.display {
       }
 
       // TODO fix streamInfo.samplesCount name -- its actually average value
-      var totalSamples = (streamInfo.samplesCount + 1) * this.movieClip.totalFrames * streamInfo.channels;
+      let totalSamples = (streamInfo.samplesCount + 1) * this.movieClip.totalFrames * streamInfo.channels;
       this.data.pcm = new Float32Array(totalSamples);
       this.soundStreamAdapter = !isMP3 ? new WebAudioAdapter(sec, this.data) :
                                          new WebAudioMP3Adapter(sec, this.data);
     }
 
     public appendBlock(frameNum: number, streamBlock: Uint8Array) {
-      var decodedBlock = this.decode(streamBlock);
-      var streamPosition = this.position;
+      let decodedBlock = this.decode(streamBlock);
+      let streamPosition = this.position;
       this.seekIndex[frameNum] = streamPosition + decodedBlock.seek * this.data.channels;
       this.position = streamPosition + decodedBlock.samplesCount * this.data.channels;
       this.soundStreamAdapter.queueData(decodedBlock);
@@ -353,8 +353,8 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
 
-      var PAUSE_WHEN_OF_SYNC_GREATER = 1.0;
-      var PLAYBACK_ADJUSTMENT = 0.25;
+      let PAUSE_WHEN_OF_SYNC_GREATER = 1.0;
+      let PLAYBACK_ADJUSTMENT = 0.25;
 
       if (!this.wasFullyLoaded && this.movieClip._isFullyLoaded) {
         this.wasFullyLoaded = true;
@@ -363,10 +363,10 @@ module Shumway.AVMX.AS.flash.display {
 
       if (this.soundStreamAdapter.isReady &&
           !isNaN(this.soundStreamAdapter.currentTime)) {
-        var soundStreamData = this.data;
-        var time = this.seekIndex[frameNum] /
+        let soundStreamData = this.data;
+        let time = this.seekIndex[frameNum] /
           soundStreamData.sampleRate / soundStreamData.channels;
-        var elementTime = this.soundStreamAdapter.currentTime;
+        let elementTime = this.soundStreamAdapter.currentTime;
         if (this.expectedFrame !== frameNum) {
           this.soundStreamAdapter.playFrom(time);
         } else if (this.waitFor > 0) {

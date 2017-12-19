@@ -23,7 +23,7 @@ module Shumway.GFX.Test {
   import VideoPlaybackEvent = Shumway.Remoting.VideoPlaybackEvent;
   import DisplayParameters = Shumway.Remoting.DisplayParameters;
 
-  var MINIMAL_TIMER_INTERVAL = 5;
+  let MINIMAL_TIMER_INTERVAL = 5;
 
   export class PlaybackEaselHost extends EaselHost {
     private _parser: MovieRecordParser;
@@ -45,7 +45,7 @@ module Shumway.GFX.Test {
     }
 
     private playUrl(url: string) {
-      var xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = 'arraybuffer';
       xhr.onload = function () {
@@ -73,10 +73,10 @@ module Shumway.GFX.Test {
     }
 
     private _parseNext() {
-      var type = this._parser.readNextRecord();
+      let type = this._parser.readNextRecord();
       if (type !== MovieRecordType.None) {
-        var runRecordBound = this._runRecord.bind(this);
-        var interval = this._parser.currentTimestamp - this._lastTimestamp;
+        let runRecordBound = this._runRecord.bind(this);
+        let interval = this._parser.currentTimestamp - this._lastTimestamp;
         this._lastTimestamp = this._parser.currentTimestamp;
         if (interval < MINIMAL_TIMER_INTERVAL) {
           // Records are too close to each other, running on next script turn.
@@ -94,18 +94,18 @@ module Shumway.GFX.Test {
     }
 
     private _runRecord() {
-      var data;
-      var start = performance.now();
+      let data;
+      let start = performance.now();
       switch (this._parser.currentType) {
         case MovieRecordType.PlayerCommand:
         case MovieRecordType.PlayerCommandAsync:
           data = this._parser.parsePlayerCommand();
-          var async = this._parser.currentType === MovieRecordType.PlayerCommandAsync;
-          var updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
+          let async = this._parser.currentType === MovieRecordType.PlayerCommandAsync;
+          let updates = DataBuffer.FromArrayBuffer(data.updates.buffer);
           if (async) {
             this.processUpdates(updates, data.assets);
           } else {
-            var output = new DataBuffer();
+            let output = new DataBuffer();
             this.processUpdates(updates, data.assets, output);
           }
           break;
@@ -139,7 +139,7 @@ module Shumway.GFX.Test {
     }
 
     private _renderFrameJustAfterRAF() {
-      var start = performance.now();
+      let start = performance.now();
       this.easel.render();
       this.cpuTimeRendering += performance.now() - start;
 

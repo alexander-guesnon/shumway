@@ -81,7 +81,7 @@ module Shumway {
   import SWFFile = Shumway.SWF.SWFFile;
 
   // Minimal amount of data to load before starting to parse. Chosen fairly arbitrarily.
-  var MIN_LOADED_BYTES = 8192;
+  let MIN_LOADED_BYTES = 8192;
 
   export class LoadProgressUpdate {
     constructor(public bytesLoaded: number, public framesLoaded: number) {
@@ -126,7 +126,7 @@ module Shumway {
       this._url = request.url;
       SWF.enterTimeline('Load file', request.url);
       this._bytesLoaded = 0;
-      var session = this._loadingServiceSession = FileLoadingService.instance.createSession();
+      let session = this._loadingServiceSession = FileLoadingService.instance.createSession();
       session.onopen = this.processLoadOpen.bind(this);
       session.onprogress = this.processNewData.bind(this);
       session.onerror = this.processError.bind(this);
@@ -152,7 +152,7 @@ module Shumway {
     }
     processNewData(data: Uint8Array, progressInfo: {bytesLoaded: number; bytesTotal: number}) {
       this._bytesLoaded += data.length;
-      var isLoadingInProgress = progressInfo.bytesLoaded < progressInfo.bytesTotal;
+      let isLoadingInProgress = progressInfo.bytesLoaded < progressInfo.bytesTotal;
       if (this._bytesLoaded < MIN_LOADED_BYTES && isLoadingInProgress) {
         if (!this._queuedInitialData) {
           this._queuedInitialData = new Uint8Array(Math.min(MIN_LOADED_BYTES,
@@ -161,15 +161,15 @@ module Shumway {
         this._queuedInitialData.set(data, this._bytesLoaded - data.length);
         return;
       } else if (this._queuedInitialData) {
-        var allData = new Uint8Array(this._bytesLoaded);
+        let allData = new Uint8Array(this._bytesLoaded);
         allData.set(this._queuedInitialData);
         allData.set(data, this._bytesLoaded - data.length);
         data = allData;
         this._queuedInitialData = null;
       }
-      var file = this._file;
-      var eagerlyParsedSymbolsCount = 0;
-      var previousFramesLoaded = 0;
+      let file = this._file;
+      let eagerlyParsedSymbolsCount = 0;
+      let previousFramesLoaded = 0;
       if (!file) {
         file = this._file = createFileInstanceForHeader(data, progressInfo.bytesTotal, this._env);
         if (file) {
@@ -196,14 +196,14 @@ module Shumway {
       Debug.warning('Loading error encountered:', error);
     }
     processLoadClose() {
-      var file = this._file;
+      let file = this._file;
       if (!file) {
         this._listener.onLoadOpen(null);
         return;
       }
       if (file instanceof SWFFile) {
-        var eagerlyParsedSymbolsCount = file.eagerlyParsedSymbolsList.length;
-        var previousFramesLoaded = file.framesLoaded;
+        let eagerlyParsedSymbolsCount = file.eagerlyParsedSymbolsList.length;
+        let previousFramesLoaded = file.framesLoaded;
 
         file.finishLoading();
 
@@ -220,11 +220,11 @@ module Shumway {
 
     private processSWFFileUpdate(file: SWFFile, previousEagerlyParsedSymbolsCount: number,
                                  previousFramesLoaded: number) {
-      var promise;
-      var eagerlyParsedSymbolsDelta = file.eagerlyParsedSymbolsList.length -
+      let promise;
+      let eagerlyParsedSymbolsDelta = file.eagerlyParsedSymbolsList.length -
                                       previousEagerlyParsedSymbolsCount;
       if (!eagerlyParsedSymbolsDelta) {
-        var update = this._lastDelayedUpdate;
+        let update = this._lastDelayedUpdate;
         if (!update) {
           release || assert(file.framesLoaded === file.frames.length);
           this._listener.onLoadProgress(new LoadProgressUpdate(file.bytesLoaded,
@@ -242,10 +242,10 @@ module Shumway {
         promise = Promise.all([this._delayedUpdatesPromise, promise]);
       }
       this._delayedUpdatesPromise = promise;
-      var update = new LoadProgressUpdate(file.bytesLoaded, file.frames.length);
+      let update = new LoadProgressUpdate(file.bytesLoaded, file.frames.length);
       this._lastDelayedUpdate = update;
       file.pendingUpdateDelays++;
-      var self = this;
+      let self = this;
       // Make sure the framesLoaded value from after this update isn't yet visible. Otherwise,
       // we might signal a higher value than allowed if this update is delayed sufficiently long
       // for another update to arrive in the meantime. That update sets the framesLoaded value too
@@ -270,7 +270,7 @@ module Shumway {
   }
 
   function createFileInstanceForHeader(header: Uint8Array, fileLength: number, env: any): any {
-    var magic = (header[0] << 16) | (header[1] << 8) | header[2];
+    let magic = (header[0] << 16) | (header[1] << 8) | header[2];
 
     if ((magic & 0xffff) === FileTypeMagicHeaderBytes.SWF) {
       return new SWFFile(header, fileLength, env);

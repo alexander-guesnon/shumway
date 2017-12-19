@@ -42,5 +42,5 @@ module Shumway {
     }
   }
 
-  export var flashlog: FlashLog = null;
+  export let flashlog: FlashLog = null;
 }

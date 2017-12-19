@@ -52,7 +52,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     clone(): Scene {
-      var labels_ = this._labels.value.map(function (label: FrameLabel) { return label.clone(); });
+      let labels_ = this._labels.value.map(function (label: FrameLabel) { return label.clone(); });
       return new this.sec.flash.display.Scene(this._name, this.sec.createArrayUnsafe(labels_),
                                               this.offset, this._numFrames);
     }
@@ -61,9 +61,9 @@ module Shumway.AVMX.AS.flash.display {
       if (ignoreCase) {
         name = name.toLowerCase();
       }
-      var labels = this._labels.value;
-      for (var i = 0; i < labels.length; i++) {
-        var label = labels[i];
+      let labels = this._labels.value;
+      for (let i = 0; i < labels.length; i++) {
+        let label = labels[i];
         if (ignoreCase ? label.name.toLowerCase() === name : label.name === name) {
           return label;
         }
@@ -72,9 +72,9 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     getLabelByFrame(frame: number): FrameLabel {
-      var labels = this._labels.value;
-      for (var i = 0; i < labels.length; i++) {
-        var label = labels[i];
+      let labels = this._labels.value;
+      for (let i = 0; i < labels.length; i++) {
+        let label = labels[i];
         if (label.frame === frame) {
           return label;
         }

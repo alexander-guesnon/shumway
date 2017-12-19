@@ -16,10 +16,10 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF {
-  export var StreamNoDataError = {};
+  export let StreamNoDataError = {};
   
-  var masks = new Uint32Array(33);
-  for (var i = 1, mask = 0; i <= 32; ++i) {
+  let masks = new Uint32Array(33);
+  for (let i = 1, mask = 0; i <= 32; ++i) {
     masks[i] = mask = (mask << 1) | 1;
   }
   
@@ -68,15 +68,15 @@ module Shumway.SWF {
     }
 
     substream(begin: number, end: number): Stream {
-      var stream = new Stream(this.bytes);
+      let stream = new Stream(this.bytes);
       stream.pos = begin;
       stream.end = end;
       return stream;
     }
 
     push(data) {
-      var bytes = this.bytes;
-      var newBytesLength = this.end + data.length;
+      let bytes = this.bytes;
+      let newBytesLength = this.end + data.length;
       if (newBytesLength > bytes.length) {
         throw 'stream buffer overfow';
       }
@@ -89,13 +89,13 @@ module Shumway.SWF {
     }
 
     readSi16(): number {
-      var r = this.view.getInt16(this.pos, true);
+      let r = this.view.getInt16(this.pos, true);
       this.pos += 2;
       return r;
     }
 
     readSi32(): number {
-      var r = this.view.getInt32(this.pos, true);
+      let r = this.view.getInt32(this.pos, true);
       this.pos += 4;
       return r;
     }
@@ -105,35 +105,35 @@ module Shumway.SWF {
     }
 
     readUi16(): number {
-      var r = this.view.getUint16(this.pos, true);
+      let r = this.view.getUint16(this.pos, true);
       this.pos += 2;
       return r;
     }
 
     readUi32(): number {
-      var r = this.view.getUint32(this.pos, true);
+      let r = this.view.getUint32(this.pos, true);
       this.pos += 4;
       return r;
     }
 
     readFixed(): number {
-      var r = this.view.getInt32(this.pos, true) / 65536;
+      let r = this.view.getInt32(this.pos, true) / 65536;
       this.pos += 4;
       return r;
     }
 
     readFixed8(): number {
-      var r = this.view.getInt16(this.pos, true) / 256;
+      let r = this.view.getInt16(this.pos, true) / 256;
       this.pos += 2;
       return r;
     }
 
     readFloat16(): number {
-      var ui16 = this.view.getUint16(this.pos, false);
+      let ui16 = this.view.getUint16(this.pos, false);
       this.pos += 2;
-      var sign = ui16 >> 15 ? -1 : 1;
-      var exponent = (ui16 & 0x7c00) >> 10;
-      var fraction = ui16 & 0x03ff;
+      let sign = ui16 >> 15 ? -1 : 1;
+      let exponent = (ui16 & 0x7c00) >> 10;
+      let fraction = ui16 & 0x03ff;
       if (!exponent)
         return sign * Math.pow(2, -14) * (fraction / 1024);
       if (exponent === 0x1f)
@@ -142,20 +142,20 @@ module Shumway.SWF {
     }
 
     readFloat(): number {
-      var r = this.view.getFloat32(this.pos, true);
+      let r = this.view.getFloat32(this.pos, true);
       this.pos += 4;
       return r;
     }
 
     readDouble(): number {
-      var r = this.view.getFloat64(this.pos, true);
+      let r = this.view.getFloat64(this.pos, true);
       this.pos += 8;
       return r;
     }
 
     readEncodedU32(): number {
-      var bytes = this.bytes;
-      var val = bytes[this.pos++];
+      let bytes = this.bytes;
+      let val = bytes[this.pos++];
       if (!(val & 0x080))
         return val;
       val = (val & 0x7f) | bytes[this.pos++] << 7;
@@ -179,9 +179,9 @@ module Shumway.SWF {
     }
 
     readUb(size: number): number {
-      var buffer = this.bitBuffer;
-      var bitlen = this.bitLength;
-      var val = 0;
+      let buffer = this.bitBuffer;
+      let bitlen = this.bitLength;
+      let val = 0;
       while (size > bitlen) {
         if (bitlen > 24) {
           // Avoid overflow. Save current buffer in val and add remaining bits later.
@@ -204,21 +204,21 @@ module Shumway.SWF {
     }
 
     readString(length: number): string {
-      var bytes = this.bytes;
-      var codes: Uint8Array;
-      var pos = this.pos;
+      let bytes = this.bytes;
+      let codes: Uint8Array;
+      let pos = this.pos;
       if (length > -1) {
         codes = bytes.subarray(pos, pos += length);
       } else {
         length = 0;
-        for (var i = pos; bytes[i]; i++) {
+        for (let i = pos; bytes[i]; i++) {
           length++;
         }
         codes = bytes.subarray(pos, pos += length);
         pos++;
       }
       this.pos = pos;
-      var str = Shumway.StringUtilities.utf8encode(codes);
+      let str = Shumway.StringUtilities.utf8encode(codes);
       if (str.indexOf('\0') >= 0) {
         str = str.split('\0').join('');
       }

@@ -33,10 +33,10 @@ module Shumway.Tools.Profiler {
     }
 
     draw() {
-      var context = this._context;
-      var ratio = window.devicePixelRatio;
-      var width = this._width;
-      var height = this._height;
+      let context = this._context;
+      let ratio = window.devicePixelRatio;
+      let width = this._width;
+      let height = this._height;
 
       context.save();
       context.scale(ratio, ratio);
@@ -45,8 +45,8 @@ module Shumway.Tools.Profiler {
 
       if (this._initialized) {
         if (this._type == FlameChartHeaderType.OVERVIEW) {
-          var left = this._toPixels(this._windowStart);
-          var right = this._toPixels(this._windowEnd);
+          let left = this._toPixels(this._windowStart);
+          let right = this._toPixels(this._windowEnd);
           context.fillStyle = this._controller.theme.bodyBackground(1); //"#14171a";
           context.fillRect(left, 0, right - left, height);
           this._drawLabels(this._rangeStart, this._rangeEnd);
@@ -61,25 +61,25 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawLabels(rangeStart: number, rangeEnd: number) {
-      var context = this._context;
-      var tickInterval = this._calculateTickInterval(rangeStart, rangeEnd);
-      var tick = Math.ceil(rangeStart / tickInterval) * tickInterval;
-      var showSeconds = (tickInterval >= 500);
-      var divisor = showSeconds ? 1000 : 1;
-      var precision = this._decimalPlaces(tickInterval / divisor);
-      var unit = showSeconds ? "s" : "ms";
-      var x = this._toPixels(tick);
-      var y = this._height / 2;
-      var theme = this._controller.theme;
+      let context = this._context;
+      let tickInterval = this._calculateTickInterval(rangeStart, rangeEnd);
+      let tick = Math.ceil(rangeStart / tickInterval) * tickInterval;
+      let showSeconds = (tickInterval >= 500);
+      let divisor = showSeconds ? 1000 : 1;
+      let precision = this._decimalPlaces(tickInterval / divisor);
+      let unit = showSeconds ? "s" : "ms";
+      let x = this._toPixels(tick);
+      let y = this._height / 2;
+      let theme = this._controller.theme;
       context.lineWidth = 1;
       context.strokeStyle = theme.contentTextDarkGrey(0.5); //"rgba(95, 115, 135, 0.5)";
       context.fillStyle = theme.contentTextDarkGrey(1); //"rgba(95, 115, 135, 1)";
       context.textAlign = "right";
       context.textBaseline = "middle";
       context.font = '11px sans-serif';
-      var maxWidth = this._width + FlameChartHeader.TICK_MAX_WIDTH;
+      let maxWidth = this._width + FlameChartHeader.TICK_MAX_WIDTH;
       while (x < maxWidth) {
-        var tickStr = (tick / divisor).toFixed(precision) + " " + unit;
+        let tickStr = (tick / divisor).toFixed(precision) + " " + unit;
         context.fillText(tickStr, x - 7, y + 1);
         context.beginPath();
         context.moveTo(x, 0);
@@ -93,11 +93,11 @@ module Shumway.Tools.Profiler {
 
     private _calculateTickInterval(rangeStart: number, rangeEnd: number) {
       // http://stackoverflow.com/a/361687
-      var tickCount = this._width / FlameChartHeader.TICK_MAX_WIDTH;
-      var range = rangeEnd - rangeStart;
-      var minimum = range / tickCount;
-      var magnitude = Math.pow(10, Math.floor(Math.log(minimum) / Math.LN10));
-      var residual = minimum / magnitude;
+      let tickCount = this._width / FlameChartHeader.TICK_MAX_WIDTH;
+      let range = rangeEnd - rangeStart;
+      let minimum = range / tickCount;
+      let magnitude = Math.pow(10, Math.floor(Math.log(minimum) / Math.LN10));
+      let residual = minimum / magnitude;
       if (residual > 5) {
         return 10 * magnitude;
       } else if (residual > 2) {
@@ -109,7 +109,7 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawDragHandle(pos: number) {
-      var context = this._context;
+      let context = this._context;
       context.lineWidth = 2;
       context.strokeStyle = this._controller.theme.bodyBackground(1); //"#14171a";
       context.fillStyle = this._controller.theme.foregroundTextGrey(0.7); //"rgba(182, 186, 191, 0.7)";
@@ -137,37 +137,37 @@ module Shumway.Tools.Profiler {
     }
 
     _toPixelsRelative(time: number): number {
-      var range = (this._type === FlameChartHeaderType.OVERVIEW)
+      let range = (this._type === FlameChartHeaderType.OVERVIEW)
                     ? this._rangeEnd - this._rangeStart
                     : this._windowEnd - this._windowStart;
       return time * this._width / range;
     }
 
     _toPixels(time: number): number {
-      var start = (this._type === FlameChartHeaderType.OVERVIEW) ? this._rangeStart : this._windowStart;
+      let start = (this._type === FlameChartHeaderType.OVERVIEW) ? this._rangeStart : this._windowStart;
       return this._toPixelsRelative(time - start);
     }
 
     _toTimeRelative(px: number): number {
-      var range = (this._type === FlameChartHeaderType.OVERVIEW)
+      let range = (this._type === FlameChartHeaderType.OVERVIEW)
                     ? this._rangeEnd - this._rangeStart
                     : this._windowEnd - this._windowStart;
       return px * range / this._width;
     }
 
     _toTime(px: number): number {
-      var start = (this._type === FlameChartHeaderType.OVERVIEW) ? this._rangeStart : this._windowStart;
+      let start = (this._type === FlameChartHeaderType.OVERVIEW) ? this._rangeStart : this._windowStart;
       return this._toTimeRelative(px) + start;
     }
 
     private _getDragTargetUnderCursor(x: number, y:number): FlameChartDragTarget {
       if (y >= 0 && y < this._height) {
         if (this._type === FlameChartHeaderType.OVERVIEW) {
-          var left = this._toPixels(this._windowStart);
-          var right = this._toPixels(this._windowEnd);
-          var radius = 2 + (FlameChartBase.DRAGHANDLE_WIDTH) / 2;
-          var leftHandle = (x >= left - radius && x <= left + radius);
-          var rightHandle = (x >= right - radius && x <= right + radius);
+          let left = this._toPixels(this._windowStart);
+          let right = this._toPixels(this._windowEnd);
+          let radius = 2 + (FlameChartBase.DRAGHANDLE_WIDTH) / 2;
+          let leftHandle = (x >= left - radius && x <= left + radius);
+          let rightHandle = (x >= right - radius && x <= right + radius);
           if (leftHandle && rightHandle) {
             return FlameChartDragTarget.HANDLE_BOTH;
           } else if (leftHandle) {
@@ -185,7 +185,7 @@ module Shumway.Tools.Profiler {
     }
 
     onMouseDown(x: number, y: number) {
-      var dragTarget = this._getDragTargetUnderCursor(x, y);
+      let dragTarget = this._getDragTargetUnderCursor(x, y);
       if (dragTarget === FlameChartDragTarget.WINDOW) {
         this._mouseController.updateCursor(MouseCursor.GRABBING);
       }
@@ -197,8 +197,8 @@ module Shumway.Tools.Profiler {
     }
 
     onMouseMove(x: number, y: number) {
-      var cursor = MouseCursor.DEFAULT;
-      var dragTarget = this._getDragTargetUnderCursor(x, y);
+      let cursor = MouseCursor.DEFAULT;
+      let dragTarget = this._getDragTargetUnderCursor(x, y);
       if (dragTarget !== FlameChartDragTarget.NONE) {
         if (dragTarget !== FlameChartDragTarget.WINDOW) {
           cursor = MouseCursor.EW_RESIZE;
@@ -218,7 +218,7 @@ module Shumway.Tools.Profiler {
     }
 
     onDrag(startX: number, startY: number, currentX: number, currentY: number, deltaX: number, deltaY: number) {
-      var dragInfo = this._dragInfo;
+      let dragInfo = this._dragInfo;
       if (dragInfo.target === FlameChartDragTarget.HANDLE_BOTH) {
         if (deltaX !== 0) {
           dragInfo.target = (deltaX < 0) ? FlameChartDragTarget.HANDLE_LEFT : FlameChartDragTarget.HANDLE_RIGHT;
@@ -226,12 +226,12 @@ module Shumway.Tools.Profiler {
           return;
         }
       }
-      var windowStart = this._windowStart;
-      var windowEnd = this._windowEnd;
-      var delta = this._toTimeRelative(deltaX);
+      let windowStart = this._windowStart;
+      let windowEnd = this._windowEnd;
+      let delta = this._toTimeRelative(deltaX);
       switch (dragInfo.target) {
         case FlameChartDragTarget.WINDOW:
-          var mult = (this._type === FlameChartHeaderType.OVERVIEW) ? 1 : -1;
+          let mult = (this._type === FlameChartHeaderType.OVERVIEW) ? 1 : -1;
           windowStart = dragInfo.windowStartInitial + mult * delta;
           windowEnd = dragInfo.windowEndInitial + mult * delta;
           break;

@@ -36,12 +36,12 @@ module Shumway.AVMX.AS.flash.filters {
       // obj.colors is an array of RGBA colors.
       // Here it contains exactly one color object, which maps to color and alpha.
       release || assert(obj.colors && obj.colors.length === 1, "colors must be Array of length 1");
-      var color: number = obj.colors[0] >>> 8;
-      var alpha: number = (obj.colors[0] & 0xff) / 0xff;
+      let color: number = obj.colors[0] >>> 8;
+      let alpha: number = (obj.colors[0] & 0xff) / 0xff;
       // obj.angle is represented in radians, the api needs degrees
-      var angle: number = obj.angle * 180 / Math.PI;
+      let angle: number = obj.angle * 180 / Math.PI;
       // obj.compositeSource maps to !hideObject
-      var hideObject: boolean = !obj.compositeSource;
+      let hideObject: boolean = !obj.compositeSource;
       return new this.sec.flash.filters.DropShadowFilter(
         obj.distance,
         angle,
@@ -80,7 +80,7 @@ module Shumway.AVMX.AS.flash.filters {
       if (!this.inner) {
         BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
         if (this._distance !== 0) {
-          var a: number = this._angle * Math.PI / 180;
+          let a: number = this._angle * Math.PI / 180;
           bounds.x += Math.floor(Math.cos(a) * this._distance);
           bounds.y += Math.floor(Math.sin(a) * this._distance);
           if (bounds.left > 0) { bounds.left = 0; }

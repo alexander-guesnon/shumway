@@ -40,7 +40,7 @@ module Shumway.AVMX.AS.flash.display {
     applySymbol() {
       release || assert(this._symbol);
       this._initializeFields();
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       if (symbol.isRoot) {
         this._root = this;
       }
@@ -100,7 +100,7 @@ module Shumway.AVMX.AS.flash.display {
     _hitTarget: flash.display.Sprite;
 
     _addFrame(frame: Shumway.SWF.SWFFrame) {
-      var frames = (<SpriteSymbol><any>this._symbol).frames;
+      let frames = (<SpriteSymbol><any>this._symbol).frames;
       frames.push(frame);
       if (frames.length === 1) {
         this._initializeChildren(frame);
@@ -116,9 +116,9 @@ module Shumway.AVMX.AS.flash.display {
     _processControlTags(tags: any[], backwards: boolean) {
       // When seeking backwards all timeline objects will be removed unless they are placed again.
       if (backwards) {
-        var children = this._children.slice();
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        let children = this._children.slice();
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
           if (child._depth < 0) {
             continue;
           }
@@ -127,10 +127,10 @@ module Shumway.AVMX.AS.flash.display {
           if ('_as2Object' in child && child._depth >= 16384) {
             continue;
           }
-          var tag = null;
+          let tag = null;
           // Look for a control tag tag that places an object at the same depth as the current
           // child.
-          for (var j = 0; j < tags.length; j++) {
+          for (let j = 0; j < tags.length; j++) {
             if (tags[j].depth === child._depth) {
               tag = tags[j];
               break;
@@ -143,16 +143,16 @@ module Shumway.AVMX.AS.flash.display {
         }
       }
 
-      var loaderInfo = (<SpriteSymbol>this._symbol).loaderInfo;
-      for (var i = 0; i < tags.length; i++) {
+      let loaderInfo = (<SpriteSymbol>this._symbol).loaderInfo;
+      for (let i = 0; i < tags.length; i++) {
         // We may have a mix of the parsed and unparsed tags.
-        var parsedOrUnparsedTag = tags[i];
-        var tag = parsedOrUnparsedTag.tagCode === undefined ?
+        let parsedOrUnparsedTag = tags[i];
+        let tag = parsedOrUnparsedTag.tagCode === undefined ?
                   parsedOrUnparsedTag : <any>loaderInfo._file.getParsedTag(parsedOrUnparsedTag);
         switch (tag.code) {
           case SwfTagCode.CODE_REMOVE_OBJECT:
           case SwfTagCode.CODE_REMOVE_OBJECT2:
-            var child = this.getTimelineObjectAtDepth(tag.depth | 0);
+            let child = this.getTimelineObjectAtDepth(tag.depth | 0);
             if (child) {
               this._removeAnimatedChild(child);
             }
@@ -160,10 +160,10 @@ module Shumway.AVMX.AS.flash.display {
           case SwfTagCode.CODE_PLACE_OBJECT:
           case SwfTagCode.CODE_PLACE_OBJECT2:
           case SwfTagCode.CODE_PLACE_OBJECT3:
-            var placeObjectTag = <Shumway.SWF.Parser.PlaceObjectTag>tag;
-            var depth = placeObjectTag.depth;
-            var child = this.getTimelineObjectAtDepth(depth);
-            var hasCharacter = placeObjectTag.symbolId > -1;
+            let placeObjectTag = <Shumway.SWF.Parser.PlaceObjectTag>tag;
+            let depth = placeObjectTag.depth;
+            let child = this.getTimelineObjectAtDepth(depth);
+            let hasCharacter = placeObjectTag.symbolId > -1;
 
             // Check for invalid flag constellations.
             if (placeObjectTag.flags & PlaceObjectFlags.Move) {
@@ -180,7 +180,7 @@ module Shumway.AVMX.AS.flash.display {
               break;
             }
 
-            var symbol: Shumway.Timeline.DisplaySymbol = null;
+            let symbol: Shumway.Timeline.DisplaySymbol = null;
             if (hasCharacter) {
               symbol = <Shumway.Timeline.DisplaySymbol>loaderInfo.getSymbolById(placeObjectTag.symbolId);
               // The Flash Player ignores references to undefined symbols here. So should we.
@@ -294,7 +294,7 @@ module Shumway.AVMX.AS.flash.display {
      * Returns the current mouse position relative to this object.
      */
     _getDragMousePosition(): flash.geom.Point {
-      var position = this.sec.flash.ui.Mouse.axClass._currentPosition;
+      let position = this.sec.flash.ui.Mouse.axClass._currentPosition;
       if (this._parent) {
         position = this._parent.globalToLocal(position);
       }
@@ -307,7 +307,7 @@ module Shumway.AVMX.AS.flash.display {
         this._dragMode = DragMode.LockToPointer;
       } else {
         this._dragMode = DragMode.PreserveDistance;
-        var mousePosition = this._getDragMousePosition();
+        let mousePosition = this._getDragMousePosition();
         this._dragDeltaX = this.x - mousePosition.x;
         this._dragDeltaY = this.y - mousePosition.y;
       }
@@ -326,9 +326,9 @@ module Shumway.AVMX.AS.flash.display {
       }
     }
     _updateDragState(dropTarget: DisplayObject = null): void {
-      var mousePosition = this._getDragMousePosition();
-      var newX = mousePosition.x;
-      var newY = mousePosition.y;
+      let mousePosition = this._getDragMousePosition();
+      let newX = mousePosition.x;
+      let newY = mousePosition.y;
       if (this._dragMode === DragMode.PreserveDistance) {
         // Preserve the distance to the point where the dragging process started.
         newX += this._dragDeltaX;
@@ -336,7 +336,7 @@ module Shumway.AVMX.AS.flash.display {
       }
       if (this._dragBounds) {
         // Clamp new position to constraint bounds.
-        var bounds = this._dragBounds;
+        let bounds = this._dragBounds;
         newX = clamp(newX, bounds.left, bounds.right);
         newY = clamp(newY, bounds.top, bounds.bottom);
       }
@@ -359,11 +359,11 @@ module Shumway.AVMX.AS.flash.display {
       if (testingType === HitTestingType.Drop && this._dragMode > DragMode.Inactive) {
         return;
       }
-      var result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
+      let result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
       if (!result && testingType === HitTestingType.Mouse && this._hitArea && this._mouseEnabled) {
-        var matrix = this._hitArea._getInvertedConcatenatedMatrix();
-        var hitAreaLocalX = matrix.transformX(globalX, globalY);
-        var hitAreaLocalY = matrix.transformY(globalX, globalY);
+        let matrix = this._hitArea._getInvertedConcatenatedMatrix();
+        let hitAreaLocalX = matrix.transformX(globalX, globalY);
+        let hitAreaLocalY = matrix.transformY(globalX, globalY);
         result = this._hitArea._boundsAndMaskContainPoint(globalX, globalY,
                                                           hitAreaLocalX, hitAreaLocalY,
                                                           testingType);
@@ -380,7 +380,7 @@ module Shumway.AVMX.AS.flash.display {
         return !!this._hitArea._containsGlobalPoint(globalX, globalY,
                                                     HitTestingType.HitTestShape, null);
       }
-      var graphics = this._getGraphics();
+      let graphics = this._getGraphics();
       return !!graphics && graphics._containsPoint(localX, localY, true, 0);
     }
   }
@@ -399,16 +399,16 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: any, loaderInfo: flash.display.LoaderInfo): SpriteSymbol {
-      var symbol = new SpriteSymbol(data, loaderInfo);
+      let symbol = new SpriteSymbol(data, loaderInfo);
       symbol.numFrames = data.frameCount;
       if (loaderInfo.actionScriptVersion === ActionScriptVersion.ACTIONSCRIPT2) {
         symbol.isAVM1Object = true;
         symbol.avm1Context = loaderInfo._avm1Context;
       }
-      var frames = data.frames;
-      var frameLabelCtor = loaderInfo.app.sec.flash.display.FrameLabel;
-      for (var i = 0; i < frames.length; i++) {
-        var frame = loaderInfo.getFrame(data, i);
+      let frames = data.frames;
+      let frameLabelCtor = loaderInfo.app.sec.flash.display.FrameLabel;
+      for (let i = 0; i < frames.length; i++) {
+        let frame = loaderInfo.getFrame(data, i);
         if (frame.labelName) {
           symbol.labels.push(new frameLabelCtor(frame.labelName, i + 1));
         }

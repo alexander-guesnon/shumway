@@ -206,13 +206,13 @@ module Shumway.AVMX.AS.flash.events {
     }
 
     private _getGlobalPoint(): flash.geom.Point {
-      var point = this._position;
+      let point = this._position;
       if (!point) {
         point = this._position = new this.sec.flash.geom.Point();
       }
       if (this.target) {
         point.setTo(this._localX, this._localY);
-        var m = (<flash.display.DisplayObject>this._target)._getConcatenatedMatrix();
+        let m = (<flash.display.DisplayObject>this._target)._getConcatenatedMatrix();
         m.transformPointInPlace(point);
       } else {
         point.setTo(0, 0);

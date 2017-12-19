@@ -24,20 +24,20 @@ module Shumway.GFX.GL.Tests {
   }
 
   function runLRUListTests(writer: IndentingWriter): boolean {
-    var nodes = [];
-    for (var i = 0; i < 1000; i++) {
+    let nodes = [];
+    for (let i = 0; i < 1000; i++) {
       nodes.push(new Node(i));
     }
-    var list = new LRUList<Node>();
-    for (var i = 0; i < 1000; i++) {
+    let list = new LRUList<Node>();
+    for (let i = 0; i < 1000; i++) {
       list.put(nodes[i]);
     }
-    for (var c = 0; c < 20; c++) {
-      for (var i = 0; i < 1000; i++) {
+    for (let c = 0; c < 20; c++) {
+      for (let i = 0; i < 1000; i++) {
         list.put(nodes[getRandomInt(nodes.length - 1)]);
       }
-      var c = list.count;
-      for (var i = 0; i < c; i++) {
+      let c = list.count;
+      for (let i = 0; i < c; i++) {
         list.pop();
       }
     }
@@ -46,16 +46,16 @@ module Shumway.GFX.GL.Tests {
   }
 
   function runCompact(writer: IndentingWriter): boolean {
-    var x = new Shumway.GFX.Geometry.RegionAllocator.Compact(1024, 1024, 0);
-    var a = [];
-    var c = 100;
-    for (var k = 0; k < c; k++) {
-      for (var i = 0; i < c; i++) {
-        var r = x.allocate(getRandomInt(10), getRandomInt(10));
+    let x = new Shumway.GFX.Geometry.RegionAllocator.Compact(1024, 1024, 0);
+    let a = [];
+    let c = 100;
+    for (let k = 0; k < c; k++) {
+      for (let i = 0; i < c; i++) {
+        let r = x.allocate(getRandomInt(10), getRandomInt(10));
         release || assert (r);
         a.push(r);
       }
-      for (var i = 0; i < c; i++) {
+      for (let i = 0; i < c; i++) {
         x.free(a.pop());
       }
     }

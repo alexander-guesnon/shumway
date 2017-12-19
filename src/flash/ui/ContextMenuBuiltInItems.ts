@@ -91,7 +91,7 @@ module Shumway.AVMX.AS.flash.ui {
     }
 
     clone(): ContextMenuBuiltInItems {
-      var items = new this.sec.flash.ui.ContextMenuBuiltInItems();
+      let items = new this.sec.flash.ui.ContextMenuBuiltInItems();
       items._save = this._save;
       items._zoom = this._zoom;
       items._quality = this._quality;

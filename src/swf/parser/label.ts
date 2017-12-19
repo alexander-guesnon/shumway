@@ -17,7 +17,7 @@
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
   export function defineLabel(tag: StaticTextTag) {
-    var label = {
+    let label = {
       type: 'label',
       id: tag.id,
       fillBounds: tag.bbox,

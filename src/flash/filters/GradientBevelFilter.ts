@@ -35,10 +35,10 @@ module Shumway.AVMX.AS.flash.filters {
     public static FromUntyped(obj: any) {
       // obj.colors is an array of RGBA colors.
       // The RGB and alpha parts must be separated into colors and alphas arrays.
-      var colors: number[] = [];
-      var alphas: number[] = [];
-      for (var i = 0; i < obj.colors.length; i++) {
-        var color = obj.colors[i];
+      let colors: number[] = [];
+      let alphas: number[] = [];
+      for (let i = 0; i < obj.colors.length; i++) {
+        let color = obj.colors[i];
         colors.push(color >>> 8);
         alphas.push(color & 0xff) / 0xff;
       }
@@ -46,14 +46,14 @@ module Shumway.AVMX.AS.flash.filters {
       // obj.onTop true: type is FULL
       // obj.inner true: type is INNER
       // neither true: type is OUTER
-      var type: string = flash.filters.BitmapFilterType.OUTER;
+      let type: string = flash.filters.BitmapFilterType.OUTER;
       if (!!obj.onTop) {
         type = flash.filters.BitmapFilterType.FULL;
       } else if (!!obj.inner) {
         type = flash.filters.BitmapFilterType.INNER;
       }
       // obj.angle is represented in radians, the api needs degrees
-      var angle: number = obj.angle * 180 / Math.PI;
+      let angle: number = obj.angle * 180 / Math.PI;
       return new this.sec.flash.filters.GradientBevelFilter(
         obj.distance,
         angle,
@@ -95,7 +95,7 @@ module Shumway.AVMX.AS.flash.filters {
       if (this.type !== BitmapFilterType.INNER) {
         BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
         if (this._distance !== 0) {
-          var a: number = this._angle * Math.PI / 180;
+          let a: number = this._angle * Math.PI / 180;
           bounds.x += Math.floor(Math.cos(a) * this._distance);
           bounds.y += Math.floor(Math.sin(a) * this._distance);
           if (bounds.left > 0) { bounds.left = 0; }
@@ -138,7 +138,7 @@ module Shumway.AVMX.AS.flash.filters {
         this.sec.throwError("TypeError", Errors.NullPointerError, "colors");
       }
       this._colors = GradientArrays.sanitizeColors(value.value);
-      var len: number = this._colors.length;
+      let len: number = this._colors.length;
       this._alphas = GradientArrays.sanitizeAlphas(this._alphas, len, len);
       this._ratios = GradientArrays.sanitizeRatios(this._ratios, len, len);
     }

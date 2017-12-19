@@ -21,7 +21,7 @@ module Shumway.AVMX {
     // typeName: string;
   }
 
-  export var Errors = {
+  export let Errors = {
   /**
    * AVM2 Error Codes
    */
@@ -625,18 +625,18 @@ module Shumway.AVMX {
   //  CubeMapSamplerMustUseMipmap                               : { code: 3704, message: "AGAL validation failed: Cube map samplers must enable mipmapping for %2 at token %3 of %1 program."}
   };
 
-  for (var k in Errors) {
-    var error = Errors[k];
+  for (let k in Errors) {
+    let error = Errors[k];
     error.typeName = k;
     Errors[error.code] = error;
   }
 
   export function getErrorMessage(index: number): string {
-    var message = "Error #" + index;
+    let message = "Error #" + index;
     if (!Shumway.AVM2.Runtime.debuggerMode.value) {
       return message;
     }
-    var error = Errors[index];
+    let error = Errors[index];
     return message + ": " + (error && error.message || "(unknown)");
   }
 
@@ -645,7 +645,7 @@ module Shumway.AVMX {
   }
 
   export function formatErrorMessage(error, ...args) {
-    var message = error.message;
+    let message = error.message;
     args.forEach(function (x, i) {
       message = message.replace("%" + (i + 1), x);
     });

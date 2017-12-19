@@ -50,7 +50,7 @@ module Shumway.AVMX.AS.flash.display {
       this._displayState = null;
       this._fullScreenSourceRect = null;
       this._mouseLock = false;
-      var objectVectorClass = this.sec.getVectorClass(this.sec.AXObject);
+      let objectVectorClass = this.sec.getVectorClass(this.sec.AXObject);
       this._stageVideos = <any>objectVectorClass.axConstruct([0, true]);
       this._stage3Ds = <any>objectVectorClass.axConstruct([0, true]);
       this._colorARGB = 0xFFFFFFFF;
@@ -150,9 +150,9 @@ module Shumway.AVMX.AS.flash.display {
 
     set align(value: string) {
       value = axCoerceString(value);
-      var n = flash.display.StageAlign.toNumber(value);
+      let n = flash.display.StageAlign.toNumber(value);
       release || assert (n >= 0);
-      var newValue = flash.display.StageAlign.fromNumber(n);
+      let newValue = flash.display.StageAlign.fromNumber(n);
       if (this._align !== newValue) {
         this._isDirty = true;
         this._align = newValue;
@@ -182,7 +182,7 @@ module Shumway.AVMX.AS.flash.display {
      */
     setStageWidth(value: number) {
       release || assert ((value | 0) === value);
-      var newValue = (value * 20) | 0;
+      let newValue = (value * 20) | 0;
       if (this._stageWidth !== newValue) {
         this._isDirty = true;
         this._stageWidth = newValue;
@@ -208,7 +208,7 @@ module Shumway.AVMX.AS.flash.display {
      */
     setStageHeight(value: number) {
       release || assert ((value | 0) === value);
-      var newValue = (value * 20) | 0;
+      let newValue = (value * 20) | 0;
       if (this._stageHeight !== newValue) {
         this._isDirty = true;
         this._stageHeight = newValue;
@@ -233,7 +233,7 @@ module Shumway.AVMX.AS.flash.display {
       // Flash doesn't fire a resize event if the pixel ratio has changed, but it needs to be set if
       // a resize event gets dispatched as a result of a size change.
       this._contentsScaleFactor = pixelRatio;
-      var sizeHasChanged = this._stageContainerWidth !== width || this._stageContainerHeight !== height;
+      let sizeHasChanged = this._stageContainerWidth !== width || this._stageContainerHeight !== height;
       if (sizeHasChanged) {
         this._stageContainerWidth = width;
         this._stageContainerHeight = height;
@@ -342,7 +342,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     set color(rgb: number /*uint*/) {
-      var newValue = rgb | 0xff000000;
+      let newValue = rgb | 0xff000000;
       // Flash player forces the alpha channel to 0xff.
       if (this._colorARGB !== newValue) {
         this._isDirty = true;

@@ -15,23 +15,23 @@
  */
 
 ///<reference path='references.ts' />
-var jsGlobal = (function() { return this || (1, eval)('this//# sourceURL=jsGlobal-getter'); })();
+let jsGlobal = (function() { return this || (1, eval)('this//# sourceURL=jsGlobal-getter'); })();
 // Our polyfills for some DOM things make testing this slightly more onerous than it ought to be.
-var inBrowser = typeof window !=='undefined' && 'document' in window && 'plugins' in window.document;
-var inFirefox = typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') >= 0;
+let inBrowser = typeof window !=='undefined' && 'document' in window && 'plugins' in window.document;
+let inFirefox = typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') >= 0;
 
-declare var putstr;
-// declare var print;
-// declare var console;
-// declare var performance;
-// declare var XMLHttpRequest;
-// declare var document;
-// declare var getComputedStyle;
+declare let putstr;
+// declare let print;
+// declare let console;
+// declare let performance;
+// declare let XMLHttpRequest;
+// declare let document;
+// declare let getComputedStyle;
 
-/** @define {boolean} */ var release = false;
-/** @define {boolean} */ var profile = false;
+/** @define {boolean} */ let release = false;
+/** @define {boolean} */ let profile = false;
 
-declare var dump: (message: string) => void;
+declare let dump: (message: string) => void;
 
 function dumpLine(line: string) {
   if (!release && typeof dump !== "undefined") {
@@ -49,7 +49,7 @@ if (!jsGlobal.performance.now) {
   };
 }
 
-var START_TIME = performance.now();
+let START_TIME = performance.now();
 
 interface String {
   padRight(c: string, n: number): string;
@@ -88,7 +88,7 @@ interface Map<K, V> {
   size: number;
 }
 
-declare var Map: {
+declare let Map: {
   new <K, V>(): Map<K, V>;
   prototype: Map<any, any>;
 };
@@ -101,7 +101,7 @@ interface WeakMap<K, V> {
   set(key: K, value: V): WeakMap<K, V>;
 }
 
-declare var WeakMap: {
+declare let WeakMap: {
   new <K, V>(): WeakMap<K, V>;
   prototype: WeakMap<any, any>;
 };
@@ -115,7 +115,7 @@ interface Set<T> {
   size: number;
 }
 
-declare var Set: {
+declare let Set: {
   new <T>(): Set<T>;
   prototype: Set<any>;
 };
@@ -131,7 +131,7 @@ interface Uint8ClampedArray extends ArrayBufferView {
   subarray(begin: number, end?: number): Uint8ClampedArray;
 }
 
-declare var Uint8ClampedArray: {
+declare let Uint8ClampedArray: {
   prototype: Uint8ClampedArray;
   new (length: number): Uint8ClampedArray;
   new (array: Uint8Array): Uint8ClampedArray;
@@ -141,8 +141,8 @@ declare var Uint8ClampedArray: {
 };
 
 declare module Shumway {
-  var version: string;
-  var build: string;
+  let version: string;
+  let build: string;
 }
 
 module Shumway {
@@ -163,10 +163,10 @@ module Shumway {
   /**
    * The buffer length required to contain any unsigned 32-bit integer.
    */
-  /** @const */ export var UINT32_CHAR_BUFFER_LENGTH = 10; // "4294967295".length;
-  /** @const */ export var UINT32_MAX = 0xFFFFFFFF;
-  /** @const */ export var UINT32_MAX_DIV_10 = 0x19999999; // UINT32_MAX / 10;
-  /** @const */ export var UINT32_MAX_MOD_10 = 0x5; // UINT32_MAX % 10
+  /** @const */ export let UINT32_CHAR_BUFFER_LENGTH = 10; // "4294967295".length;
+  /** @const */ export let UINT32_MAX = 0xFFFFFFFF;
+  /** @const */ export let UINT32_MAX_DIV_10 = 0x19999999; // UINT32_MAX / 10;
+  /** @const */ export let UINT32_MAX_MOD_10 = 0x5; // UINT32_MAX % 10
 
   export function isString(value): boolean {
     return typeof value === "string";
@@ -218,7 +218,7 @@ module Shumway {
       // isIndex()/isNumericString() pair is slow and expensive, so we do a
       // quick check for obvious non-numericalness first. Just checking if the
       // first char is a 7-bit identifier char catches most cases.
-      var c = value.charCodeAt(0);
+      let c = value.charCodeAt(0);
       if ((65 <= c && c <= 90) ||     // 'A'..'Z'
           (97 <= c && c <= 122) ||    // 'a'..'z'
           (c === 36) ||               // '$'
@@ -237,7 +237,7 @@ module Shumway {
   export function isIndex(value: any): boolean {
     // js/src/vm/String.cpp JSFlatString::isIndexSlow
     // http://dxr.mozilla.org/mozilla-central/source/js/src/vm/String.cpp#474
-    var index = 0;
+    let index = 0;
     if (typeof value === "number") {
       index = (value | 0);
       if (value === index && index >= 0) {
@@ -248,7 +248,7 @@ module Shumway {
     if (typeof value !== "string") {
       return false;
     }
-    var length = value.length;
+    let length = value.length;
     if (length === 0) {
       return false;
     }
@@ -259,13 +259,13 @@ module Shumway {
     if (length > UINT32_CHAR_BUFFER_LENGTH) {
       return false;
     }
-    var i = 0;
+    let i = 0;
     index = value.charCodeAt(i++) - CharacterCodes._0;
     if (index < 1 || index > 9) {
       return false;
     }
-    var oldIndex = 0;
-    var c = 0;
+    let oldIndex = 0;
+    let c = 0;
     while (i < length) {
       c = value.charCodeAt(i++) - CharacterCodes._0;
       if (c < 0 || c > 9) {
@@ -289,11 +289,11 @@ module Shumway {
   }
 
   export function argumentsToString(args: IArguments) {
-    var resultList = [];
-    for (var i = 0; i < args.length; i++) {
-      var arg = args[i];
+    let resultList = [];
+    for (let i = 0; i < args.length; i++) {
+      let arg = args[i];
       try {
-        var argStr;
+        let argStr;
         if (typeof arg !== 'object' || !arg) {
           argStr = arg + '';
         } else if ('toString' in arg) {
@@ -330,7 +330,7 @@ module Shumway {
     }
 
     export function assertUnreachable(msg: string): void {
-      var location = new Error().stack.split('\n')[1];
+      let location = new Error().stack.split('\n')[1];
       throw new Error("Reached unreachable location " + location + msg);
     }
 
@@ -340,13 +340,13 @@ module Shumway {
       }
     }
 
-    var _warnedCounts = Object.create(null);
+    let _warnedCounts = Object.create(null);
 
     export function warning(message: any, arg1?: any, arg2?: any/*...messages: any[]*/) {
       if (release) {
         return;
       }
-      var key = argumentsToString(arguments);
+      let key = argumentsToString(arguments);
       if (_warnedCounts[key]) {
         _warnedCounts[key]++;
         if (Shumway.omitRepeatedWarnings.value) {
@@ -358,8 +358,8 @@ module Shumway {
     }
 
     export function warnCounts() {
-      var list = [];
-      for (var key in _warnedCounts) {
+      let list = [];
+      for (let key in _warnedCounts) {
         list.push({key: key, count: _warnedCounts[key]});
       }
       list.sort((entry, prev) => prev.count - entry.count);
@@ -378,7 +378,7 @@ module Shumway {
       release || Debug.assert(false, "Abstract Method " + message);
     }
 
-    var somewhatImplementedCache = {};
+    let somewhatImplementedCache = {};
 
     export function somewhatImplemented(message: string) {
       if (somewhatImplementedCache[message]) {
@@ -417,7 +417,7 @@ module Shumway {
      */
     export function popManyInto(src: any [], count: number, dst: any []) {
       release || assert(src.length >= count);
-      for (var i = count - 1; i >= 0; i--) {
+      for (let i = count - 1; i >= 0; i--) {
         dst[i] = src.pop();
       }
       dst.length = count;
@@ -425,8 +425,8 @@ module Shumway {
 
     export function popMany<T>(array: T [], count: number): T [] {
       release || assert(array.length >= count);
-      var start = array.length - count;
-      var result = array.slice(start, this.length);
+      let start = array.length - count;
+      let result = array.slice(start, this.length);
       array.length = start;
       return result;
     }
@@ -440,7 +440,7 @@ module Shumway {
     }
 
     export function pushMany(dst: any [], src: any []) {
-      for (var i = 0; i < src.length; i++) {
+      for (let i = 0; i < src.length; i++) {
         dst.push(src[i]);
       }
     }
@@ -459,7 +459,7 @@ module Shumway {
     }
 
     export function indexOf<T>(array: T [], value: T): number {
-      for (var i = 0, j = array.length; i < j; i++) {
+      for (let i = 0, j = array.length; i < j; i++) {
         if (array[i] === value) {
           return i;
         }
@@ -471,7 +471,7 @@ module Shumway {
       if (a.length !== b.length) {
         return false;
       }
-      for (var i = 0; i < a.length; i++) {
+      for (let i = 0; i < a.length; i++) {
         if (a[i] !== b[i]) {
           return false;
         }
@@ -480,7 +480,7 @@ module Shumway {
     }
 
     export function pushUnique<T>(array: T [], value: T): number {
-      for (var i = 0, j = array.length; i < j; i++) {
+      for (let i = 0, j = array.length; i < j; i++) {
         if (array[i] === value) {
           return i;
         }
@@ -490,8 +490,8 @@ module Shumway {
     }
 
     export function unique<T>(array: T []): T [] {
-      var result = [];
-      for (var i = 0; i < array.length; i++) {
+      let result = [];
+      for (let i = 0; i < array.length; i++) {
         pushUnique(result, array[i]);
       }
       return result;
@@ -515,7 +515,7 @@ module Shumway {
      */
     export function ensureTypedArrayCapacity<T extends TypedArray>(array: T, capacity: number): T {
       if (array.length < capacity) {
-        var oldArray = array;
+        let oldArray = array;
         array = new (<any>array).constructor(Shumway.IntegerUtilities.nearestPowerOfTwo(capacity));
         array.set(oldArray, 0);
       }
@@ -551,9 +551,9 @@ module Shumway {
     }
 
     export function toKeyValueArray(object: Object) {
-      var hasOwnProperty = Object.prototype.hasOwnProperty;
-      var array = [];
-      for (var k in object) {
+      let hasOwnProperty = Object.prototype.hasOwnProperty;
+      let array = [];
+      for (let k in object) {
         if (hasOwnProperty.call(object, k)) {
           array.push([k, object[k]]);
         }
@@ -579,7 +579,7 @@ module Shumway {
      */
     export function getPropertyDescriptor(object: Object, name: string): PropertyDescriptor {
       do {
-        var propDesc = Object.getOwnPropertyDescriptor(object, name);
+        let propDesc = Object.getOwnPropertyDescriptor(object, name);
         if (propDesc) {
           return propDesc;
         }
@@ -589,17 +589,17 @@ module Shumway {
     }
 
     export function hasOwnGetter(object: Object, name: string): boolean {
-      var d = Object.getOwnPropertyDescriptor(object, name);
+      let d = Object.getOwnPropertyDescriptor(object, name);
       return !!(d && d.get);
     }
 
     export function getOwnGetter(object: Object, name: string): () => any {
-      var d = Object.getOwnPropertyDescriptor(object, name);
+      let d = Object.getOwnPropertyDescriptor(object, name);
       return d ? d.get : null;
     }
 
     export function hasOwnSetter(object: Object, name: string): boolean {
-      var d = Object.getOwnPropertyDescriptor(object, name);
+      let d = Object.getOwnPropertyDescriptor(object, name);
       return !!(d && !!d.set);
     }
 
@@ -621,13 +621,13 @@ module Shumway {
     }
 
     export function copyProperties(object: Object, template: Object) {
-      for (var property in template) {
+      for (let property in template) {
         object[property] = template[property];
       }
     }
 
     export function copyOwnProperties(object: Object, template: Object) {
-      for (var property in template) {
+      for (let property in template) {
         if (hasOwnProperty(template, property)) {
           object[property] = template[property];
         }
@@ -639,9 +639,9 @@ module Shumway {
                                                filter: (name: string) => boolean = null,
                                                overwrite = true,
                                                makeWritable = false) {
-      for (var property in template) {
+      for (let property in template) {
         if (hasOwnProperty(template, property) && (!filter || filter(property))) {
-          var descriptor = Object.getOwnPropertyDescriptor(template, property);
+          let descriptor = Object.getOwnPropertyDescriptor(template, property);
           if (!overwrite && hasOwnProperty(object, property)) {
             continue;
           }
@@ -661,8 +661,8 @@ module Shumway {
     export function copyPropertiesByList(object: Object,
                                          template: Object,
                                          propertyList: string []) {
-      for (var i = 0; i < propertyList.length; i++) {
-        var property = propertyList[i];
+      for (let i = 0; i < propertyList.length; i++) {
+        let property = propertyList[i];
         object[property] = template[property];
       }
     }
@@ -699,8 +699,8 @@ module Shumway {
     import assert = Shumway.Debug.assert;
 
     export function repeatString(c: string, n: number): string {
-      var s = "";
-      for (var i = 0; i < n; i++) {
+      let s = "";
+      for (let i = 0; i < n; i++) {
         s += c;
       }
       return s;
@@ -708,8 +708,8 @@ module Shumway {
 
     export function memorySizeToString(value: number) {
       value |= 0;
-      var K = 1024;
-      var M = K * K;
+      let K = 1024;
+      let M = K * K;
       if (value < K) {
         return value + " B";
       } else if (value < M) {
@@ -736,25 +736,25 @@ module Shumway {
     }
 
     export function toSafeArrayString(array) {
-      var str = [];
-      for (var i = 0; i < array.length; i++) {
+      let str = [];
+      for (let i = 0; i < array.length; i++) {
         str.push(toSafeString(array[i]));
       }
       return str.join(", ");
     }
 
     export function utf8decode(str: string): Uint8Array {
-      var bytes = new Uint8Array(str.length * 4);
-      var b = 0;
-      for (var i = 0, j = str.length; i < j; i++) {
-        var code = str.charCodeAt(i);
+      let bytes = new Uint8Array(str.length * 4);
+      let b = 0;
+      for (let i = 0, j = str.length; i < j; i++) {
+        let code = str.charCodeAt(i);
         if (code <= 0x7f) {
           bytes[b++] = code;
           continue;
         }
 
         if (0xD800 <= code && code <= 0xDBFF) {
-          var codeLow = str.charCodeAt(i + 1);
+          let codeLow = str.charCodeAt(i + 1);
           if (0xDC00 <= codeLow && codeLow <= 0xDFFF) {
             // convert only when both high and low surrogates are present
             code = ((code & 0x3FF) << 10) + (codeLow & 0x3FF) + 0x10000;
@@ -786,16 +786,16 @@ module Shumway {
     }
 
     export function utf8encode(bytes: Uint8Array): string {
-      var j = 0, str = "";
+      let j = 0, str = "";
       while (j < bytes.length) {
-        var b1 = bytes[j++] & 0xFF;
+        let b1 = bytes[j++] & 0xFF;
         if (b1 <= 0x7F) {
           str += String.fromCharCode(b1);
         } else {
-          var currentPrefix = 0xC0;
-          var validBits = 5;
+          let currentPrefix = 0xC0;
+          let validBits = 5;
           do {
-            var mask = (currentPrefix >> 1) | 0x80;
+            let mask = (currentPrefix >> 1) | 0x80;
             if((b1 & mask) === currentPrefix) break;
             currentPrefix = (currentPrefix >> 1) | 0x80;
             --validBits;
@@ -806,10 +806,10 @@ module Shumway {
             str += String.fromCharCode(b1);
             continue;
           }
-          var code = (b1 & ((1 << validBits) - 1));
-          var invalid = false;
-          for (var i = 5; i >= validBits; --i) {
-            var bi = bytes[j++];
+          let code = (b1 & ((1 << validBits) - 1));
+          let invalid = false;
+          for (let i = 5; i >= validBits; --i) {
+            let bi = bytes[j++];
             if ((bi & 0xC0) != 0x80) {
               // Invalid UTF8 character sequence
               invalid = true;
@@ -819,7 +819,7 @@ module Shumway {
           }
           if (invalid) {
             // Copying invalid sequence as is
-            for (var k = j - (7 - i); k < j; ++k) {
+            for (let k = j - (7 - i); k < j; ++k) {
               str += String.fromCharCode(bytes[k] & 255);
             }
             continue;
@@ -837,18 +837,18 @@ module Shumway {
 
     // https://gist.github.com/958841
     export function base64EncodeBytes(bytes: Uint8Array) {
-      var base64 = '';
-      var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      let base64 = '';
+      let encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-      var byteLength = bytes.byteLength;
-      var byteRemainder = byteLength % 3;
-      var mainLength = byteLength - byteRemainder;
+      let byteLength = bytes.byteLength;
+      let byteRemainder = byteLength % 3;
+      let mainLength = byteLength - byteRemainder;
 
-      var a, b, c, d;
-      var chunk;
+      let a, b, c, d;
+      let chunk;
 
       // Main loop deals with bytes in chunks of 3
-      for (var i = 0; i < mainLength; i = i + 3) {
+      for (let i = 0; i < mainLength; i = i + 3) {
         // Combine the three bytes into a single integer
         chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
 
@@ -887,31 +887,31 @@ module Shumway {
       return base64;
     }
 
-    var base64DecodeMap = [ // starts at 0x2B
+    let base64DecodeMap = [ // starts at 0x2B
       62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
       0, 0, 0, 0, 0, 0, 0, // 0x3A-0x40
       0,  1,  2,  3,  4,  5,  6, 7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
       19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, // 0x5B-0x0x60
       26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
       44, 45, 46, 47, 48, 49, 50, 51];
-    var base64DecodeMapOffset = 0x2B;
-    var base64EOF = 0x3D;
+    let base64DecodeMapOffset = 0x2B;
+    let base64EOF = 0x3D;
 
     /**
      * Decodes the result of encoding with base64EncodeBytes, but not necessarily any other
      * base64-encoded data. Note that this also doesn't do any error checking.
      */
     export function decodeRestrictedBase64ToBytes(encoded: string): Uint8Array {
-      var ch: number;
-      var code: number;
-      var code2: number;
+      let ch: number;
+      let code: number;
+      let code2: number;
 
-      var len = encoded.length;
-      var padding = encoded.charAt(len - 2) === '=' ? 2 : encoded.charAt(len - 1) === '=' ? 1 : 0;
+      let len = encoded.length;
+      let padding = encoded.charAt(len - 2) === '=' ? 2 : encoded.charAt(len - 1) === '=' ? 1 : 0;
       release || assert(encoded.length % 4 === 0);
-      var decoded = new Uint8Array((encoded.length >> 2) * 3 - padding);
+      let decoded = new Uint8Array((encoded.length >> 2) * 3 - padding);
 
-      for (var i = 0, j = 0; i < encoded.length;) {
+      for (let i = 0, j = 0; i < encoded.length;) {
         ch = encoded.charCodeAt(i++);
         code = base64DecodeMap[ch - base64DecodeMapOffset];
         ch = encoded.charCodeAt(i++);
@@ -949,24 +949,24 @@ module Shumway {
      * Workaround for max stack size limit.
      */
     export function fromCharCodeArray(buffer: Uint8Array): string {
-      var str = "", SLICE = 1024 * 16;
-      for (var i = 0; i < buffer.length; i += SLICE) {
-        var chunk = Math.min(buffer.length - i, SLICE);
+      let str = "", SLICE = 1024 * 16;
+      for (let i = 0; i < buffer.length; i += SLICE) {
+        let chunk = Math.min(buffer.length - i, SLICE);
         str += String.fromCharCode.apply(null, buffer.subarray(i, i + chunk));
       }
       return str;
     }
 
-    var _encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$_';
+    let _encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$_';
     export function variableLengthEncodeInt32(n) {
-      var e = _encoding;
-      var bitCount = (32 - Math.clz32(n));
+      let e = _encoding;
+      let bitCount = (32 - Math.clz32(n));
       release || assert (bitCount <= 32, bitCount);
-      var l = Math.ceil(bitCount / 6);
+      let l = Math.ceil(bitCount / 6);
       // Encode length followed by six bit chunks.
-      var s = e[l];
-      for (var i = l - 1; i >= 0; i--) {
-        var offset = (i * 6);
+      let s = e[l];
+      for (let i = l - 1; i >= 0; i--) {
+        let offset = (i * 6);
         s += e[(n >> offset) & 0x3F];
       }
       release || assert (StringUtilities.variableLengthDecodeInt32(s) === n, n + " : " + s + " - " + l + " bits: " + bitCount);
@@ -993,10 +993,10 @@ module Shumway {
     }
 
     export function variableLengthDecodeInt32(s) {
-      var l = StringUtilities.fromEncoding(s.charCodeAt(0));
-      var n = 0;
-      for (var i = 0; i < l; i++) {
-        var offset = ((l - i - 1) * 6);
+      let l = StringUtilities.fromEncoding(s.charCodeAt(0));
+      let n = 0;
+      for (let i = 0; i < l; i++) {
+        let offset = ((l - i - 1) * 6);
         n |= StringUtilities.fromEncoding(s.charCodeAt(1 + i)) << offset;
       }
       return n;
@@ -1006,23 +1006,23 @@ module Shumway {
       if (s.length <= maxLength) {
         return s;
       }
-      var leftHalf = maxLength >> 1;
-      var rightHalf = maxLength - leftHalf - 1;
+      let leftHalf = maxLength >> 1;
+      let rightHalf = maxLength - leftHalf - 1;
       return s.substr(0, leftHalf) + "\u2026" + s.substr(s.length - rightHalf, rightHalf);
     }
 
     export function multiple(s: string, count: number): string {
-      var o = "";
-      for (var i = 0; i < count; i++) {
+      let o = "";
+      for (let i = 0; i < count; i++) {
         o += s;
       }
       return o;
     }
 
     export function indexOfAny(s: string, chars: string [], position: number) {
-      var index = s.length;
-      for (var i = 0; i < chars.length; i++) {
-        var j = s.indexOf(chars[i], position);
+      let index = s.length;
+      for (let i = 0; i < chars.length; i++) {
+        let j = s.indexOf(chars[i], position);
         if (j >= 0) {
           index = Math.min(index, j);
         }
@@ -1030,9 +1030,9 @@ module Shumway {
       return index === s.length ? -1 : index;
     }
 
-    var _concat3array = new Array(3);
-    var _concat4array = new Array(4);
-    var _concat9array = new Array(9);
+    let _concat3array = new Array(3);
+    let _concat4array = new Array(4);
+    let _concat9array = new Array(9);
 
     /**
      * The concatN() functions concatenate multiple strings in a way that
@@ -1074,13 +1074,13 @@ module Shumway {
   }
 
   export module HashUtilities {
-    var _md5R = new Uint8Array([
+    let _md5R = new Uint8Array([
       7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
       5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
       4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
       6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21]);
 
-    var _md5K = new Int32Array([
+    let _md5K = new Int32Array([
       -680876936, -389564586, 606105819, -1044525330, -176418897, 1200080426,
       -1473231341, -45705983, 1770035416, -1958414417, -42063, -1990404162,
       1804603682, -40341101, -1502002290, 1236535329, -165796510, -1069501632,
@@ -1094,13 +1094,13 @@ module Shumway {
       -145523070, -1120210379, 718787259, -343485551]);
 
     export function hashBytesTo32BitsMD5(data: Uint8Array, offset: number, length: number): number {
-      var r = _md5R;
-      var k = _md5K;
-      var h0 = 1732584193, h1 = -271733879, h2 = -1732584194, h3 = 271733878;
+      let r = _md5R;
+      let k = _md5K;
+      let h0 = 1732584193, h1 = -271733879, h2 = -1732584194, h3 = 271733878;
       // pre-processing
-      var paddedLength = (length + 72) & ~63; // data + 9 extra bytes
-      var padded = new Uint8Array(paddedLength);
-      var i, j, n;
+      let paddedLength = (length + 72) & ~63; // data + 9 extra bytes
+      let padded = new Uint8Array(paddedLength);
+      let i, j, n;
       for (i = 0; i < length; ++i) {
         padded[i] = data[offset++];
       }
@@ -1119,13 +1119,13 @@ module Shumway {
       padded[i++] = 0;
       // chunking
       // TODO ArrayBuffer ?
-      var w = new Int32Array(16);
+      let w = new Int32Array(16);
       for (i = 0; i < paddedLength;) {
         for (j = 0; j < 16; ++j, i += 4) {
           w[j] = (padded[i] | (padded[i + 1] << 8) |
             (padded[i + 2] << 16) | (padded[i + 3] << 24));
         }
-        var a = h0, b = h1, c = h2, d = h3, f, g;
+        let a = h0, b = h1, c = h2, d = h3, f, g;
         for (j = 0; j < 64; ++j) {
           if (j < 16) {
             f = (b & c) | ((~b) & d);
@@ -1140,7 +1140,7 @@ module Shumway {
             f = c ^ (b | (~d));
             g = (7 * j) & 15;
           }
-          var tmp = d, rotateArg = (a + f + k[j] + w[g]) | 0, rotate = r[j];
+          let tmp = d, rotateArg = (a + f + k[j] + w[g]) | 0, rotate = r[j];
           d = c;
           c = b;
           b = (b + ((rotateArg << rotate) | (rotateArg >>> (32 - rotate)))) | 0;
@@ -1203,12 +1203,12 @@ module Shumway {
     }
 
     public static next(): number {
-      var s = this._state;
-      var r0 = (Math.imul(18273, s[0] & 0xFFFF) + (s[0] >>> 16)) | 0;
+      let s = this._state;
+      let r0 = (Math.imul(18273, s[0] & 0xFFFF) + (s[0] >>> 16)) | 0;
       s[0] = r0;
-      var r1 = (Math.imul(36969, s[1] & 0xFFFF) + (s[1] >>> 16)) | 0;
+      let r1 = (Math.imul(36969, s[1] & 0xFFFF) + (s[1] >>> 16)) | 0;
       s[1] = r1;
-      var x = ((r0 << 16) + (r1 & 0xFFFF)) | 0;
+      let x = ((r0 << 16) + (r1 & 0xFFFF)) | 0;
       // Division by 0x100000000 through multiplication by reciprocal.
       return (x < 0 ? (x + 0x100000000) : x) * 2.3283064365386962890625e-10;
     }
@@ -1222,10 +1222,10 @@ module Shumway {
    * This should only be called if you need fake time.
    */
   export function installTimeWarper() {
-    var RealDate = Date;
+    let RealDate = Date;
 
     // Go back in time.
-    var fakeTime = 1428107694580; // 3-Apr-2015
+    let fakeTime = 1428107694580; // 3-Apr-2015
 
     // Overload
     jsGlobal.Date = function (yearOrTimevalue, month, date, hour, minute, second, millisecond) {
@@ -1255,7 +1255,7 @@ module Shumway {
     if (typeof jsGlobal.WeakMap === 'function') {
       return; // weak map is supported
     }
-    var id = 0;
+    let id = 0;
     function WeakMap() {
       this.id = '$weakmap' + (id++);
     };
@@ -1288,7 +1288,7 @@ module Shumway {
     _removeReference();
   }
 
-  var useReferenceCounting = true;
+  let useReferenceCounting = true;
 
   export class WeakList<T extends IReferenceCountable> {
     private _map: WeakMap<T, number>;
@@ -1336,10 +1336,10 @@ module Shumway {
     }
     forEach(callback: (value: T) => void) {
       if (this._map) {
-        var newAdditionsToKeys : Array<T> = [];
+        let newAdditionsToKeys : Array<T> = [];
         this._newAdditions.push(newAdditionsToKeys);
-        var map = this._map;
-        var keys: Array<T> = ShumwayCom.getWeakMapKeys(map);
+        let map = this._map;
+        let keys: Array<T> = ShumwayCom.getWeakMapKeys(map);
         // The keys returned by ShumwayCom.getWeakMapKeys are not guaranteed to
         // be in insertion order. Therefore we have to sort them manually.
         keys.sort(function (a: T, b: T) {
@@ -1360,10 +1360,10 @@ module Shumway {
         this._newAdditions.splice(this._newAdditions.indexOf(newAdditionsToKeys), 1);
         return;
       }
-      var list = this._list;
-      var zeroCount = 0;
-      for (var i = 0; i < list.length; i++) {
-        var value = list[i];
+      let list = this._list;
+      let zeroCount = 0;
+      for (let i = 0; i < list.length; i++) {
+        let value = list[i];
         if (!value) {
           continue;
         }
@@ -1375,9 +1375,9 @@ module Shumway {
         }
       }
       if (zeroCount > 16 && zeroCount > (list.length >> 2)) {
-        var newList = [];
-        for (var i = 0; i < list.length; i++) {
-          var value = list[i];
+        let newList = [];
+        for (let i = 0; i < list.length; i++) {
+          let value = list[i];
           if (value && value._referenceCount > 0) {
             newList.push(value);
           }
@@ -1416,7 +1416,7 @@ module Shumway {
      */
     export function roundHalfEven(value: number): number {
       if (Math.abs(value % 1) === 0.5) {
-        var floor = Math.floor(value);
+        let floor = Math.floor(value);
         return floor % 2 === 0 ? floor : Math.ceil(value);
       }
       return Math.round(value);
@@ -1445,13 +1445,13 @@ module Shumway {
   }
 
   export module IntegerUtilities {
-    var sharedBuffer = new ArrayBuffer(8);
-    export var i8 = new Int8Array(sharedBuffer);
-    export var u8 = new Uint8Array(sharedBuffer);
-    export var i32 = new Int32Array(sharedBuffer);
-    export var f32 = new Float32Array(sharedBuffer);
-    export var f64 = new Float64Array(sharedBuffer);
-    export var nativeLittleEndian = new Int8Array(new Int32Array([1]).buffer)[0] === 1;
+    let sharedBuffer = new ArrayBuffer(8);
+    export let i8 = new Int8Array(sharedBuffer);
+    export let u8 = new Uint8Array(sharedBuffer);
+    export let i32 = new Int32Array(sharedBuffer);
+    export let f32 = new Float32Array(sharedBuffer);
+    export let f64 = new Float64Array(sharedBuffer);
+    export let nativeLittleEndian = new Int8Array(new Int32Array([1]).buffer)[0] === 1;
 
     /**
      * Convert a float into 32 bits.
@@ -1526,8 +1526,8 @@ module Shumway {
     }
 
     export function getFlags(i: number, flags: string[]): string {
-      var str = "";
-      for (var i = 0; i < flags.length; i++) {
+      let str = "";
+      for (let i = 0; i < flags.length; i++) {
         if (i & (1 << i)) {
           str += flags[i] + " ";
         }
@@ -1558,12 +1558,12 @@ module Shumway {
     }
 
     export function roundToMultipleOfPowerOfTwo(i: number, powerOfTwo: number) {
-      var x = (1 << powerOfTwo) - 1;
+      let x = (1 << powerOfTwo) - 1;
       return (i + x) & ~x; // Round up to multiple of power of two.
     }
 
     export function toHEX(i: number) {
-      var i = (i < 0 ? 0xFFFFFFFF + i + 1 : i);
+      let i = (i < 0 ? 0xFFFFFFFF + i + 1 : i);
       return "0x" + ("00000000" + i.toString(16)).substr(-8);
     }
 
@@ -1572,10 +1572,10 @@ module Shumway {
      */
     if (!Math.imul) {
       Math.imul = function imul(a, b) {
-        var ah  = (a >>> 16) & 0xffff;
-        var al = a & 0xffff;
-        var bh  = (b >>> 16) & 0xffff;
-        var bl = b & 0xffff;
+        let ah  = (a >>> 16) & 0xffff;
+        let al = a & 0xffff;
+        let bh  = (b >>> 16) & 0xffff;
+        let bl = b & 0xffff;
         // the shift by 0 fixes the sign on the high part
         // the final |0 converts the unsigned value into a signed value
         return ((al * bl) + (((ah * bl + al * bh) << 16) >>> 0) | 0);
@@ -1666,12 +1666,12 @@ module Shumway {
     }
 
     writeComment(str: string) {
-      var lines = (str || '').split("\n");
+      let lines = (str || '').split("\n");
       if (lines.length === 1) {
         this.writeLn("// " + lines[0]);
       } else {
         this.writeLn("/**");
-        for (var i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
           this.writeLn(" * " + lines[i]);
         }
         this.writeLn(" */");
@@ -1679,8 +1679,8 @@ module Shumway {
     }
 
     writeLns(str: string) {
-      var lines = (str || '').split("\n");
-      for (var i = 0; i < lines.length; i++) {
+      let lines = (str || '').split("\n");
+      for (let i = 0; i < lines.length; i++) {
         this.writeLn(lines[i]);
       }
     }
@@ -1750,8 +1750,8 @@ module Shumway {
     }
 
     colorLns(color: string, str: string) {
-      var lines = (str || '').split("\n");
-      for (var i = 0; i < lines.length; i++) {
+      let lines = (str || '').split("\n");
+      for (let i = 0; i < lines.length; i++) {
         this.colorLn(color, lines[i]);
       }
     }
@@ -1787,8 +1787,8 @@ module Shumway {
 
     writeArray(arr: any[], detailed: boolean = false, noNumbers: boolean = false) {
       detailed = detailed || false;
-      for (var i = 0, j = arr.length; i < j; i++) {
-        var prefix = "";
+      for (let i = 0, j = arr.length; i < j; i++) {
+        let prefix = "";
         if (detailed) {
           if (arr[i] === null) {
             prefix = "null";
@@ -1799,7 +1799,7 @@ module Shumway {
           }
           prefix += " ";
         }
-        var number = noNumbers ? "" : ("" + i).padRight(' ', 4);
+        let number = noNumbers ? "" : ("" + i).padRight(' ', 4);
         this.writeLn(number + prefix + arr[i]);
       }
     }
@@ -1826,8 +1826,8 @@ module Shumway {
       if (this.isEmpty()) {
         return;
       }
-      var i = this.index === 0 ? this._size - 1 : this.index - 1;
-      var end = (this.start - 1) & this._mask;
+      let i = this.index === 0 ? this._size - 1 : this.index - 1;
+      let end = (this.start - 1) & this._mask;
       while (i !== end) {
         if (visitor(this.array[i], i)) {
           break;
@@ -1965,8 +1965,8 @@ module Shumway {
 
     static contrastStyle(rgb: string): string {
       // http://www.w3.org/TR/AERT#color-contrast
-      var c = parseInt(rgb.substr(1), 16);
-      var yiq = (((c >> 16) * 299) + (((c >> 8) & 0xff) * 587) + ((c & 0xff) * 114)) / 1000;
+      let c = parseInt(rgb.substr(1), 16);
+      let yiq = (((c >> 16) * 299) + (((c >> 8) & 0xff) * 587) + ((c & 0xff) * 114)) / 1000;
       return (yiq >= 128) ? '#000000' : '#ffffff';
     }
 
@@ -2088,14 +2088,14 @@ module Shumway {
     }
 
     public getBaseWidth(angle: number): number {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return u * (this.xMax - this.xMin) + v * (this.yMax - this.yMin);
     }
 
     public getBaseHeight(angle: number): number {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return v * (this.xMax - this.xMin) + u * (this.yMax - this.yMin);
     }
 
@@ -2263,14 +2263,14 @@ module Shumway {
     }
 
     public getBaseWidth(angle: number): number {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return u * (this._xMax - this._xMin) + v * (this._yMax - this._yMin);
     }
 
     public getBaseHeight(angle: number): number {
-      var u = Math.abs(Math.cos(angle));
-      var v = Math.abs(Math.sin(angle));
+      let u = Math.abs(Math.cos(angle));
+      let v = Math.abs(Math.sin(angle));
       return v * (this._xMax - this._xMin) + u * (this._yMax - this._yMin);
     }
 
@@ -2354,14 +2354,14 @@ module Shumway {
         return Color.colorCache[color];
       }
       // TODO: Obviously slow, but it will do for now.
-      var span = document.createElement('span');
+      let span = document.createElement('span');
       document.body.appendChild(span);
       span.style.backgroundColor = color;
-      var rgb = getComputedStyle(span).backgroundColor;
+      let rgb = getComputedStyle(span).backgroundColor;
       document.body.removeChild(span);
-      var m = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(rgb);
+      let m = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(rgb);
       if (!m) m = /^rgba\((\d+), (\d+), (\d+), ([\d.]+)\)$/.exec(rgb);
-      var result = new Color(0, 0, 0, 0);
+      let result = new Color(0, 0, 0, 0);
       result.r = parseFloat(m[1]) / 255;
       result.g = parseFloat(m[2]) / 255;
       result.b = parseFloat(m[3]) / 255;
@@ -2382,10 +2382,10 @@ module Shumway {
     /**
      * Cache frequently used rgba -> css style conversions.
      */
-    var rgbaToCSSStyleCache = new Cache(1024);
+    let rgbaToCSSStyleCache = new Cache(1024);
 
     export function rgbaToCSSStyle(rgba: number): string {
-      var result = rgbaToCSSStyleCache.get(rgba);
+      let result = rgbaToCSSStyleCache.get(rgba);
       if (typeof result === "string") {
         return result;
       }
@@ -2397,10 +2397,10 @@ module Shumway {
     /**
      * Cache frequently used css -> rgba styles conversions.
      */
-    var cssStyleToRGBACache = new Cache(1024);
+    let cssStyleToRGBACache = new Cache(1024);
 
     export function cssStyleToRGBA(style: string) {
-      var result = cssStyleToRGBACache.get(style);
+      let result = cssStyleToRGBACache.get(style);
       if (typeof result === "number") {
         return result;
       }
@@ -2412,11 +2412,11 @@ module Shumway {
       } else if (style[0] === "r") {
         // We don't parse all types of rgba(....) color styles. We only handle the
         // ones we generate ourselves.
-        var values = style.substring(5, style.length - 1).split(",");
-        var r = parseInt(values[0]);
-        var g = parseInt(values[1]);
-        var b = parseInt(values[2]);
-        var a = parseFloat(values[3]);
+        let values = style.substring(5, style.length - 1).split(",");
+        let r = parseInt(values[0]);
+        let g = parseInt(values[1]);
+        let b = parseInt(values[2]);
+        let a = parseFloat(values[3]);
         result = (r & 0xff) << 24 |
                  (g & 0xff) << 16 |
                  (b & 0xff) << 8  |
@@ -2446,10 +2446,10 @@ module Shumway {
      * Unpremultiplies the given |pARGB| color value.
      */
     export function unpremultiplyARGB(pARGB: number) {
-      var b = (pARGB >>  0) & 0xff;
-      var g = (pARGB >>  8) & 0xff;
-      var r = (pARGB >> 16) & 0xff;
-      var a = (pARGB >> 24) & 0xff;
+      let b = (pARGB >>  0) & 0xff;
+      let g = (pARGB >>  8) & 0xff;
+      let r = (pARGB >> 16) & 0xff;
+      let a = (pARGB >> 24) & 0xff;
       r = Math.imul(255, r) / a & 0xff;
       g = Math.imul(255, g) / a & 0xff;
       b = Math.imul(255, b) / a & 0xff;
@@ -2460,17 +2460,17 @@ module Shumway {
      * Premultiplies the given |pARGB| color value.
      */
     export function premultiplyARGB(uARGB: number) {
-      var b = (uARGB >>  0) & 0xff;
-      var g = (uARGB >>  8) & 0xff;
-      var r = (uARGB >> 16) & 0xff;
-      var a = (uARGB >> 24) & 0xff;
+      let b = (uARGB >>  0) & 0xff;
+      let g = (uARGB >>  8) & 0xff;
+      let r = (uARGB >> 16) & 0xff;
+      let a = (uARGB >> 24) & 0xff;
       r = ((Math.imul(r, a) + 127) / 255) | 0;
       g = ((Math.imul(g, a) + 127) / 255) | 0;
       b = ((Math.imul(b, a) + 127) / 255) | 0;
       return a << 24 | r << 16 | g << 8 | b;
     }
 
-    var premultiplyTable: Uint8Array;
+    let premultiplyTable: Uint8Array;
 
     /**
      * All possible alpha values and colors 256 * 256 = 65536 entries. Experiments
@@ -2482,7 +2482,7 @@ module Shumway {
      *
      * TODO: Figure out if memory / speed tradeoff is worth it.
      */
-    var unpremultiplyTable: Uint8Array;
+    let unpremultiplyTable: Uint8Array;
 
     /**
      * Make sure to call this before using the |unpremultiplyARGBUsingTableLookup| or
@@ -2492,8 +2492,8 @@ module Shumway {
     export function ensureUnpremultiplyTable() {
       if (!unpremultiplyTable) {
         unpremultiplyTable = new Uint8Array(256 * 256);
-        for (var c = 0; c < 256; c++) {
-          for (var a = 0; a < 256; a++) {
+        for (let c = 0; c < 256; c++) {
+          for (let a = 0; a < 256; a++) {
             unpremultiplyTable[(a << 8) + c] = Math.imul(255, c) / a;
           }
         }
@@ -2507,17 +2507,17 @@ module Shumway {
 
     export function tableLookupUnpremultiplyARGB(pARGB): number {
       pARGB = pARGB | 0;
-      var a = (pARGB >> 24) & 0xff;
+      let a = (pARGB >> 24) & 0xff;
       if (a === 0) {
         return 0;
       } else if (a === 0xff) {
         return pARGB;
       }
-      var b = (pARGB >>  0) & 0xff;
-      var g = (pARGB >>  8) & 0xff;
-      var r = (pARGB >> 16) & 0xff;
-      var o = a << 8;
-      var T = unpremultiplyTable;
+      let b = (pARGB >>  0) & 0xff;
+      let g = (pARGB >>  8) & 0xff;
+      let r = (pARGB >> 16) & 0xff;
+      let o = a << 8;
+      let T = unpremultiplyTable;
       r = T[o + r];
       g = T[o + g];
       b = T[o + b];
@@ -2541,12 +2541,12 @@ module Shumway {
      * compute GA and BR without unpacking them.
      */
     export function blendPremultipliedBGRA(tpBGRA: number, spBGRA: number) {
-      var sA  = spBGRA & 0xff;
-      var sGA = spBGRA      & 0x00ff00ff;
-      var sBR = spBGRA >> 8 & 0x00ff00ff;
-      var tGA = tpBGRA      & 0x00ff00ff;
-      var tBR = tpBGRA >> 8 & 0x00ff00ff;
-      var A  = 256 - sA;
+      let sA  = spBGRA & 0xff;
+      let sGA = spBGRA      & 0x00ff00ff;
+      let sBR = spBGRA >> 8 & 0x00ff00ff;
+      let tGA = tpBGRA      & 0x00ff00ff;
+      let tBR = tpBGRA >> 8 & 0x00ff00ff;
+      let A  = 256 - sA;
       tGA = Math.imul(tGA, A) >> 8;
       tBR = Math.imul(tBR, A) >> 8;
       return ((sBR + tBR & 0x00ff00ff) << 8) | (sGA + tGA & 0x00ff00ff);
@@ -2557,12 +2557,12 @@ module Shumway {
       if (source !== target) {
         release || Debug.assert(source.buffer !== target.buffer, "Can't handle overlapping views.");
       }
-      var length = source.length;
+      let length = source.length;
       if (sourceFormat === targetFormat) {
         if (source === target) {
           return;
         }
-        for (var i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
           target[i] = source[i];
         }
         return;
@@ -2571,19 +2571,19 @@ module Shumway {
       if (sourceFormat === ImageType.PremultipliedAlphaARGB &&
           targetFormat === ImageType.StraightAlphaRGBA) {
         Shumway.ColorUtilities.ensureUnpremultiplyTable();
-        for (var i = 0; i < length; i++) {
-          var pBGRA = source[i];
-          var a = pBGRA & 0xff;
+        for (let i = 0; i < length; i++) {
+          let pBGRA = source[i];
+          let a = pBGRA & 0xff;
           if (a === 0) {
             target[i] = 0;
           } else if (a === 0xff) {
             target[i] = 0xff000000 | ((pBGRA >> 8) & 0x00ffffff);
           } else {
-            var b = (pBGRA >> 24) & 0xff;
-            var g = (pBGRA >> 16) & 0xff;
-            var r = (pBGRA >>  8) & 0xff;
-            var o = a << 8;
-            var T = unpremultiplyTable;
+            let b = (pBGRA >> 24) & 0xff;
+            let g = (pBGRA >> 16) & 0xff;
+            let r = (pBGRA >>  8) & 0xff;
+            let o = a << 8;
+            let T = unpremultiplyTable;
             r = T[o + r];
             g = T[o + g];
             b = T[o + b];
@@ -2592,14 +2592,14 @@ module Shumway {
         }
       } else if (sourceFormat === ImageType.StraightAlphaARGB &&
                  targetFormat === ImageType.StraightAlphaRGBA) {
-        for (var i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
           target[i] = swap32(source[i]);
         }
       } else if (sourceFormat === ImageType.StraightAlphaRGBA &&
                  targetFormat === ImageType.PremultipliedAlphaARGB) {
-        for (var i = 0; i < length; i++) {
-          var uABGR = source[i];
-          var uARGB = (uABGR & 0xFF00FF00)  | // A_G_
+        for (let i = 0; i < length; i++) {
+          let uABGR = source[i];
+          let uARGB = (uABGR & 0xFF00FF00)  | // A_G_
                       (uABGR >> 16) & 0xff  | // A_GB
                       (uABGR & 0xff) << 16;   // ARGR
           target[i] = swap32(premultiplyARGB(uARGB));
@@ -2607,7 +2607,7 @@ module Shumway {
       } else {
         release || Debug.somewhatImplemented("Image Format Conversion: " + ImageType[sourceFormat] + " -> " + ImageType[targetFormat]);
         // Copy the buffer over for now, we should at least get some image output.
-        for (var i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
           target[i] = source[i];
         }
       }
@@ -2638,9 +2638,9 @@ module Shumway {
      */
     public acquire(length: number): ArrayBuffer {
       if (ArrayBufferPool._enabled) {
-        var list = this._list;
-        for (var i = 0; i < list.length; i++) {
-          var buffer = list[i];
+        let list = this._list;
+        for (let i = 0; i < list.length; i++) {
+          let buffer = list[i];
           if (buffer.byteLength >= length) {
             list.splice(i, 1);
             return buffer;
@@ -2655,7 +2655,7 @@ module Shumway {
      */
     public release(buffer: ArrayBuffer) {
       if (ArrayBufferPool._enabled) {
-        var list = this._list;
+        let list = this._list;
         release || Debug.assert(ArrayUtilities.indexOf(list, buffer) < 0);
         if (list.length === this._maxSize) {
           list.shift();
@@ -2671,8 +2671,8 @@ module Shumway {
       if (array.length >= length) {
         return array;
       }
-      var newLength = Math.max(array.length + length, ((array.length * 3) >> 1) + 1);
-      var newArray = new Uint8Array(this.acquire(newLength), 0, newLength);
+      let newLength = Math.max(array.length + length, ((array.length * 3) >> 1) + 1);
+      let newArray = new Uint8Array(this.acquire(newLength), 0, newLength);
       newArray.set(array);
       this.release(array.buffer);
       return newArray;
@@ -2685,8 +2685,8 @@ module Shumway {
       if (array.length >= length) {
         return array;
       }
-      var newLength = Math.max(array.length + length, ((array.length * 3) >> 1) + 1);
-      var newArray = new Float64Array(this.acquire(newLength * Float64Array.BYTES_PER_ELEMENT), 0, newLength);
+      let newLength = Math.max(array.length + length, ((array.length * 3) >> 1) + 1);
+      let newArray = new Float64Array(this.acquire(newLength * Float64Array.BYTES_PER_ELEMENT), 0, newLength);
       newArray.set(array);
       this.release(array.buffer);
       return newArray;
@@ -2717,7 +2717,7 @@ module Shumway {
       StreamCrossdomain = 5
     }
 
-    export var instance: ITelemetryService;
+    export let instance: ITelemetryService;
   }
 
   export interface ITelemetryService {
@@ -2751,7 +2751,7 @@ module Shumway {
   }
 
   export module FileLoadingService {
-    export var instance: IFileLoadingService;
+    export let instance: IFileLoadingService;
   }
 
   export const enum SystemResourceId {
@@ -2766,7 +2766,7 @@ module Shumway {
   }
 
   export module SystemResourcesLoadingService {
-    export var instance: ISystemResourcesLoadingService;
+    export let instance: ISystemResourcesLoadingService;
   }
 
   export function registerCSSFont(id: number, data: Uint8Array, forceFontInit: boolean) {
@@ -2774,10 +2774,10 @@ module Shumway {
       Debug.warning('Cannot register CSS font outside the browser');
       return;
     }
-    var head = document.head;
+    let head = document.head;
     head.insertBefore(document.createElement('style'), head.firstChild);
-    var style = <CSSStyleSheet>document.styleSheets[0];
-    var rule = '@font-face{font-family:swffont' + id + ';src:url(data:font/opentype;base64,' +
+    let style = <CSSStyleSheet>document.styleSheets[0];
+    let rule = '@font-face{font-family:swffont' + id + ';src:url(data:font/opentype;base64,' +
                Shumway.StringUtilities.base64EncodeBytes(data) + ')' + '}';
     style.insertRule(rule, style.cssRules.length);
     // In at least Chrome, the browser only decodes a font once it's used in the page at all.
@@ -2787,11 +2787,11 @@ module Shumway {
     // take hold, the font is available for actual use on canvas.
     // TODO: remove the need for magic by implementing this in terms of the font loading API.
     if (forceFontInit) {
-      var node = document.createElement('div');
+      let node = document.createElement('div');
       node.style.fontFamily = 'swffont' + id;
       node.innerHTML = 'hello';
       document.body.appendChild(node);
-      var dummyHeight = node.clientHeight;
+      let dummyHeight = node.clientHeight;
       document.body.removeChild(node);
     }
   }
@@ -2809,7 +2809,7 @@ module Shumway {
   }
 
   export module ExternalInterfaceService {
-    export var instance: IExternalInterfaceService = {
+    export let instance: IExternalInterfaceService = {
       enabled: false,
       initJS(callback: (functionName: string, args: any[]) => any) {
         // ...
@@ -2864,7 +2864,7 @@ module Shumway {
   }
 
   export module LocalConnectionService {
-    export var instance: ILocalConnectionService;
+    export let instance: ILocalConnectionService;
   }
 
   export interface IClipboardService {
@@ -2872,7 +2872,7 @@ module Shumway {
   }
 
   export module ClipboardService {
-    export var instance: IClipboardService = {
+    export let instance: IClipboardService = {
       setClipboard(data: string) { Debug.notImplemented('setClipboard'); }
     };
   }
@@ -2886,7 +2886,7 @@ module Shumway {
     public register(type, callback) {
       Debug.assert(type);
       Debug.assert(callback);
-      var queue = this._queues[type];
+      let queue = this._queues[type];
       if (queue) {
         if (queue.indexOf(callback) > -1) {
           return;
@@ -2900,11 +2900,11 @@ module Shumway {
     public unregister(type: string, callback) {
       Debug.assert(type);
       Debug.assert(callback);
-      var queue = this._queues[type];
+      let queue = this._queues[type];
       if (!queue) {
         return;
       }
-      var i = queue.indexOf(callback);
+      let i = queue.indexOf(callback);
       if (i !== -1) {
         queue.splice(i, 1);
       }
@@ -2914,26 +2914,26 @@ module Shumway {
     }
 
     public notify(type: string, args) {
-      var queue = this._queues[type];
+      let queue = this._queues[type];
       if (!queue) {
         return;
       }
       queue = queue.slice();
-      var args = Array.prototype.slice.call(arguments, 0);
-      for (var i = 0; i < queue.length; i++) {
-        var callback = queue[i];
+      let args = Array.prototype.slice.call(arguments, 0);
+      for (let i = 0; i < queue.length; i++) {
+        let callback = queue[i];
         callback.apply(null, args);
       }
     }
 
     public notify1(type: string, value) {
-      var queue = this._queues[type];
+      let queue = this._queues[type];
       if (!queue) {
         return;
       }
       queue = queue.slice();
-      for (var i = 0; i < queue.length; i++) {
-        var callback = queue[i];
+      for (let i = 0; i < queue.length; i++) {
+        let callback = queue[i];
         callback(type, value);
       }
     }
@@ -3013,7 +3013,7 @@ module Shumway {
 }
 
 
-declare var exports;
+declare let exports;
 if (typeof exports !== "undefined") {
   exports["Shumway"] = Shumway;
 }
@@ -3040,26 +3040,26 @@ if (typeof exports !== "undefined") {
   }
 
   extendBuiltin(String.prototype, "padRight", function (c, n) {
-    var str = this;
-    var length = removeColors(str).length;
+    let str = this;
+    let length = removeColors(str).length;
     if (!c || length >= n) {
       return str;
     }
-    var max = (n - length) / c.length;
-    for (var i = 0; i < max; i++) {
+    let max = (n - length) / c.length;
+    for (let i = 0; i < max; i++) {
       str += c;
     }
     return str;
   });
 
   extendBuiltin(String.prototype, "padLeft", function (c, n) {
-    var str = this;
-    var length = str.length;
+    let str = this;
+    let length = str.length;
     if (!c || length >= n) {
       return str;
     }
-    var max = (n - length) / c.length;
-    for (var i = 0; i < max; i++) {
+    let max = (n - length) / c.length;
+    for (let i = 0; i < max; i++) {
       str = c + str;
     }
     return str;
@@ -3077,8 +3077,8 @@ if (typeof exports !== "undefined") {
     if (x === y) {
       return 0;
     }
-    var count = 0;
-    for (var i = 0; i < this.length; i++) {
+    let count = 0;
+    for (let i = 0; i < this.length; i++) {
       if (this[i] === x) {
         this[i] = y;
         count ++;

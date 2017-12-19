@@ -32,14 +32,14 @@ module Shumway.ArrayUtilities {
     }
 
     append(data: Uint8Array) {
-      var length = this.pos + this.available;
-      var needLength = length + data.length;
+      let length = this.pos + this.available;
+      let needLength = length + data.length;
       if (needLength > this.buffer.length) {
-        var newLength = this.buffer.length * 2;
+        let newLength = this.buffer.length * 2;
         while (newLength < needLength) {
           newLength *= 2;
         }
-        var newBuffer = new Uint8Array(newLength);
+        let newBuffer = new Uint8Array(newLength);
         newBuffer.set(this.buffer);
         this.buffer = newBuffer;
       }
@@ -130,15 +130,15 @@ module Shumway.ArrayUtilities {
     }
 
     copyMatch(dist: number, len: number): void {
-      var pos = this.pos;
-      var size = this.size;
-      var buffer = this.buf;
-      var getPos = dist <= pos ? pos - dist : size - dist + pos;
-      var left = len;
+      let pos = this.pos;
+      let size = this.size;
+      let buffer = this.buf;
+      let getPos = dist <= pos ? pos - dist : size - dist + pos;
+      let left = len;
       while (left > 0) {
-        var chunk = Math.min(Math.min(left, size - pos), size - getPos);
-        for (var i = 0; i < chunk; i++) {
-          var b = buffer[getPos++];
+        let chunk = Math.min(Math.min(left, size - pos), size - getPos);
+        for (let i = 0; i < chunk; i++) {
+          let b = buffer[getPos++];
           buffer[pos++] = b;
         }
         if (pos === size) {
@@ -165,20 +165,20 @@ module Shumway.ArrayUtilities {
     }
   }
 
-  var kNumBitModelTotalBits = 11;
-  var kNumMoveBits = 5;
+  let kNumBitModelTotalBits = 11;
+  let kNumMoveBits = 5;
 
-  var PROB_INIT_VAL = ((1 << kNumBitModelTotalBits) >> 1);
+  let PROB_INIT_VAL = ((1 << kNumBitModelTotalBits) >> 1);
 
   function createProbsArray(length: number): Uint16Array {
-    var p = new Uint16Array(length);
-    for (var i = 0; i < length; i++) {
+    let p = new Uint16Array(length);
+    for (let i = 0; i < length; i++) {
       p[i] = PROB_INIT_VAL;
     }
     return p;
   }
 
-  var kTopValue = 1 << 24;
+  let kTopValue = 1 << 24;
 
   class RangeDecoder {
     inStream: InputStream;
@@ -199,8 +199,8 @@ module Shumway.ArrayUtilities {
       }
 
       this.range = 0xFFFFFFFF | 0;
-      var code = 0;
-      for (var i = 0; i < 4; i++) {
+      let code = 0;
+      for (let i = 0; i < 4; i++) {
         code = (code << 8) | this.inStream.readByte();
       }
 
@@ -215,13 +215,13 @@ module Shumway.ArrayUtilities {
     }
 
     decodeDirectBits(numBits: number): number {
-      var res = 0;
-      var range = this.range;
-      var code = this.code;
+      let res = 0;
+      let range = this.range;
+      let code = this.code;
       do {
         range = (range >>> 1) | 0;
         code = (code - range) | 0;
-        var t = code >> 31; // if high bit set -1, otherwise 0
+        let t = code >> 31; // if high bit set -1, otherwise 0
         code = (code + (range & t)) | 0;
 
         if (code === range) {
@@ -241,11 +241,11 @@ module Shumway.ArrayUtilities {
     }
 
     decodeBit(prob: Uint16Array, index: number): number {
-      var range = this.range;
-      var code = this.code;
-      var v = prob[index];
-      var bound = (range >>> kNumBitModelTotalBits) * v; // keep unsigned
-      var symbol;
+      let range = this.range;
+      let code = this.code;
+      let v = prob[index];
+      let bound = (range >>> kNumBitModelTotalBits) * v; // keep unsigned
+      let symbol;
       if ((code >>> 0) < bound) {
         v = (v + (((1 << kNumBitModelTotalBits) - v) >> kNumMoveBits)) | 0;
         range = bound | 0;
@@ -271,10 +271,10 @@ module Shumway.ArrayUtilities {
 
   function bitTreeReverseDecode(probs: Uint16Array, offset: number,
                                 numBits: number, rc: RangeDecoder): number {
-    var m = 1;
-    var symbol = 0;
-    for (var i = 0; i < numBits; i++) {
-      var bit = rc.decodeBit(probs, m + offset);
+    let m = 1;
+    let symbol = 0;
+    for (let i = 0; i < numBits; i++) {
+      let bit = rc.decodeBit(probs, m + offset);
       m = (m << 1) + bit;
       symbol |= bit << i;
     }
@@ -291,8 +291,8 @@ module Shumway.ArrayUtilities {
     }
 
     decode(rc: RangeDecoder) {
-      var m = 1;
-      for (var i = 0; i < this.numBits; i++) {
+      let m = 1;
+      for (let i = 0; i < this.numBits; i++) {
         m = (m << 1) + rc.decodeBit(this.probs, m);
       }
       return m - (1 << this.numBits);
@@ -304,23 +304,23 @@ module Shumway.ArrayUtilities {
   }
 
   function createBitTreeDecoderArray(numBits: number, length: number): BitTreeDecoder[] {
-    var p: BitTreeDecoder[] = [];
+    let p: BitTreeDecoder[] = [];
     p.length = length;
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       p[i] = new BitTreeDecoder(numBits);
     }
     return p;
   }
 
-  var kNumPosBitsMax = 4;
+  let kNumPosBitsMax = 4;
 
-  var kNumStates = 12;
-  var kNumLenToPosStates = 4;
-  var kNumAlignBits = 4;
-  var kStartPosModelIndex = 4;
-  var kEndPosModelIndex = 14;
-  var kNumFullDistances = 1 << (kEndPosModelIndex >> 1);
-  var kMatchMinLen = 2;
+  let kNumStates = 12;
+  let kNumLenToPosStates = 4;
+  let kNumAlignBits = 4;
+  let kStartPosModelIndex = 4;
+  let kEndPosModelIndex = 14;
+  let kNumFullDistances = 1 << (kEndPosModelIndex >> 1);
+  let kMatchMinLen = 2;
 
   class LenDecoder {
     choice: Uint16Array;
@@ -365,9 +365,9 @@ module Shumway.ArrayUtilities {
     return state < 7 ? 9 : 11;
   }
 
-  var LZMA_DIC_MIN = 1 << 12;
+  let LZMA_DIC_MIN = 1 << 12;
 
-  var MAX_DECODE_BITS_CALLS = 48;
+  let MAX_DECODE_BITS_CALLS = 48;
 
   class LzmaDecoderInternal {
     rangeDec: RangeDecoder;
@@ -401,7 +401,7 @@ module Shumway.ArrayUtilities {
     }
 
     decodeProperties(properties: Uint8Array) {
-      var d = properties[0];
+      let d = properties[0];
       if (d >= (9 * 5 * 5)) {
         throw new Error("Incorrect LZMA properties");
       }
@@ -410,7 +410,7 @@ module Shumway.ArrayUtilities {
       this.pb = (d / 5) | 0;
       this.lp = d % 5;
       this.dictSizeInProperties = 0;
-      for (var i = 0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {
         this.dictSizeInProperties |= properties[i + 1] << (8 * i);
       }
       this.dictSize = this.dictSizeInProperties;
@@ -434,24 +434,24 @@ module Shumway.ArrayUtilities {
     }
 
     decodeLiteral(state: number, rep0: number): number {
-      var outWindow = this.outWindow;
-      var rangeDec = this.rangeDec;
+      let outWindow = this.outWindow;
+      let rangeDec = this.rangeDec;
 
-      var prevByte = 0;
+      let prevByte = 0;
       if (!outWindow.isEmpty()) {
         prevByte = outWindow.getByte(1);
       }
 
-      var symbol = 1;
-      var litState = ((outWindow.totalPos & ((1 << this.lp) - 1)) << this.lc) + (prevByte >> (8 - this.lc));
-      var probsIndex = 0x300 * litState;
+      let symbol = 1;
+      let litState = ((outWindow.totalPos & ((1 << this.lp) - 1)) << this.lc) + (prevByte >> (8 - this.lc));
+      let probsIndex = 0x300 * litState;
 
       if (state >= 7) {
-        var matchByte = outWindow.getByte(rep0 + 1);
+        let matchByte = outWindow.getByte(rep0 + 1);
         do {
-          var matchBit = (matchByte >> 7) & 1;
+          let matchBit = (matchByte >> 7) & 1;
           matchByte <<= 1;
-          var bit = rangeDec.decodeBit(this.litProbs, probsIndex + (((1 + matchBit) << 8) + symbol));
+          let bit = rangeDec.decodeBit(this.litProbs, probsIndex + (((1 + matchBit) << 8) + symbol));
           symbol = (symbol << 1) | bit;
           if (matchBit !== bit) {
             break;
@@ -466,17 +466,17 @@ module Shumway.ArrayUtilities {
     }
 
     decodeDistance(len: number) {
-      var lenState = len;
+      let lenState = len;
       if (lenState > kNumLenToPosStates - 1) {
         lenState = kNumLenToPosStates - 1;
       }
-      var rangeDec = this.rangeDec;
-      var posSlot = this.posSlotDecoder[lenState].decode(rangeDec);
+      let rangeDec = this.rangeDec;
+      let posSlot = this.posSlotDecoder[lenState].decode(rangeDec);
       if (posSlot < 4) {
         return posSlot;
       }
-      var numDirectBits = (posSlot >> 1) - 1;
-      var dist = (2 | (posSlot & 1)) << numDirectBits;
+      let numDirectBits = (posSlot >> 1) - 1;
+      let dist = (2 | (posSlot & 1)) << numDirectBits;
       if (posSlot < kEndPosModelIndex) {
         dist =
           (dist + bitTreeReverseDecode(this.posDecoders, dist - posSlot, numDirectBits, rangeDec)) | 0;
@@ -521,27 +521,27 @@ module Shumway.ArrayUtilities {
     }
 
     decode(notFinal: boolean): number {
-      var rangeDec = this.rangeDec;
-      var outWindow = this.outWindow;
-      var pb = this.pb;
-      var dictSize = this.dictSize;
-      var markerIsMandatory = this.markerIsMandatory;
-      var leftToUnpack = this.leftToUnpack;
+      let rangeDec = this.rangeDec;
+      let outWindow = this.outWindow;
+      let pb = this.pb;
+      let dictSize = this.dictSize;
+      let markerIsMandatory = this.markerIsMandatory;
+      let leftToUnpack = this.leftToUnpack;
 
-      var isMatch = this.isMatch;
-      var isRep = this.isRep;
-      var isRepG0 = this.isRepG0;
-      var isRepG1 = this.isRepG1;
-      var isRepG2 = this.isRepG2;
-      var isRep0Long = this.isRep0Long;
-      var lenDecoder = this.lenDecoder;
-      var repLenDecoder = this.repLenDecoder;
+      let isMatch = this.isMatch;
+      let isRep = this.isRep;
+      let isRepG0 = this.isRepG0;
+      let isRepG1 = this.isRepG1;
+      let isRepG2 = this.isRepG2;
+      let isRep0Long = this.isRep0Long;
+      let lenDecoder = this.lenDecoder;
+      let repLenDecoder = this.repLenDecoder;
 
-      var rep0 = this.reps[0];
-      var rep1 = this.reps[1];
-      var rep2 = this.reps[2];
-      var rep3 = this.reps[3];
-      var state = this.state;
+      let rep0 = this.reps[0];
+      let rep1 = this.reps[1];
+      let rep2 = this.reps[2];
+      let rep3 = this.reps[3];
+      let state = this.state;
 
       while (true) {
         // Based on worse case scenario one byte consumed per decodeBit calls,
@@ -559,7 +559,7 @@ module Shumway.ArrayUtilities {
           }
         }
 
-        var posState = outWindow.totalPos & ((1 << pb) - 1);
+        let posState = outWindow.totalPos & ((1 << pb) - 1);
 
         if (rangeDec.decodeBit(isMatch, (state << kNumPosBitsMax) + posState) === 0) {
           if (leftToUnpack === 0) {
@@ -571,7 +571,7 @@ module Shumway.ArrayUtilities {
           continue;
         }
 
-        var len;
+        let len;
         if (rangeDec.decodeBit(isRep, state) !== 0) {
           if (leftToUnpack === 0) {
             return LZMA_RES_ERROR;
@@ -587,7 +587,7 @@ module Shumway.ArrayUtilities {
               continue;
             }
           } else {
-            var dist;
+            let dist;
             if (rangeDec.decodeBit(isRepG1, state) === 0) {
               dist = rep1;
             } else {
@@ -626,7 +626,7 @@ module Shumway.ArrayUtilities {
           }
         }
         len += kMatchMinLen;
-        var isError = false;
+        let isError = false;
         if (leftToUnpack !== undefined && leftToUnpack < len) {
           len = leftToUnpack;
           isError = true;
@@ -652,14 +652,14 @@ module Shumway.ArrayUtilities {
     }
   }
 
-  var LZMA_RES_ERROR = 0;
-  var LZMA_RES_FINISHED_WITH_MARKER = 1;
-  var LZMA_RES_FINISHED_WITHOUT_MARKER = 2;
-  var LZMA_RES_NOT_COMPLETE = 3;
+  let LZMA_RES_ERROR = 0;
+  let LZMA_RES_FINISHED_WITH_MARKER = 1;
+  let LZMA_RES_FINISHED_WITHOUT_MARKER = 2;
+  let LZMA_RES_NOT_COMPLETE = 3;
 
-  var SWF_LZMA_HEADER_LENGTH = 17;
-  var STANDARD_LZMA_HEADER_LENGTH = 13;
-  var EXTRA_LZMA_BYTES_NEEDED = 5;
+  let SWF_LZMA_HEADER_LENGTH = 17;
+  let STANDARD_LZMA_HEADER_LENGTH = 13;
+  let EXTRA_LZMA_BYTES_NEEDED = 5;
 
   enum LzmaDecoderState {
     WAIT_FOR_LZMA_HEADER = 0,
@@ -686,13 +686,13 @@ module Shumway.ArrayUtilities {
 
     public push(data: Uint8Array) {
       if (this._state < LzmaDecoderState.PROCESS_DATA) {
-        var buffered = this.buffer ? this.buffer.length : 0;
-        var headerBytesExpected =
+        let buffered = this.buffer ? this.buffer.length : 0;
+        let headerBytesExpected =
           (this._state === LzmaDecoderState.WAIT_FOR_SWF_HEADER ?
            SWF_LZMA_HEADER_LENGTH : STANDARD_LZMA_HEADER_LENGTH) +
           EXTRA_LZMA_BYTES_NEEDED;
         if (buffered + data.length < headerBytesExpected) {
-          var newBuffer = new Uint8Array(buffered + data.length);
+          let newBuffer = new Uint8Array(buffered + data.length);
           if (buffered > 0) {
             newBuffer.set(this.buffer);
           }
@@ -701,7 +701,7 @@ module Shumway.ArrayUtilities {
           return;
         }
 
-        var header = new Uint8Array(headerBytesExpected);
+        let header = new Uint8Array(headerBytesExpected);
         if (buffered > 0) {
           header.set(this.buffer);
         }
@@ -723,11 +723,11 @@ module Shumway.ArrayUtilities {
             (header[6] << 16) | (header[7] << 24)) >>> 0) - 8;
         } else {
           this._decoder.decodeProperties(header.subarray(0, 5));
-          var unpackSize = 0;
-          var unpackSizeDefined = false;
-          for (var i = 0; i < 8; i++)
+          let unpackSize = 0;
+          let unpackSizeDefined = false;
+          for (let i = 0; i < 8; i++)
           {
-            var b = header[5 + i];
+            let b = header[5 + i];
             if (b !== 0xFF) {
               unpackSizeDefined = true;
             }
@@ -746,7 +746,7 @@ module Shumway.ArrayUtilities {
 
       try {
         this._inStream.append(data);
-        var res = this._decoder.decode(true);
+        let res = this._decoder.decode(true);
         this._inStream.compact();
 
         if (res !== LZMA_RES_NOT_COMPLETE) {
@@ -765,7 +765,7 @@ module Shumway.ArrayUtilities {
       }
       this._state = LzmaDecoderState.CLOSED;
       try {
-        var res = this._decoder.decode(false);
+        let res = this._decoder.decode(false);
         this._checkError(res);
       } catch (e) {
         this._decoder.flushOutput();
@@ -783,7 +783,7 @@ module Shumway.ArrayUtilities {
     }
 
     private _checkError(res) {
-      var error;
+      let error;
       if (res === LZMA_RES_ERROR) {
         error = "LZMA decoding error";
       } else if (res === LZMA_RES_NOT_COMPLETE) {

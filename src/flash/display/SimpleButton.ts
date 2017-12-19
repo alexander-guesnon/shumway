@@ -30,7 +30,7 @@ module Shumway.AVMX.AS.flash.display {
     applySymbol() {
       release || assert(this._symbol);
       this._initializeFields();
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       if (symbol.upState) {
         this._upState = this.createAnimatedDisplayObject(symbol.upState.symbol,
                                                          symbol.upState.placeObjectTag, true);
@@ -156,7 +156,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     set upState(value: flash.display.DisplayObject) {
-      var old = this._upState;
+      let old = this._upState;
       if (value._parent) {
         value._parent.removeChild(value);
       }
@@ -171,7 +171,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     set overState(value: flash.display.DisplayObject) {
-      var old = this._overState;
+      let old = this._overState;
       if (value._parent) {
         value._parent.removeChild(value);
       }
@@ -186,7 +186,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     set downState(value: flash.display.DisplayObject) {
-      var old = this._downState;
+      let old = this._downState;
       if (value._parent) {
         value._parent.removeChild(value);
       }
@@ -220,13 +220,13 @@ module Shumway.AVMX.AS.flash.display {
      */
     _containsPoint(globalX: number, globalY: number, localX: number, localY: number,
                    testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
-      var target = testingType === HitTestingType.Mouse ? this._hitTestState : this._currentState;
+      let target = testingType === HitTestingType.Mouse ? this._hitTestState : this._currentState;
       if (!target) {
         return HitTestingResult.None;
       }
       // Hit testing relies on being able to get combined transforms and all that, so, a parent.
       target._parent = <any>this;
-      var result = target._containsGlobalPoint(globalX, globalY, testingType, objects);
+      let result = target._containsGlobalPoint(globalX, globalY, testingType, objects);
       target._parent = null;
       // For mouse target finding, SimpleButtons always return themselves as the hit.
       if (result !== HitTestingResult.None && testingType === HitTestingType.Mouse &&
@@ -261,7 +261,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     _updateButton(): void {
-      var state;
+      let state;
       if (this._mouseOver) {
         state = this._mouseDown ? this._downState : this._overState;
       } else {
@@ -306,15 +306,15 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: any, loaderInfo: flash.display.LoaderInfo): ButtonSymbol {
-      var symbol = new ButtonSymbol(data, loaderInfo);
+      let symbol = new ButtonSymbol(data, loaderInfo);
       if (loaderInfo.actionScriptVersion === ActionScriptVersion.ACTIONSCRIPT2) {
         symbol.isAVM1Object = true;
       }
-      var states = data.states;
-      var character: Shumway.Timeline.DisplaySymbol = null;
-      var placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag;
-      for (var stateName in states) {
-        var controlTags = states[stateName];
+      let states = data.states;
+      let character: Shumway.Timeline.DisplaySymbol = null;
+      let placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag;
+      for (let stateName in states) {
+        let controlTags = states[stateName];
         if (controlTags.length === 1) {
           placeObjectTag = controlTags[0];
           character = <Shumway.Timeline.DisplaySymbol>loaderInfo.getSymbolById(placeObjectTag.symbolId);

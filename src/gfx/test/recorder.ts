@@ -78,7 +78,7 @@ module Shumway.GFX.Test {
           if (Array.isArray(item)) {
             buffer.writeByte(MovieRecordObjectType.Array);
             buffer.writeInt(item.length);
-            for (var i = 0; i < item.length; i++) {
+            for (let i = 0; i < item.length; i++) {
               serialize(item[i]);
             }
           } else if (isInstanceOfTypedArray(item, 'Uint8Array')) {
@@ -102,7 +102,7 @@ module Shumway.GFX.Test {
               throw new Error('Some unsupported TypedArray is used')
             }
             buffer.writeByte(MovieRecordObjectType.Object);
-            for (var key in item) {
+            for (let key in item) {
               buffer.writeUTF(key);
               serialize(item[key]);
             }
@@ -112,7 +112,7 @@ module Shumway.GFX.Test {
       }
     }
 
-    var buffer = new DataBuffer();
+    let buffer = new DataBuffer();
     serialize(obj);
     return buffer.getBytes();
   }
@@ -150,7 +150,7 @@ module Shumway.GFX.Test {
     }
 
     public dump() {
-      var parser = new MovieRecordParser(this._recording.getBytes());
+      let parser = new MovieRecordParser(this._recording.getBytes());
       parser.dump();
     }
 
@@ -182,12 +182,12 @@ module Shumway.GFX.Test {
     }
 
     public recordPlayerCommand(async: boolean, updates: Uint8Array, assets: any[]) {
-      var buffer = new DataBuffer();
+      let buffer = new DataBuffer();
       writeUint8Array(buffer, updates);
 
       buffer.writeInt(assets.length);
       assets.forEach(function (a) {
-        var data = serializeObj(a);
+        let data = serializeObj(a);
         writeUint8Array(buffer, data);
       });
       this._createRecord(async ? MovieRecordType.PlayerCommandAsync : MovieRecordType.PlayerCommand, buffer);
@@ -198,7 +198,7 @@ module Shumway.GFX.Test {
     }
 
     public recordFont(syncId: number, data: Uint8Array) {
-      var buffer = new DataBuffer();
+      let buffer = new DataBuffer();
       buffer.writeInt(syncId);
       writeUint8Array(buffer, serializeObj(data));
       this._createRecord(MovieRecordType.Font, buffer);
@@ -206,7 +206,7 @@ module Shumway.GFX.Test {
 
     public recordImage(syncId: number, symbolId: number, imageType: ImageType,
                        data: Uint8Array, alphaData: Uint8Array) {
-      var buffer = new DataBuffer();
+      let buffer = new DataBuffer();
       buffer.writeInt(syncId);
       buffer.writeInt(symbolId);
       buffer.writeInt(imageType);
@@ -216,7 +216,7 @@ module Shumway.GFX.Test {
     }
 
     public recordFSCommand(command: string, args: string) {
-      var buffer = new DataBuffer();
+      let buffer = new DataBuffer();
       buffer.writeUTF(command);
       buffer.writeUTF(args || '');
       this._createRecord(MovieRecordType.FSCommand, buffer);
@@ -224,21 +224,21 @@ module Shumway.GFX.Test {
   }
 
   function readUint8Array(buffer: DataBuffer): Uint8Array {
-    var data = new DataBuffer();
-    var length = buffer.readInt();
+    let data = new DataBuffer();
+    let length = buffer.readInt();
     buffer.readBytes(data, 0, length);
     return data.getBytes();
   }
 
   function deserializeObj(source: DataBuffer) {
-    var buffer = new DataBuffer();
-    var length = source.readInt();
+    let buffer = new DataBuffer();
+    let length = source.readInt();
     source.readBytes(buffer, 0, length);
     return deserializeObjImpl(buffer);
   }
 
   function deserializeObjImpl(buffer: DataBuffer) {
-    var type: MovieRecordObjectType = buffer.readByte();
+    let type: MovieRecordObjectType = buffer.readByte();
     switch(type) {
       case MovieRecordObjectType.Undefined:
         return undefined;
@@ -253,15 +253,15 @@ module Shumway.GFX.Test {
       case MovieRecordObjectType.String:
         return buffer.readUTF();
       case MovieRecordObjectType.Array:
-        var arr = [];
-        var length = buffer.readInt();
-        for (var i = 0; i < length; i++) {
+        let arr = [];
+        let length = buffer.readInt();
+        for (let i = 0; i < length; i++) {
           arr[i] = deserializeObjImpl(buffer);
         }
         return arr;
       case MovieRecordObjectType.Object:
-        var obj = {};
-        var key;
+        let obj = {};
+        let key;
         while ((key = buffer.readUTF())) {
           obj[key] = deserializeObjImpl(buffer);
         }
@@ -272,7 +272,7 @@ module Shumway.GFX.Test {
         return readUint8Array(buffer);
       case MovieRecordObjectType.PlainObjectDataBufferBE:
       case MovieRecordObjectType.PlainObjectDataBufferLE:
-        var data = readUint8Array(buffer);
+        let data = readUint8Array(buffer);
         return new PlainObjectDataBuffer(data.buffer, data.length,
                                          type === MovieRecordObjectType.PlainObjectDataBufferLE);
       case MovieRecordObjectType.Int32Array:
@@ -300,10 +300,10 @@ module Shumway.GFX.Test {
       if (this._buffer.position >= this._buffer.length) {
         return MovieRecordType.None;
       }
-      var timestamp: number = this._buffer.readInt();
-      var type: MovieRecordType = this._buffer.readInt();
-      var length: number = this._buffer.readInt();
-      var data: DataBuffer = null;
+      let timestamp: number = this._buffer.readInt();
+      let type: MovieRecordType = this._buffer.readInt();
+      let length: number = this._buffer.readInt();
+      let data: DataBuffer = null;
 
       if (length > 0) {
         data = new DataBuffer();
@@ -318,38 +318,38 @@ module Shumway.GFX.Test {
     }
 
     public parsePlayerCommand(): any {
-      var updates = readUint8Array(this.currentData);
-      var assetsLength = this.currentData.readInt();
-      var assets = [];
-      for (var i = 0; i < assetsLength; i++) {
+      let updates = readUint8Array(this.currentData);
+      let assetsLength = this.currentData.readInt();
+      let assets = [];
+      for (let i = 0; i < assetsLength; i++) {
         assets.push(deserializeObj(this.currentData));
       }
       return { updates: updates, assets: assets };
     }
 
     public parseFSCommand(): any {
-      var command = this.currentData.readUTF();
-      var args = this.currentData.readUTF();
+      let command = this.currentData.readUTF();
+      let args = this.currentData.readUTF();
       return { command: command, args: args };
     }
 
     public parseFont(): any {
-      var syncId = this.currentData.readInt();
-      var data = deserializeObj(this.currentData);
+      let syncId = this.currentData.readInt();
+      let data = deserializeObj(this.currentData);
       return {syncId: syncId, data: data};
     }
 
     public parseImage(): any {
-      var syncId = this.currentData.readInt();
-      var symbolId = this.currentData.readInt();
-      var imageType = this.currentData.readInt();
-      var data = deserializeObj(this.currentData);
-      var alphaData = deserializeObj(this.currentData);
+      let syncId = this.currentData.readInt();
+      let symbolId = this.currentData.readInt();
+      let imageType = this.currentData.readInt();
+      let data = deserializeObj(this.currentData);
+      let alphaData = deserializeObj(this.currentData);
       return {syncId: syncId, symbolId: symbolId, imageType: imageType, data: data, alphaData: alphaData};
     }
 
     public dump() {
-      var type: MovieRecordType;
+      let type: MovieRecordType;
       while ((type = this.readNextRecord())) {
         console.log('record ' + type + ' @' + this.currentTimestamp);
         switch (type) {

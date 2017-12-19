@@ -19,7 +19,7 @@
 module Shumway.AVM1.Lib {
   export class AVM1Stage extends AVM1Object {
     public static createAVM1Class(context: AVM1Context): AVM1Object {
-      var wrapped = new AVM1Stage(context);
+      let wrapped = new AVM1Stage(context);
       wrapAVM1NativeMembers(context, wrapped, AVM1Stage.prototype,
         ['align#', 'displayState#', 'fullScreenSourceRect#', 'height#',
           'scaleMode#', 'showMenu#', 'width#'],

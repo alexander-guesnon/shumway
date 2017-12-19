@@ -97,7 +97,7 @@ module Shumway.AVMX.AS {
       public static instanceNatives: any [] = [DataBuffer.prototype];
 
       static classInitializer() {
-        var proto: any = DataBuffer.prototype;
+        let proto: any = DataBuffer.prototype;
         ObjectUtilities.defineNonEnumerableProperty(proto, '$BgtoJSON', proto.toJSON);
       }
 
@@ -111,8 +111,8 @@ module Shumway.AVMX.AS {
         if (this._symbol) {
           source = this._symbol;
         }
-        var buffer: ArrayBuffer;
-        var length = 0;
+        let buffer: ArrayBuffer;
+        let length = 0;
         if (source) {
           if (source instanceof ArrayBuffer) {
             buffer = source.slice();
@@ -122,7 +122,7 @@ module Shumway.AVMX.AS {
             if (source.buffer instanceof ArrayBuffer) {
               buffer = new Uint8Array(source.buffer).buffer;
             } else if (source.buffer instanceof Uint8Array) {
-              var begin = source.buffer.byteOffset;
+              let begin = source.buffer.byteOffset;
               buffer = source.buffer.buffer.slice(begin, begin + source.buffer.length);
             } else {
               release || assert(source.buffer instanceof ArrayBuffer);
@@ -258,7 +258,7 @@ module Shumway.AVMX.AS {
       }
 
       axGetProperty(mn: Multiname): any {
-        var name = mn.name;
+        let name = mn.name;
         if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
           release || assert(mn.isRuntimeName());
           return (<any>this).getValue(+name);
@@ -268,7 +268,7 @@ module Shumway.AVMX.AS {
 
       axSetProperty(mn: Multiname, value: any, bc: Bytecode): void {
         release || checkValue(value);
-        var name = mn.name;
+        let name = mn.name;
         if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
           release || assert(mn.isRuntimeName());
           (<any>this).setValue(+name, value);

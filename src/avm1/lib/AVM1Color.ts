@@ -36,7 +36,7 @@ module Shumway.AVM1.Lib {
     }
 
     public getRGB(): number {
-      var transform = AVM1Color.prototype.getTransform.call(this);
+      let transform = AVM1Color.prototype.getTransform.call(this);
       return transform.alGet('rgb');
     }
 
@@ -46,7 +46,7 @@ module Shumway.AVM1.Lib {
     }
 
     public setRGB(offset): void {
-      var transform = AVM1Color.prototype.getTransform.call(this);
+      let transform = AVM1Color.prototype.getTransform.call(this);
       transform.alPut('rgb', offset);
       AVM1Color.prototype.setTransform.call(this, transform);
     }

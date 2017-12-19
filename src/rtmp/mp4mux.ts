@@ -16,18 +16,18 @@
 
 module RtmpJs.MP4 {
   function hex(s: string): Uint8Array {
-    var len = s.length >> 1;
-    var arr = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
+    let len = s.length >> 1;
+    let arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
       arr[i] = parseInt(s.substr(i * 2, 2), 16);
     }
     return arr;
   }
 
-  var SOUNDRATES = [5500, 11025, 22050, 44100];
-  var SOUNDFORMATS = ['PCM', 'ADPCM', 'MP3', 'PCM le', 'Nellymouser16', 'Nellymouser8', 'Nellymouser', 'G.711 A-law', 'G.711 mu-law', null, 'AAC', 'Speex', 'MP3 8khz'];
-  var MP3_SOUND_CODEC_ID = 2;
-  var AAC_SOUND_CODEC_ID = 10;
+  let SOUNDRATES = [5500, 11025, 22050, 44100];
+  let SOUNDFORMATS = ['PCM', 'ADPCM', 'MP3', 'PCM le', 'Nellymouser16', 'Nellymouser8', 'Nellymouser', 'G.711 A-law', 'G.711 mu-law', null, 'AAC', 'Speex', 'MP3 8khz'];
+  let MP3_SOUND_CODEC_ID = 2;
+  let AAC_SOUND_CODEC_ID = 10;
 
   enum AudioPacketType {
     HEADER = 0,
@@ -46,24 +46,24 @@ module RtmpJs.MP4 {
   }
 
   function parseAudiodata(data: Uint8Array): AudioPacket {
-    var i = 0;
-    var packetType = AudioPacketType.RAW;
-    var flags = data[i];
-    var codecId = flags >> 4;
-    var soundRateId = (flags >> 2) & 3;
-    var sampleSize =  flags & 2 ? 16 : 8;
-    var channels = flags & 1 ? 2 : 1;
-    var samples: number;
+    let i = 0;
+    let packetType = AudioPacketType.RAW;
+    let flags = data[i];
+    let codecId = flags >> 4;
+    let soundRateId = (flags >> 2) & 3;
+    let sampleSize =  flags & 2 ? 16 : 8;
+    let channels = flags & 1 ? 2 : 1;
+    let samples: number;
     i++;
     switch (codecId) {
       case AAC_SOUND_CODEC_ID:
-        var type = data[i++];
+        let type = data[i++];
         packetType = <AudioPacketType>type;
         samples = 1024; // AAC implementations typically represent 1024 PCM audio samples
         break;
       case MP3_SOUND_CODEC_ID:
-        var version = (data[i + 1] >> 3) & 3; // 3 - MPEG 1
-        var layer = (data[i + 1] >> 1) & 3; // 3 - Layer I, 2 - II, 1 - III
+        let version = (data[i + 1] >> 3) & 3; // 3 - MPEG 1
+        let layer = (data[i + 1] >> 1) & 3; // 3 - Layer I, 2 - II, 1 - III
         samples = layer === 1 ? (version === 3 ? 1152 : 576) :
           (layer === 3 ? 384 : 1152);
         break;
@@ -80,9 +80,9 @@ module RtmpJs.MP4 {
     };
   }
 
-  var VIDEOCODECS = [null, 'JPEG', 'Sorenson', 'Screen', 'VP6', 'VP6 alpha', 'Screen2', 'AVC'];
-  var VP6_VIDEO_CODEC_ID = 4;
-  var AVC_VIDEO_CODEC_ID = 7;
+  let VIDEOCODECS = [null, 'JPEG', 'Sorenson', 'Screen', 'VP6', 'VP6 alpha', 'Screen2', 'AVC'];
+  let VP6_VIDEO_CODEC_ID = 4;
+  let AVC_VIDEO_CODEC_ID = 7;
 
   enum VideoFrameType {
     KEY = 1,
@@ -110,18 +110,18 @@ module RtmpJs.MP4 {
   }
 
   function parseVideodata(data: Uint8Array): VideoPacket {
-    var i = 0;
-    var frameType = data[i] >> 4;
-    var codecId = data[i] & 15;
+    let i = 0;
+    let frameType = data[i] >> 4;
+    let codecId = data[i] & 15;
     i++;
-    var result: any = {
+    let result: any = {
       frameType: <VideoFrameType>frameType,
       codecId: codecId,
       codecDescription: VIDEOCODECS[codecId]
     };
     switch (codecId) {
       case AVC_VIDEO_CODEC_ID:
-        var type = data[i++];
+        let type = data[i++];
         result.packetType = <VideoPacketType>type;
         result.compositionTime = ((data[i] << 24) | (data[i + 1] << 16) | (data[i + 2] << 8)) >> 8;
         i += 3;
@@ -138,10 +138,10 @@ module RtmpJs.MP4 {
     return result;
   }
 
-  var AUDIO_PACKET = 8;
-  var VIDEO_PACKET = 9;
-  var MAX_PACKETS_IN_CHUNK = 200;
-  var SPLIT_AT_KEYFRAMES = false;
+  let AUDIO_PACKET = 8;
+  let VIDEO_PACKET = 9;
+  let MAX_PACKETS_IN_CHUNK = 200;
+  let SPLIT_AT_KEYFRAMES = false;
 
   interface CachedPacket {
     packet: any;
@@ -209,7 +209,7 @@ module RtmpJs.MP4 {
       this.metadata = metadata;
 
       this.trackStates = this.metadata.tracks.map((t, index) => {
-        var state = {
+        let state = {
           trackId: index + 1,
           trackInfo: t,
           cachedDuration: 0,
@@ -239,8 +239,8 @@ module RtmpJs.MP4 {
 
       switch (type) {
         case AUDIO_PACKET: // audio
-          var audioTrack = this.audioTrackState;
-          var audioPacket = parseAudiodata(data);
+          let audioTrack = this.audioTrackState;
+          let audioPacket = parseAudiodata(data);
           if (!audioTrack || audioTrack.trackInfo.codecId !== audioPacket.codecId) {
             throw new Error('Unexpected audio packet codec: ' + audioPacket.codecDescription);
           }
@@ -259,8 +259,8 @@ module RtmpJs.MP4 {
           this.cachedPackets.push({packet: audioPacket, timestamp: timestamp, trackId: audioTrack.trackId});
           break;
         case VIDEO_PACKET:
-          var videoTrack = this.videoTrackState;
-          var videoPacket = parseVideodata(data);
+          let videoTrack = this.videoTrackState;
+          let videoPacket = parseVideodata(data);
           if (!videoTrack || videoTrack.trackInfo.codecId !== videoPacket.codecId) {
             throw new Error('Unexpected video packet codec: ' + videoPacket.codecDescription);
           }
@@ -307,7 +307,7 @@ module RtmpJs.MP4 {
     }
 
     private _tryGenerateHeader() {
-      var allInitializationDataExists = this.trackStates.every((ts) => {
+      let allInitializationDataExists = this.trackStates.every((ts) => {
         switch (ts.trackInfo.codecId) {
           case AAC_SOUND_CODEC_ID:
           case AVC_VIDEO_CODEC_ID:
@@ -320,19 +320,19 @@ module RtmpJs.MP4 {
         return; // not enough data, waiting more
       }
 
-      var brands: string[] = ['isom'];
-      var audioDataReferenceIndex = 1, videoDataReferenceIndex = 1;
-      var traks: Iso.TrackBox[] = [];
-      for (var i = 0; i < this.trackStates.length; i++) {
-        var trackState = this.trackStates[i];
-        var trackInfo = trackState.trackInfo;
-        var sampleEntry: Iso.SampleEntry;
+      let brands: string[] = ['isom'];
+      let audioDataReferenceIndex = 1, videoDataReferenceIndex = 1;
+      let traks: Iso.TrackBox[] = [];
+      for (let i = 0; i < this.trackStates.length; i++) {
+        let trackState = this.trackStates[i];
+        let trackInfo = trackState.trackInfo;
+        let sampleEntry: Iso.SampleEntry;
         switch (trackInfo.codecId) {
           case AAC_SOUND_CODEC_ID:
-            var audioSpecificConfig = trackState.initializationData[0];
+            let audioSpecificConfig = trackState.initializationData[0];
             sampleEntry = new Iso.AudioSampleEntry('mp4a', audioDataReferenceIndex, trackInfo.channels, trackInfo.samplesize, trackInfo.samplerate);
 
-            var esdsData = new Uint8Array(41 + audioSpecificConfig.length);
+            let esdsData = new Uint8Array(41 + audioSpecificConfig.length);
             esdsData.set(hex('0000000003808080'), 0);
             esdsData[8] = 32 + audioSpecificConfig.length;
             esdsData.set(hex('00020004808080'), 9);
@@ -344,7 +344,7 @@ module RtmpJs.MP4 {
             (<Iso.AudioSampleEntry>sampleEntry).otherBoxes = [
               new Iso.RawTag('esds', esdsData)
             ];
-            var objectType = (audioSpecificConfig[0] >> 3); // TODO 31
+            let objectType = (audioSpecificConfig[0] >> 3); // TODO 31
             // mp4a.40.objectType
             trackState.mimeTypeCodec = 'mp4a.40.' + objectType;
             break;
@@ -353,12 +353,12 @@ module RtmpJs.MP4 {
             trackState.mimeTypeCodec = 'mp3';
             break;
           case AVC_VIDEO_CODEC_ID:
-            var avcC = trackState.initializationData[0];
+            let avcC = trackState.initializationData[0];
             sampleEntry = new Iso.VideoSampleEntry('avc1', videoDataReferenceIndex, trackInfo.width, trackInfo.height);
             (<Iso.VideoSampleEntry>sampleEntry).otherBoxes = [
               new Iso.RawTag('avcC', avcC)
             ];
-            var codecProfile = (avcC[1] << 16) | (avcC[2] << 8) | avcC[3];
+            let codecProfile = (avcC[1] << 16) | (avcC[2] << 8) | avcC[3];
             // avc1.XXYYZZ -- XX - profile + YY - constraints + ZZ - level
             trackState.mimeTypeCodec = 'avc1.' + (0x1000000 | codecProfile).toString(16).substr(1);
             brands.push('iso2', 'avc1', 'mp41');
@@ -375,8 +375,8 @@ module RtmpJs.MP4 {
             throw new Error('not supported track type');
         }
 
-        var trak;
-        var trakFlags = Iso.TrackHeaderFlags.TRACK_ENABLED | Iso.TrackHeaderFlags.TRACK_IN_MOVIE;
+        let trak;
+        let trakFlags = Iso.TrackHeaderFlags.TRACK_ENABLED | Iso.TrackHeaderFlags.TRACK_IN_MOVIE;
         if (trackState === this.audioTrackState) {
           trak = new Iso.TrackBox(
             new Iso.TrackHeaderBox(trakFlags, trackState.trackId, -1, 0 /*width*/, 0 /*height*/, 1.0, i),
@@ -421,24 +421,24 @@ module RtmpJs.MP4 {
         traks.push(trak);
       }
 
-      var mvex = new Iso.MovieExtendsBox(null, [
+      let mvex = new Iso.MovieExtendsBox(null, [
         new Iso.TrackExtendsBox(1, 1, 0, 0, 0),
         new Iso.TrackExtendsBox(2, 1, 0, 0, 0)
       ], null);
-      var udat = new Iso.BoxContainerBox('udat', [
+      let udat = new Iso.BoxContainerBox('udat', [
         new Iso.MetaBox(
           new Iso.RawTag('hdlr', hex('00000000000000006D6469726170706C000000000000000000')), // notice weird stuff in reserved field
           [new Iso.RawTag('ilst', hex('00000025A9746F6F0000001D6461746100000001000000004C61766635342E36332E313034'))]
         )
       ]);
-      var mvhd = new Iso.MovieHeaderBox(1000, 0 /* unknown duration */, this.trackStates.length + 1);
-      var moov = new Iso.MovieBox(mvhd, traks, mvex, udat);
-      var ftype = new Iso.FileTypeBox('isom', 0x00000200, brands);
+      let mvhd = new Iso.MovieHeaderBox(1000, 0 /* unknown duration */, this.trackStates.length + 1);
+      let moov = new Iso.MovieBox(mvhd, traks, mvex, udat);
+      let ftype = new Iso.FileTypeBox('isom', 0x00000200, brands);
 
-      var ftypeSize = ftype.layout(0);
-      var moovSize = moov.layout(ftypeSize);
+      let ftypeSize = ftype.layout(0);
+      let moovSize = moov.layout(ftypeSize);
 
-      var header = new Uint8Array(ftypeSize + moovSize);
+      let header = new Uint8Array(ftypeSize + moovSize);
       ftype.write(header);
       moov.write(header);
 
@@ -449,11 +449,11 @@ module RtmpJs.MP4 {
     }
 
     _chunk() {
-      var cachedPackets = this.cachedPackets;
+      let cachedPackets = this.cachedPackets;
 
       if (SPLIT_AT_KEYFRAMES) {
-        var j = cachedPackets.length - 1;
-        var videoTrackId = this.videoTrackState.trackId;
+        let j = cachedPackets.length - 1;
+        let videoTrackId = this.videoTrackState.trackId;
         // Finding last video keyframe.
         while (j > 0 &&
                (cachedPackets[j].trackId !== videoTrackId || cachedPackets[j].packet.frameType !== VideoFrameType.KEY)) {
@@ -468,44 +468,44 @@ module RtmpJs.MP4 {
         return; // No data to produce.
       }
 
-      var tdatParts: Uint8Array[] = [];
-      var tdatPosition: number = 0;
-      var trafs: Iso.TrackFragmentBox[] = [];
-      var trafDataStarts: number[] = [];
+      let tdatParts: Uint8Array[] = [];
+      let tdatPosition: number = 0;
+      let trafs: Iso.TrackFragmentBox[] = [];
+      let trafDataStarts: number[] = [];
 
-      for (var i = 0; i < this.trackStates.length; i++) {
-        var trackState = this.trackStates[i];
-        var trackInfo = trackState.trackInfo;
-        var trackId = trackState.trackId;
+      for (let i = 0; i < this.trackStates.length; i++) {
+        let trackState = this.trackStates[i];
+        let trackInfo = trackState.trackInfo;
+        let trackId = trackState.trackId;
 
         // Finding all packets for this track.
-        var trackPackets = cachedPackets.filter((cp) => cp.trackId === trackId);
+        let trackPackets = cachedPackets.filter((cp) => cp.trackId === trackId);
         if (trackPackets.length === 0) {
           continue;
         }
 
-        //var currentTimestamp = (trackPackets[0].timestamp * trackInfo.timescale / 1000) | 0;
-        var tfdt = new Iso.TrackFragmentBaseMediaDecodeTimeBox(trackState.cachedDuration);
-        var tfhd: Iso.TrackFragmentHeaderBox;
-        var trun: Iso.TrackRunBox;
-        var trunSamples: Iso.TrackRunSample[];
+        //let currentTimestamp = (trackPackets[0].timestamp * trackInfo.timescale / 1000) | 0;
+        let tfdt = new Iso.TrackFragmentBaseMediaDecodeTimeBox(trackState.cachedDuration);
+        let tfhd: Iso.TrackFragmentHeaderBox;
+        let trun: Iso.TrackRunBox;
+        let trunSamples: Iso.TrackRunSample[];
 
         trafDataStarts.push(tdatPosition);
         switch (trackInfo.codecId) {
           case AAC_SOUND_CODEC_ID:
           case MP3_SOUND_CODEC_ID:
             trunSamples = [];
-            for (var j = 0; j < trackPackets.length; j++) {
-              var audioPacket: AudioPacket = trackPackets[j].packet;
-              var audioFrameDuration = Math.round(audioPacket.samples * trackInfo.timescale / trackInfo.samplerate);
+            for (let j = 0; j < trackPackets.length; j++) {
+              let audioPacket: AudioPacket = trackPackets[j].packet;
+              let audioFrameDuration = Math.round(audioPacket.samples * trackInfo.timescale / trackInfo.samplerate);
               tdatParts.push(audioPacket.data);
               tdatPosition += audioPacket.data.length;
               trunSamples.push({duration: audioFrameDuration, size: audioPacket.data.length});
               trackState.samplesProcessed += audioPacket.samples;
             }
-            var tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
+            let tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
             tfhd = new Iso.TrackFragmentHeaderBox(tfhdFlags, trackId, 0 /* offset */, 0 /* index */, 0 /* duration */, 0 /* size */, Iso.SampleFlags.SAMPLE_DEPENDS_ON_NO_OTHERS);
-            var trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
+            let trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
                             Iso.TrackRunFlags.SAMPLE_DURATION_PRESENT | Iso.TrackRunFlags.SAMPLE_SIZE_PRESENT;
             trun = new Iso.TrackRunBox(trunFlags, trunSamples, 0 /* data offset */, 0 /* first flags */);
             trackState.cachedDuration = Math.round(trackState.samplesProcessed * trackInfo.timescale / trackInfo.samplerate);
@@ -513,29 +513,29 @@ module RtmpJs.MP4 {
           case AVC_VIDEO_CODEC_ID:
           case VP6_VIDEO_CODEC_ID:
             trunSamples = [];
-            var samplesProcessed = trackState.samplesProcessed;
-            var decodeTime = samplesProcessed * trackInfo.timescale / trackInfo.framerate;
-            var lastTime = Math.round(decodeTime);
-            for (var j = 0; j < trackPackets.length; j++) {
-              var videoPacket: VideoPacket = trackPackets[j].packet;
+            let samplesProcessed = trackState.samplesProcessed;
+            let decodeTime = samplesProcessed * trackInfo.timescale / trackInfo.framerate;
+            let lastTime = Math.round(decodeTime);
+            for (let j = 0; j < trackPackets.length; j++) {
+              let videoPacket: VideoPacket = trackPackets[j].packet;
               samplesProcessed++;
-              var nextTime = Math.round(samplesProcessed * trackInfo.timescale / trackInfo.framerate);
-              var videoFrameDuration = nextTime - lastTime;
+              let nextTime = Math.round(samplesProcessed * trackInfo.timescale / trackInfo.framerate);
+              let videoFrameDuration = nextTime - lastTime;
               lastTime = nextTime;
-              var compositionTime = Math.round(samplesProcessed * trackInfo.timescale / trackInfo.framerate +
+              let compositionTime = Math.round(samplesProcessed * trackInfo.timescale / trackInfo.framerate +
                                                videoPacket.compositionTime * trackInfo.timescale / 1000);
 
               tdatParts.push(videoPacket.data);
               tdatPosition += videoPacket.data.length;
-              var frameFlags = videoPacket.frameType === VideoFrameType.KEY ?
+              let frameFlags = videoPacket.frameType === VideoFrameType.KEY ?
                                Iso.SampleFlags.SAMPLE_DEPENDS_ON_NO_OTHERS :
                                (Iso.SampleFlags.SAMPLE_DEPENDS_ON_OTHER | Iso.SampleFlags.SAMPLE_IS_NOT_SYNC);
               trunSamples.push({duration: videoFrameDuration, size: videoPacket.data.length,
                                 flags: frameFlags, compositionTimeOffset: (compositionTime - nextTime)});
             }
-            var tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
+            let tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
             tfhd = new Iso.TrackFragmentHeaderBox(tfhdFlags, trackId, 0 /* offset */, 0 /* index */, 0 /* duration */, 0 /* size */, Iso.SampleFlags.SAMPLE_DEPENDS_ON_NO_OTHERS);
-            var trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
+            let trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
                             Iso.TrackRunFlags.SAMPLE_DURATION_PRESENT | Iso.TrackRunFlags.SAMPLE_SIZE_PRESENT |
                             Iso.TrackRunFlags.SAMPLE_FLAGS_PRESENT | Iso.TrackRunFlags.SAMPLE_COMPOSITION_TIME_OFFSET;
             trun = new Iso.TrackRunBox(trunFlags, trunSamples, 0 /* data offset */, 0 /* first flag */ );
@@ -546,23 +546,23 @@ module RtmpJs.MP4 {
             throw new Error('Un codec');
         }
 
-        var traf = new Iso.TrackFragmentBox(tfhd, tfdt, trun);
+        let traf = new Iso.TrackFragmentBox(tfhd, tfdt, trun);
         trafs.push(traf);
       }
       this.cachedPackets.splice(0, cachedPackets.length);
 
-      var moofHeader = new Iso.MovieFragmentHeaderBox(++this.chunkIndex);
-      var moof = new Iso.MovieFragmentBox(moofHeader, trafs);
-      var moofSize = moof.layout(0);
-      var mdat = new Iso.MediaDataBox(tdatParts);
-      var mdatSize = mdat.layout(moofSize);
+      let moofHeader = new Iso.MovieFragmentHeaderBox(++this.chunkIndex);
+      let moof = new Iso.MovieFragmentBox(moofHeader, trafs);
+      let moofSize = moof.layout(0);
+      let mdat = new Iso.MediaDataBox(tdatParts);
+      let mdatSize = mdat.layout(moofSize);
 
-      var tdatOffset = moofSize + 8 /* 'mdat' header size */;
-      for (var i = 0; i < trafs.length; i++) {
+      let tdatOffset = moofSize + 8 /* 'mdat' header size */;
+      for (let i = 0; i < trafs.length; i++) {
         trafs[i].run.dataOffset = tdatOffset + trafDataStarts[i];
       }
 
-      var chunk = new Uint8Array(moofSize + mdatSize);
+      let chunk = new Uint8Array(moofSize + mdatSize);
       moof.write(chunk);
       mdat.write(chunk);
 
@@ -572,14 +572,14 @@ module RtmpJs.MP4 {
   }
 
   export function parseFLVMetadata(metadata: any): MP4Metadata {
-    var tracks: MP4Track[] = [];
-    var audioTrackId = -1;
-    var videoTrackId = -1;
+    let tracks: MP4Track[] = [];
+    let audioTrackId = -1;
+    let videoTrackId = -1;
 
-    var duration = +metadata.axGetPublicProperty('duration');
+    let duration = +metadata.axGetPublicProperty('duration');
 
-    var audioCodec, audioCodecId;
-    var audioCodecCode = metadata.axGetPublicProperty('audiocodecid');
+    let audioCodec, audioCodecId;
+    let audioCodecCode = metadata.axGetPublicProperty('audiocodecid');
     switch (audioCodecCode) {
       case MP3_SOUND_CODEC_ID:
       case 'mp3':
@@ -600,8 +600,8 @@ module RtmpJs.MP4 {
         break;
     }
 
-    var videoCodec, videoCodecId;
-    var videoCodecCode = metadata.axGetPublicProperty('videocodecid');
+    let videoCodec, videoCodecId;
+    let videoCodecCode = metadata.axGetPublicProperty('videocodecid');
     switch (videoCodecCode) {
       case VP6_VIDEO_CODEC_ID:
       case 'vp6f':
@@ -622,7 +622,7 @@ module RtmpJs.MP4 {
         break;
     }
 
-    var audioTrack: MP4Track = (audioCodec === null) ? null : {
+    let audioTrack: MP4Track = (audioCodec === null) ? null : {
       codecDescription: audioCodec,
       codecId: audioCodecId,
       language: 'und',
@@ -631,7 +631,7 @@ module RtmpJs.MP4 {
       channels: +metadata.axGetPublicProperty('audiochannels') || 2,
       samplesize: 16
     };
-    var videoTrack: MP4Track = (videoCodec === null) ? null : {
+    let videoTrack: MP4Track = (videoCodec === null) ? null : {
       codecDescription: videoCodec,
       codecId: videoCodecId,
       language: 'und',
@@ -642,12 +642,12 @@ module RtmpJs.MP4 {
       height: +metadata.axGetPublicProperty('height')
     };
 
-    var trackInfos = metadata.axGetPublicProperty('trackinfo');
+    let trackInfos = metadata.axGetPublicProperty('trackinfo');
     if (trackInfos) {
       // Not in the Adobe's references, red5 specific?
-      for (var i = 0; i < trackInfos.length; i++) {
-        var info = trackInfos[i];
-        var sampleDescription = info.axGetPublicProperty('sampledescription')[0];
+      for (let i = 0; i < trackInfos.length; i++) {
+        let info = trackInfos[i];
+        let sampleDescription = info.axGetPublicProperty('sampledescription')[0];
         if (sampleDescription.axGetPublicProperty('sampletype') === audioCodecCode) {
           audioTrack.language = info.axGetPublicProperty('language');
           audioTrack.timescale = +info.axGetPublicProperty('timescale');

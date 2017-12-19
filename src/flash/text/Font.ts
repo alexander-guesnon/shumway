@@ -731,7 +731,7 @@ module Shumway.AVMX.AS.flash.text {
         "Monospace": [0.9115, 0.2604]
       };
 
-      var userAgent = self.navigator.userAgent;
+      let userAgent = self.navigator.userAgent;
       if (userAgent.indexOf("Windows") > -1) {
         this._deviceFontMetrics = this.DEVICE_FONT_METRICS_WIN;
       } else if (/(Macintosh|iPad|iPhone|iPod|Android)/.test(userAgent)) {
@@ -746,8 +746,8 @@ module Shumway.AVMX.AS.flash.text {
         this.DEFAULT_FONT_TYPEWRITER = 'Monospace';
       }
 
-      var metrics = this._deviceFontMetrics;
-      for (var fontName in metrics) {
+      let metrics = this._deviceFontMetrics;
+      for (let fontName in metrics) {
         metrics[fontName.toLowerCase()] = metrics[fontName];
       }
     };
@@ -788,13 +788,13 @@ module Shumway.AVMX.AS.flash.text {
     _symbol: FontSymbol;
     applySymbol() {
       release || Debug.assert(this._symbol);
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       release || Debug.assert(symbol.syncId);
       this._initializeFields();
 
       this._id = symbol.syncId;
       this._fontName = symbol.name;
-      var fontClass = this.sec.flash.text.Font.axClass;
+      let fontClass = this.sec.flash.text.Font.axClass;
       this._fontFamily = fontClass.resolveFontName(symbol.name);
       if (symbol.bold) {
         if (symbol.italic) {
@@ -808,7 +808,7 @@ module Shumway.AVMX.AS.flash.text {
         this._fontStyle = FontStyle.REGULAR;
       }
 
-      var metrics = symbol.metrics;
+      let metrics = symbol.metrics;
       if (metrics) {
         this.ascent = metrics.ascent;
         this.descent = metrics.descent;
@@ -821,7 +821,7 @@ module Shumway.AVMX.AS.flash.text {
 
       // Keeping fontProp.configurable === true, some old movies have fonts with non-unique
       // names.
-      var fontProp = {
+      let fontProp = {
         value: this,
         configurable: true
       };
@@ -845,19 +845,19 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     static getByNameAndStyle(name: string, style: string): Font {
-      var key: string;
-      var font: Font;
+      let key: string;
+      let font: Font;
 
       // The name argument can be a string specifying a list of comma-delimited font names in which
       // case the first available font should be used.
-      var names = name.split(',');
-      for (var i = 0; i < names.length && !font; i++) {
+      let names = name.split(',');
+      for (let i = 0; i < names.length && !font; i++) {
         key = names[i].toLowerCase() + style;
         font = this._fontsByName[key];
       }
 
       if (!font) {
-        var font = new this.sec.flash.text.Font();
+        let font = new this.sec.flash.text.Font();
         font._fontName = names[0];
         font._fontFamily = this.resolveFontName(names[0].toLowerCase());
         font._fontStyle = style;
@@ -865,7 +865,7 @@ module Shumway.AVMX.AS.flash.text {
         this._fontsByName[key] = font;
       }
       if (font._fontType === FontType.DEVICE) {
-        var metrics = this._getFontMetrics(font._fontName, font._fontStyle);
+        let metrics = this._getFontMetrics(font._fontName, font._fontStyle);
         if (!metrics) {
           Shumway.Debug.warning(
             'Font metrics for "' + font._fontName + '" unknown. Fallback to default.');
@@ -919,9 +919,9 @@ module Shumway.AVMX.AS.flash.text {
      */
     static registerFontSymbol(fontMapping: {name: string; style: string; id: number},
                               loaderInfo: flash.display.LoaderInfo): void {
-      var syncId = this.sec.flash.display.DisplayObject.axClass.getNextSyncID();
-      var key = fontMapping.name.toLowerCase() + fontMapping.style;
-      var resolverProp = {
+      let syncId = this.sec.flash.display.DisplayObject.axClass.getNextSyncID();
+      let key = fontMapping.name.toLowerCase() + fontMapping.style;
+      let resolverProp = {
         get: this.resolveFontSymbol.bind(this, loaderInfo, fontMapping.id, syncId, key),
         configurable: true
       };
@@ -935,7 +935,7 @@ module Shumway.AVMX.AS.flash.text {
                              key: string) {
       // Force font resolution and installation in _fontsByName and _fontsBySymbolId.
       release || assert('get' in Object.getOwnPropertyDescriptor(this._fontsBySymbolId, id + ''));
-      var symbol = <FontSymbol>loaderInfo.getSymbolById(id);
+      let symbol = <FontSymbol>loaderInfo.getSymbolById(id);
       symbol.syncId = syncId;
       release || assert('value' in Object.getOwnPropertyDescriptor(this._fontsBySymbolId, id + ''));
       release || assert('value' in Object.getOwnPropertyDescriptor(this._fontsByName, key));
@@ -975,7 +975,7 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     static FromData(data: any, loaderInfo: display.LoaderInfo): FontSymbol {
-      var symbol = new FontSymbol(data, loaderInfo.sec);
+      let symbol = new FontSymbol(data, loaderInfo.sec);
       // Immediately mark glyph-less fonts as ready.
       symbol.ready = !data.metrics;
       symbol.name = data.name;

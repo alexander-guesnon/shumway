@@ -39,22 +39,22 @@ module Shumway.AVMX.AS.flash.filters {
       //  - first maps to highlightColor and highlightAlpha;
       //  - second maps to shadowColor and shadowAlpha;
       release || assert(obj.colors && obj.colors.length === 2, "colors must be Array of length 2");
-      var highlightColor: number = obj.colors[0] >>> 8;
-      var highlightAlpha: number = (obj.colors[0] & 0xff) / 0xff;
-      var shadowColor: number = obj.colors[1] >>> 8;
-      var shadowAlpha: number = (obj.colors[1] & 0xff) / 0xff;
+      let highlightColor: number = obj.colors[0] >>> 8;
+      let highlightAlpha: number = (obj.colors[0] & 0xff) / 0xff;
+      let shadowColor: number = obj.colors[1] >>> 8;
+      let shadowAlpha: number = (obj.colors[1] & 0xff) / 0xff;
       // type is derived from obj.onTop and obj.innerShadow
       // obj.onTop true: type is FULL
       // obj.inner true: type is INNER
       // neither true: type is OUTER
-      var type: string = flash.filters.BitmapFilterType.OUTER;
+      let type: string = flash.filters.BitmapFilterType.OUTER;
       if (!!obj.onTop) {
         type = flash.filters.BitmapFilterType.FULL;
       } else if (!!obj.inner) {
         type = flash.filters.BitmapFilterType.INNER;
       }
       // obj.angle is represented in radians, the api needs degrees
-      var angle: number = obj.angle * 180 / Math.PI;
+      let angle: number = obj.angle * 180 / Math.PI;
       return new this.sec.flash.filters.BevelFilter(
         obj.distance,
         angle,
@@ -96,7 +96,7 @@ module Shumway.AVMX.AS.flash.filters {
       if (this.type !== BitmapFilterType.INNER) {
         BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
         if (this._distance !== 0) {
-          var a: number = this._angle * Math.PI / 180;
+          let a: number = this._angle * Math.PI / 180;
           bounds.x += Math.floor(Math.cos(a) * this._distance);
           bounds.y += Math.floor(Math.sin(a) * this._distance);
           if (bounds.left > 0) { bounds.left = 0; }

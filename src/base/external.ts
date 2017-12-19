@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-var ShumwayEnvironment = {
+let ShumwayEnvironment = {
   DEBUG: 'test',
   DEVELOPMENT: 'dev',
   RELEASE: 'release',
   TEST: 'test'
 };
 
-declare var ShumwayCom: {
+declare let ShumwayCom: {
   environment: string // ShumwayEnvironment;
   
   createSpecialInflate?: () => SpecialInflate;

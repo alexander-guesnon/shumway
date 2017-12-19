@@ -23,13 +23,13 @@ module Shumway.AVM1.Lib {
 
   import flash = Shumway.AVMX.AS.flash; // REDUX remove
 
-  var _escape: (str: string) => string = jsGlobal.escape;
+  let _escape: (str: string) => string = jsGlobal.escape;
 
-  var _internalTimeouts: number[] = [];
+  let _internalTimeouts: number[] = [];
 
   export class AVM1Globals extends AVM1Object {
     public static createGlobalsObject(context: AVM1Context): AVM1Globals {
-      var globals = new AVM1Globals(context);
+      let globals = new AVM1Globals(context);
       wrapAVM1NativeMembers(context, globals, globals,
         ['flash', 'ASSetPropFlags', 'clearInterval', 'clearTimeout',
           'escape', 'unescape', 'setInterval', 'setTimeout', 'showRedrawRegions',
@@ -47,7 +47,7 @@ module Shumway.AVM1.Lib {
 
       this._initBuiltins(context);
 
-      var swfVersion = context.loaderInfo.swfVersion;
+      let swfVersion = context.loaderInfo.swfVersion;
       if (swfVersion >= 8) {
         this._initializeFlashObject(context);
       }
@@ -61,7 +61,7 @@ module Shumway.AVM1.Lib {
     }
 
     public clearInterval(id: number /* uint */): void {
-      var internalId = _internalTimeouts[id - 1];
+      let internalId = _internalTimeouts[id - 1];
       if (internalId) {
         clearInterval(internalId);
         delete _internalTimeouts[id - 1];
@@ -69,7 +69,7 @@ module Shumway.AVM1.Lib {
     }
 
     public clearTimeout(id: number /* uint */): void {
-      var internalId = _internalTimeouts[id - 1];
+      let internalId = _internalTimeouts[id - 1];
       if (internalId) {
         clearTimeout(internalId);
         delete _internalTimeouts[id - 1];
@@ -85,7 +85,7 @@ module Shumway.AVM1.Lib {
      * we escape here.
      */
     public escape(str: string): string {
-      var result = encodeURIComponent(str);
+      let result = encodeURIComponent(str);
       return result.replace(/!|'|\(|\)|\*|-|\.|_|~/g, function(char: string): string {
         switch (char) {
           case '*':
@@ -111,35 +111,35 @@ module Shumway.AVM1.Lib {
       if (arguments.length < 2) {
         return undefined;
       }
-      var context = this.context;
-      var args: any[] = [];
+      let context = this.context;
+      let args: any[] = [];
       if (alIsFunction(arguments[0])) {
-        var fn: AVM1Function = arguments[0];
+        let fn: AVM1Function = arguments[0];
         args.push(fn.toJSFunction(), arguments[1]);
       } else {
         if (arguments.length < 3) {
           return undefined;
         }
-        var obj: any = arguments[0];
-        var funName: string = arguments[1];
+        let obj: any = arguments[0];
+        let funName: string = arguments[1];
         if (!(obj instanceof AVM1Object) || typeof funName !== 'string') {
           return undefined;
         }
         args.push(function () {
-          var fn: AVM1Function = obj.alGet(funName);
+          let fn: AVM1Function = obj.alGet(funName);
           if (!alIsFunction(fn)) {
             return;
           }
-          var args = Array.prototype.slice.call(arguments, 0);
+          let args = Array.prototype.slice.call(arguments, 0);
           context.executeFunction(fn, obj, args);
         });
       }
-      for (var i = 2; i < arguments.length; i++) {
+      for (let i = 2; i < arguments.length; i++) {
         args.push(arguments[i]);
       }
       // Unconditionally coerce interval to int, as one would do.
       args[1] = alToInteger(context, args[1]);
-      var internalId = setInterval.apply(null, args);
+      let internalId = setInterval.apply(null, args);
       return _internalTimeouts.push(internalId);
     }
 
@@ -148,16 +148,16 @@ module Shumway.AVM1.Lib {
       if (arguments.length < 2 || !alIsFunction(arguments[0])) {
         return undefined;
       }
-      var args: any[] = [];
-      var fn: AVM1Function = arguments[0];
+      let args: any[] = [];
+      let fn: AVM1Function = arguments[0];
       args.push(fn.toJSFunction());
       // Unconditionally coerce interval to int, as one would do.
       args.push(alToInteger(this.context, arguments[1]));
-      for (var i = 2; i < arguments.length; i++) {
+      for (let i = 2; i < arguments.length; i++) {
         args.push(arguments[i]);
       }
 
-      var internalId = setTimeout.apply(null, args);
+      let internalId = setTimeout.apply(null, args);
       return _internalTimeouts.push(internalId);
     }
 
@@ -231,7 +231,7 @@ module Shumway.AVM1.Lib {
     public ColorTransform: AVM1Object;
 
     private _initBuiltins(context: AVM1Context) {
-      var builtins = context.builtins;
+      let builtins = context.builtins;
 
       this.Object = builtins.Object;
       this.Function = builtins.Function;
@@ -278,23 +278,23 @@ module Shumway.AVM1.Lib {
 
     private _initializeFlashObject(context: AVM1Context): void {
       this.flash = alNewObject(context);
-      var display: AVM1Object = alNewObject(context);
+      let display: AVM1Object = alNewObject(context);
       display.alPut('BitmapData', this.BitmapData);
       this.flash.alPut('display', display);
-      var external: AVM1Object = alNewObject(context);
+      let external: AVM1Object = alNewObject(context);
       external.alPut('ExternalInterface', AVM1ExternalInterface.createAVM1Class(context));
       this.flash.alPut('external', external);
-      var filters: AVM1Object = createFiltersClasses(context);
+      let filters: AVM1Object = createFiltersClasses(context);
       this.flash.alPut('filters', filters);
       this.filters = filters;
-      var geom: AVM1Object = alNewObject(context);
+      let geom: AVM1Object = alNewObject(context);
       geom.alPut('ColorTransform', this.ColorTransform);
       geom.alPut('Matrix', this.Matrix);
       geom.alPut('Point', this.Point);
       geom.alPut('Rectangle', this.Rectangle);
       geom.alPut('Transform', this.Transform);
       this.flash.alPut('geom', geom);
-      var text: AVM1Object = alNewObject(context);
+      let text: AVM1Object = alNewObject(context);
       this.flash.alPut('text', text);
     }
   }
@@ -309,9 +309,9 @@ module Shumway.AVM1.Lib {
     }
 
     public call(frame) {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
-      var frameNum = as3Object._getAbsFrameNumber(<any>frame, null);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let frameNum = as3Object._getAbsFrameNumber(<any>frame, null);
       if (frameNum === undefined) {
         return;
       }
@@ -327,8 +327,8 @@ module Shumway.AVM1.Lib {
     }
 
     public duplicateMovieClip(target, newname, depth) {
-      var normalizedDepth = alCoerceNumber(this.context, depth) - DEPTH_OFFSET;
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
+      let normalizedDepth = alCoerceNumber(this.context, depth) - DEPTH_OFFSET;
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
       nativeTarget.duplicateMovieClip(newname, normalizedDepth, null);
     }
 
@@ -341,8 +341,8 @@ module Shumway.AVM1.Lib {
     }
 
     public getURL(url, target?, method?) {
-      var sec = this.context.sec;
-      var request = new sec.flash.net.URLRequest(String(url));
+      let sec = this.context.sec;
+      let request = new sec.flash.net.URLRequest(String(url));
       if (method) {
         request.method = method;
       }
@@ -354,8 +354,8 @@ module Shumway.AVM1.Lib {
     }
 
     public gotoAndPlay(scene, frame?) {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       if (arguments.length < 2) {
         as3Object.gotoAndPlay(arguments[0]);
       } else {
@@ -364,8 +364,8 @@ module Shumway.AVM1.Lib {
     }
 
     public gotoAndStop(scene, frame?) {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       if (arguments.length < 2) {
         as3Object.gotoAndStop(arguments[0]);
       } else {
@@ -375,10 +375,10 @@ module Shumway.AVM1.Lib {
 
     public ifFrameLoaded(scene, frame?) {
       // ignoring scene parameter ?
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var frameNum = arguments.length < 2 ? arguments[0] : arguments[1];
-      var framesLoaded = nativeTarget.alGet('_framesloaded');
-      var totalFrames = nativeTarget.alGet('_totalframes');
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let frameNum = arguments.length < 2 ? arguments[0] : arguments[1];
+      let framesLoaded = nativeTarget.alGet('_framesloaded');
+      let totalFrames = nativeTarget.alGet('_totalframes');
       // The (0-based) requested frame index is clamped to (the 1-based) totalFrames value.
       // I.e., asking if frame 20 is loaded in a timline with only 10 frames returns true if all
       // frames have been loaded.
@@ -395,18 +395,18 @@ module Shumway.AVM1.Lib {
         this.fscommand(url.substring('fscommand:'.length), target);
         return;
       }
-      var loadLevel: boolean = typeof target === 'string' &&
+      let loadLevel: boolean = typeof target === 'string' &&
         target.indexOf('_level') === 0;
-      var levelNumber: number;
+      let levelNumber: number;
       if (loadLevel) {
-        var levelStr: string = target.substr(6);
+        let levelStr: string = target.substr(6);
         levelNumber = parseInt(levelStr, 10);
         loadLevel = levelNumber.toString() === levelStr;
       }
       if (loadLevel) {
         this.loadMovieNum(url, levelNumber, method);
       } else {
-        var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
+        let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
         nativeTarget.loadMovie(url, method);
       }
     }
@@ -426,8 +426,8 @@ module Shumway.AVM1.Lib {
         return;
       }
 
-      var avm1LevelHolder = this.context.levelsContainer;
-      var loaderHelper = new AVM1LoaderHelper(this.context);
+      let avm1LevelHolder = this.context.levelsContainer;
+      let loaderHelper = new AVM1LoaderHelper(this.context);
       loaderHelper.load(url, method).then(function () {
         avm1LevelHolder._addRoot(level, loaderHelper.content);
       });
@@ -437,7 +437,7 @@ module Shumway.AVM1.Lib {
       url = alCoerceString(this.context, url);
       method = alCoerceString(this.context, method);
 
-      var nativeTarget = this.context.resolveTarget(target);
+      let nativeTarget = this.context.resolveTarget(target);
       if (!nativeTarget) {
         return; // target was not found
       }
@@ -449,7 +449,7 @@ module Shumway.AVM1.Lib {
       level = alToInteger(this.context, level);
       method = alCoerceString(this.context, method);
       
-      var nativeTarget = this.context.resolveLevel(level);
+      let nativeTarget = this.context.resolveLevel(level);
       if (!nativeTarget) {
         return; // target was not found
       }
@@ -457,15 +457,15 @@ module Shumway.AVM1.Lib {
     }
 
     _loadVariables(nativeTarget: IAVM1SymbolBase, url: string, method: string): void {
-      var context = this.context;
-      var request = new context.sec.flash.net.URLRequest(url);
+      let context = this.context;
+      let request = new context.sec.flash.net.URLRequest(url);
       if (method) {
         request.method = method;
       }
-      var loader = new context.sec.flash.net.URLLoader(request);
+      let loader = new context.sec.flash.net.URLLoader(request);
       loader._ignoreDecodeErrors = true;
       loader.dataFormat = 'variables'; // flash.net.URLLoaderDataFormat.VARIABLES;
-      var completeHandler = context.sec.boxFunction(function (event: flash.events.Event): void {
+      let completeHandler = context.sec.boxFunction(function (event: flash.events.Event): void {
         loader.removeEventListener(flash.events.Event.COMPLETE, completeHandler);
         // If the response data is empty, URLLoader#data contains an empty string.
         if (loader.data !== '') {
@@ -503,14 +503,14 @@ module Shumway.AVM1.Lib {
     }
 
     public nextFrame() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       as3Object.nextFrame();
     }
 
     public nextScene() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       as3Object.nextScene();
     }
 
@@ -519,19 +519,19 @@ module Shumway.AVM1.Lib {
     }
 
     public play() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
       nativeTarget.play();
     }
 
     public prevFrame() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       as3Object.prevFrame();
     }
 
     public prevScene() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
-      var as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
       as3Object.prevScene();
     }
 
@@ -557,7 +557,7 @@ module Shumway.AVM1.Lib {
     }
 
     public removeMovieClip(target) {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
       if (!nativeTarget) {
         return;
       }
@@ -565,12 +565,12 @@ module Shumway.AVM1.Lib {
     }
 
     public startDrag(target?, ...args: any[]): void {
-      var mc = <AVM1MovieClip>this.context.resolveTarget(target);
+      let mc = <AVM1MovieClip>this.context.resolveTarget(target);
       mc.startDrag.apply(mc, args);
     }
 
     public stop() {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
       nativeTarget.stop();
     }
     public stopAllSounds() {
@@ -578,9 +578,9 @@ module Shumway.AVM1.Lib {
     }
     public stopDrag() {
       // Using current draggable instead of current target.
-      var as3CurrentDraggable = this.context.sec.flash.ui.Mouse.axClass.draggableObject;
+      let as3CurrentDraggable = this.context.sec.flash.ui.Mouse.axClass.draggableObject;
       if (as3CurrentDraggable) {
-        var nativeTarget = <AVM1MovieClip>getAVM1Object(as3CurrentDraggable, this.context);
+        let nativeTarget = <AVM1MovieClip>getAVM1Object(as3CurrentDraggable, this.context);
         nativeTarget.stopDrag();
       }
     }
@@ -592,7 +592,7 @@ module Shumway.AVM1.Lib {
       notImplemented('AVM1Globals.toggleHighQuality');
     }
     public trace(expression) {
-      var value: string;
+      let value: string;
       switch (typeof expression) {
         case 'undefined':
           // undefined is always 'undefined' for trace (even for SWF6).
@@ -610,7 +610,7 @@ module Shumway.AVM1.Lib {
     }
 
     public unloadMovie(target) {
-      var nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
+      let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(target);
       if (!nativeTarget) {
         return; // target was not found
       }
@@ -623,7 +623,7 @@ module Shumway.AVM1.Lib {
         return;
       }
 
-      var avm1MovieHolder = this.context.levelsContainer;
+      let avm1MovieHolder = this.context.levelsContainer;
       avm1MovieHolder._removeRoot(level);
     }
   }

@@ -21,20 +21,20 @@ module Shumway.AVM1.Lib {
 
   export class AVM1TextFormat extends AVM1Object implements IHasAS3ObjectReference {
     static createAVM1Class(context: AVM1Context): AVM1Object {
-      var members = ['align#', 'blockIndent#', 'bold#', 'bullet#', 'color#', 'font#',
+      let members = ['align#', 'blockIndent#', 'bold#', 'bullet#', 'color#', 'font#',
                      'getTextExtent', 'indent#', 'italic#', 'kerning#', 'leading#',
                      'leftMargin#', 'letterSpacing#', 'rightMargin#', 'size#', 'tabStops#',
                      'target#', 'underline#', 'url#'];
-      var wrapped = wrapAVM1NativeClass(context, true, AVM1TextFormat,
+      let wrapped = wrapAVM1NativeClass(context, true, AVM1TextFormat,
         [],
         members,
         null, AVM1TextFormat.prototype.avm1Constructor);
-      var proto = wrapped.alGetPrototypeProperty();
+      let proto = wrapped.alGetPrototypeProperty();
       members.forEach((x) => {
          if (x[x.length - 1] === '#') {
            x = x.slice(0, -1);
          }
-         var p = proto.alGetOwnProperty(x);
+         let p = proto.alGetOwnProperty(x);
          p.flags &= ~AVM1PropertyFlags.DONT_ENUM;
          proto.alSetOwnProperty(x, p);
        });
@@ -42,8 +42,8 @@ module Shumway.AVM1.Lib {
     }
 
     static createFromNative(context: AVM1Context, as3Object: flash.text.TextFormat): AVM1Object {
-      var TextFormat = context.globals.TextFormat;
-      var obj = new AVM1TextFormat(context);
+      let TextFormat = context.globals.TextFormat;
+      let obj = new AVM1TextFormat(context);
       obj.alPrototype = TextFormat.alGetPrototypeProperty();
       (<AVM1TextFormat>obj)._as3Object = as3Object;
       return obj;
@@ -55,7 +55,7 @@ module Shumway.AVM1.Lib {
                 italic?: boolean, underline?: boolean, url?: string, target?: string,
                 align?: string, leftMargin?: number, rightMargin?: number,
                 indent?: number, leading?: number) {
-      var context = this.context;
+      let context = this.context;
       font = isNullOrUndefined(font) ? null : alToString(context, font);
       size = isNullOrUndefined(size) ? null : alToNumber(context, size);
       color = isNullOrUndefined(color) ? null : alToNumber(context, color);
@@ -69,7 +69,7 @@ module Shumway.AVM1.Lib {
       rightMargin = isNullOrUndefined(rightMargin) ? null : alToNumber(context, rightMargin);
       indent = isNullOrUndefined(indent) ? null : alToNumber(context, indent);
       leading = isNullOrUndefined(leading) ? null : alToNumber(context, leading);
-      var as3Object = new this.context.sec.flash.text.TextFormat(
+      let as3Object = new this.context.sec.flash.text.TextFormat(
         font, size, color, bold, italic, underline, url, target,
         align, leftMargin, rightMargin, indent, leading);
       this._as3Object = as3Object;
@@ -79,7 +79,7 @@ module Shumway.AVM1.Lib {
 
     static alInitStatic(context: AVM1Context): void {
       // See _measureTextField usage in the getTextExtent() below.
-      var measureTextField = new context.sec.flash.text.TextField();
+      let measureTextField = new context.sec.flash.text.TextField();
       measureTextField.multiline = true;
       this._measureTextField = measureTextField;
     }
@@ -197,7 +197,7 @@ module Shumway.AVM1.Lib {
     }
 
     public getTabStops(): any {
-      var tabStops = this._as3Object.tabStops;
+      let tabStops = this._as3Object.tabStops;
       return tabStops ? tabStops.value : null;
     }
 
@@ -206,7 +206,7 @@ module Shumway.AVM1.Lib {
           !isNullOrUndefined(value)) {
         return; // TODO
       }
-      var tabStops = value && this.context.sec.createArray(value);
+      let tabStops = value && this.context.sec.createArray(value);
       this._as3Object.tabStops = tabStops;
     }
 
@@ -222,8 +222,8 @@ module Shumway.AVM1.Lib {
       text = alCoerceString(this.context, text);
       width = +width;
 
-      var staticState: typeof AVM1TextFormat = this.context.getStaticState(AVM1TextFormat);
-      var measureTextField = staticState._measureTextField;
+      let staticState: typeof AVM1TextFormat = this.context.getStaticState(AVM1TextFormat);
+      let measureTextField = staticState._measureTextField;
       if (!isNaN(width) && width > 0) {
         measureTextField.width = width + 4;
         measureTextField.wordWrap = true;
@@ -232,14 +232,14 @@ module Shumway.AVM1.Lib {
       }
       measureTextField.defaultTextFormat = this._as3Object;
       measureTextField.text = text;
-      var result: AVM1Object = alNewObject(this.context);
-      var textWidth = measureTextField.textWidth;
-      var textHeight = measureTextField.textHeight;
+      let result: AVM1Object = alNewObject(this.context);
+      let textWidth = measureTextField.textWidth;
+      let textHeight = measureTextField.textHeight;
       result.alPut('width', textWidth);
       result.alPut('height', textHeight);
       result.alPut('textFieldWidth', textWidth + 4);
       result.alPut('textFieldHeight', textHeight + 4);
-      var metrics = measureTextField.getLineMetrics(0);
+      let metrics = measureTextField.getLineMetrics(0);
       result.alPut('ascent',
         metrics.axGetPublicProperty('ascent'));
       result.alPut('descent',

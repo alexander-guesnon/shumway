@@ -21,8 +21,8 @@ module Shumway.AVMX.AS.flash.media {
   import somewhatImplemented = Shumway.Debug.somewhatImplemented;
   import error = Shumway.Debug.error;
 
-  declare var URL;
-  declare var Blob;
+  declare let URL;
+  declare let Blob;
   declare class AudioContext {
     constructor();
     sampleRate: number;
@@ -57,27 +57,27 @@ module Shumway.AVMX.AS.flash.media {
       this._sourceOffset = 0;
     }
     getData(channelsData, count: number) {
-      var k = this._sourceRate / this._targetRate;
+      let k = this._sourceRate / this._targetRate;
 
-      var offset = this._sourceOffset;
-      var needed = Math.ceil((count - 1) * k + offset) + 1;
-      var sourceData = [];
-      for (var channel = 0; channel < channelsData.length; channel++) {
+      let offset = this._sourceOffset;
+      let needed = Math.ceil((count - 1) * k + offset) + 1;
+      let sourceData = [];
+      for (let channel = 0; channel < channelsData.length; channel++) {
         sourceData.push(new Float32Array(needed));
       }
-      var e = { data: sourceData, count: needed };
+      let e = { data: sourceData, count: needed };
       this.ondatarequested(e);
-      for (var channel = 0; channel < channelsData.length; channel++) {
-        var data = channelsData[channel];
-        var source = sourceData[channel];
-        for (var j = 0; j < count; j++) {
-          var i = j * k + offset;
-          var i1 = i | 0, i2 = Math.ceil(i) | 0;
-          var source_i1 = i1 < 0 ? this._tail[channel] : source[i1];
+      for (let channel = 0; channel < channelsData.length; channel++) {
+        let data = channelsData[channel];
+        let source = sourceData[channel];
+        for (let j = 0; j < count; j++) {
+          let i = j * k + offset;
+          let i1 = i | 0, i2 = Math.ceil(i) | 0;
+          let source_i1 = i1 < 0 ? this._tail[channel] : source[i1];
           if (i1 === i2) {
             data[j] = source_i1;
           } else {
-            var alpha = i - i1;
+            let alpha = i - i1;
             data[j] = source_i1 * (1 - alpha) + source[i2] * alpha;
           }
         }
@@ -98,7 +98,7 @@ module Shumway.AVMX.AS.flash.media {
     ondatarequested: (e) => void;
 
     constructor(sampleRate, channels) {
-      var context = WebAudioChannel._cachedContext;
+      let context = WebAudioChannel._cachedContext;
       if (!context) {
         context = new AudioContext();
         WebAudioChannel._cachedContext = context;
@@ -121,14 +121,14 @@ module Shumway.AVMX.AS.flash.media {
     }
 
     start() {
-      var source = this._context.createScriptProcessor(2048, 0, this._channels);
-      var self = this;
+      let source = this._context.createScriptProcessor(2048, 0, this._channels);
+      let self = this;
       source.onaudioprocess = function(e) {
-        var channelsData = [];
-        for (var i = 0; i < self._channels; i++) {
+        let channelsData = [];
+        for (let i = 0; i < self._channels; i++) {
           channelsData.push(e.outputBuffer.getChannelData(i));
         }
-        var count = channelsData[0].length;
+        let count = channelsData[0].length;
         if (self._resampler) {
           self._resampler.getData(channelsData, count);
         } else {
@@ -143,13 +143,13 @@ module Shumway.AVMX.AS.flash.media {
       this._source.disconnect(this._context.destination);
     }
     requestData(channelsData: any[], count: number) {
-      var channels = this._channels;
-      var buffer = new Float32Array(count * channels);
-      var e = { data: buffer, count: buffer.length };
+      let channels = this._channels;
+      let buffer = new Float32Array(count * channels);
+      let e = { data: buffer, count: buffer.length };
       this.ondatarequested(e);
 
-      for (var j = 0, p = 0; j < count; j++) {
-        for (var i = 0; i < channels; i++) {
+      for (let j = 0, p = 0; j < count; j++) {
+        for (let i = 0; i < channels; i++) {
           channelsData[i][j] = buffer[p++];
         }
       }
@@ -179,7 +179,7 @@ module Shumway.AVMX.AS.flash.media {
     }
 
     static initializeFromAudioElement(sec: ISecurityDomain, element: HTMLAudioElement): SoundChannel {
-      var channel = new sec.flash.media.SoundChannel();
+      let channel = new sec.flash.media.SoundChannel();
       channel._element = element;
       SoundMixer._registerSoundSource(channel);
       return channel;
@@ -246,9 +246,9 @@ module Shumway.AVMX.AS.flash.media {
       SoundMixer._registerSoundSource(this);
 
       this._position = startTime;
-      var self = this;
-      var lastCurrentTime = 0;
-      var element = document.createElement('audio');
+      let self = this;
+      let lastCurrentTime = 0;
+      let element = document.createElement('audio');
       if (!element.canPlayType(soundData.mimeType)) {
         console.error('ERROR: \"' + soundData.mimeType + '\" ' +
           'type playback is not supported by the browser');
@@ -256,14 +256,14 @@ module Shumway.AVMX.AS.flash.media {
       }
       element.preload = 'metadata'; // for mobile devices
       element.loop = loops > 0; // starts loop played if at least one is specified
-      var blob = new Blob([soundData.data], {type: soundData.mimeType});
+      let blob = new Blob([soundData.data], {type: soundData.mimeType});
       element.src = URL.createObjectURL(blob);
       element.addEventListener("loadeddata", function loaded() {
         element.currentTime = startTime / 1000;
         element.play();
       });
       element.addEventListener("timeupdate", function timeupdate() {
-        var currentTime = element.currentTime;
+        let currentTime = element.currentTime;
         if (loops && lastCurrentTime > currentTime) {
           --loops;
           if (!loops) { // checks if we need to stop looping
@@ -293,14 +293,14 @@ module Shumway.AVMX.AS.flash.media {
 
       SoundMixer._registerSoundSource(this);
 
-      var self = this;
-      var startPosition = Math.round(startTime / 1000 * soundData.sampleRate) *
+      let self = this;
+      let startPosition = Math.round(startTime / 1000 * soundData.sampleRate) *
         soundData.channels;
-      var position = startPosition;
+      let position = startPosition;
       this._position = startTime;
       this._audioChannel = createAudioChannel(soundData.sampleRate, soundData.channels);
       this._audioChannel.ondatarequested = function (e) {
-        var end = soundData.end;
+        let end = soundData.end;
         if (position >= end && soundData.completed) {
           // end of buffer
           SoundMixer._unregisterSoundSource(this);
@@ -312,12 +312,12 @@ module Shumway.AVMX.AS.flash.media {
           return;
         }
 
-        var left = e.count;
-        var data = e.data;
-        var source = soundData.pcm;
+        let left = e.count;
+        let data = e.data;
+        let source = soundData.pcm;
         do {
-          var count = Math.min(end - position, left);
-          for (var j = 0; j < count; j++) {
+          let count = Math.min(end - position, left);
+          for (let j = 0; j < count; j++) {
             data[j] = source[position++];
           }
           left -= count;

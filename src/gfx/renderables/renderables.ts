@@ -33,7 +33,7 @@ module Shumway.GFX {
   import VideoPlaybackEvent = Shumway.Remoting.VideoPlaybackEvent;
   import VideoControlEvent = Shumway.Remoting.VideoControlEvent;
 
-  declare var registerInspectorAsset;
+  declare let registerInspectorAsset;
 
   /**
    * Represents some source renderable content.
@@ -56,7 +56,7 @@ module Shumway.GFX {
 
     public addParent(frame: Shape) {
       release || assert(frame);
-      var index = indexOf(this._parents, frame);
+      let index = indexOf(this._parents, frame);
       release || assert(index < 0);
       this._parents.push(frame);
     }
@@ -65,9 +65,9 @@ module Shumway.GFX {
      * Checks if this node will be reached by the renderer.
      */
     public willRender(): boolean {
-      var parents = this._parents;
-      for (var i = 0; i < parents.length; i++) {
-        var node = <Node>parents[i];
+      let parents = this._parents;
+      for (let i = 0; i < parents.length; i++) {
+        let node = <Node>parents[i];
         while (node) {
           if (node.isType(NodeType.Stage)) {
             return true;
@@ -91,9 +91,9 @@ module Shumway.GFX {
      * Returns the first unrooted parent or creates a new parent if none was found.
      */
     public wrap(): Shape {
-      var node: Shape;
-      var parents = this._parents;
-      for (var i = 0; i < parents.length; i++) {
+      let node: Shape;
+      let parents = this._parents;
+      for (let i = 0; i < parents.length; i++) {
         node = parents[i];
         if (!node._parent) {
           return node;
@@ -106,17 +106,17 @@ module Shumway.GFX {
 
     public invalidate() {
       this.setFlags(NodeFlags.Dirty);
-      var nodes = this._parents;
-      for (var i = 0; i < nodes.length; i++) {
+      let nodes = this._parents;
+      for (let i = 0; i < nodes.length; i++) {
         nodes[i].invalidate();
       }
-      var renderables = this._renderableParents;
-      for (var i = 0; i < renderables.length; i++) {
+      let renderables = this._renderableParents;
+      for (let i = 0; i < renderables.length; i++) {
         renderables[i].invalidate();
       }
-      var listeners = this._invalidateEventListeners;
+      let listeners = this._invalidateEventListeners;
       if (listeners) {
-        for (var i = 0; i < listeners.length; i++) {
+        for (let i = 0; i < listeners.length; i++) {
           listeners[i](this);
         }
       }
@@ -128,7 +128,7 @@ module Shumway.GFX {
       if (!this._invalidateEventListeners) {
         this._invalidateEventListeners = [];
       }
-      var index = indexOf(this._invalidateEventListeners, listener);
+      let index = indexOf(this._invalidateEventListeners, listener);
       release || assert(index < 0);
       this._invalidateEventListeners.push(listener);
     }
@@ -149,7 +149,7 @@ module Shumway.GFX {
       if (flags === NodeFlags.None || this.hasFlags(flags)) {
         return;
       }
-      for (var i = 0; i < this._parents.length; i++) {
+      for (let i = 0; i < this._parents.length; i++) {
         this._parents[i]._propagateFlagsUp(flags);
       }
     }
@@ -212,8 +212,8 @@ module Shumway.GFX {
       this._assetId = assetId;
       this._eventSerializer = eventSerializer;
 
-      var element: HTMLVideoElement = document.createElement('video');
-      var elementEventHandler = this._handleVideoEvent.bind(this);
+      let element: HTMLVideoElement = document.createElement('video');
+      let elementEventHandler = this._handleVideoEvent.bind(this);
       element.preload = 'metadata'; // for mobile devices
       element.addEventListener("play", elementEventHandler);
       element.addEventListener("pause", elementEventHandler);
@@ -259,9 +259,9 @@ module Shumway.GFX {
     }
 
     private _handleVideoEvent(evt: Event) {
-      var type: VideoPlaybackEvent;
-      var data: any = null;
-      var element: HTMLVideoElement = this._video;
+      let type: VideoPlaybackEvent;
+      let data: any = null;
+      let element: HTMLVideoElement = this._video;
       switch (evt.type) {
         case "play":
           if (!this._pauseHappening) {
@@ -338,8 +338,8 @@ module Shumway.GFX {
     }
 
     processControlRequest(type: VideoControlEvent, data: any): any {
-      var videoElement = this._video;
-      var ESTIMATED_VIDEO_SECOND_SIZE: number = 500;
+      let videoElement = this._video;
+      let ESTIMATED_VIDEO_SECOND_SIZE: number = 500;
       switch (type) {
         case VideoControlEvent.Init:
           videoElement.src = data.url;
@@ -390,9 +390,9 @@ module Shumway.GFX {
           if (!videoElement) {
             return 0;
           }
-          var bufferedTill: number = -1;
+          let bufferedTill: number = -1;
           if (videoElement.buffered) {
-            for (var i = 0; i < videoElement.buffered.length; i++) {
+            for (let i = 0; i < videoElement.buffered.length; i++) {
               bufferedTill = Math.max(bufferedTill, videoElement.buffered.end(i));
             }
           } else {
@@ -415,9 +415,9 @@ module Shumway.GFX {
     }
 
     public static checkForVideoUpdates() {
-      var renderables = RenderableVideo._renderableVideos;
-      for (var i = 0; i < renderables.length; i++) {
-        var renderable = renderables[i];
+      let renderables = RenderableVideo._renderableVideos;
+      for (let i = 0; i < renderables.length; i++) {
+        let renderable = renderables[i];
         // Check if the node will be reached by the renderer.
         if (renderable.willRender()) {
           // If the nodes video element isn't already on the video layer, mark the node as invalid to
@@ -436,7 +436,7 @@ module Shumway.GFX {
 
     render(context: CanvasRenderingContext2D, ratio: number, cullBounds: Rectangle): void {
       enterTimeline("RenderableVideo.render");
-      var videoElement = this._video;
+      let videoElement = this._video;
       if (videoElement && videoElement.videoWidth > 0) {
         context.drawImage(videoElement,
           0, 0, videoElement.videoWidth, videoElement.videoHeight,
@@ -457,10 +457,10 @@ module Shumway.GFX {
 
     public static FromDataBuffer(type: ImageType, dataBuffer: DataBuffer, bounds: Rectangle): RenderableBitmap {
       enterTimeline("RenderableBitmap.FromDataBuffer");
-      var canvas = document.createElement("canvas");
+      let canvas = document.createElement("canvas");
       canvas.width = bounds.w;
       canvas.height = bounds.h;
-      var renderableBitmap = new RenderableBitmap(canvas, bounds);
+      let renderableBitmap = new RenderableBitmap(canvas, bounds);
       renderableBitmap.updateFromDataBuffer(type, dataBuffer);
       leaveTimeline("RenderableBitmap.FromDataBuffer");
       return renderableBitmap;
@@ -468,11 +468,11 @@ module Shumway.GFX {
 
     public static FromNode(source: Node, matrix: Shumway.GFX.Geometry.Matrix, colorMatrix: Shumway.GFX.ColorMatrix, blendMode: number, clipRect: Rectangle) {
       enterTimeline("RenderableBitmap.FromFrame");
-      var canvas = document.createElement("canvas");
-      var bounds = source.getBounds();
+      let canvas = document.createElement("canvas");
+      let bounds = source.getBounds();
       canvas.width = bounds.w;
       canvas.height = bounds.h;
-      var renderableBitmap = new RenderableBitmap(canvas, bounds);
+      let renderableBitmap = new RenderableBitmap(canvas, bounds);
       renderableBitmap.drawNode(source, matrix, colorMatrix, blendMode, clipRect);
       leaveTimeline("RenderableBitmap.FromFrame");
       return renderableBitmap;
@@ -492,20 +492,20 @@ module Shumway.GFX {
       if (!imageUpdateOption.value) {
         return;
       }
-      var buffer = dataBuffer.buffer;
+      let buffer = dataBuffer.buffer;
       enterTimeline("RenderableBitmap.updateFromDataBuffer", {length: dataBuffer.length});
       if (type === ImageType.JPEG || type === ImageType.PNG || type === ImageType.GIF) {
         release || Debug.assertUnreachable("Mustn't encounter un-decoded images here");
       } else {
-        var bounds = this._bounds;
-        var imageData = this._imageData;
+        let bounds = this._bounds;
+        let imageData = this._imageData;
         if (!imageData || imageData.width !== bounds.w || imageData.height !== bounds.h) {
           imageData = this._imageData = this._context.createImageData(bounds.w, bounds.h);
         }
         if (imageConvertOption.value) {
           enterTimeline("ColorUtilities.convertImage");
-          var pixels = new Int32Array(buffer);
-          var out = new Int32Array((<any>imageData.data).buffer);
+          let pixels = new Int32Array(buffer);
+          let out = new Int32Array((<any>imageData.data).buffer);
           ColorUtilities.convertImage (type, ImageType.StraightAlphaRGBA, pixels, out);
           leaveTimeline("ColorUtilities.convertImage");
         }
@@ -550,20 +550,20 @@ module Shumway.GFX {
       // TODO: Support colorMatrix and blendMode.
       enterTimeline("RenderableBitmap.drawFrame");
       // TODO: Hack to be able to compile this as part of gfx-base.
-      var Canvas2D = (<any>GFX).Canvas2D;
-      var bounds = this.getBounds();
+      let Canvas2D = (<any>GFX).Canvas2D;
+      let bounds = this.getBounds();
       // TODO: don't create a new renderer every time.
-      var renderer = new Canvas2D.Canvas2DRenderer(this._canvas, null);
+      let renderer = new Canvas2D.Canvas2DRenderer(this._canvas, null);
       renderer.renderNode(source, clip || bounds, matrix);
       leaveTimeline("RenderableBitmap.drawFrame");
     }
     
     mask(alphaValues: Uint8Array) {
-      var imageData = this.imageData;
-      var pixels = new Int32Array((<any>imageData.data).buffer);
-      var T = Shumway.ColorUtilities.getUnpremultiplyTable();
-      for (var i = 0; i < alphaValues.length; i++) {
-        var a = alphaValues[i];
+      let imageData = this.imageData;
+      let pixels = new Int32Array((<any>imageData.data).buffer);
+      let T = Shumway.ColorUtilities.getUnpremultiplyTable();
+      for (let i = 0; i < alphaValues.length; i++) {
+        let a = alphaValues[i];
         if (a === 0) {
           pixels[i] = 0;
           continue;
@@ -571,11 +571,11 @@ module Shumway.GFX {
         if (a === 0xff) {
           continue;
         }
-        var pixel = pixels[i];
-        var r = (pixel >>  0) & 0xff;
-        var g = (pixel >>  8) & 0xff;
-        var b = (pixel >> 16) & 0xff;
-        var o = a << 8;
+        let pixel = pixels[i];
+        let r = (pixel >>  0) & 0xff;
+        let g = (pixel >>  8) & 0xff;
+        let b = (pixel >> 16) & 0xff;
+        let o = a << 8;
         r = T[o + Math.min(r, a)];
         g = T[o + Math.min(g, a)];
         b = T[o + Math.min(b, a)];
@@ -593,8 +593,8 @@ module Shumway.GFX {
       if (this._canvas) {
         return;
       }
-      var canvas = document.createElement("canvas");
-      var bounds = this._bounds;
+      let canvas = document.createElement("canvas");
+      let bounds = this._bounds;
       canvas.width = bounds.w;
       canvas.height = bounds.h;
       this._initializeSourceCanvas(canvas);
@@ -622,7 +622,7 @@ module Shumway.GFX {
       if (!this.fillStyle) {
         this.fillStyle = Shumway.ColorStyle.randomStyle();
       }
-      var bounds = this._bounds;
+      let bounds = this._bounds;
       context.save();
       context.beginPath();
       context.lineWidth = 2;
@@ -716,15 +716,15 @@ module Shumway.GFX {
     render(context: CanvasRenderingContext2D, ratio: number, cullBounds: Rectangle,
            clipPath: Path2D = null, paintStencil: boolean = false): void
     {
-      var paintStencilStyle = release ? '#000000' : '#FF4981';
+      let paintStencilStyle = release ? '#000000' : '#FF4981';
       context.fillStyle = context.strokeStyle = 'transparent';
 
-      var paths = this._deserializePaths(this._pathData, context, ratio);
+      let paths = this._deserializePaths(this._pathData, context, ratio);
       release || assert(paths);
 
       enterTimeline("RenderableShape.render", this);
-      for (var i = 0; i < paths.length; i++) {
-        var path = paths[i];
+      for (let i = 0; i < paths.length; i++) {
+        let path = paths[i];
         context['mozImageSmoothingEnabled'] = context.msImageSmoothingEnabled =
                                               context['imageSmoothingEnabled'] =
                                               path.smoothImage;
@@ -738,7 +738,7 @@ module Shumway.GFX {
           }
         } else if (!clipPath && !paintStencil) {
           context.strokeStyle = path.style;
-          var lineScaleMode = LineScaleMode.Normal;
+          let lineScaleMode = LineScaleMode.Normal;
           if (path.strokeProperties) {
             lineScaleMode = path.strokeProperties.scaleMode;
             context.lineWidth = path.strokeProperties.thickness;
@@ -755,8 +755,8 @@ module Shumway.GFX {
           // on coordinates slightly below round pixels (0.8, say) will be moved up/left.
           // Properly fixing this would probably have to happen in the rasterizer. Or when replaying
           // all the drawing commands, which seems expensive.
-          var lineWidth = context.lineWidth;
-          var isSpecialCaseWidth = lineWidth === 1 || lineWidth === 3;
+          let lineWidth = context.lineWidth;
+          let isSpecialCaseWidth = lineWidth === 1 || lineWidth === 3;
           if (isSpecialCaseWidth) {
             context.translate(0.5, 0.5);
           }
@@ -782,29 +782,29 @@ module Shumway.GFX {
         return this._paths;
       }
 
-      var paths = this._paths = [];
+      let paths = this._paths = [];
 
-      var fillPath: Path2D = null;
-      var strokePath: Path2D = null;
+      let fillPath: Path2D = null;
+      let strokePath: Path2D = null;
 
       // We have to alway store the last position because Flash keeps the drawing cursor where it
       // was when changing fill or line style, whereas Canvas forgets it on beginning a new path.
-      var x = 0;
-      var y = 0;
-      var cpX: number;
-      var cpY: number;
-      var formOpen = false;
-      var formOpenX = 0;
-      var formOpenY = 0;
-      var commands = data.commands;
-      var coordinates = data.coordinates;
-      var styles = data.styles;
+      let x = 0;
+      let y = 0;
+      let cpX: number;
+      let cpY: number;
+      let formOpen = false;
+      let formOpenX = 0;
+      let formOpenY = 0;
+      let commands = data.commands;
+      let coordinates = data.coordinates;
+      let styles = data.styles;
       styles.position = 0;
-      var coordinatesIndex = 0;
-      var commandsCount = data.commandsPosition;
+      let coordinatesIndex = 0;
+      let commandsCount = data.commandsPosition;
       // Description of serialization format can be found in flash.display.Graphics.
-      for (var commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
-        var command = commands[commandIndex];
+      for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+        let command = commands[commandIndex];
         switch (command) {
           case PathCommand.MoveTo:
             release || assert(coordinatesIndex <= data.coordinatesPosition - 2);
@@ -838,8 +838,8 @@ module Shumway.GFX {
             release || assert(coordinatesIndex <= data.coordinatesPosition - 6);
             cpX = coordinates[coordinatesIndex++] / 20;
             cpY = coordinates[coordinatesIndex++] / 20;
-            var cpX2 = coordinates[coordinatesIndex++] / 20;
-            var cpY2 = coordinates[coordinatesIndex++] / 20;
+            let cpX2 = coordinates[coordinatesIndex++] / 20;
+            let cpY2 = coordinates[coordinatesIndex++] / 20;
             x = coordinates[coordinatesIndex++] / 20;
             y = coordinates[coordinatesIndex++] / 20;
             fillPath && fillPath.bezierCurveTo(cpX, cpY, cpX2, cpY2, x, y);
@@ -852,7 +852,7 @@ module Shumway.GFX {
                                         false, null, x, y);
             break;
           case PathCommand.BeginBitmapFill:
-            var bitmapStyle = this._readBitmap(styles, context);
+            let bitmapStyle = this._readBitmap(styles, context);
             fillPath = this._createPath(PathType.Fill, bitmapStyle.style, bitmapStyle.smoothImage,
                                         null, x, y);
             break;
@@ -864,13 +864,13 @@ module Shumway.GFX {
             fillPath = null;
             break;
           case PathCommand.LineStyleSolid:
-            var color = ColorUtilities.rgbaToCSSStyle(styles.readUnsignedInt());
+            let color = ColorUtilities.rgbaToCSSStyle(styles.readUnsignedInt());
             // Skip pixel hinting.
             styles.position += 1;
-            var scaleMode: LineScaleMode = styles.readByte();
-            var capsStyle: string = RenderableShape.LINE_CAPS_STYLES[styles.readByte()];
-            var jointsStyle: string = RenderableShape.LINE_JOINTS_STYLES[styles.readByte()];
-            var strokeProperties = new StrokeProperties(coordinates[coordinatesIndex++]/20,
+            let scaleMode: LineScaleMode = styles.readByte();
+            let capsStyle: string = RenderableShape.LINE_CAPS_STYLES[styles.readByte()];
+            let jointsStyle: string = RenderableShape.LINE_JOINTS_STYLES[styles.readByte()];
+            let strokeProperties = new StrokeProperties(coordinates[coordinatesIndex++]/20,
                                                         scaleMode, capsStyle, jointsStyle, styles.readByte());
             // Look ahead at the following command to determine if this is a complex stroke style.
             if (commands[commandIndex + 1] === PathCommand.LineStyleGradient) {
@@ -879,7 +879,7 @@ module Shumway.GFX {
                                             false, strokeProperties, x, y);
             } else if (commands[commandIndex + 1] === PathCommand.LineStyleGradient) {
               commandIndex++;
-              var bitmapStyle = this._readBitmap(styles, context);
+              let bitmapStyle = this._readBitmap(styles, context);
               strokePath = this._createPath(PathType.StrokeFill, bitmapStyle.style,
                                             bitmapStyle.smoothImage, strokeProperties, x, y);
             } else {
@@ -910,7 +910,7 @@ module Shumway.GFX {
     private _createPath(type: PathType, style: any, smoothImage: boolean,
                         strokeProperties: StrokeProperties, x: number, y: number): Path2D
     {
-      var path = new StyledPath(type, style, smoothImage, strokeProperties);
+      let path = new StyledPath(type, style, smoothImage, strokeProperties);
       this._paths.push(path);
       path.path.moveTo(x, y);
       return path.path;
@@ -927,18 +927,18 @@ module Shumway.GFX {
       // Assert at least one color stop.
       release || assert(styles.bytesAvailable >= 1 + 1 + 6 * 4 /* matrix fields as floats */ +
                                                  1 + 1 + 4 + 1 + 1);
-      var gradientType = styles.readUnsignedByte();
-      var focalPoint = styles.readShort() * 2 / 0xff;
+      let gradientType = styles.readUnsignedByte();
+      let focalPoint = styles.readShort() * 2 / 0xff;
       release || assert(focalPoint >= -1 && focalPoint <= 1);
-      var transform = this._readMatrix(styles);
-      var gradient = gradientType === GradientType.Linear ?
+      let transform = this._readMatrix(styles);
+      let gradient = gradientType === GradientType.Linear ?
                      context.createLinearGradient(-1, 0, 1, 0) :
                      context.createRadialGradient(focalPoint, 0, 0, 0, 0, 1);
       gradient.setTransform && gradient.setTransform(transform.toSVGMatrix());
-      var colorStopsCount = styles.readUnsignedByte();
-      for (var i = 0; i < colorStopsCount; i++) {
-        var ratio = styles.readUnsignedByte() / 0xff;
-        var cssColor = ColorUtilities.rgbaToCSSStyle(styles.readUnsignedInt());
+      let colorStopsCount = styles.readUnsignedByte();
+      for (let i = 0; i < colorStopsCount; i++) {
+        let ratio = styles.readUnsignedByte() / 0xff;
+        let cssColor = ColorUtilities.rgbaToCSSStyle(styles.readUnsignedInt());
         gradient.addColorStop(ratio, cssColor);
       }
 
@@ -953,12 +953,12 @@ module Shumway.GFX {
                                                              smoothImage: boolean}
     {
       release || assert(styles.bytesAvailable >= 4 + 6 * 4 /* matrix fields as floats */ + 1 + 1);
-      var textureIndex = styles.readUnsignedInt();
-      var fillTransform: Matrix = this._readMatrix(styles);
-      var repeat = styles.readBoolean() ? 'repeat' : 'no-repeat';
-      var smooth = styles.readBoolean();
-      var texture = this._textures[textureIndex];
-      var fillStyle: CanvasPattern;
+      let textureIndex = styles.readUnsignedInt();
+      let fillTransform: Matrix = this._readMatrix(styles);
+      let repeat = styles.readBoolean() ? 'repeat' : 'no-repeat';
+      let smooth = styles.readBoolean();
+      let texture = this._textures[textureIndex];
+      let fillStyle: CanvasPattern;
       if (texture) {
         fillStyle = context.createPattern(texture.renderSource, repeat);
         fillStyle.setTransform(fillTransform.toSVGMatrix());
@@ -976,7 +976,7 @@ module Shumway.GFX {
       if (!this.fillStyle) {
         this.fillStyle = Shumway.ColorStyle.randomStyle();
       }
-      var bounds = this._bounds;
+      let bounds = this._bounds;
       context.save();
       context.beginPath();
       context.lineWidth = 2;
@@ -1008,32 +1008,32 @@ module Shumway.GFX {
         return this._morphPaths[ratio];
       }
 
-      var paths = this._morphPaths[ratio] = [];
+      let paths = this._morphPaths[ratio] = [];
 
-      var fillPath: Path2D = null;
-      var strokePath: Path2D = null;
+      let fillPath: Path2D = null;
+      let strokePath: Path2D = null;
 
       // We have to alway store the last position because Flash keeps the drawing cursor where it
       // was when changing fill or line style, whereas Canvas forgets it on beginning a new path.
-      var x = 0;
-      var y = 0;
-      var cpX: number;
-      var cpY: number;
-      var formOpen = false;
-      var formOpenX = 0;
-      var formOpenY = 0;
-      var commands = data.commands;
-      var coordinates = data.coordinates;
-      var morphCoordinates = data.morphCoordinates;
-      var styles = data.styles;
-      var morphStyles = data.morphStyles;
+      let x = 0;
+      let y = 0;
+      let cpX: number;
+      let cpY: number;
+      let formOpen = false;
+      let formOpenX = 0;
+      let formOpenY = 0;
+      let commands = data.commands;
+      let coordinates = data.coordinates;
+      let morphCoordinates = data.morphCoordinates;
+      let styles = data.styles;
+      let morphStyles = data.morphStyles;
       styles.position = 0;
       morphStyles.position = 0;
-      var coordinatesIndex = 0;
-      var commandsCount = data.commandsPosition;
+      let coordinatesIndex = 0;
+      let commandsCount = data.commandsPosition;
       // Description of serialization format can be found in flash.display.Graphics.
-      for (var commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
-        var command = commands[commandIndex];
+      for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+        let command = commands[commandIndex];
         switch (command) {
           case PathCommand.MoveTo:
             release || assert(coordinatesIndex <= data.coordinatesPosition - 2);
@@ -1077,9 +1077,9 @@ module Shumway.GFX {
               morphCoordinates[coordinatesIndex++], ratio) / 20;
             cpY = morph(coordinates[coordinatesIndex],
               morphCoordinates[coordinatesIndex++], ratio) / 20;
-            var cpX2 = morph(coordinates[coordinatesIndex],
+            let cpX2 = morph(coordinates[coordinatesIndex],
               morphCoordinates[coordinatesIndex++], ratio) / 20;
-            var cpY2 = morph(coordinates[coordinatesIndex],
+            let cpY2 = morph(coordinates[coordinatesIndex],
               morphCoordinates[coordinatesIndex++], ratio) / 20;
             x = morph(coordinates[coordinatesIndex],
               morphCoordinates[coordinatesIndex++], ratio) / 20;
@@ -1097,12 +1097,12 @@ module Shumway.GFX {
               false, null, x, y);
             break;
           case PathCommand.BeginBitmapFill:
-            var bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
+            let bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
             fillPath = this._createMorphPath(PathType.Fill, ratio, bitmapStyle.style, bitmapStyle.smoothImage,
               null, x, y);
             break;
           case PathCommand.BeginGradientFill:
-            var gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
+            let gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
             fillPath = this._createMorphPath(PathType.Fill, ratio, gradientStyle,
               false, null, x, y);
             break;
@@ -1110,29 +1110,29 @@ module Shumway.GFX {
             fillPath = null;
             break;
           case PathCommand.LineStyleSolid:
-            var width = morph(coordinates[coordinatesIndex],
+            let width = morph(coordinates[coordinatesIndex],
               morphCoordinates[coordinatesIndex++], ratio) / 20;
-            var color = ColorUtilities.rgbaToCSSStyle(
+            let color = ColorUtilities.rgbaToCSSStyle(
               morphColor(styles.readUnsignedInt(), morphStyles.readUnsignedInt(), ratio)
             );
             // Skip pixel hinting.
             styles.position += 1;
-            var scaleMode: LineScaleMode = styles.readByte();
-            var capsStyle: string = RenderableShape.LINE_CAPS_STYLES[styles.readByte()];
-            var jointsStyle: string = RenderableShape.LINE_JOINTS_STYLES[styles.readByte()];
-            var strokeProperties = new StrokeProperties(
+            let scaleMode: LineScaleMode = styles.readByte();
+            let capsStyle: string = RenderableShape.LINE_CAPS_STYLES[styles.readByte()];
+            let jointsStyle: string = RenderableShape.LINE_JOINTS_STYLES[styles.readByte()];
+            let strokeProperties = new StrokeProperties(
               width, scaleMode, capsStyle, jointsStyle, styles.readByte());
             if (strokeProperties.thickness > 0) {
               strokePath = this._createMorphPath(PathType.Stroke, ratio, color, false, strokeProperties, x, y); 
             }
             break;
           case PathCommand.LineStyleGradient:
-            var gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
+            let gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
             strokePath = this._createMorphPath(PathType.StrokeFill, ratio, gradientStyle,
               false, null, x, y);
             break;
           case PathCommand.LineStyleBitmap:
-            var bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
+            let bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
             strokePath = this._createMorphPath(PathType.StrokeFill, ratio, bitmapStyle.style,
               bitmapStyle.smoothImage, null, x, y);
             break;
@@ -1159,7 +1159,7 @@ module Shumway.GFX {
     private _createMorphPath(type: PathType, ratio: number, style: any, smoothImage: boolean,
                              strokeProperties: StrokeProperties, x: number, y: number): Path2D
     {
-      var path = new StyledPath(type, style, smoothImage, strokeProperties);
+      let path = new StyledPath(type, style, smoothImage, strokeProperties);
       this._morphPaths[ratio].push(path);
       path.path.moveTo(x, y);
       return path.path;
@@ -1181,23 +1181,23 @@ module Shumway.GFX {
       // Assert at least one color stop.
       release || assert(styles.bytesAvailable >= 1 + 1 + 6 * 4 /* matrix fields as floats */ +
         1 + 1 + 4 + 1 + 1);
-      var gradientType = styles.readUnsignedByte();
-      var focalPoint = styles.readShort() * 2 / 0xff;
+      let gradientType = styles.readUnsignedByte();
+      let focalPoint = styles.readShort() * 2 / 0xff;
       release || assert(focalPoint >= -1 && focalPoint <= 1);
-      var transform = this._readMorphMatrix(styles, morphStyles, ratio);
-      var gradient = gradientType === GradientType.Linear ?
+      let transform = this._readMorphMatrix(styles, morphStyles, ratio);
+      let gradient = gradientType === GradientType.Linear ?
         context.createLinearGradient(-1, 0, 1, 0) :
         context.createRadialGradient(focalPoint, 0, 0, 0, 0, 1);
       gradient.setTransform && gradient.setTransform(transform.toSVGMatrix());
-      var colorStopsCount = styles.readUnsignedByte();
-      for (var i = 0; i < colorStopsCount; i++) {
-        var stop = morph(
+      let colorStopsCount = styles.readUnsignedByte();
+      for (let i = 0; i < colorStopsCount; i++) {
+        let stop = morph(
             styles.readUnsignedByte() / 0xff, morphStyles.readUnsignedByte() / 0xff, ratio
         );
-        var color = morphColor(
+        let color = morphColor(
           styles.readUnsignedInt(), morphStyles.readUnsignedInt(), ratio
         );
-        var cssColor = ColorUtilities.rgbaToCSSStyle(color);
+        let cssColor = ColorUtilities.rgbaToCSSStyle(color);
         gradient.addColorStop(stop, cssColor);
       }
 
@@ -1212,13 +1212,13 @@ module Shumway.GFX {
       smoothImage: boolean}
     {
       release || assert(styles.bytesAvailable >= 4 + 6 * 4 /* matrix fields as floats */ + 1 + 1);
-      var textureIndex = styles.readUnsignedInt();
-      var fillTransform: Matrix = this._readMorphMatrix(styles, morphStyles, ratio);
-      var repeat = styles.readBoolean() ? 'repeat' : 'no-repeat';
-      var smooth = styles.readBoolean();
-      var texture = this._textures[textureIndex];
+      let textureIndex = styles.readUnsignedInt();
+      let fillTransform: Matrix = this._readMorphMatrix(styles, morphStyles, ratio);
+      let repeat = styles.readBoolean() ? 'repeat' : 'no-repeat';
+      let smooth = styles.readBoolean();
+      let texture = this._textures[textureIndex];
       release || assert(texture._canvas);
-      var fillStyle: CanvasPattern = context.createPattern(texture._canvas, repeat);
+      let fillStyle: CanvasPattern = context.createPattern(texture._canvas, repeat);
       fillStyle.setTransform(fillTransform.toSVGMatrix());
       return {style: fillStyle, smoothImage: smooth};
     }
@@ -1247,45 +1247,45 @@ module Shumway.GFX {
     addRun(font: string, fillStyle: string, text: string,
            letterSpacing: number, underline: boolean) {
       if (text) {
-        var measureContext = TextLine._getMeasureContext();
+        let measureContext = TextLine._getMeasureContext();
         measureContext.font = font;
-        var width = measureText(measureContext, text, letterSpacing);
+        let width = measureText(measureContext, text, letterSpacing);
         this.runs.push(new TextRun(font, fillStyle, text, width, letterSpacing, underline));
         this.width += width;
       }
     }
 
     wrap(maxWidth: number): TextLine[] {
-      var lines: TextLine[] = [this];
-      var runs = this.runs;
+      let lines: TextLine[] = [this];
+      let runs = this.runs;
 
-      var currentLine = this;
+      let currentLine = this;
       currentLine.width = 0;
       currentLine.runs = [];
 
-      var measureContext = TextLine._getMeasureContext();
+      let measureContext = TextLine._getMeasureContext();
 
-      for (var i = 0; i < runs.length; i++) {
-        var run = runs[i];
-        var text = run.text;
+      for (let i = 0; i < runs.length; i++) {
+        let run = runs[i];
+        let text = run.text;
         run.text = '';
         run.width = 0;
         measureContext.font = run.font;
-        var spaceLeft = maxWidth;
-        var words = text.split(/[\s.-]/);
-        var offset = 0;
-        for (var j = 0; j < words.length; j++) {
-          var word = words[j];
-          var chunk = text.substr(offset, word.length + 1);
-          var letterSpacing = run.letterSpacing;
-          var wordWidth = measureText(measureContext, chunk, letterSpacing);
+        let spaceLeft = maxWidth;
+        let words = text.split(/[\s.-]/);
+        let offset = 0;
+        for (let j = 0; j < words.length; j++) {
+          let word = words[j];
+          let chunk = text.substr(offset, word.length + 1);
+          let letterSpacing = run.letterSpacing;
+          let wordWidth = measureText(measureContext, chunk, letterSpacing);
           if (wordWidth > spaceLeft) {
             do {
               if (run.text) {
                 currentLine.runs.push(run);
                 currentLine.width += run.width;
                 run = new TextRun(run.font, run.fillStyle, '', 0, run.letterSpacing, run.underline);
-                var newLine = new TextLine();
+                let newLine = new TextLine();
                 newLine.y = (currentLine.y + currentLine.descent + currentLine.leading + currentLine.ascent) | 0;
                 newLine.ascent = currentLine.ascent;
                 newLine.descent = currentLine.descent;
@@ -1296,9 +1296,9 @@ module Shumway.GFX {
               }
               spaceLeft = maxWidth - wordWidth;
               if (spaceLeft < 0) {
-                var k = chunk.length;
-                var t = chunk;
-                var w = wordWidth;
+                let k = chunk.length;
+                let t = chunk;
+                let w = wordWidth;
                 while (k > 1) {
                   k--;
                   t = chunk.substr(0, k);
@@ -1347,7 +1347,7 @@ module Shumway.GFX {
   
   function measureText(context: CanvasRenderingContext2D, text: string,
                        letterSpacing: number): number {
-    var width = context.measureText(text).width | 0;
+    let width = context.measureText(text).width | 0;
     if (letterSpacing > 0) {
       width += text.length * letterSpacing;
     }
@@ -1410,26 +1410,26 @@ module Shumway.GFX {
     }
 
     reflow(autoSize: number, wordWrap: boolean): void {
-      var textRunData = this._textRunData;
+      let textRunData = this._textRunData;
 
       if (!textRunData) {
         return;
       }
 
-      var bounds = this._bounds;
-      var availableWidth = bounds.w - 4;
-      var plainText = this._plainText;
-      var lines = this.lines;
+      let bounds = this._bounds;
+      let availableWidth = bounds.w - 4;
+      let plainText = this._plainText;
+      let lines = this.lines;
 
-      var currentLine = new TextLine();
-      var baseLinePos = 0;
-      var maxWidth = 0;
-      var maxAscent = 0;
-      var maxDescent = 0;
-      var maxLeading = -0xffffffff;
-      var firstAlign = -1;
+      let currentLine = new TextLine();
+      let baseLinePos = 0;
+      let maxWidth = 0;
+      let maxAscent = 0;
+      let maxDescent = 0;
+      let maxLeading = -0xffffffff;
+      let firstAlign = -1;
 
-      var finishLine = function () {
+      let finishLine = function () {
         if (!currentLine.runs.length) {
           baseLinePos += maxAscent + maxDescent + maxLeading;
           return;
@@ -1448,9 +1448,9 @@ module Shumway.GFX {
         currentLine.align = firstAlign;
 
         if (wordWrap && currentLine.width > availableWidth) {
-          var wrappedLines = currentLine.wrap(availableWidth);
-          for (var i = 0; i < wrappedLines.length; i++) {
-            var line = wrappedLines[i];
+          let wrappedLines = currentLine.wrap(availableWidth);
+          for (let i = 0; i < wrappedLines.length; i++) {
+            let line = wrappedLines[i];
             baseLinePos = line.y + line.descent + line.leading;
             lines.push(line);
             if (line.width > maxWidth) {
@@ -1470,15 +1470,15 @@ module Shumway.GFX {
       enterTimeline("RenderableText.reflow");
 
       while (textRunData.position < textRunData.length) {
-        var beginIndex = textRunData.readInt();
-        var endIndex = textRunData.readInt();
+        let beginIndex = textRunData.readInt();
+        let endIndex = textRunData.readInt();
 
-        var size = textRunData.readInt();
-        var fontName = textRunData.readUTF();
+        let size = textRunData.readInt();
+        let fontName = textRunData.readUTF();
 
-        var ascent = textRunData.readInt();
-        var descent = textRunData.readInt();
-        var leading = textRunData.readInt();
+        let ascent = textRunData.readInt();
+        let descent = textRunData.readInt();
+        let leading = textRunData.readInt();
         if (ascent > maxAscent) {
           maxAscent = ascent;
         }
@@ -1489,42 +1489,42 @@ module Shumway.GFX {
           maxLeading = leading;
         }
 
-        var bold = textRunData.readBoolean();
-        var italic = textRunData.readBoolean();
-        var boldItalic = '';
+        let bold = textRunData.readBoolean();
+        let italic = textRunData.readBoolean();
+        let boldItalic = '';
         if (italic) {
           boldItalic += 'italic ';
         }
         if (bold) {
           boldItalic += 'bold ';
         }
-        var font = boldItalic + size + 'px ' + fontName + ', AdobeBlank';
+        let font = boldItalic + size + 'px ' + fontName + ', AdobeBlank';
 
-        var color = textRunData.readInt();
-        var fillStyle = ColorUtilities.rgbToHex(color);
+        let color = textRunData.readInt();
+        let fillStyle = ColorUtilities.rgbToHex(color);
 
-        var align = textRunData.readInt();
+        let align = textRunData.readInt();
         if (firstAlign === -1) {
           firstAlign = align;
         }
 
-        var bullet = textRunData.readBoolean();
-        //var display = textRunData.readInt();
-        var indent = textRunData.readInt();
-        //var blockIndent = textRunData.readInt();
-        var kerning = textRunData.readInt();
-        var leftMargin = textRunData.readInt();
-        var letterSpacing = textRunData.readInt();
-        var rightMargin = textRunData.readInt();
-        //var tabStops = textRunData.readInt();
-        var underline = textRunData.readBoolean();
+        let bullet = textRunData.readBoolean();
+        //let display = textRunData.readInt();
+        let indent = textRunData.readInt();
+        //let blockIndent = textRunData.readInt();
+        let kerning = textRunData.readInt();
+        let leftMargin = textRunData.readInt();
+        let letterSpacing = textRunData.readInt();
+        let rightMargin = textRunData.readInt();
+        //let tabStops = textRunData.readInt();
+        let underline = textRunData.readBoolean();
 
-        var text = '';
-        var eof = false;
-        for (var i = beginIndex; !eof; i++) {
-          var eof = i >= endIndex - 1;
+        let text = '';
+        let eof = false;
+        for (let i = beginIndex; !eof; i++) {
+          let eof = i >= endIndex - 1;
 
-          var char = plainText[i];
+          let char = plainText[i];
           if (char !== '\r' && char !== '\n') {
             text += char;
             if (i < plainText.length - 1) {
@@ -1551,19 +1551,19 @@ module Shumway.GFX {
       }
 
       // Append an additional empty line if we find a line break character at the end of the text.
-      var endCharacter = plainText[plainText.length - 1];
+      let endCharacter = plainText[plainText.length - 1];
       if (endCharacter === '\r' || endCharacter === '\n') {
         lines.push(currentLine);
       }
 
-      var rect = this.textRect;
+      let rect = this.textRect;
       rect.w = maxWidth;
       rect.h = baseLinePos;
 
       if (autoSize) {
         if (!wordWrap) {
           availableWidth = maxWidth;
-          var width = bounds.w;
+          let width = bounds.w;
           switch (autoSize) {
             case 1: // CENTER
               rect.x = (width - (availableWidth + 4)) >> 1;
@@ -1583,9 +1583,9 @@ module Shumway.GFX {
         this._textBounds = bounds;
       }
 
-      var numLines = lines.length;
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
+      let numLines = lines.length;
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
         if (line.width < availableWidth) {
           switch (line.align) {
             case 0: // left
@@ -1608,8 +1608,8 @@ module Shumway.GFX {
                                           new Point(0, 0), new Point(0, 0)];
     private static roundBoundPoints(points: Point[]) {
       release || assert(points === RenderableText.absoluteBoundPoints);
-      for (var i = 0; i < points.length; i++) {
-        var point = points[i];
+      for (let i = 0; i < points.length; i++) {
+        let point = points[i];
         point.x = Math.floor(point.x + .1) + .5;
         point.y = Math.floor(point.y + .1) + .5;
       }
@@ -1619,7 +1619,7 @@ module Shumway.GFX {
       enterTimeline("RenderableText.render");
       context.save();
 
-      var rect = this._textBounds;
+      let rect = this._textBounds;
       if (this._backgroundColor) {
         context.fillStyle = ColorUtilities.rgbaToCSSStyle(this._backgroundColor);
         context.fillRect(rect.x, rect.y, rect.w, rect.h);
@@ -1631,11 +1631,11 @@ module Shumway.GFX {
         // TextField bounds are always drawn as 1px lines on (global-space) pixel boundaries.
         // Their rounding is a bit weird, though: fractions below .9 are rounded down.
         // We can only fully implement this in browsers that support `currentTransform`.
-        var boundPoints = RenderableText.absoluteBoundPoints;
-        var m: SVGMatrix = context['currentTransform'];
+        let boundPoints = RenderableText.absoluteBoundPoints;
+        let m: SVGMatrix = context['currentTransform'];
         if (m) {
           rect = rect.clone();
-          var matrix = new Matrix(m.a, m.b, m.c, m.d, m.e, m.f);
+          let matrix = new Matrix(m.a, m.b, m.c, m.d, m.e, m.f);
           matrix.transformRectangle(rect, boundPoints);
           context.setTransform(1, 0, 0, 1, 0, 0);
         } else {
@@ -1649,7 +1649,7 @@ module Shumway.GFX {
           boundPoints[3].y = rect.y + rect.h;
         }
         RenderableText.roundBoundPoints(boundPoints);
-        var path = new Path2D();
+        let path = new Path2D();
         path.moveTo(boundPoints[0].x, boundPoints[0].y);
         path.lineTo(boundPoints[1].x, boundPoints[1].y);
         path.lineTo(boundPoints[2].x, boundPoints[2].y);
@@ -1673,29 +1673,29 @@ module Shumway.GFX {
 
     private _renderChars(context: CanvasRenderingContext2D) {
       if (this._matrix) {
-        var m = this._matrix;
+        let m = this._matrix;
         context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
       }
-      var lines = this.lines;
-      var coords = this._coords;
+      let lines = this.lines;
+      let coords = this._coords;
       coords.position = 0;
-      var font = '';
-      var fillStyle = '';
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var runs = line.runs;
-        for (var j = 0; j < runs.length; j++) {
-          var run = runs[j];
+      let font = '';
+      let fillStyle = '';
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let runs = line.runs;
+        for (let j = 0; j < runs.length; j++) {
+          let run = runs[j];
           if (run.font !== font) {
             context.font = font = run.font;
           }
           if (run.fillStyle !== fillStyle) {
             context.fillStyle = fillStyle = run.fillStyle;
           }
-          var text = run.text;
-          for (var k = 0; k < text.length; k++) {
-            var x = coords.readInt() / 20;
-            var y = coords.readInt() / 20;
+          let text = run.text;
+          for (let k = 0; k < text.length; k++) {
+            let x = coords.readInt() / 20;
+            let y = coords.readInt() / 20;
             context.fillText(text[k], x, y);
           }
         }
@@ -1704,22 +1704,22 @@ module Shumway.GFX {
 
     private _renderLines(context: CanvasRenderingContext2D) {
       // TODO: Render bullet points.
-      var bounds = this._textBounds;
+      let bounds = this._textBounds;
       context.beginPath();
       context.rect(bounds.x + 2, bounds.y + 2, bounds.w - 4, bounds.h - 4);
       context.clip();
       context.translate((bounds.x - this._scrollH) + 2, bounds.y + 2);
-      var lines = this.lines;
-      var scrollV = this._scrollV;
-      var scrollY = 0;
-      var font = '';
-      var fillStyle = '';
+      let lines = this.lines;
+      let scrollV = this._scrollV;
+      let scrollY = 0;
+      let font = '';
+      let fillStyle = '';
       context.textAlign = "left";
       context.textBaseline = "alphabetic";
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var x = line.x;
-        var y = line.y;
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let x = line.x;
+        let y = line.y;
         // Skip lines until we are within the scroll view.
         if (i + 1 < scrollV) {
           scrollY = y + line.descent + line.leading;
@@ -1731,9 +1731,9 @@ module Shumway.GFX {
         if ((i + 1) - scrollV && y > bounds.h) {
           break;
         }
-        var runs = line.runs;
-        for (var j = 0; j < runs.length; j++) {
-          var run = runs[j];
+        let runs = line.runs;
+        for (let j = 0; j < runs.length; j++) {
+          let run = runs[j];
           if (run.font !== font) {
             context.font = font = run.font;
           }
@@ -1746,8 +1746,8 @@ module Shumway.GFX {
           context.textAlign = "left";
           context.textBaseline = "alphabetic";
           if (run.letterSpacing > 0) {
-            var text = run.text;
-            for (var k = 0; k < text.length; k++) {
+            let text = run.text;
+            for (let k = 0; k < text.length; k++) {
               context.fillText(text[k], x, y);
               x += measureText(context, text[k], run.letterSpacing);
             }

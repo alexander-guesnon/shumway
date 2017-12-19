@@ -15,7 +15,7 @@
  */
 
 module Shumway.SWF {
-  export var timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("Parser") : null;
+  export let timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("Parser") : null;
 
   export function enterTimeline(name: string, data?: any) {
     profile && timelineBuffer && timelineBuffer.enter(name, data);

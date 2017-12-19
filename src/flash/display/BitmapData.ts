@@ -44,7 +44,7 @@ module Shumway.AVMX.AS.flash.display {
     _symbol: BitmapSymbol;
     applySymbol() {
       release || assert(this._symbol);
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       release || assert(symbol.syncId);
       this._rect = new this.sec.flash.geom.Rectangle(0, 0, symbol.width, symbol.height);
       this._transparent = true;
@@ -86,7 +86,7 @@ module Shumway.AVMX.AS.flash.display {
       this._transparent = transparent;
       this._id = flash.display.DisplayObject.getNextSyncID();
       this._setData(new Uint8Array(width * height * 4), ImageType.PremultipliedAlphaARGB);
-      var alpha = fillColorARGB >> 24;
+      let alpha = fillColorARGB >> 24;
       if (alpha === 0 && transparent) {
         // No need to do an initial fill since this would all be zeros anyway.
         this._solidFillColorPBGRA = 0;
@@ -119,13 +119,13 @@ module Shumway.AVMX.AS.flash.display {
     private _bitmapReferrers: flash.display.Bitmap [];
 
     _addBitmapReferrer(bitmap: flash.display.Bitmap) {
-      var index = indexOf(this._bitmapReferrers, bitmap);
+      let index = indexOf(this._bitmapReferrers, bitmap);
       release || assert(index < 0);
       this._bitmapReferrers.push(bitmap);
     }
 
     _removeBitmapReferrer(bitmap: flash.display.Bitmap) {
-      var index = indexOf(this._bitmapReferrers, bitmap);
+      let index = indexOf(this._bitmapReferrers, bitmap);
       release || assert(index >= 0);
       this._bitmapReferrers[index] = null;
     }
@@ -140,8 +140,8 @@ module Shumway.AVMX.AS.flash.display {
       this._isDirty = true;
       this._isRemoteDirty = false;
       // TODO: We probably don't need to propagate any flags if |_locked| is true.
-      for (var i = 0; i < this._bitmapReferrers.length; i++) {
-        var bitmap = this._bitmapReferrers[i];
+      for (let i = 0; i < this._bitmapReferrers.length; i++) {
+        let bitmap = this._bitmapReferrers[i];
         if (bitmap) {
           bitmap._setDirtyFlags(DisplayObjectDirtyFlags.DirtyBitmapData);
         }
@@ -200,7 +200,7 @@ module Shumway.AVMX.AS.flash.display {
     private static _temporaryRectangle: flash.geom.Rectangle;
 
     private _getTemporaryRectangleFrom(rect: flash.geom.Rectangle): flash.geom.Rectangle {
-      var r = this.sec.flash.display.BitmapData.axClass._temporaryRectangle;
+      let r = this.sec.flash.display.BitmapData.axClass._temporaryRectangle;
       r.copyFrom(rect);
       return r;
     }
@@ -217,25 +217,25 @@ module Shumway.AVMX.AS.flash.display {
      * TODO: Not tested.
      */
     private _getPixelData(rect: flash.geom.Rectangle): Int32Array {
-      var r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
+      let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
       if (r.isEmpty()) {
         return;
       }
-      var xMin = r.x;
-      var xMax = r.x + r.width;
-      var yMin = r.y;
-      var yMax = r.y + r.height;
+      let xMin = r.x;
+      let xMax = r.x + r.width;
+      let yMin = r.y;
+      let yMax = r.y + r.height;
       this._ensureBitmapData();
-      var view = this._view;
-      var width = this._rect.width;
-      var output = new Int32Array(r.area);
-      var p = 0;
-      for (var y = yMin; y < yMax; y++) {
-        var offset = y * width;
-        for (var x = xMin; x < xMax; x++) {
-          var colorBGRA = view[offset + x];
-          var alpha = colorBGRA & 0xff;
-          var colorBGR = colorBGRA >>> 8;
+      let view = this._view;
+      let width = this._rect.width;
+      let output = new Int32Array(r.area);
+      let p = 0;
+      for (let y = yMin; y < yMax; y++) {
+        let offset = y * width;
+        for (let x = xMin; x < xMax; x++) {
+          let colorBGRA = view[offset + x];
+          let alpha = colorBGRA & 0xff;
+          let colorBGR = colorBGRA >>> 8;
           colorBGRA = ((255 * colorBGR) / alpha) << 8 | alpha;
           output[p++] = colorBGRA;
         }
@@ -247,26 +247,26 @@ module Shumway.AVMX.AS.flash.display {
      * TODO: Not tested.
      */
     private _putPixelData(rect: flash.geom.Rectangle, input: Int32Array): void {
-      var r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
+      let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
       if (r.isEmpty()) {
         return;
       }
-      var xMin = r.x;
-      var xMax = r.x + r.width;
-      var yMin = r.y;
-      var yMax = r.y + r.height;
+      let xMin = r.x;
+      let xMax = r.x + r.width;
+      let yMin = r.y;
+      let yMax = r.y + r.height;
       this._ensureBitmapData();
-      var view = this._view;
-      var width = this._rect.width;
-      var p = (rect.width * rect.height - r.height) + (xMin - rect.x);
-      var padding = rect.width - r.width;
-      var alphaMask = this._transparent ? 0x00 : 0xff;
-      for (var y = yMin; y < yMax; y++) {
-        var offset = y * width;
-        for (var x = xMin; x < xMax; x++) {
-          var colorBGRA = input[p++];
-          var alpha = colorBGRA & alphaMask;
-          var colorBGR = colorBGRA >>> 8;
+      let view = this._view;
+      let width = this._rect.width;
+      let p = (rect.width * rect.height - r.height) + (xMin - rect.x);
+      let padding = rect.width - r.width;
+      let alphaMask = this._transparent ? 0x00 : 0xff;
+      for (let y = yMin; y < yMax; y++) {
+        let offset = y * width;
+        for (let x = xMin; x < xMax; x++) {
+          let colorBGRA = input[p++];
+          let alpha = colorBGRA & alphaMask;
+          let colorBGR = colorBGRA >>> 8;
           view[offset + x] = (((colorBGR * alpha + 254) / 255) & 0x00ffffff) << 8 | alpha;
         }
         p += padding;
@@ -291,7 +291,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     clone(): flash.display.BitmapData {
-      var bd: BitmapData = Object.create(this.sec.flash.display.BitmapData.axClass.tPrototype);
+      let bd: BitmapData = Object.create(this.sec.flash.display.BitmapData.axClass.tPrototype);
       bd._rect = this._rect.clone();
       bd._transparent = this._transparent;
       bd._solidFillColorPBGRA = this._solidFillColorPBGRA;
@@ -322,11 +322,11 @@ module Shumway.AVMX.AS.flash.display {
         return 0;
       }
       this._ensureBitmapData();
-      var value = this._view[y * this._rect.width + x];
+      let value = this._view[y * this._rect.width + x];
       switch (this._type) {
         case ImageType.PremultipliedAlphaARGB:
-          var pARGB = swap32(value);
-          var uARGB = unpremultiplyARGB(pARGB);
+          let pARGB = swap32(value);
+          let uARGB = unpremultiplyARGB(pARGB);
           return uARGB >>> 0;
         case ImageType.StraightAlphaRGBA:
           return RGBAToARGB(swap32(value));
@@ -345,10 +345,10 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
       this._ensureBitmapData();
-      var i = y * this._rect.width + x;
-      var a = this._view[i] & 0xff;
+      let i = y * this._rect.width + x;
+      let a = this._view[i] & 0xff;
       uARGB = uARGB & 0x00ffffff | a << 24;
-      var pARGB = premultiplyARGB(uARGB);
+      let pARGB = premultiplyARGB(uARGB);
       this._view[i] = swap32(pARGB);
       this._invalidate();
       this._solidFillColorPBGRA = null;
@@ -361,13 +361,13 @@ module Shumway.AVMX.AS.flash.display {
         return;
       }
       this._ensureBitmapData();
-      var a = uARGB >>> 24;
-      var uRGB = uARGB & 0x00ffffff;
+      let a = uARGB >>> 24;
+      let uRGB = uARGB & 0x00ffffff;
       if (this._transparent) {
-        var uARGB = uRGB | a << 24;
-        var pARGB = premultiplyARGB(uARGB);
+        let uARGB = uRGB | a << 24;
+        let pARGB = premultiplyARGB(uARGB);
       } else {
-        var pARGB = uRGB | 0xff000000;
+        let pARGB = uRGB | 0xff000000;
       }
       this._view[y * this._rect.width + x] = swap32(pARGB);
       this._invalidate();
@@ -429,28 +429,28 @@ module Shumway.AVMX.AS.flash.display {
       // Deal with fractional pixel coordinates, looks like Flash "rounds" the corners of
       // the source rect, however a width of |0.5| rounds down rather than up so we're not
       // quite correct here.
-      var sRect;
+      let sRect;
       if (sourceRect) {
         sRect = this._getTemporaryRectangleFrom(sourceRect).roundInPlace();
       } else {
         sRect = this.sec.flash.display.BitmapData.axClass._temporaryRectangle.setEmpty();
       }
 
-      var tBRect = this._rect;
-      var sBRect = sourceBitmapData._rect;
+      let tBRect = this._rect;
+      let sBRect = sourceBitmapData._rect;
 
       // Clip sRect against SBRect.
-      var sL = Math.max(sRect.x, 0);
-      var sT = Math.max(sRect.y, 0);
-      var sR = Math.min(sRect.x + sRect.width, sBRect.width);
-      var sB = Math.min(sRect.y + sRect.height, sBRect.height);
+      let sL = Math.max(sRect.x, 0);
+      let sT = Math.max(sRect.y, 0);
+      let sR = Math.min(sRect.x + sRect.width, sBRect.width);
+      let sB = Math.min(sRect.y + sRect.height, sBRect.height);
 
       // Compute source rect offsets (in case the source rect had negative x, y coordinates).
-      var oX = sL - sRect.x ;
-      var oY = sT - sRect.y;
+      let oX = sL - sRect.x ;
+      let oY = sT - sRect.y;
 
-      var tL = (destPoint.x | 0) + oX;
-      var tT = (destPoint.y | 0) + oY;
+      let tL = (destPoint.x | 0) + oX;
+      let tT = (destPoint.y | 0) + oY;
 
       if (tL < 0) {
         sL -= tL;
@@ -462,27 +462,27 @@ module Shumway.AVMX.AS.flash.display {
         tT = 0;
       }
 
-      var tW = Math.min(sR - sL, tBRect.width - tL);
-      var tH = Math.min(sB - sT, tBRect.height - tT);
+      let tW = Math.min(sR - sL, tBRect.width - tL);
+      let tH = Math.min(sB - sT, tBRect.height - tT);
 
       if (tW <= 0 || tH <= 0) {
         return;
       }
 
-      var sX = sL;
-      var sY = sT;
+      let sX = sL;
+      let sY = sT;
 
-      var tX = tL;
-      var tY = tT;
+      let tX = tL;
+      let tY = tT;
 
-      var sStride = sourceBitmapData._rect.width;
-      var tStride = this._rect.width;
+      let sStride = sourceBitmapData._rect.width;
+      let tStride = this._rect.width;
 
       this._ensureBitmapData();
       sourceBitmapData._ensureBitmapData();
 
-      var s = sourceBitmapData._view;
-      var t = this._view;
+      let s = sourceBitmapData._view;
+      let t = this._view;
 
       if (sourceBitmapData._type !== this._type) {
         release || somewhatImplemented("public flash.display.BitmapData::copyPixels - Color Format Conversion");
@@ -512,11 +512,11 @@ module Shumway.AVMX.AS.flash.display {
       if (mergeAlpha) {
         this._copyPixelsAndMergeAlpha(s, sX, sY, sStride, t, tX, tY, tStride, tW, tH);
       } else {
-        var sP = (sY * sStride + sX) | 0;
-        var tP = (tY * tStride + tX) | 0;
+        let sP = (sY * sStride + sX) | 0;
+        let tP = (tY * tStride + tX) | 0;
         if ((tW & 3) === 0) {
-          for (var y = 0; y < tH; y = y + 1 | 0) {
-            for (var x = 0; x < tW; x = x + 4 | 0) {
+          for (let y = 0; y < tH; y = y + 1 | 0) {
+            for (let x = 0; x < tW; x = x + 4 | 0) {
               t[(tP + x + 0) | 0] = s[(sP + x + 0) | 0];
               t[(tP + x + 1) | 0] = s[(sP + x + 1) | 0];
               t[(tP + x + 2) | 0] = s[(sP + x + 2) | 0];
@@ -526,8 +526,8 @@ module Shumway.AVMX.AS.flash.display {
             tP = tP + tStride | 0;
           }
         } else {
-          for (var y = 0; y < tH; y = y + 1 | 0) {
-            for (var x = 0; x < tW; x = x + 1 | 0) {
+          for (let y = 0; y < tH; y = y + 1 | 0) {
+            for (let x = 0; x < tW; x = x + 1 | 0) {
               t[tP + x | 0] = s[sP + x | 0];
             }
             sP = sP + sStride | 0;
@@ -542,12 +542,12 @@ module Shumway.AVMX.AS.flash.display {
 
     private _copyPixelsAndMergeAlpha(s: Int32Array, sX: number, sY: number, sStride: number,
                                      t: Int32Array, tX: number, tY: number, tStride: number, tW: number, tH: number) {
-      var sP = (sY * sStride + sX) | 0;
-      var tP = (tY * tStride + tX) | 0;
-      for (var y = 0; y < tH; y = y + 1 | 0) {
-        for (var x = 0; x < tW; x = x + 1 | 0) {
-          var spBGRA = s[sP + x | 0];
-          var sA = spBGRA & 0xff;
+      let sP = (sY * sStride + sX) | 0;
+      let tP = (tY * tStride + tX) | 0;
+      for (let y = 0; y < tH; y = y + 1 | 0) {
+        for (let x = 0; x < tW; x = x + 1 | 0) {
+          let spBGRA = s[sP + x | 0];
+          let sA = spBGRA & 0xff;
           // Optimize for the case where the source pixel is fully opaque or transparent. This
           // pays off if the source image has many such pixels but slows down the normal case.
           if (sA === 0xff) {
@@ -559,12 +559,12 @@ module Shumway.AVMX.AS.flash.display {
             // is to compute GA and BR at the same time without pulling apart each channel.
             // We use the "double blend trick" (http://stereopsis.com/doubleblend.html) to
             // compute GA and BR without unpacking them.
-            var sGA = spBGRA      & 0x00ff00ff;
-            var sBR = spBGRA >> 8 & 0x00ff00ff;
-            var tpBGRA = t[tP + x | 0];
-            var tGA = tpBGRA      & 0x00ff00ff;
-            var tBR = tpBGRA >> 8 & 0x00ff00ff;
-            var A = 256 - sA;
+            let sGA = spBGRA      & 0x00ff00ff;
+            let sBR = spBGRA >> 8 & 0x00ff00ff;
+            let tpBGRA = t[tP + x | 0];
+            let tGA = tpBGRA      & 0x00ff00ff;
+            let tBR = tpBGRA >> 8 & 0x00ff00ff;
+            let A = 256 - sA;
             tGA = Math.imul(tGA, A) >> 8;
             tBR = Math.imul(tBR, A) >> 8;
             // TODO: Not sure if target alpha is computed correctly.
@@ -588,7 +588,7 @@ module Shumway.AVMX.AS.flash.display {
       blendMode = axCoerceString(blendMode);
       smoothing = !!smoothing;
       release || somewhatImplemented("public flash.display.BitmapData::draw");
-      var serializer: IBitmapDataSerializer = this.sec.player;
+      let serializer: IBitmapDataSerializer = this.sec.player;
       if (matrix) {
         matrix = matrix.clone().toTwipsInPlace();
       }
@@ -610,12 +610,12 @@ module Shumway.AVMX.AS.flash.display {
       // TODO: what guarantees this, and why do we even need it?
       release || assert(this._type === ImageType.PremultipliedAlphaARGB);
       if (this._transparent) {
-        var pARGB = premultiplyARGB(uARGB);
+        let pARGB = premultiplyARGB(uARGB);
       } else {
-        var pARGB = uARGB | 0xff000000;
+        let pARGB = uARGB | 0xff000000;
       }
-      var pBGRA = swap32(pARGB);
-      var r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
+      let pBGRA = swap32(pARGB);
+      let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
       if (r.isEmpty()) {
         return;
       }
@@ -623,33 +623,33 @@ module Shumway.AVMX.AS.flash.display {
       if (this._solidFillColorPBGRA === pBGRA) {
         return;
       }
-      var view = this._view;
+      let view = this._view;
       // If we are filling the entire buffer, we can do a little better ~ 25% faster.
       if (r.equals(this._rect)) {
-        var length = view.length | 0;
+        let length = view.length | 0;
         // Unroll 4 iterations, ~ 5% faster.
         if ((length & 0x3) === 0) {
-          for (var i = 0; i < length; i += 4) {
+          for (let i = 0; i < length; i += 4) {
             view[i]     = pBGRA;
             view[i + 1] = pBGRA;
             view[i + 2] = pBGRA;
             view[i + 3] = pBGRA;
           }
         } else {
-          for (var i = 0; i < length; i++) {
+          for (let i = 0; i < length; i++) {
             view[i] = pBGRA;
           }
         }
         this._solidFillColorPBGRA = pBGRA;
       } else {
-        var xMin = r.x | 0;
-        var xMax = r.x + r.width | 0;
-        var yMin = r.y | 0;
-        var yMax = r.y + r.height | 0;
-        var width = this._rect.width | 0;
-        for (var y = yMin; y < yMax; y++) {
-          var offset = y * width | 0;
-          for (var x = xMin; x < xMax; x++) {
+        let xMin = r.x | 0;
+        let xMax = r.x + r.width | 0;
+        let yMin = r.y | 0;
+        let yMax = r.y + r.height | 0;
+        let width = this._rect.width | 0;
+        for (let y = yMin; y < yMax; y++) {
+          let offset = y * width | 0;
+          for (let x = xMin; x < xMax; x++) {
             view[offset + x] = pBGRA;
           }
         }
@@ -684,13 +684,13 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     getPixels(rect: flash.geom.Rectangle): flash.utils.ByteArray {
-      var outputByteArray = new this.sec.flash.utils.ByteArray();
+      let outputByteArray = new this.sec.flash.utils.ByteArray();
       this.copyPixelsToByteArray(rect, outputByteArray);
       return outputByteArray;
     }
 
     copyPixelsToByteArray(rect: flash.geom.Rectangle, data: flash.utils.ByteArray): void {
-      var pixelData = this._getPixelData(rect);
+      let pixelData = this._getPixelData(rect);
       if (!pixelData) {
         return;
       }
@@ -698,8 +698,8 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     getVector(rect: flash.geom.Rectangle): Uint32Vector {
-      var outputVector = new this.sec.Uint32Vector(pixelData.length);
-      var pixelData = this._getPixelData(rect);
+      let outputVector = new this.sec.Uint32Vector(pixelData.length);
+      let pixelData = this._getPixelData(rect);
       if (!pixelData) {
         return outputVector;
       }
@@ -851,7 +851,7 @@ module Shumway.AVMX.AS.flash.display {
      */
     private _ensureBitmapData() {
       if (this._isRemoteDirty) {
-        var data = this.sec.player.requestBitmapData(this);
+        let data = this.sec.player.requestBitmapData(this);
         this._setData(data.getBytes(), ImageType.StraightAlphaRGBA);
         this._isRemoteDirty = false;
         this._isDirty = false;
@@ -898,7 +898,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: any, loaderInfo: LoaderInfo): BitmapSymbol {
-      var symbol = new BitmapSymbol(data, loaderInfo.sec);
+      let symbol = new BitmapSymbol(data, loaderInfo.sec);
       // For non-decoded images, we don't yet have dimensions.
       symbol.width = data.width || -1;
       symbol.height = data.height || -1;

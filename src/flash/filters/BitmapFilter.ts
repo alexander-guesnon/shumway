@@ -36,13 +36,13 @@ module Shumway.AVMX.AS.flash.filters {
 
     static _updateBlurBounds(bounds: Rectangle, blurX: number, blurY: number, quality: number /*int*/, isBlurFilter: boolean = false) {
       // Approximation of BitmapData.generateFilterRect()
-      var stepWidth: number = BitmapFilter.blurFilterStepWidths[quality - 1];
+      let stepWidth: number = BitmapFilter.blurFilterStepWidths[quality - 1];
       if (isBlurFilter) {
         // BlurFilter behaves slightly different from other blur based filters:
         // Given ascending blurX/blurY values, generateFilterRect with BlurFilter
         // expands the source rect later than with i.e. GlowFilter. The difference
         // appears to be stepWidth / 4 for all quality values.
-        var stepWidth4: number = stepWidth / 4;
+        let stepWidth4: number = stepWidth / 4;
         blurX -= stepWidth4;
         blurY -= stepWidth4;
       }
@@ -50,8 +50,8 @@ module Shumway.AVMX.AS.flash.filters {
       // blurX/blurY values <= 1 are always rounded up to 1,
       // which means that generateFilterRect always expands the source rect,
       // even when blurX/blurY is 0.
-      var bh: number = Math.ceil((blurX < 1 ? 1 : blurX) * stepWidth);
-      var bv: number = Math.ceil((blurY < 1 ? 1 : blurY) * stepWidth);
+      let bh: number = Math.ceil((blurX < 1 ? 1 : blurX) * stepWidth);
+      let bv: number = Math.ceil((blurY < 1 ? 1 : blurY) * stepWidth);
       bounds.inflate(bh, bv);
     }
 
@@ -98,7 +98,7 @@ module Shumway.AVMX.AS.flash.filters {
         this.alphas = [];
         this.ratios = [];
       } else {
-        var len: number;
+        let len: number;
         if (isNullOrUndefined(ratios)) {
           this.colors = this.sanitizeColors(colors);
           len = this.colors.length;
@@ -128,16 +128,16 @@ module Shumway.AVMX.AS.flash.filters {
     }
 
     static sanitizeColors(colors: number [], maxLen: number = 16): number [] {
-      var arr: number [] = [];
-      for (var i = 0, n = Math.min(colors.length, maxLen); i < n; i++) {
+      let arr: number [] = [];
+      for (let i = 0, n = Math.min(colors.length, maxLen); i < n; i++) {
         arr[i] = (colors[i] >>> 0) & 0xffffff;
       }
       return arr;
     }
 
     static sanitizeAlphas(alphas: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
-      var arr: number [] = [];
-      for (var i = 0, n = Math.min(alphas.length, maxLen); i < n; i++) {
+      let arr: number [] = [];
+      for (let i = 0, n = Math.min(alphas.length, maxLen); i < n; i++) {
         arr[i] = NumberUtilities.clamp(+alphas[i], 0, 1);
       }
       while (i < minLen) {
@@ -147,8 +147,8 @@ module Shumway.AVMX.AS.flash.filters {
     }
 
     static sanitizeRatios(ratios: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
-      var arr: number [] = [];
-      for (var i = 0, n = Math.min(ratios.length, maxLen); i < n; i++) {
+      let arr: number [] = [];
+      for (let i = 0, n = Math.min(ratios.length, maxLen); i < n; i++) {
         arr[i] = NumberUtilities.clamp(+ratios[i], 0, 255);
       }
       while (i < minLen) {
@@ -158,8 +158,8 @@ module Shumway.AVMX.AS.flash.filters {
     }
 
     static initArray(len: number, value: number = 0): number [] {
-      var arr: number [] = Array(len);
-      for (var i = 0; i < len; i++) {
+      let arr: number [] = Array(len);
+      for (let i = 0; i < len; i++) {
         arr[i] = value;
       }
       return arr;

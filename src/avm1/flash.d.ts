@@ -476,7 +476,7 @@ declare module Shumway.AVMX.AS.flash {
       static allowInsecureDomain(domain: string): void;
       static loadPolicyFile(url: string): void;
     }
-    var fscommand: { axCall: (thisArg, sec: ISecurityDomain, command: string, args?: string) => any };
+    let fscommand: { axCall: (thisArg, sec: ISecurityDomain, command: string, args?: string) => any };
   }
   module text {
     class TextField extends flash.display.InteractiveObject {

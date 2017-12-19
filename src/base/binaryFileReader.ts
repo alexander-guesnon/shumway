@@ -15,7 +15,7 @@
  */
 
 module Shumway {
-  declare var XMLHttpRequest;
+  declare let XMLHttpRequest;
   import unexpected = Shumway.Debug.unexpected;
 
   export interface BinaryFileReaderProgressInfo {
@@ -39,9 +39,9 @@ module Shumway {
 
     readAll(progress: (response: any, loaded: number, total: number) => void,
             complete: (response: any, error?: any) => void) {
-      var url = this.url;
-      var xhr = this.xhr = new XMLHttpRequest({mozSystem: true});
-      var async = true;
+      let url = this.url;
+      let xhr = this.xhr = new XMLHttpRequest({mozSystem: true});
+      let async = true;
       xhr.open(this.method || "GET", this.url, async);
       xhr.responseType = "arraybuffer";
       if (progress) {
@@ -76,15 +76,15 @@ module Shumway {
         return;
       }
 
-      var position = 0;
-      var buffer = new Uint8Array(chunkSize);
-      var read = 0, total;
+      let position = 0;
+      let buffer = new Uint8Array(chunkSize);
+      let read = 0, total;
       this.readAsync(
         function (data: Uint8Array, progress: BinaryFileReaderProgressInfo) {
           total = progress.total;
-          var left = data.length, offset = 0;
+          let left = data.length, offset = 0;
           while (position + left >= chunkSize) {
-            var tailSize = chunkSize - position;
+            let tailSize = chunkSize - position;
             buffer.set(data.subarray(offset, offset + tailSize), position);
             offset += tailSize;
             left -= tailSize;
@@ -113,13 +113,13 @@ module Shumway {
               onopen?: () => void,
               oncomplete?: () => void,
               onhttpstatus?: (location: string, status: string, responseHeaders: any) => void) {
-      var xhr = this.xhr = new XMLHttpRequest({mozSystem: true});
-      var url = this.url;
-      var loaded = 0;
-      var total = 0;
+      let xhr = this.xhr = new XMLHttpRequest({mozSystem: true});
+      let url = this.url;
+      let loaded = 0;
+      let total = 0;
       xhr.open(this.method || "GET", url, true);
       xhr.responseType = 'moz-chunked-arraybuffer';
-      var isNotProgressive = xhr.responseType !== 'moz-chunked-arraybuffer';
+      let isNotProgressive = xhr.responseType !== 'moz-chunked-arraybuffer';
       if (isNotProgressive) {
         xhr.responseType = 'arraybuffer';
       }
@@ -129,7 +129,7 @@ module Shumway {
         }
         loaded = e.loaded;
         total = e.total;
-        var bytes = new Uint8Array(xhr.response);
+        let bytes = new Uint8Array(xhr.response);
         // The event's `loaded` and `total` properties are sometimes lower than the actual
         // number of loaded bytes. In that case, increase them to that value.
         loaded = Math.max(loaded, bytes.byteLength);
@@ -152,7 +152,7 @@ module Shumway {
             return;
           }
           if (isNotProgressive) {
-            var buffer = xhr.response;
+            let buffer = xhr.response;
             ondata(new Uint8Array(buffer), { loaded: buffer.byteLength, total: buffer.byteLength });
           }
         }

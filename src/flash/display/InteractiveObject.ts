@@ -60,7 +60,7 @@ module Shumway.AVMX.AS.flash.display {
 
     set tabEnabled(enabled: boolean) {
       enabled = !!enabled;
-      var old = this._tabEnabled;
+      let old = this._tabEnabled;
       this._tabEnabled = enabled;
       if (old !== enabled) {
         this.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.TAB_ENABLED_CHANGE, true));
@@ -73,7 +73,7 @@ module Shumway.AVMX.AS.flash.display {
 
     set tabIndex(index: number /*int*/) {
       index = index | 0;
-      var old = this._tabIndex;
+      let old = this._tabIndex;
       this._tabIndex = index;
       if (old !== index) {
         this.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.TAB_INDEX_CHANGE, true));

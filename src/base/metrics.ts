@@ -45,7 +45,7 @@ module Shumway.Metrics {
     public static start(name) {
       Timer._top = Timer._top._timers[name] || (Timer._top._timers[name] = new Timer(Timer._top, name));
       Timer._top.start();
-      var tmp = Timer._flat._timers[name] || (Timer._flat._timers[name] = new Timer(Timer._flat, name));
+      let tmp = Timer._flat._timers[name] || (Timer._flat._timers[name] = new Timer(Timer._flat, name));
       tmp.start();
       Timer._flatStack.push(tmp);
     }
@@ -75,7 +75,7 @@ module Shumway.Metrics {
         ", count: " + this._count +
         ", average: " + (this._total / this._count).toFixed(2) + " ms"
       );
-      for (var name in this._timers) {
+      for (let name in this._timers) {
         this._timers[name].trace(writer);
       }
       writer.outdent();
@@ -128,15 +128,15 @@ module Shumway.Metrics {
       return this._counts[name];
     }
     public trace(writer: IndentingWriter) {
-      for (var name in this._counts) {
+      for (let name in this._counts) {
         writer.writeLn(name + ": " + this._counts[name]);
       }
     }
     private _pairToString(times, pair): string {
-      var name = pair[0];
-      var count = pair[1];
-      var time = times[name];
-      var line = name + ": " + count;
+      let name = pair[0];
+      let count = pair[1];
+      let time = times[name];
+      let line = name + ": " + count;
       if (time) {
         line += ", " + time.toFixed(4);
         if (count > 1) {
@@ -146,10 +146,10 @@ module Shumway.Metrics {
       return line;
     }
     public toStringSorted(): string {
-      var self = this;
-      var times = this._times;
-      var pairs = [];
-      for (var name in this._counts) {
+      let self = this;
+      let times = this._times;
+      let pairs = [];
+      for (let name in this._counts) {
         pairs.push([name, this._counts[name]]);
       }
       pairs.sort(function (a, b) {
@@ -160,10 +160,10 @@ module Shumway.Metrics {
       }).join(", "));
     }
     public traceSorted(writer: IndentingWriter, inline = false) {
-      var self = this;
-      var times = this._times;
-      var pairs = [];
-      for (var name in this._counts) {
+      let self = this;
+      let times = this._times;
+      let pairs = [];
+      for (let name in this._counts) {
         pairs.push([name, this._counts[name]]);
       }
       pairs.sort(function (a, b) {
@@ -198,8 +198,8 @@ module Shumway.Metrics {
       this._samples[this._index % this._samples.length] = sample;
     }
     public average(): number {
-      var sum = 0;
-      for (var i = 0; i < this._count; i++) {
+      let sum = 0;
+      for (let i = 0; i < this._count; i++) {
         sum += this._samples[i];
       }
       return sum / this._count;

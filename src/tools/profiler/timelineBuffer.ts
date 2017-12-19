@@ -74,11 +74,11 @@ module Shumway.Tools.Profiler {
     }
 
     private _getKindId(name: string):number {
-      var kindId = TimelineBuffer.MAX_KINDID;
+      let kindId = TimelineBuffer.MAX_KINDID;
       if (this._kindNameMap[name] === undefined) {
         kindId = this._kinds.length;
         if (kindId < TimelineBuffer.MAX_KINDID) {
-          var kind: TimelineItemKind = <TimelineItemKind>{
+          let kind: TimelineItemKind = <TimelineItemKind>{
             id: kindId,
             name: name,
             visible: true
@@ -95,7 +95,7 @@ module Shumway.Tools.Profiler {
     }
 
     private _getMark(type: number, kindId: number, data?: any): number {
-      var dataId = TimelineBuffer.MAX_DATAID;
+      let dataId = TimelineBuffer.MAX_DATAID;
       if (!isNullOrUndefined(data) && kindId !== TimelineBuffer.MAX_KINDID) {
         dataId = this._data.length;
         if (dataId < TimelineBuffer.MAX_DATAID) {
@@ -113,7 +113,7 @@ module Shumway.Tools.Profiler {
         this._initialize();
       }
       this._depth++;
-      var kindId = this._getKindId(name);
+      let kindId = this._getKindId(name);
       this._marks.write(this._getMark(TimelineBuffer.ENTER, kindId, data));
       this._times.write(time);
       this._stack.push(kindId);
@@ -121,7 +121,7 @@ module Shumway.Tools.Profiler {
 
     leave(name?: string, data?: any, time?: number) {
       time = (isNullOrUndefined(time) ? performance.now() : time) - this._startTime;
-      var kindId = this._stack.pop();
+      let kindId = this._stack.pop();
       if (name) {
         kindId = this._getKindId(name);
       }
@@ -141,26 +141,26 @@ module Shumway.Tools.Profiler {
       if (!this._marks) {
         return null;
       }
-      var times = this._times;
-      var kinds = this._kinds;
-      var datastore = this._data;
-      var snapshot = new TimelineBufferSnapshot(this.name);
-      var stack: TimelineFrame [] = [snapshot];
-      var topLevelFrameCount = 0;
+      let times = this._times;
+      let kinds = this._kinds;
+      let datastore = this._data;
+      let snapshot = new TimelineBufferSnapshot(this.name);
+      let stack: TimelineFrame [] = [snapshot];
+      let topLevelFrameCount = 0;
 
       if (!this._marks) {
         this._initialize();
       }
 
       this._marks.forEachInReverse(function (mark, i) {
-        var dataId = (mark >>> 16) & TimelineBuffer.MAX_DATAID;
-        var data = datastore[dataId];
-        var kindId = mark & TimelineBuffer.MAX_KINDID;
-        var kind = kinds[kindId];
+        let dataId = (mark >>> 16) & TimelineBuffer.MAX_DATAID;
+        let data = datastore[dataId];
+        let kindId = mark & TimelineBuffer.MAX_KINDID;
+        let kind = kinds[kindId];
         if (isNullOrUndefined(kind) || kind.visible) {
-          var action = mark & 0x80000000;
-          var time = times.get(i);
-          var stackLength = stack.length;
+          let action = mark & 0x80000000;
+          let time = times.get(i);
+          let stackLength = stack.length;
           if (action === TimelineBuffer.LEAVE) {
             if (stackLength === 1) {
               topLevelFrameCount++;
@@ -170,15 +170,15 @@ module Shumway.Tools.Profiler {
             }
             stack.push(new TimelineFrame(stack[stackLength - 1], kind, null, data, NaN, time));
           } else if (action === TimelineBuffer.ENTER) {
-            var node = stack.pop();
-            var top = stack[stack.length - 1];
+            let node = stack.pop();
+            let top = stack[stack.length - 1];
             if (top) {
               if (!top.children) {
                 top.children = [node];
               } else {
                 top.children.unshift(node);
               }
-              var currentDepth = stack.length;
+              let currentDepth = stack.length;
               node.depth = currentDepth;
               node.startData = data;
               node.startTime = time;
@@ -216,21 +216,21 @@ module Shumway.Tools.Profiler {
     }
 
     static FromFirefoxProfile(profile, name?: string) {
-      var samples = profile.profile.threads[0].samples;
-      var buffer = new TimelineBuffer(name, samples[0].time);
-      var currentStack = [];
-      var sample;
-      for (var i = 0; i < samples.length; i++) {
+      let samples = profile.profile.threads[0].samples;
+      let buffer = new TimelineBuffer(name, samples[0].time);
+      let currentStack = [];
+      let sample;
+      for (let i = 0; i < samples.length; i++) {
         sample = samples[i];
-        var time = sample.time;
-        var stack = sample.frames;
-        var j = 0;
-        var minStackLen = Math.min(stack.length, currentStack.length);
+        let time = sample.time;
+        let stack = sample.frames;
+        let j = 0;
+        let minStackLen = Math.min(stack.length, currentStack.length);
         while (j < minStackLen && stack[j].location === currentStack[j].location) {
           j++;
         }
-        var leaveCount = currentStack.length - j;
-        for (var k = 0; k < leaveCount; k++) {
+        let leaveCount = currentStack.length - j;
+        for (let k = 0; k < leaveCount; k++) {
           sample = currentStack.pop();
           buffer.leave(sample.location, null, time);
         }
@@ -247,28 +247,28 @@ module Shumway.Tools.Profiler {
     }
 
     static FromChromeProfile(profile, name?: string) {
-      var timestamps = profile.timestamps;
-      var samples = profile.samples;
-      var buffer = new TimelineBuffer(name, timestamps[0] / 1000);
-      var currentStack = [];
-      var idMap = {};
-      var sample;
+      let timestamps = profile.timestamps;
+      let samples = profile.samples;
+      let buffer = new TimelineBuffer(name, timestamps[0] / 1000);
+      let currentStack = [];
+      let idMap = {};
+      let sample;
       TimelineBuffer._resolveIds(profile.head, idMap);
-      for (var i = 0; i < timestamps.length; i++) {
-        var time = timestamps[i] / 1000;
-        var stack = [];
+      for (let i = 0; i < timestamps.length; i++) {
+        let time = timestamps[i] / 1000;
+        let stack = [];
         sample = idMap[samples[i]];
         while (sample) {
           stack.unshift(sample);
           sample = sample.parent;
         }
-        var j = 0;
-        var minStackLen = Math.min(stack.length, currentStack.length);
+        let j = 0;
+        let minStackLen = Math.min(stack.length, currentStack.length);
         while (j < minStackLen && stack[j] === currentStack[j]) {
           j++;
         }
-        var leaveCount = currentStack.length - j;
-        for (var k = 0; k < leaveCount; k++) {
+        let leaveCount = currentStack.length - j;
+        for (let k = 0; k < leaveCount; k++) {
           sample = currentStack.pop();
           buffer.leave(sample.functionName, null, time);
         }
@@ -287,7 +287,7 @@ module Shumway.Tools.Profiler {
     private static _resolveIds(parent, idMap) {
       idMap[parent.id] = parent;
       if (parent.children) {
-        for (var i = 0; i < parent.children.length; i++) {
+        for (let i = 0; i < parent.children.length; i++) {
           parent.children[i].parent = parent;
           TimelineBuffer._resolveIds(parent.children[i], idMap);
         }

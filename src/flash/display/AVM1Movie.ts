@@ -123,7 +123,7 @@ module Shumway.AVMX.AS.flash.display {
      * Override of DisplayObject#_getChildBounds that retrieves the AVM1 content's bounds.
      */
     _getChildBounds(bounds: Bounds, includeStrokes: boolean) {
-      var childBounds = this._content._getContentBounds(includeStrokes).clone();
+      let childBounds = this._content._getContentBounds(includeStrokes).clone();
       // Always apply the SimpleButton's matrix.
       this._getConcatenatedMatrix().transformBounds(childBounds);
       bounds.unionInPlace(childBounds);
@@ -146,7 +146,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     _removeRoot(level: number): boolean {
-      var root = this._content.getTimelineObjectAtDepth(level);
+      let root = this._content.getTimelineObjectAtDepth(level);
       if (!root) {
         return false;
       }

@@ -26,7 +26,7 @@ module Shumway.AVMX.AS.flash.net {
     removeItem(key: string): void;
   }
 
-  var _sharedObjectStorage: IStorage;
+  let _sharedObjectStorage: IStorage;
 
   function getSharedObjectStorage(): IStorage  {
     if (!_sharedObjectStorage) {
@@ -65,7 +65,7 @@ module Shumway.AVMX.AS.flash.net {
     }
 
     private static _create(path: string, data: any, encoding: net.AMFEncoding): SharedObject {
-      var obj = new this.sec.flash.net.SharedObject();
+      let obj = new this.sec.flash.net.SharedObject();
       obj._path = path;
       obj._data = data;
       obj._objectEncoding = encoding;
@@ -77,17 +77,17 @@ module Shumway.AVMX.AS.flash.net {
       name = axCoerceString(name);
       localPath = axCoerceString(localPath);
       secure = !!secure;
-      var path = (localPath || '') + '/' + name;
+      let path = (localPath || '') + '/' + name;
       if (this._sharedObjects[path]) {
         return this._sharedObjects[path];
       }
-      var encodedData = getSharedObjectStorage().getItem(path);
-      var data;
-      var encoding = this._defaultObjectEncoding;
+      let encodedData = getSharedObjectStorage().getItem(path);
+      let data;
+      let encoding = this._defaultObjectEncoding;
       if (encodedData) {
         try {
-          var bytes = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
-          var serializedData = new this.sec.flash.utils.ByteArray(bytes);
+          let bytes = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
+          let serializedData = new this.sec.flash.utils.ByteArray(bytes);
           data = serializedData.readObject();
           encoding = serializedData.objectEncoding;
         } catch (e) {
@@ -99,7 +99,7 @@ module Shumway.AVMX.AS.flash.net {
       } else {
         data = this.sec.createObject();
       }
-      var so = this._create(path, data, encoding);
+      let so = this._create(path, data, encoding);
       so._objectEncoding = encoding;
       this._sharedObjects[path] = so;
       return so;
@@ -177,8 +177,8 @@ module Shumway.AVMX.AS.flash.net {
       clearTimeout(this._pendingFlushId);
       this._pendingFlushId = 0;
       // Check if the object is empty. If it is, don't create a stored object if one doesn't exist.
-      var isEmpty = true;
-      for (var key in this._data) {
+      let isEmpty = true;
+      for (let key in this._data) {
         if (this._data.hasOwnProperty(key)) {
           isEmpty = false;
           break;
@@ -187,15 +187,15 @@ module Shumway.AVMX.AS.flash.net {
       if (isEmpty && !getSharedObjectStorage().getItem(this._path)) {
         return;
       }
-      var serializedData = new this.sec.flash.utils.ByteArray();
+      let serializedData = new this.sec.flash.utils.ByteArray();
       serializedData.objectEncoding = this._objectEncoding;
       serializedData.writeObject(this._data);
-      var bytes = serializedData.getBytes();
-      var encodedData = StringUtilities.base64EncodeBytes(bytes);
+      let bytes = serializedData.getBytes();
+      let encodedData = StringUtilities.base64EncodeBytes(bytes);
       if (!release) {
-        var decoded = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
+        let decoded = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
         Debug.assert(decoded.byteLength === bytes.byteLength);
-        for (var i = 0; i < decoded.byteLength; i++) {
+        for (let i = 0; i < decoded.byteLength; i++) {
           Debug.assert(decoded[i] === bytes[i]);
         }
       }
@@ -212,7 +212,7 @@ module Shumway.AVMX.AS.flash.net {
     get size(): number {
       release || somewhatImplemented("public flash.net.SharedObject::get size");
       this.flush(0);
-      var storedData = getSharedObjectStorage().getItem(this._path);
+      let storedData = getSharedObjectStorage().getItem(this._path);
       return storedData ? storedData.length : 0;
     }
 

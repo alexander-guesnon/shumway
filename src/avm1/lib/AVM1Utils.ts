@@ -21,7 +21,7 @@ module Shumway.AVM1.Lib {
   import flash = Shumway.AVMX.AS.flash;
   import AXClass = Shumway.AVMX.AXClass;
 
-  export var DEPTH_OFFSET = 16384;
+  export let DEPTH_OFFSET = 16384;
 
   export interface IHasAS3ObjectReference {
     _as3Object: ASObject;
@@ -80,8 +80,8 @@ module Shumway.AVM1.Lib {
     // The _as3ObjectTemplate is not really an ASObject type, but we will fake
     // that for AVM1SymbolBase's properties transfers.
     if (!obj._as3ObjectTemplate) {
-      var template;
-      var proto = obj.alPrototype;
+      let template;
+      let proto = obj.alPrototype;
       while (proto && !(<any>proto).initAVM1SymbolInstance) {
         template = (<any>proto)._as3ObjectTemplate;
         if (template) {
@@ -116,20 +116,20 @@ module Shumway.AVM1.Lib {
     }
 
     public load(url: string, method: string): Promise<flash.display.DisplayObject> {
-      var context = this._context;
-      var loader = this._loader;
-      var loaderContext: flash.system.LoaderContext = new context.sec.flash.system.LoaderContext();
+      let context = this._context;
+      let loader = this._loader;
+      let loaderContext: flash.system.LoaderContext = new context.sec.flash.system.LoaderContext();
       loaderContext._avm1Context = context;
-      var request = new context.sec.flash.net.URLRequest(url);
+      let request = new context.sec.flash.net.URLRequest(url);
       if (method) {
         request.method = method;
       }
 
-      var loaderInfo = loader.contentLoaderInfo;
-      var result = new PromiseWrapper<flash.display.DisplayObject>();
+      let loaderInfo = loader.contentLoaderInfo;
+      let result = new PromiseWrapper<flash.display.DisplayObject>();
       // Waiting for content in the progress event -- the result promise will be resolved
       // as soon as loader's content will be set to non-empty value.
-      var progressEventHandler = function (e: flash.events.ProgressEvent): void {
+      let progressEventHandler = function (e: flash.events.ProgressEvent): void {
         if (!loader._content) {
           return;
         }
@@ -152,8 +152,8 @@ module Shumway.AVM1.Lib {
 
       release || Debug.assert(as3Object);
       this._as3Object = as3Object;
-      var name = as3Object.name;
-      var parent = this.get_parent();
+      let name = as3Object.name;
+      let parent = this.get_parent();
       if (name && parent) {
         parent._addChildName(this, name);
       }
@@ -165,15 +165,15 @@ module Shumway.AVM1.Lib {
 
     public bindEvents(events: AVM1EventHandler[], autoUnbind: boolean = true) {
       this._events = events;
-      var eventsMap = Object.create(null);
+      let eventsMap = Object.create(null);
       this._eventsMap = eventsMap;
       this._eventsListeners = Object.create(null);
-      var observer = this;
-      var context: AVM1Context = (<any>this).context;
+      let observer = this;
+      let context: AVM1Context = (<any>this).context;
       events.forEach(function (event: AVM1EventHandler) {
         // Normalization will always stay valid in a player instance, so we can safely modify
         // the event itself, here.
-        var propertyName = event.propertyName = context.normalizeName(event.propertyName);
+        let propertyName = event.propertyName = context.normalizeName(event.propertyName);
         eventsMap[propertyName] = event;
         context.registerEventPropertyObserver(propertyName, observer);
         observer._updateEvent(event);
@@ -188,9 +188,9 @@ module Shumway.AVM1.Lib {
     }
 
     public unbindEvents() {
-      var events = this._events;
-      var observer = this;
-      var context = this.context;
+      let events = this._events;
+      let observer = this;
+      let context = this.context;
       events.forEach(function (event: AVM1EventHandler) {
         context.unregisterEventPropertyObserver(event.propertyName, observer);
         observer._removeEventListener(event);
@@ -215,11 +215,11 @@ module Shumway.AVM1.Lib {
     }
 
     private _addEventListener(event: AVM1EventHandler) {
-      var propertyName = this.context.normalizeName(event.propertyName);
-      var listener: any = this._eventsListeners[propertyName];
+      let propertyName = this.context.normalizeName(event.propertyName);
+      let listener: any = this._eventsListeners[propertyName];
       if (!listener) {
         listener = function avm1EventHandler() {
-          var args = event.argsConverter ? event.argsConverter.apply(null, arguments) : null;
+          let args = event.argsConverter ? event.argsConverter.apply(null, arguments) : null;
           avm1BroadcastNativeEvent(this.context, this, propertyName, args);
         }.bind(this);
         this._as3Object.addEventListener(event.eventName, listener);
@@ -229,8 +229,8 @@ module Shumway.AVM1.Lib {
     }
 
     private _removeEventListener(event: AVM1EventHandler) {
-      var propertyName = this.context.normalizeName(event.propertyName);
-      var listener: any = this._eventsListeners[propertyName];
+      let propertyName = this.context.normalizeName(event.propertyName);
+      let listener: any = this._eventsListeners[propertyName];
       if (listener) {
         event.onUnbind(this);
         this._as3Object.removeEventListener(event.eventName, listener);
@@ -239,8 +239,8 @@ module Shumway.AVM1.Lib {
     }
 
     public onEventPropertyModified(propertyName: string) {
-      var propertyName = this.context.normalizeName(propertyName);
-      var event = this._eventsMap[propertyName];
+      let propertyName = this.context.normalizeName(propertyName);
+      let event = this._eventsMap[propertyName];
       this._updateEvent(event);
     }
 
@@ -317,7 +317,7 @@ module Shumway.AVM1.Lib {
     }
 
     public set_highquality(value: number) {
-      var quality: string;
+      let quality: string;
       switch (alToInteger(this.context, value)) {
         case 2:
           quality = 'BEST';
@@ -348,13 +348,13 @@ module Shumway.AVM1.Lib {
 
     public set_name(value: string) {
       value = alCoerceString(this.context, value);
-      var oldName = this._as3Object.name;
+      let oldName = this._as3Object.name;
       this._as3Object.name = value;
       this.get_parent()._updateChildName(<AVM1MovieClip><any>this, oldName, value);
     }
 
     public get_parent(): AVM1MovieClip {
-      var parent = getAVM1Object(this._as3Object.parent, this.context);
+      let parent = getAVM1Object(this._as3Object.parent, this.context);
       // In AVM1, the _parent property is `undefined`, not `null` if the element has no parent.
       return <AVM1MovieClip>parent || undefined;
     }
@@ -385,9 +385,9 @@ module Shumway.AVM1.Lib {
     }
 
     public get_root(): AVM1MovieClip {
-      var as3Object: flash.display.InteractiveObject = this._as3Object;
+      let as3Object: flash.display.InteractiveObject = this._as3Object;
       while (as3Object && as3Object !== as3Object.root) {
-        var as2Object = <AVM1MovieClip>getAVM1Object(as3Object, this.context);
+        let as2Object = <AVM1MovieClip>getAVM1Object(as3Object, this.context);
         if (as2Object.get_lockroot()) {
           return as2Object;
         }
@@ -446,7 +446,7 @@ module Shumway.AVM1.Lib {
     }
 
     public getTabIndex(): number {
-      var tabIndex = this._as3Object.tabIndex;
+      let tabIndex = this._as3Object.tabIndex;
       return tabIndex < 0 ? undefined : tabIndex;
     }
 
@@ -459,11 +459,11 @@ module Shumway.AVM1.Lib {
     }
 
     public get_target(): string {
-      var nativeObject: flash.display.DisplayObject = this._as3Object;
+      let nativeObject: flash.display.DisplayObject = this._as3Object;
       if (nativeObject === nativeObject.root) {
         return '/';
       }
-      var path = '';
+      let path = '';
       do {
         if (isNullOrUndefined(nativeObject)) {
           release || Debug.assert(false);
@@ -476,7 +476,7 @@ module Shumway.AVM1.Lib {
     }
 
     public getTransform(): AVM1Object {
-      var transformCtor = <AVM1Function>this.context.globals.Transform;
+      let transformCtor = <AVM1Function>this.context.globals.Transform;
       return transformCtor.alConstruct([this]);
     }
 
@@ -484,7 +484,7 @@ module Shumway.AVM1.Lib {
       if (!(value instanceof AVM1Transform)) {
         return;
       }
-      var as3Transform = value.as3Transform;
+      let as3Transform = value.as3Transform;
       this._as3Object.transform = as3Transform;
     }
 
@@ -574,7 +574,7 @@ module Shumway.AVM1.Lib {
     }
   }
 
-  export var BlendModesMap = [undefined, "normal", "layer", "multiply",
+  export let BlendModesMap = [undefined, "normal", "layer", "multiply",
     "screen", "lighten", "darken", "difference", "add", "subtract", "invert",
     "alpha", "erase", "overlay", "hardlight"];
 
@@ -583,28 +583,28 @@ module Shumway.AVM1.Lib {
         (target.alGet(propertyName) instanceof AVM1Function)) {
       return true;
     }
-    var listenersField = target.alGet('_listeners');
+    let listenersField = target.alGet('_listeners');
     if (!(listenersField instanceof Natives.AVM1ArrayNative)) {
       return false;
     }
-    var listeners: any[] = listenersField.value;
+    let listeners: any[] = listenersField.value;
     return listeners.some(function (listener) {
       return (listener instanceof AVM1Object) && listener.alHasProperty(propertyName);
     });
   }
 
   function avm1BroadcastNativeEvent(context: AVM1Context, target: any, propertyName: string, args: any[] = null): void {
-    var handler: AVM1Function = target.alGet(propertyName);
+    let handler: AVM1Function = target.alGet(propertyName);
     if (handler instanceof AVM1Function) {
       context.executeFunction(handler, target, args);
     }
-    var _listeners = target.alGet('_listeners');
+    let _listeners = target.alGet('_listeners');
     if (_listeners instanceof Natives.AVM1ArrayNative) {
       _listeners.value.forEach(function (listener) {
         if (!(listener instanceof AVM1Object)) {
           return;
         }
-        var handlerOnListener: AVM1Function = listener.alGet(propertyName);
+        let handlerOnListener: AVM1Function = listener.alGet(propertyName);
         if (handlerOnListener instanceof AVM1Function) {
           context.executeFunction(handlerOnListener, target, args);
         }
@@ -613,17 +613,17 @@ module Shumway.AVM1.Lib {
   }
 
   export function avm1BroadcastEvent(context: AVM1Context, target: any, propertyName: string, args: any[] = null): void {
-    var handler: AVM1Function = target.alGet(propertyName);
+    let handler: AVM1Function = target.alGet(propertyName);
     if (handler instanceof AVM1Function) {
       handler.alCall(target, args);
     }
-    var _listeners = target.alGet('_listeners');
+    let _listeners = target.alGet('_listeners');
     if (_listeners instanceof Natives.AVM1ArrayNative) {
       _listeners.value.forEach(function (listener) {
         if (!(listener instanceof AVM1Object)) {
           return;
         }
-        var handlerOnListener: AVM1Function = listener.alGet(propertyName);
+        let handlerOnListener: AVM1Function = listener.alGet(propertyName);
         if (handlerOnListener instanceof AVM1Function) {
           handlerOnListener.alCall(target, args);
         }
@@ -633,8 +633,8 @@ module Shumway.AVM1.Lib {
 
   function createAVM1NativeObject(ctor, nativeObject: flash.display.DisplayObject, context: AVM1Context) {
     // We need to walk on __proto__ to find right ctor.prototype.
-    var template;
-    var proto = ctor.alGetPrototypeProperty();
+    let template;
+    let proto = ctor.alGetPrototypeProperty();
     while (proto && !(<any>proto).initAVM1SymbolInstance) {
       if ((<any>proto)._as3ObjectTemplate && !template) {
         template = (<any>proto)._as3ObjectTemplate;
@@ -642,7 +642,7 @@ module Shumway.AVM1.Lib {
       proto = proto.alPrototype;
     }
     release || Debug.assert(proto);
-    var avm1Object = Object.create(proto);
+    let avm1Object = Object.create(proto);
     (<any>proto).initAVM1SymbolInstance.call(avm1Object, context, nativeObject);
     avm1Object.alPrototype = ctor.alGetPrototypeProperty();
     avm1Object.alSetOwnConstructorProperty(ctor);
@@ -650,7 +650,7 @@ module Shumway.AVM1.Lib {
     ctor.alCall(avm1Object);
     if (template) {
       // transfer properties from the template
-      for (var prop in template) {
+      for (let prop in template) {
         nativeObject[prop] = template[prop];
       }
     }
@@ -664,9 +664,9 @@ module Shumway.AVM1.Lib {
     if (as3Object._as2Object) {
       return as3Object._as2Object;
     }
-    var sec = context.sec;
+    let sec = context.sec;
     if (sec.flash.display.MovieClip.axClass.axIsType(as3Object)) {
-      var theClass = as3Object._symbol &&
+      let theClass = as3Object._symbol &&
                      context.getSymbolClass(as3Object._symbol.data.id);
       if (theClass) {
         return createAVM1NativeObject(theClass, as3Object, context);
@@ -696,14 +696,14 @@ module Shumway.AVM1.Lib {
         return new AVM1NativeFunction(context, fn);
       }
       return new AVM1NativeFunction(context, function () {
-        var args = Array.prototype.slice.call(arguments, 0);
+        let args = Array.prototype.slice.call(arguments, 0);
         args.unshift(context);
         return fn.apply(this, args);
       });
     }
     function getMemberDescriptor(memberName): PropertyDescriptor {
-      var desc;
-      for (var p = obj; p; p = Object.getPrototypeOf(p)) {
+      let desc;
+      for (let p = obj; p; p = Object.getPrototypeOf(p)) {
         desc = Object.getOwnPropertyDescriptor(p, memberName);
         if (desc) {
           return desc;
@@ -718,12 +718,12 @@ module Shumway.AVM1.Lib {
     members.forEach(function (memberName) {
       if (memberName[memberName.length - 1] === '#') {
         // Property mapping
-        var getterName = 'get' + memberName[0].toUpperCase() + memberName.slice(1, -1);
-        var getter = obj[getterName];
-        var setterName = 'set' + memberName[0].toUpperCase() + memberName.slice(1, -1);
-        var setter = obj[setterName];
+        let getterName = 'get' + memberName[0].toUpperCase() + memberName.slice(1, -1);
+        let getter = obj[getterName];
+        let setterName = 'set' + memberName[0].toUpperCase() + memberName.slice(1, -1);
+        let setter = obj[setterName];
         release || Debug.assert(getter || setter, 'define getter or setter')
-        var desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
+        let desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
                                               AVM1PropertyFlags.DONT_DELETE |
                                               AVM1PropertyFlags.DONT_ENUM,
                                               null, wrapFunction(getter), wrapFunction(setter));
@@ -731,7 +731,7 @@ module Shumway.AVM1.Lib {
         return;
       }
 
-      var nativeDesc = getMemberDescriptor(memberName);
+      let nativeDesc = getMemberDescriptor(memberName);
       if (!nativeDesc) {
         return;
       }
@@ -740,11 +740,11 @@ module Shumway.AVM1.Lib {
         return;
       }
 
-      var value = nativeDesc.value;
+      let value = nativeDesc.value;
       if (typeof value === 'function') {
         value = wrapFunction(value);
       }
-      var desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA |
+      let desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA |
                                             AVM1PropertyFlags.DONT_DELETE |
                                             AVM1PropertyFlags.DONT_ENUM,
                                             value);
@@ -753,10 +753,10 @@ module Shumway.AVM1.Lib {
   }
 
   export function wrapAVM1NativeClass(context: AVM1Context, wrapAsFunction: boolean, cls: typeof AVM1Object, staticMembers: string[], members: string[], call?: Function, cstr?: Function): AVM1Object  {
-    var wrappedFn = wrapAsFunction ?
+    let wrappedFn = wrapAsFunction ?
       new AVM1NativeFunction(context, call || function () { }, function () {
         // Creating simple AVM1 object
-        var obj = new cls(context);
+        let obj = new cls(context);
         obj.alPrototype = wrappedPrototype;
         obj.alSetOwnConstructorProperty(wrappedFn);
         if (cstr) {
@@ -766,7 +766,7 @@ module Shumway.AVM1.Lib {
       }) :
       new AVM1Object(context);
     wrapAVM1NativeMembers(context, wrappedFn, cls, staticMembers, true);
-    var wrappedPrototype = new cls(context);
+    let wrappedPrototype = new cls(context);
     wrappedPrototype.alPrototype = context.builtins.Object.alGetPrototypeProperty();
     wrapAVM1NativeMembers(context, wrappedPrototype, cls.prototype, members, false);
     alDefineObjectProperties(wrappedFn, {
@@ -787,22 +787,22 @@ module Shumway.AVM1.Lib {
   export function initializeAVM1Object(as3Object: any,
                                        context: AVM1Context,
                                        placeObjectTag: any) {
-    var instanceAVM1 = <AVM1SymbolBase<flash.display.DisplayObject>>getAVM1Object(as3Object, context);
+    let instanceAVM1 = <AVM1SymbolBase<flash.display.DisplayObject>>getAVM1Object(as3Object, context);
     release || Debug.assert(instanceAVM1);
 
     if (placeObjectTag.variableName) {
       instanceAVM1.alPut('variable', placeObjectTag.variableName);
     }
 
-    var events = placeObjectTag.events;
+    let events = placeObjectTag.events;
     if (!events) {
       return;
     }
-    var stageListeners = [];
-    var as3Stage = (<any>context.globals.Stage)._as3Stage;
-    for (var j = 0; j < events.length; j++) {
-      var swfEvent = events[j];
-      var actionsData;
+    let stageListeners = [];
+    let as3Stage = (<any>context.globals.Stage)._as3Stage;
+    for (let j = 0; j < events.length; j++) {
+      let swfEvent = events[j];
+      let actionsData;
       if (swfEvent.actionsBlock) {
         actionsData = context.actionsDataFactory.createActionsData(
           swfEvent.actionsBlock,
@@ -813,15 +813,15 @@ module Shumway.AVM1.Lib {
         actionsData = swfEvent.compiled;
       }
       release || Debug.assert(actionsData);
-      var handler = clipEventHandler.bind(null, actionsData, instanceAVM1);
-      var flags = swfEvent.flags;
-      for (var eventFlag in ClipEventMappings) {
+      let handler = clipEventHandler.bind(null, actionsData, instanceAVM1);
+      let flags = swfEvent.flags;
+      for (let eventFlag in ClipEventMappings) {
         eventFlag |= 0;
         if (!(flags & (eventFlag | 0))) {
           continue;
         }
-        var eventMapping = ClipEventMappings[eventFlag];
-        var eventName = eventMapping.name;
+        let eventMapping = ClipEventMappings[eventFlag];
+        let eventName = eventMapping.name;
         if (!eventName) {
           Debug.warning("ClipEvent: " + eventFlag + ' not implemented');
           continue;
@@ -845,7 +845,7 @@ module Shumway.AVM1.Lib {
     }
     if (stageListeners.length > 0) {
       as3Object.addEventListener('removedFromStage', function () {
-        for (var i = 0; i < stageListeners.length; i++) {
+        for (let i = 0; i < stageListeners.length; i++) {
           as3Stage.removeEventListener(stageListeners[i].eventName, stageListeners[i].fn, false);
         }
       }, false);
@@ -858,7 +858,7 @@ module Shumway.AVM1.Lib {
   }
 
   import AVM1ClipEvents = SWF.Parser.AVM1ClipEvents;
-  var ClipEventMappings: Map<number, {name: string; isStageEvent: boolean; isButtonEvent: boolean}>;
+  let ClipEventMappings: Map<number, {name: string; isStageEvent: boolean; isButtonEvent: boolean}>;
   ClipEventMappings = Object.create(null);
   ClipEventMappings[AVM1ClipEvents.Load] = {name: 'load', isStageEvent: false, isButtonEvent: false};
   // AVM1's enterFrame happens at the same point in the cycle as AVM2's frameConstructed.

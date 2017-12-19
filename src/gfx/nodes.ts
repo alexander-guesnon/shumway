@@ -211,8 +211,8 @@ module Shumway.GFX {
 
     visitGroup(node: Group, state: State) {
       this.visitNode(node, state);
-      var children = node.getChildren();
-      for (var i = 0; i < children.length; i++) {
+      let children = node.getChildren();
+      for (let i = 0; i < children.length; i++) {
         children[i].visit(this, state);
       }
     }
@@ -260,9 +260,9 @@ module Shumway.GFX {
     }
 
     visitGroup(node: Group, state: State) {
-      var children = node.getChildren();
+      let children = node.getChildren();
       this.visitNode(node, state);
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         children[i].visit(this, state);
       }
     }
@@ -296,9 +296,9 @@ module Shumway.GFX {
     visitGroup(node: Group, state: State) {
       this.visitNode(node, state);
 
-      var children = node.getChildren();
+      let children = node.getChildren();
       this.writer.enter(node.toString() + " " + children.length);
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         children[i].visit(this, state);
       }
       this.writer.outdent();
@@ -378,9 +378,9 @@ module Shumway.GFX {
       if (!this._eventListeners) {
         return;
       }
-      var listeners = this._eventListeners;
-      for (var i = 0; i < listeners.length; i++) {
-        var listener = listeners[i];
+      let listeners = this._eventListeners;
+      for (let i = 0; i < listeners.length; i++) {
+        let listener = listeners[i];
         if (listener.type === type) {
           listener.listener(this, type);
         }
@@ -401,9 +401,9 @@ module Shumway.GFX {
      * Removes an event listener.
      */
     public removeEventListener(type: NodeEventType, listener: (node: Node, type?: NodeEventType) => void) {
-      var listeners = this._eventListeners;
-      for (var i = 0; i < listeners.length; i++) {
-        var listenerObject = listeners[i];
+      let listeners = this._eventListeners;
+      for (let i = 0; i < listeners.length; i++) {
+        let listenerObject = listeners[i];
         if (listenerObject.type === type && listenerObject.listener === listener) {
           listeners.splice(i, 1);
           return;
@@ -460,13 +460,13 @@ module Shumway.GFX {
     }
 
     public getTransformedBounds(target: Node): Rectangle {
-      var bounds = this.getBounds(true);
+      let bounds = this.getBounds(true);
       if (target === this || bounds.isEmpty()) {
         // Nop.
       } else {
-        var m = this.getTransform().getConcatenatedMatrix();
+        let m = this.getTransform().getConcatenatedMatrix();
         if (target) {
-          var t = target.getTransform().getInvertedConcatenatedMatrix(true);
+          let t = target.getTransform().getInvertedConcatenatedMatrix(true);
           t.preMultiply(m);
           t.transformRectangleAABB(bounds);
           t.free();
@@ -479,19 +479,19 @@ module Shumway.GFX {
 
     _markCurrentBoundsAsDirtyRegion() {
       // return;
-      var stage = this.getStage();
+      let stage = this.getStage();
       if (!stage) {
         return;
       }
-      var bounds = this.getTransformedBounds(stage);
+      let bounds = this.getTransformedBounds(stage);
       stage.dirtyRegion.addDirtyRectangle(bounds);
     }
 
     public getStage(withDirtyRegion: boolean = true): Stage {
-      var node = this._parent;
+      let node = this._parent;
       while (node) {
         if (node.isType(NodeType.Stage)) {
-          var stage = <Stage>node;
+          let stage = <Stage>node;
           if (withDirtyRegion) {
             if (stage.dirtyRegion) {
               return stage;
@@ -521,7 +521,7 @@ module Shumway.GFX {
      */
     public setBounds(value: Rectangle) {
       release || assert(!(this._flags & NodeFlags.BoundsAutoCompute));
-      var bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
+      let bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
       bounds.set(value);
       this.removeFlags(NodeFlags.InvalidBounds);
     }
@@ -565,7 +565,7 @@ module Shumway.GFX {
         flags &= ~NodeFlags.InvalidBounds;
       }
       this.setFlags(flags);
-      var parent = this._parent;
+      let parent = this._parent;
       if (parent) {
         parent._propagateFlagsUp(flags);
       }
@@ -593,7 +593,7 @@ module Shumway.GFX {
      * Return's a list of ancestors excluding the |last|, the return list is reused.
      */
     static _getAncestors(node: Node, last: Node): Node [] {
-      var path = Node._path;
+      let path = Node._path;
       path.length = 0;
       while (node && node !== last) {
         release || assert(node !== node._parent);
@@ -608,7 +608,7 @@ module Shumway.GFX {
      * Finds the closest ancestor with a given set of flags that are either turned on or off.
      */
     _findClosestAncestor(flags: NodeFlags, on: boolean): Node {
-      var node = this;
+      let node = this;
       while (node) {
         if (node.hasFlags(flags) === on) {
           return node;
@@ -642,7 +642,7 @@ module Shumway.GFX {
         return true;
       }
       if (this.isType(NodeType.Group)) {
-        var children = (<any>this)._children;
+        let children = (<any>this)._children;
         if (children.length === 1 && children[0].isLinear()) {
           return true;
         }
@@ -669,7 +669,7 @@ module Shumway.GFX {
     }
     
     public getLayerBounds(includeFilters: boolean): Rectangle {
-      var bounds = this.getBounds();
+      let bounds = this.getBounds();
       if (includeFilters && this._layer) {
         this._layer.expandBounds(bounds);
       }
@@ -677,7 +677,7 @@ module Shumway.GFX {
     }
 
 //    public getConcatenatedMatrix(clone: boolean = false): Matrix {
-//      var transform: Transform = this.getTransform(false);
+//      let transform: Transform = this.getTransform(false);
 //      if (transform) {
 //        return transform.getConcatenatedMatrix(clone);
 //      }
@@ -715,7 +715,7 @@ module Shumway.GFX {
     }
 
     public toString(bounds: boolean = false): string {
-      var s = getNodeTypeName(this._type) + " " + this._id;
+      let s = getNodeTypeName(this._type) + " " + this._id;
       if (bounds) {
         s += " " + this._bounds.toString();
       }
@@ -781,7 +781,7 @@ module Shumway.GFX {
      */
     public removeChildAt(index: number) {
       release || assert(index >= 0 && index < this._children.length);
-      var node = this._children[index];
+      let node = this._children[index];
       release || assert(index === node._index);
       node._markCurrentBoundsAsDirtyRegion();
       this._children.splice(index, 1);
@@ -792,8 +792,8 @@ module Shumway.GFX {
     }
 
     public clearChildren() {
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
+      for (let i = 0; i < this._children.length; i++) {
+        let child = this._children[i];
         child._markCurrentBoundsAsDirtyRegion();
         if (child) {
           child._index = -1;
@@ -813,8 +813,8 @@ module Shumway.GFX {
         return;
       }
       this.setFlags(flags);
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
         children[i]._propagateFlagsDown(flags);
       }
     }
@@ -823,13 +823,13 @@ module Shumway.GFX {
      * Takes the union of all child bounds and caches the bounds locally.
      */
     public getBounds(clone: boolean = false): Rectangle {
-      var bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
+      let bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
       if (this.hasFlags(NodeFlags.InvalidBounds)) {
         bounds.setEmpty();
-        var children = this._children;
-        var childBounds = Rectangle.allocate();
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        let children = this._children;
+        let childBounds = Rectangle.allocate();
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
           childBounds.set(child.getBounds());
           child.getTransformMatrix().transformRectangleAABB(childBounds);
           bounds.union(childBounds);
@@ -850,11 +850,11 @@ module Shumway.GFX {
       if (!includeFilters) {
         return this.getBounds();
       }
-      var bounds = Rectangle.createEmpty();
-      var children = this._children;
-      var childBounds = Rectangle.allocate();
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      let bounds = Rectangle.createEmpty();
+      let children = this._children;
+      let childBounds = Rectangle.allocate();
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         childBounds.set(child.getLayerBounds(includeFilters));
         child.getTransformMatrix().transformRectangleAABB(childBounds);
         bounds.union(childBounds);
@@ -979,12 +979,12 @@ module Shumway.GFX {
      */
     public getConcatenatedMatrix(clone: boolean = false): Matrix {
       if (this._node.hasFlags(NodeFlags.InvalidConcatenatedMatrix)) {
-        var ancestor = this._node._findClosestAncestor(NodeFlags.InvalidConcatenatedMatrix, false);
-        var path = Node._getAncestors(this._node, ancestor);
-        var m = ancestor ? ancestor.getTransform()._concatenatedMatrix.clone() : Matrix.createIdentity();
-        for (var i = path.length - 1; i >= 0; i--) {
-          var ancestor = path[i];
-          var ancestorTransform = ancestor.getTransform();
+        let ancestor = this._node._findClosestAncestor(NodeFlags.InvalidConcatenatedMatrix, false);
+        let path = Node._getAncestors(this._node, ancestor);
+        let m = ancestor ? ancestor.getTransform()._concatenatedMatrix.clone() : Matrix.createIdentity();
+        for (let i = path.length - 1; i >= 0; i--) {
+          let ancestor = path[i];
+          let ancestorTransform = ancestor.getTransform();
           release || assert (ancestor.hasFlags(NodeFlags.InvalidConcatenatedMatrix));
           m.preMultiply(ancestorTransform._matrix);
           ancestorTransform._concatenatedMatrix.set(m);
@@ -1011,11 +1011,11 @@ module Shumway.GFX {
 //    public getConcatenatedColorMatrix(clone: boolean = false): ColorMatrix {
 //      // Compute the concatenated color transforms for this node and all of its ancestors.
 //      if (this.hasFlags(NodeFlags.InvalidConcatenatedColorMatrix)) {
-//        var ancestor = <Transform>this._findClosestAncestor(NodeFlags.InvalidConcatenatedColorMatrix, false);
-//        var path = <Transform []>Node._getAncestors(this, ancestor, NodeType.Transform);
-//        var m = ancestor ? ancestor._concatenatedColorMatrix.clone() : ColorMatrix.createIdentity();
-//        for (var i = path.length - 1; i >= 0; i--) {
-//          var ancestor = path[i];
+//        let ancestor = <Transform>this._findClosestAncestor(NodeFlags.InvalidConcatenatedColorMatrix, false);
+//        let path = <Transform []>Node._getAncestors(this, ancestor, NodeType.Transform);
+//        let m = ancestor ? ancestor._concatenatedColorMatrix.clone() : ColorMatrix.createIdentity();
+//        for (let i = path.length - 1; i >= 0; i--) {
+//          let ancestor = path[i];
 //          release || assert (ancestor.hasFlags(NodeFlags.InvalidConcatenatedColorMatrix));
 //          // TODO: Premultiply here.
 //          m.multiply(ancestor._colorMatrix);
@@ -1092,9 +1092,9 @@ module Shumway.GFX {
     }
     
     public expandBounds(bounds: Rectangle) {
-      var filters = this._filters;
+      let filters = this._filters;
       if (filters) {
-        for (var i = 0; i < filters.length; i++) {
+        for (let i = 0; i < filters.length; i++) {
           filters[i].expandBounds(bounds);
         }
       }
@@ -1117,7 +1117,7 @@ module Shumway.GFX {
     }
 
     public getBounds(clone: boolean = false): Rectangle {
-      var bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
+      let bounds = this._bounds || (this._bounds = Rectangle.createEmpty());
       if (this.hasFlags(NodeFlags.InvalidBounds)) {
         bounds.set(this._source.getBounds());
         this.removeFlags(NodeFlags.InvalidBounds);
@@ -1340,13 +1340,13 @@ module Shumway.GFX {
         return;
       }
 
-      var bounds = this.getBounds();
-      var contentBounds = this._content.getBounds();
+      let bounds = this.getBounds();
+      let contentBounds = this._content.getBounds();
 
       // Debug.assert(this.targetWidth > 0 && this.targetHeight > 0);
-      var wScale = bounds.w / contentBounds.w;
-      var hScale = bounds.h / contentBounds.h;
-      var scaleX, scaleY;
+      let wScale = bounds.w / contentBounds.w;
+      let hScale = bounds.h / contentBounds.h;
+      let scaleX, scaleY;
       switch (this._scaleMode) {
         case StageScaleMode.NoBorder:
           scaleX = scaleY = Math.max(wScale, hScale);
@@ -1364,7 +1364,7 @@ module Shumway.GFX {
           break;
       }
 
-      var offsetX;
+      let offsetX;
       if ((this._align & StageAlignFlags.Left)) {
         offsetX = 0;
       } else if ((this._align & StageAlignFlags.Right)) {
@@ -1373,7 +1373,7 @@ module Shumway.GFX {
         offsetX = (bounds.w - contentBounds.w * scaleX) / 2;
       }
 
-      var offsetY;
+      let offsetY;
       if ((this._align & StageAlignFlags.Top)) {
         offsetY = 0;
       } else if ((this._align & StageAlignFlags.Bottom)) {

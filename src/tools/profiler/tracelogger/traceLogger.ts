@@ -53,8 +53,8 @@ module Shumway.Tools.Profiler.TraceLogger {
     }
 
     get buffers(): TimelineBuffer [] {
-      var buffers = [];
-      for (var i = 0, n = this._threads.length; i < n; i++) {
+      let buffers = [];
+      for (let i = 0, n = this._threads.length; i < n; i++) {
         buffers.push(this._threads[i].buffer);
       }
       return buffers;
@@ -68,16 +68,16 @@ module Shumway.Tools.Profiler.TraceLogger {
 
     private _onLoadPage(result: any []) {
       if (result && result.length == 1) {
-        var self = this;
-        var count = 0;
-        var threads = result[0];
-        var threadCount = threads.length;
+        let self = this;
+        let count = 0;
+        let threads = result[0];
+        let threadCount = threads.length;
         this._threads = Array(threadCount);
         this._progressInfo.pageLoaded = true;
         this._progressInfo.threadsTotal = threadCount;
-        for (var i = 0; i < threads.length; i++) {
-          var thread = threads[i];
-          var urls = [thread.dict, thread.tree];
+        for (let i = 0; i < threads.length; i++) {
+          let thread = threads[i];
+          let urls = [thread.dict, thread.tree];
           if (thread.corrections) {
             urls.push(thread.corrections);
           }
@@ -87,7 +87,7 @@ module Shumway.Tools.Profiler.TraceLogger {
             (function(index: number) {
               return function(result: any []): any {
                 if (result) {
-                  var thread = new Thread(result);
+                  let thread = new Thread(result);
                   thread.buffer.name = "Thread " + index;
                   self._threads[index] = thread;
                 }
@@ -112,22 +112,22 @@ module Shumway.Tools.Profiler.TraceLogger {
     }
 
     private _loadData(urls: string [], callback: (result: any []) => void, progress?: (count: number) => void) {
-      var count = 0;
-      var errors = 0;
-      var expected = urls.length;
-      var received = [];
+      let count = 0;
+      let errors = 0;
+      let expected = urls.length;
+      let received = [];
       received.length = expected;
-      for (var i = 0; i < expected; i++) {
-        var url = this._baseUrl + urls[i];
-        var isTL = /\.tl$/i.test(url);
-        var xhr = new XMLHttpRequest();
-        var responseType = isTL ? "arraybuffer" : "json";
+      for (let i = 0; i < expected; i++) {
+        let url = this._baseUrl + urls[i];
+        let isTL = /\.tl$/i.test(url);
+        let xhr = new XMLHttpRequest();
+        let responseType = isTL ? "arraybuffer" : "json";
         xhr.open('GET', url, true);
         xhr.responseType = responseType;
         xhr.onload = (function(index: number, type: string) {
           return function(event: Event): any {
             if (type === "json") {
-              var json = this.response;
+              let json = this.response;
               if (typeof json === "string") {
                 try {
                   json = JSON.parse(json);
@@ -175,9 +175,9 @@ module Shumway.Tools.Profiler.TraceLogger {
 
     this.map = []
 
-    var usedColors = 0;
-    for(var i=0; i<textmap.length; i++) {
-      var color = "";
+    let usedColors = 0;
+    for(let i=0; i<textmap.length; i++) {
+      let color = "";
       switch(textmap[i]) {
         case "IonCompilation": color = "green"; break;
         case "IonLinking": color = "green"; break;

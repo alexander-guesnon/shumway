@@ -20,57 +20,57 @@ module Shumway {
 
   import shumwayOptions = Shumway.Settings.shumwayOptions;
 
-  export var playerOptions = shumwayOptions.register(new OptionSet("Player Options"));
+  export let playerOptions = shumwayOptions.register(new OptionSet("Player Options"));
 
-  export var frameEnabledOption = playerOptions.register (
+  export let frameEnabledOption = playerOptions.register (
     new Shumway.Options.Option("enableFrames", "Enable Frame Execution", "boolean", true, "Enable frame execution.")
   );
 
-  export var timerEnabledOption = playerOptions.register (
+  export let timerEnabledOption = playerOptions.register (
     new Shumway.Options.Option("enableTimers", "Enable Timers", "boolean", true, "Enable timer events.")
   );
 
-  export var pumpEnabledOption = playerOptions.register (
+  export let pumpEnabledOption = playerOptions.register (
     new Shumway.Options.Option("enablePump", "Enable Pump", "boolean", true, "Enable display tree serialization.")
   );
 
-  export var pumpRateOption = playerOptions.register (
+  export let pumpRateOption = playerOptions.register (
     new Shumway.Options.Option("pumpRate", "Pump Rate", "number", 60, "Number of times / second that the display list is synchronized.", {range: { min: 1, max: 120, step: 1 }})
   );
 
-  export var frameRateOption = playerOptions.register (
+  export let frameRateOption = playerOptions.register (
     new Shumway.Options.Option("frameRate", "Frame Rate", "number", -1, "Override a movie's frame rate, set to -1 to use the movies default frame rate.", {range: { min: -1, max: 120, step: 1 }})
   );
 
-  export var tracePlayerOption = playerOptions.register (
+  export let tracePlayerOption = playerOptions.register (
     new Shumway.Options.Option("tp", "Trace Player", "number", 0, "Trace player every n frames.", {range: { min: 0, max: 512, step: 1 }})
   );
 
-  export var traceMouseEventOption = playerOptions.register (
+  export let traceMouseEventOption = playerOptions.register (
     new Shumway.Options.Option("tme", "Trace Mouse Events", "boolean", false, "Trace mouse events.")
   );
 
-  export var frameRateMultiplierOption = playerOptions.register (
+  export let frameRateMultiplierOption = playerOptions.register (
     new Shumway.Options.Option("", "Frame Rate Multiplier", "number", 1, "Play frames at a faster rate.", {range: { min: 1, max: 16, step: 1 }})
   );
 
-  export var dontSkipFramesOption = playerOptions.register (
+  export let dontSkipFramesOption = playerOptions.register (
     new Shumway.Options.Option("", "Disables Frame Skipping", "boolean", false, "Play all frames, e.g. no skipping frame during throttle.")
   );
 
-  export var playAllSymbolsOption = playerOptions.register (
+  export let playAllSymbolsOption = playerOptions.register (
     new Shumway.Options.Option("", "Play Symbols", "boolean", false, "Plays all SWF symbols automatically.")
   );
 
-  export var playSymbolOption = playerOptions.register (
+  export let playSymbolOption = playerOptions.register (
     new Shumway.Options.Option("", "Play Symbol Number", "number", 0, "Select symbol by Id.", {range: { min: 0, max: 20000, step: 1 }})
   );
 
-  export var playSymbolFrameDurationOption = playerOptions.register (
+  export let playSymbolFrameDurationOption = playerOptions.register (
     new Shumway.Options.Option("", "Play Symbol Duration", "number", 0, "How many frames to play, 0 for all frames of the movie clip.", {range: { min: 0, max: 128, step: 1 }})
   );
 
-  export var playSymbolCountOption = playerOptions.register (
+  export let playSymbolCountOption = playerOptions.register (
     new Shumway.Options.Option("", "Play Symbol Count", "number", -1, "Select symbol count.", {range: { min: -1, max: 20000, step: 1 }})
   );
 }

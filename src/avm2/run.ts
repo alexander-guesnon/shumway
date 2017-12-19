@@ -44,7 +44,7 @@ interface Function {
   axCall(thisArg: any): any;
 }
 
-var $: Shumway.AVMX.AXSecurityDomain = null;
+let $: Shumway.AVMX.AXSecurityDomain = null;
 
 module Shumway.AVMX {
   /*
@@ -123,12 +123,12 @@ module Shumway.AVMX {
   }
   export function validateConstruct(sec: AXSecurityDomain, axClass: AXClass, argc: number) {
     if (!axClass || !axClass.axConstruct) {
-      var name = axClass && axClass.classInfo ?
+      let name = axClass && axClass.classInfo ?
                  axClass.classInfo.instanceInfo.getName().name :
                  'value';
       sec.throwError('TypeError', Errors.ConstructOfNonFunctionError, name);
     }
-    var methodInfo = axClass.classInfo.getInitializer();
+    let methodInfo = axClass.classInfo.getInitializer();
     if (argc < methodInfo.minArgs) {
       sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
                      axClass.classInfo.instanceInfo.getName().name,
@@ -153,10 +153,10 @@ module Shumway.AVMX {
 
   export function forEachPublicProperty(object: AS.ASObject, callbackfn: (property: any, value: any) => void, thisArg?: any) {
     // REDUX: Do we need to walk the proto chain here?
-    var properties = object.axGetEnumerableKeys();
-    for (var i = 0; i < properties.length; i++) {
-      var property = properties[i];
-      var value = object.axGetPublicProperty(property);
+    let properties = object.axGetEnumerableKeys();
+    for (let i = 0; i < properties.length; i++) {
+      let property = properties[i];
+      let value = object.axGetPublicProperty(property);
       callbackfn.call(thisArg, property, value);
     }
   }
@@ -168,10 +168,10 @@ module Shumway.AVMX {
     Interpreter = 4
   }
 
-  var writer = new IndentingWriter(false, function (x) { dumpLine(x); } );
-  export var runtimeWriter = null;
-  export var executionWriter = null;
-  export var interpreterWriter = null;
+  let writer = new IndentingWriter(false, function (x) { dumpLine(x); } );
+  export let runtimeWriter = null;
+  export let executionWriter = null;
+  export let interpreterWriter = null;
 
   export function sliceArguments(args, offset: number) {
     return Array.prototype.slice.call(args, offset);
@@ -202,7 +202,7 @@ module Shumway.AVMX {
   }
 
   function axBoxPrimitive(value) {
-    var boxed = Object.create(this.tPrototype);
+    let boxed = Object.create(this.tPrototype);
     boxed.value = value;
     return boxed;
   }
@@ -212,7 +212,7 @@ module Shumway.AVMX {
       release || checkValue(receiver);
       return receiver;
     }
-    var boxedReceiver = sec.box(receiver);
+    let boxedReceiver = sec.box(receiver);
     // Boxing still leaves `null` and `undefined` unboxed, so return the current global instead.
     if (!boxedReceiver) {
       if (scopeStacks.length) {
@@ -234,7 +234,7 @@ module Shumway.AVMX {
   }
 
   function axApplyObject(_, args) {
-    var x = args[0];
+    let x = args[0];
     if (x == null) {
       return Object.create(this.tPrototype);
     }
@@ -242,7 +242,7 @@ module Shumway.AVMX {
   }
 
   function axConstructObject(args) {
-    var x = args[0];
+    let x = args[0];
     if (x == null) {
       return Object.create(this.tPrototype);
     }
@@ -343,7 +343,7 @@ module Shumway.AVMX {
 
   export function axCheckFilter(sec: AXSecurityDomain, value) {
     if (!value || !AS.isXMLCollection(sec, value)) {
-      var className = value && value.axClass ? value.axClass.name.toFQNString(false) : '[unknown]';
+      let className = value && value.axClass ? value.axClass.name.toFQNString(false) : '[unknown]';
       sec.throwError('TypeError', Errors.FilterError, className);
     }
     return value;
@@ -357,7 +357,7 @@ module Shumway.AVMX {
    * Returns the current interpreter frame's callee.
    */
   function axGetArgumentsCallee(): AXFunction {
-    var callee = this.callee;
+    let callee = this.callee;
     if (callee) {
       return callee;
     }
@@ -368,8 +368,8 @@ module Shumway.AVMX {
       return null;
     }
     release || assert(this.methodInfo.trait);
-    var mn = this.methodInfo.trait.name;
-    var methodClosure = this.receiver.axGetProperty(mn);
+    let mn = this.methodInfo.trait.name;
+    let methodClosure = this.receiver.axGetProperty(mn);
     release || assert(this.sec.AXMethodClosure.tPrototype === Object.getPrototypeOf(methodClosure));
     return methodClosure;
   }
@@ -383,7 +383,7 @@ module Shumway.AVMX {
     release || Shumway.Debug.assertNotImplemented(!(options & SORT.UNIQUESORT), "UNIQUESORT");
     release || Shumway.Debug.assertNotImplemented(!(options & SORT.RETURNINDEXEDARRAY),
                                                   "RETURNINDEXEDARRAY");
-    var result = 0;
+    let result = 0;
     if (options & SORT.CASEINSENSITIVE) {
       a = String(a).toLowerCase();
       b = String(b).toLowerCase();
@@ -401,13 +401,13 @@ module Shumway.AVMX {
   export function axCompareFields(objA: any, objB: any, names: string[], optionsList: SORT[]) {
     release || assert(names.length === optionsList.length);
     release || assert(names.length > 0);
-    var result = 0;
-    var i;
+    let result = 0;
+    let i;
     for (i = 0; i < names.length && result === 0; i++) {
-      var name = names[i];
-      var a = objA[name];
-      var b = objB[name];
-      var options = optionsList[i];
+      let name = names[i];
+      let a = objA[name];
+      let b = objB[name];
+      let options = optionsList[i];
       if (options & SORT.CASEINSENSITIVE) {
         a = String(a).toLowerCase();
         b = String(b).toLowerCase();
@@ -509,7 +509,7 @@ module Shumway.AVMX {
   }
 
   function axImplementsInterface(type: AXClass) {
-    var interfaces = (<AXClass>this).classInfo.instanceInfo.getInterfaces(this.axClass);
+    let interfaces = (<AXClass>this).classInfo.instanceInfo.getInterfaces(this.axClass);
     return interfaces.has(type);
   }
 
@@ -563,8 +563,8 @@ module Shumway.AVMX {
     }
 
     public findDepth(object: any): number {
-      var current = this;
-      var depth = 0;
+      let current = this;
+      let depth = 0;
       while (current) {
         if (current.object === object) {
           return depth;
@@ -576,8 +576,8 @@ module Shumway.AVMX {
     }
 
     public getScopeObjects(): Object [] {
-      var objects = [];
-      var current = this;
+      let objects = [];
+      let current = this;
       while (current) {
         objects.unshift(current.object);
         current = current.parent;
@@ -595,7 +595,7 @@ module Shumway.AVMX {
       if (mn.name === null) {
         this.global.object.sec.throwError('ReferenceError', Errors.UndefinedVarError, '*');
       }
-      var object;
+      let object;
       if (!scopeOnly && !mn.isRuntime()) {
         if ((object = this.cache[mn.id])) {
           return object;
@@ -609,7 +609,7 @@ module Shumway.AVMX {
         return (this.isWith || mn.isRuntime()) ? this.object : (this.cache[mn.id] = this.object);
       }
       if (this.parent) {
-        var object = this.parent.findScopeProperty(mn, strict, scopeOnly);
+        let object = this.parent.findScopeProperty(mn, strict, scopeOnly);
         if (mn.kind === CONSTANT.QName) {
           this.cache[mn.id] = object;
         }
@@ -625,7 +625,7 @@ module Shumway.AVMX {
       }
 
       // If we can't find the property look in the domain.
-      var globalObject = <AXGlobal><any>this.global.object;
+      let globalObject = <AXGlobal><any>this.global.object;
       if ((object = globalObject.applicationDomain.findProperty(mn, strict, true))) {
         return object;
       }
@@ -647,10 +647,10 @@ module Shumway.AVMX {
   export function applyTraits(object: ITraits, traits: RuntimeTraits) {
     release || assert(!object.hasOwnProperty("traits"));
     defineReadOnlyProperty(object, "traits", traits);
-    var T = traits.getTraitsList();
-    for (var i = 0; i < T.length; i++) {
-      var t = T[i];
-      var p: PropertyDescriptor = t;
+    let T = traits.getTraitsList();
+    for (let i = 0; i < T.length; i++) {
+      let t = T[i];
+      let p: PropertyDescriptor = t;
       if (p.value instanceof Namespace) {
         // We can't call |object.sec.AXNamespace.FromNamespace(...)| because the
         // AXNamespace class may not have been loaded yet. However, at this point we do have a
@@ -665,17 +665,17 @@ module Shumway.AVMX {
     }
   }
 
-  var D = defineNonEnumerableProperty;
+  let D = defineNonEnumerableProperty;
 
   // The Object that's at the root of all AXObjects' prototype chain, regardless of their
   // SecurityDomain.
-  export var AXBasePrototype = null;
+  export let AXBasePrototype = null;
 
   function AXBasePrototype_$BgtoString() {
     // Dynamic prototypes just return [object Object], so we have to special-case them.
     // Since the dynamic object is the one holding the direct reference to `classInfo`,
     // we can check for that.
-    var name = this.hasOwnProperty('classInfo') ?
+    let name = this.hasOwnProperty('classInfo') ?
                'Object' :
                this.classInfo.instanceInfo.name.name;
     return Shumway.StringUtilities.concat3("[object ", name, "]");
@@ -697,7 +697,7 @@ module Shumway.AVMX {
     if (AXBasePrototype) {
       return;
     }
-    var Op = AS.ASObject.prototype;
+    let Op = AS.ASObject.prototype;
     AXBasePrototype = Object.create(null);
     D(AXBasePrototype, "axHasPropertyInternal", Op.axHasPropertyInternal);
     D(AXBasePrototype, "axHasProperty", Op.axHasProperty);
@@ -839,12 +839,12 @@ module Shumway.AVMX {
    * Make sure we bottom out at the securityDomain's objectPrototype.
    */
   export function safeGetPrototypeOf(object: AXObject): AXObject {
-    var axClass = object.axClass;
+    let axClass = object.axClass;
     if (!axClass || axClass === axClass.sec.AXObject) {
       return null;
     }
 
-    var prototype = axClass.dPrototype;
+    let prototype = axClass.dPrototype;
     if (prototype === object) {
       prototype = axClass.superClass.dPrototype;
     }
@@ -892,14 +892,14 @@ module Shumway.AVMX {
         this.object = object;
         this.index = index;
       }
-      var nextIndex = object.axNextNameIndex(this.index);
+      let nextIndex = object.axNextNameIndex(this.index);
       if (nextIndex > 0) {
         this.index = nextIndex;
         return;
       }
       // If there are no more properties in the object then follow the prototype chain.
       while (true) {
-        var object = safeGetPrototypeOf(object);
+        let object = safeGetPrototypeOf(object);
         if (!object) {
           this.index = 0;
           this.object = null;
@@ -924,7 +924,7 @@ module Shumway.AVMX {
    * make object construction faster.
    */
   function axConstruct(argArray?: any[]) {
-    var object = Object.create(this.tPrototype);
+    let object = Object.create(this.tPrototype);
     object.axInitializer.apply(object, argArray);
     return object;
   }
@@ -950,7 +950,7 @@ module Shumway.AVMX {
     return this.axCoerce(args ? args[0] : undefined);
   }
 
-  export var scopeStacks: ScopeStack[] = [];
+  export let scopeStacks: ScopeStack[] = [];
 
   export function getCurrentScope(): Scope {
     if (scopeStacks.length === 0) {
@@ -963,7 +963,7 @@ module Shumway.AVMX {
     if (scopeStacks.length === 0) {
       return null;
     }
-    var globalObject = <any>scopeStacks[scopeStacks.length - 1].topScope().global.object;
+    let globalObject = <any>scopeStacks[scopeStacks.length - 1].topScope().global.object;
     return (<ScriptInfo>globalObject.scriptInfo).abc;
   }
 
@@ -1039,9 +1039,9 @@ module Shumway.AVMX {
 
     findDefiningABC(mn: Multiname): ABCFile {
       runtimeWriter && runtimeWriter.writeLn("findDefiningABC: " + mn);
-      var abcFile = null;
-      for (var i = 0; i < this._catalogs.length; i++) {
-        var abcCatalog = this._catalogs[i];
+      let abcFile = null;
+      for (let i = 0; i < this._catalogs.length; i++) {
+        let abcCatalog = this._catalogs[i];
         abcFile = abcCatalog.getABCByMultiname(mn);
         if (abcFile) {
           return abcFile;
@@ -1057,14 +1057,14 @@ module Shumway.AVMX {
 
     createError(className: string, error: any, replacement1?: any,
                replacement2?: any, replacement3?: any, replacement4?: any) {
-      var message = formatErrorMessage.apply(null, sliceArguments(arguments, 1));
-      var mn = Multiname.FromFQNString(className, NamespaceType.Public);
-      var axClass: AXClass = <any>this.system.getProperty(mn, true, true);
+      let message = formatErrorMessage.apply(null, sliceArguments(arguments, 1));
+      let mn = Multiname.FromFQNString(className, NamespaceType.Public);
+      let axClass: AXClass = <any>this.system.getProperty(mn, true, true);
       return axClass.axConstruct([message, error.code]);
     }
 
     applyType(axClass: AXClass, types: AXClass []): AXClass {
-      var vectorProto = (<AXClass><any>this.ObjectVector.axClass).superClass.dPrototype;
+      let vectorProto = (<AXClass><any>this.ObjectVector.axClass).superClass.dPrototype;
       if (!vectorProto.isPrototypeOf(axClass.dPrototype)) {
         this.throwError('TypeError', Errors.TypeAppOfNonParamType);
       }
@@ -1072,16 +1072,16 @@ module Shumway.AVMX {
         this.throwError('TypeError', Errors.WrongTypeArgCountError, '__AS3__.vec::Vector', 1,
                         types.length);
       }
-      var type = types[0] || this.AXObject;
+      let type = types[0] || this.AXObject;
       return this.getVectorClass(type);
     }
 
     getVectorClass(type: AXClass): AXClass {
-      var vectorClass = this.vectorClasses.get(type);
+      let vectorClass = this.vectorClasses.get(type);
       if (vectorClass) {
         return vectorClass;
       }
-      var typeClassName = type ?
+      let typeClassName = type ?
                           type.classInfo.instanceInfo.getName().getMangledName() :
                           '$BgObject';
       switch (typeClassName) {
@@ -1103,8 +1103,8 @@ module Shumway.AVMX {
     }
 
     createVectorClass(type: AXClass): AXClass {
-      var genericVectorClass = this.ObjectVector.axClass;
-      var axClass: AXClass = Object.create(genericVectorClass);
+      let genericVectorClass = this.ObjectVector.axClass;
+      let axClass: AXClass = Object.create(genericVectorClass);
       // Put the superClass tPrototype on the prototype chain so we have access
       // to all factory protocol handlers by default.
       axClass.tPrototype = Object.create(genericVectorClass.tPrototype);
@@ -1127,10 +1127,10 @@ module Shumway.AVMX {
      * Takes a JS Object and transforms it into an AXObject.
      */
     createObjectFromJS(value: Object, deep: boolean = false) {
-      var keys = Object.keys(value);
-      var result = this.createObject();
-      for (var i = 0; i < keys.length; i++) {
-        var v = value[keys[i]];
+      let keys = Object.keys(value);
+      let result = this.createObject();
+      for (let i = 0; i < keys.length; i++) {
+        let v = value[keys[i]];
         if (deep) {
           v = AS.transformJSValueToAS(this, v, true);
         }
@@ -1144,10 +1144,10 @@ module Shumway.AVMX {
      * Warning: This doesn't handle non-indexed keys.
      */
     createArrayUnsafe(value: any[]) {
-      var array = Object.create(this.AXArray.tPrototype);
+      let array = Object.create(this.AXArray.tPrototype);
       array.value = value;
       if (!release) { // Array values must only hold index keys.
-        for (var k in value) {
+        for (let k in value) {
           assert(isIndex(k));
           checkValue(value[k]);
         }
@@ -1161,8 +1161,8 @@ module Shumway.AVMX {
      * Warning: this does not use the given Array as the `value`.
      */
     createArray(value: any[]) {
-      var array = this.createArrayUnsafe([]);
-      for (var k in value) {
+      let array = this.createArrayUnsafe([]);
+      for (let k in value) {
         array.axSetPublicProperty(k, value[k]);
         release || checkValue(value[k]);
       }
@@ -1174,17 +1174,17 @@ module Shumway.AVMX {
      * Constructs an AXFunction in this security domain and sets its value to the given function.
      */
     boxFunction(value: Function) {
-      var fn = Object.create(this.AXFunction.tPrototype);
+      let fn = Object.create(this.AXFunction.tPrototype);
       fn.value = value;
       return fn;
     }
 
     createClass(classInfo: ClassInfo, superClass: AXClass, scope: Scope): AXClass {
-      var instanceInfo = classInfo.instanceInfo;
-      var className = instanceInfo.getName().toFQNString(false);
-      var axClass: AXClass = this.nativeClasses[className] ||
+      let instanceInfo = classInfo.instanceInfo;
+      let className = instanceInfo.getName().toFQNString(false);
+      let axClass: AXClass = this.nativeClasses[className] ||
                              Object.create(this.AXClass.tPrototype);
-      var classScope = new Scope(scope, axClass);
+      let classScope = new Scope(scope, axClass);
       if (!this.nativeClasses[className]) {
         if (instanceInfo.isInterface()) {
           axClass.dPrototype = Object.create(this.objectPrototype);
@@ -1231,8 +1231,8 @@ module Shumway.AVMX {
       AS.tryLinkNativeClass(axClass);
 
       // Run the static initializer.
-      var initializer = classInfo.getInitializer();
-      var initializerCode = initializer.getBody().code;
+      let initializer = classInfo.getInitializer();
+      let initializerCode = initializer.getBody().code;
       // ... except if it's the standard class initializer that doesn't really do anything.
       if (initializerCode[0] !== 208 || initializerCode[1] !== 48 || initializerCode[2] !== 71) {
         interpret(axClass, initializer, classScope, [axClass], null);
@@ -1241,15 +1241,15 @@ module Shumway.AVMX {
     }
 
     private initializeRuntimeTraits(axClass: AXClass, superClass: AXClass, scope: Scope) {
-      var classInfo = axClass.classInfo;
-      var instanceInfo = classInfo.instanceInfo;
+      let classInfo = axClass.classInfo;
+      let instanceInfo = classInfo.instanceInfo;
 
       // Prepare class traits.
-      var classTraits: RuntimeTraits;
+      let classTraits: RuntimeTraits;
       if (axClass === this.AXClass) {
         classTraits = instanceInfo.traits.resolveRuntimeTraits(null, null, scope);
       } else {
-        var rootClassTraits = this.AXClass.classInfo.instanceInfo.runtimeTraits;
+        let rootClassTraits = this.AXClass.classInfo.instanceInfo.runtimeTraits;
         release || assert(rootClassTraits);
         // Class traits don't capture the class' scope. This is relevant because it allows
         // referring to global names that would be shadowed if the class scope were active.
@@ -1261,19 +1261,19 @@ module Shumway.AVMX {
       applyTraits(axClass, classTraits);
 
       // Prepare instance traits.
-      var superInstanceTraits = superClass ? superClass.classInfo.instanceInfo.runtimeTraits : null;
-      var protectedNs = classInfo.abc.getNamespace(instanceInfo.protectedNs);
-      var instanceTraits = instanceInfo.traits.resolveRuntimeTraits(superInstanceTraits,
+      let superInstanceTraits = superClass ? superClass.classInfo.instanceInfo.runtimeTraits : null;
+      let protectedNs = classInfo.abc.getNamespace(instanceInfo.protectedNs);
+      let instanceTraits = instanceInfo.traits.resolveRuntimeTraits(superInstanceTraits,
                                                                     protectedNs, scope);
       instanceInfo.runtimeTraits = instanceTraits;
       applyTraits(axClass.tPrototype, instanceTraits);
     }
 
     createFunction(methodInfo: MethodInfo, scope: Scope, hasDynamicScope: boolean): AXFunction {
-      var traceMsg = !release && flashlog && methodInfo.trait ? methodInfo.toFlashlogString() : null;
-      var fun = this.boxFunction(function () {
+      let traceMsg = !release && flashlog && methodInfo.trait ? methodInfo.toFlashlogString() : null;
+      let fun = this.boxFunction(function () {
         release || (traceMsg && flashlog.writeAS3Trace(methodInfo.toFlashlogString()));
-        var self = this === jsGlobal ? scope.global.object : this;
+        let self = this === jsGlobal ? scope.global.object : this;
         return interpret(self, methodInfo, scope, <any>arguments, fun);
       });
       //fun.methodInfo = methodInfo;
@@ -1289,9 +1289,9 @@ module Shumway.AVMX {
     }
 
     createInitializerFunction(classInfo: ClassInfo, scope: Scope): AXCallable {
-      var methodInfo = classInfo.instanceInfo.getInitializer();
-      var traceMsg = !release && flashlog && methodInfo.trait ? methodInfo.toFlashlogString() : null;
-      var fun = AS.getNativeInitializer(classInfo);
+      let methodInfo = classInfo.instanceInfo.getInitializer();
+      let traceMsg = !release && flashlog && methodInfo.trait ? methodInfo.toFlashlogString() : null;
+      let fun = AS.getNativeInitializer(classInfo);
       if (!fun) {
         release || assert(!methodInfo.isNative(), "Must provide a native initializer for " +
                                                   classInfo.instanceInfo.getClassName());
@@ -1301,7 +1301,7 @@ module Shumway.AVMX {
         };
         if (!release) {
           try {
-            var className = classInfo.instanceInfo.getName().toFQNString(false);
+            let className = classInfo.instanceInfo.getName().toFQNString(false);
             Object.defineProperty(fun, 'name', {value: className});
           } catch (e) {
             // Ignore errors in browsers that don't allow overriding Function#length;
@@ -1315,7 +1315,7 @@ module Shumway.AVMX {
     }
 
     createActivation(methodInfo: MethodInfo, scope: Scope): AXActivation {
-      var body = methodInfo.getBody();
+      let body = methodInfo.getBody();
       if (!body.activationPrototype) {
         body.traits.resolve();
         body.activationPrototype = Object.create(this.AXActivationPrototype);
@@ -1326,7 +1326,7 @@ module Shumway.AVMX {
 
     createCatch(exceptionInfo: ExceptionInfo, scope: Scope): AXCatch {
       if (!exceptionInfo.catchPrototype) {
-        var traits = exceptionInfo.getTraits();
+        let traits = exceptionInfo.getTraits();
         exceptionInfo.catchPrototype = Object.create(this.AXCatchPrototype);
         defineReadOnlyProperty(exceptionInfo.catchPrototype, "traits",
                                traits.resolveRuntimeTraits(null, null, scope));
@@ -1361,13 +1361,13 @@ module Shumway.AVMX {
     }
 
     createAXGlobal(applicationDomain: AXApplicationDomain, scriptInfo: ScriptInfo) {
-      var global: AXGlobal = Object.create(this.AXGlobalPrototype);
+      let global: AXGlobal = Object.create(this.AXGlobalPrototype);
       global.applicationDomain = applicationDomain;
       global.scriptInfo = scriptInfo;
 
-      var scope = global.scope = new Scope(null, global, false);
-      var objectTraits = this.AXObject.classInfo.instanceInfo.runtimeTraits;
-      var traits = scriptInfo.traits.resolveRuntimeTraits(objectTraits, null, scope);
+      let scope = global.scope = new Scope(null, global, false);
+      let objectTraits = this.AXObject.classInfo.instanceInfo.runtimeTraits;
+      let traits = scriptInfo.traits.resolveRuntimeTraits(objectTraits, null, scope);
       applyTraits(global, traits);
       return global;
     }
@@ -1380,13 +1380,13 @@ module Shumway.AVMX {
      * all of them.
      */
     prepareRootClassPrototype() {
-      var dynamicClassPrototype: AXObject = Object.create(this.objectPrototype);
-      var rootClassPrototype: AXObject = Object.create(dynamicClassPrototype);
+      let dynamicClassPrototype: AXObject = Object.create(this.objectPrototype);
+      let rootClassPrototype: AXObject = Object.create(dynamicClassPrototype);
       rootClassPrototype.$BgtoString = function axClassToString() {
         return "[class " + this.classInfo.instanceInfo.getName().name + "]";
       };
 
-      var D = defineNonEnumerableProperty;
+      let D = defineNonEnumerableProperty;
       D(rootClassPrototype, "axBox", axBoxIdentity);
       D(rootClassPrototype, "axCoerce", axCoerce);
       D(rootClassPrototype, "axIsType", axIsTypeObject);
@@ -1411,34 +1411,34 @@ module Shumway.AVMX {
       // - The Object constructor is an instance of Object.
 
       this.prepareRootClassPrototype();
-      var AXClass = this.prepareNativeClass("AXClass", "Class", false);
+      let AXClass = this.prepareNativeClass("AXClass", "Class", false);
       AXClass.classInfo = this.system.findClassInfo("Class");
       AXClass.defaultValue = null;
 
-      var AXObject = this.prepareNativeClass("AXObject", "Object", false);
+      let AXObject = this.prepareNativeClass("AXObject", "Object", false);
       AXObject.classInfo = this.system.findClassInfo("Object");
 
-      var AXObject = this.AXObject;
+      let AXObject = this.AXObject;
 
       // AXFunction needs to exist for runtime trait resolution.
-      var AXFunction = this.prepareNativeClass("AXFunction", "Function", false);
+      let AXFunction = this.prepareNativeClass("AXFunction", "Function", false);
       defineNonEnumerableProperty(AXFunction, "axBox", axBoxPrimitive);
 
       // Initialization of the core classes' traits is a messy multi-step process:
 
       // First, create a scope for looking up all the things.
-      var scope = new Scope(null, AXClass, false);
+      let scope = new Scope(null, AXClass, false);
 
       // Then, create the runtime traits all Object instances share.
-      var objectCI = this.AXObject.classInfo;
-      var objectII = objectCI.instanceInfo;
-      var objectRTT = objectII.runtimeTraits = objectII.traits.resolveRuntimeTraits(null, null,
+      let objectCI = this.AXObject.classInfo;
+      let objectII = objectCI.instanceInfo;
+      let objectRTT = objectII.runtimeTraits = objectII.traits.resolveRuntimeTraits(null, null,
                                                                                     scope);
       applyTraits(this.AXObject.tPrototype, objectRTT);
 
       // Building on that, create the runtime traits all Class instances share.
-      var classCI = this.AXClass.classInfo;
-      var classII = classCI.instanceInfo;
+      let classCI = this.AXClass.classInfo;
+      let classII = classCI.instanceInfo;
       classII.runtimeTraits = classII.traits.resolveRuntimeTraits(objectRTT, null, scope);
       applyTraits(this.AXClass.tPrototype, classII.runtimeTraits);
 
@@ -1454,7 +1454,7 @@ module Shumway.AVMX {
     }
 
     prepareNativeClass(exportName: string, name: string, isPrimitiveClass: boolean) {
-      var axClass: AXClass = Object.create(this.rootClassPrototype);
+      let axClass: AXClass = Object.create(this.rootClassPrototype);
 
       // For Object and Class, we've already created the instance prototype to break
       // circular dependencies.
@@ -1465,7 +1465,7 @@ module Shumway.AVMX {
         axClass.dPrototype = <any>Object.getPrototypeOf(this.rootClassPrototype);
         axClass.tPrototype = this.rootClassPrototype;
       } else {
-        var instancePrototype = isPrimitiveClass ?
+        let instancePrototype = isPrimitiveClass ?
                                 this.AXPrimitiveBox.dPrototype :
                                 exportName === 'AXMethodClosure' ?
                                   this.AXFunction.dPrototype :
@@ -1479,8 +1479,8 @@ module Shumway.AVMX {
 
     preparePrimitiveClass(exportName: string, name: string, convert, defaultValue, coerce,
                           isType, isInstanceOf) {
-      var axClass = this.prepareNativeClass(exportName, name, true);
-      var D = defineNonEnumerableProperty;
+      let axClass = this.prepareNativeClass(exportName, name, true);
+      let D = defineNonEnumerableProperty;
       D(axClass, 'axBox', axBoxPrimitive);
       D(axClass, "axApply", function axApply(_ , args: any []) {
         return convert(args && args.length ? args[0] : defaultValue);
@@ -1499,10 +1499,10 @@ module Shumway.AVMX {
      * Configures all the builtin Objects.
      */
     initialize() {
-      var D = defineNonEnumerableProperty;
+      let D = defineNonEnumerableProperty;
       
       // The basic dynamic prototype that all objects in this security domain have in common.
-      var dynamicObjectPrototype = Object.create(AXBasePrototype);
+      let dynamicObjectPrototype = Object.create(AXBasePrototype);
       dynamicObjectPrototype.sec = this;
       // The basic traits prototype that all objects in this security domain have in common.
       Object.defineProperty(this, 'objectPrototype',
@@ -1511,8 +1511,8 @@ module Shumway.AVMX {
 
       // Debugging Helper
       release || (this.objectPrototype['trace'] = function trace() {
-        var self = this;
-        var writer = new IndentingWriter();
+        let self = this;
+        let writer = new IndentingWriter();
         this.traits.traits.forEach(t => {
           writer.writeLn(t + ": " + self[t.getName().getMangledName()]);
         });
@@ -1535,8 +1535,8 @@ module Shumway.AVMX {
 
       // The core classes' MOP hooks and dynamic prototype methods are defined
       // here to keep all the hooks initialization in one place.
-      var AXObject = this.AXObject;
-      var AXFunction = this.AXFunction;
+      let AXObject = this.AXObject;
+      let AXFunction = this.AXFunction;
 
       // Object(null) creates an object, and this behaves differently than:
       // (function (x: Object) { trace (x); })(null) which prints null.
@@ -1556,7 +1556,7 @@ module Shumway.AVMX {
       this.prepareNativeClass("AXQName", "QName", false);
       this.prepareNativeClass("AXNamespace", "Namespace", false);
 
-      var AXArray = this.prepareNativeClass("AXArray", "Array", false);
+      let AXArray = this.prepareNativeClass("AXArray", "Array", false);
       D(AXArray, 'axBox', axBoxPrimitive);
       AXArray.tPrototype.$BgtoString = AXFunction.axBox(function () {
         return this.value.toString();
@@ -1567,28 +1567,28 @@ module Shumway.AVMX {
       this.argumentsPrototype = Object.create(this.AXArray.tPrototype);
       Object.defineProperty(this.argumentsPrototype, '$Bgcallee', {get: axGetArgumentsCallee});
 
-      var AXRegExp = this.prepareNativeClass("AXRegExp", "RegExp", false);
+      let AXRegExp = this.prepareNativeClass("AXRegExp", "RegExp", false);
       // RegExp.prototype is an (empty string matching) RegExp, and behaves like one.
       AXRegExp.dPrototype['value'] = /(?:)/;
 
       // Boolean, int, Number, String, and uint are primitives in AS3. We create a placeholder
       // base class to help us with instanceof tests.
-      var AXPrimitiveBox = this.prepareNativeClass("AXPrimitiveBox", "PrimitiveBox", false);
+      let AXPrimitiveBox = this.prepareNativeClass("AXPrimitiveBox", "PrimitiveBox", false);
       D(AXPrimitiveBox.dPrototype, '$BgtoString',
         AXFunction.axBox(function () { return this.value.toString(); }));
-      var AXBoolean = this.preparePrimitiveClass("AXBoolean", "Boolean", axCoerceBoolean, false,
+      let AXBoolean = this.preparePrimitiveClass("AXBoolean", "Boolean", axCoerceBoolean, false,
                                                  axCoerceBoolean, axIsTypeBoolean, axIsTypeBoolean);
 
-      var AXString = this.preparePrimitiveClass("AXString", "String", axConvertString, '',
+      let AXString = this.preparePrimitiveClass("AXString", "String", axConvertString, '',
                                                  axCoerceString, axIsTypeString, axIsTypeString);
 
-      var AXNumber = this.preparePrimitiveClass("AXNumber", "Number", axCoerceNumber, 0,
+      let AXNumber = this.preparePrimitiveClass("AXNumber", "Number", axCoerceNumber, 0,
                                                 axCoerceNumber, axIsTypeNumber, axIsTypeNumber);
 
-      var AXInt = this.preparePrimitiveClass("AXInt", "int", axCoerceInt, 0, axCoerceInt,
+      let AXInt = this.preparePrimitiveClass("AXInt", "int", axCoerceInt, 0, axCoerceInt,
                                              axIsTypeInt, axFalse);
 
-      var AXUint = this.preparePrimitiveClass("AXUint", "uint", axCoerceUint, 0, axCoerceUint,
+      let AXUint = this.preparePrimitiveClass("AXUint", "uint", axCoerceUint, 0, axCoerceUint,
                                               axIsTypeUint, axFalse);
 
       // Install class loaders on the security domain.
@@ -1633,15 +1633,15 @@ module Shumway.AVMX {
     }
 
     public executeABC(abc: ABCFile) {
-      var lastScript = abc.scripts[abc.scripts.length - 1];
+      let lastScript = abc.scripts[abc.scripts.length - 1];
       this.executeScript(lastScript);
     }
 
     public findClassInfo(name: string) {
-      for (var i = 0; i < this._abcs.length; i++) {
-        var abc = this._abcs[i];
-        for (var j = 0; j < abc.instances.length; j++) {
-          var c = abc.classes[j];
+      for (let i = 0; i < this._abcs.length; i++) {
+        let abc = this._abcs[i];
+        for (let j = 0; j < abc.instances.length; j++) {
+          let c = abc.classes[j];
           if (c.instanceInfo.getName().name === name) {
             return c;
           }
@@ -1654,7 +1654,7 @@ module Shumway.AVMX {
       assert (scriptInfo.state === ScriptInfoState.None);
 
       runtimeWriter && runtimeWriter.writeLn("Running Script: " + scriptInfo);
-      var global = this.sec.createAXGlobal(this, scriptInfo);
+      let global = this.sec.createAXGlobal(this, scriptInfo);
       scriptInfo.global = global;
       scriptInfo.state = ScriptInfoState.Executing;
       interpret(<any>global, scriptInfo.getInitializer(), global.scope, [], null);
@@ -1663,7 +1663,7 @@ module Shumway.AVMX {
 
     public findProperty(mn: Multiname, strict: boolean, execute: boolean): AXGlobal {
       release || assert(mn instanceof Multiname);
-      var script = this.findDefiningScript(mn, execute);
+      let script = this.findDefiningScript(mn, execute);
       if (script) {
         return script.global;
       }
@@ -1677,7 +1677,7 @@ module Shumway.AVMX {
 
     public getProperty(mn: Multiname, strict: boolean, execute: boolean): AXObject {
       release || assert(mn instanceof Multiname);
-      var global: any = this.findProperty(mn, strict, execute);
+      let global: any = this.findProperty(mn, strict, execute);
       if (global) {
         return global.axGetProperty(mn);
       }
@@ -1687,7 +1687,7 @@ module Shumway.AVMX {
     public findDefiningScript(mn: Multiname, execute: boolean): ScriptInfo {
       release || assert(mn instanceof Multiname);
       // Look in parent domain first.
-      var script: ScriptInfo;
+      let script: ScriptInfo;
       if (this.parent) {
         script = this.parent.findDefiningScript(mn, execute);
         if (script) {
@@ -1696,8 +1696,8 @@ module Shumway.AVMX {
       }
 
       // Search through the loaded abcs.
-      for (var i = 0; i < this._abcs.length; i++) {
-        var abc = this._abcs[i];
+      for (let i = 0; i < this._abcs.length; i++) {
+        let abc = this._abcs[i];
         script = this._findDefiningScriptInABC(abc, mn, execute);
         if (script) {
           return script;
@@ -1705,7 +1705,7 @@ module Shumway.AVMX {
       }
 
       // Still no luck, so let's ask the security domain to load additional ABCs and try again.
-      var abc = this.system.sec.findDefiningABC(mn);
+      let abc = this.system.sec.findDefiningABC(mn);
       if (abc) {
         this.loadABC(abc);
         script = this._findDefiningScriptInABC(abc, mn, execute);
@@ -1717,10 +1717,10 @@ module Shumway.AVMX {
     }
 
     private _findDefiningScriptInABC(abc: ABCFile, mn: Multiname, execute: boolean): ScriptInfo {
-      var scripts = abc.scripts;
-      for (var j = 0; j < scripts.length; j++) {
-        var script = scripts[j];
-        var traits = script.traits;
+      let scripts = abc.scripts;
+      for (let j = 0; j < scripts.length; j++) {
+        let script = scripts[j];
+        let traits = script.traits;
         traits.resolve();
         if (traits.getTrait(mn)) {
           // Ensure script is executed.

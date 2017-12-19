@@ -266,7 +266,7 @@ module Shumway.AVMX.AS {
   registerNativeFunction('flash.system.fscommand', flash.system.fscommand);
 
   export function constructClassFromSymbol(symbol: Timeline.Symbol, axClass: ASClass) {
-    var instance = Object.create(axClass.tPrototype);
+    let instance = Object.create(axClass.tPrototype);
     if (instance._symbol) {
       release || Debug.assert(instance._symbol === symbol);
     } else {

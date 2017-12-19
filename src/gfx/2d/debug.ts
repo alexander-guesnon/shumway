@@ -2,12 +2,12 @@
 module Shumway.GFX.Canvas2D {
   import assert = Shumway.Debug.assert;
 
-  var originalSave = CanvasRenderingContext2D.prototype.save;
-  var originalClip = CanvasRenderingContext2D.prototype.clip;
-  var originalFill = CanvasRenderingContext2D.prototype.fill;
-  var originalStroke = CanvasRenderingContext2D.prototype.stroke;
-  var originalRestore = CanvasRenderingContext2D.prototype.restore;
-  var originalBeginPath = CanvasRenderingContext2D.prototype.beginPath;
+  let originalSave = CanvasRenderingContext2D.prototype.save;
+  let originalClip = CanvasRenderingContext2D.prototype.clip;
+  let originalFill = CanvasRenderingContext2D.prototype.fill;
+  let originalStroke = CanvasRenderingContext2D.prototype.stroke;
+  let originalRestore = CanvasRenderingContext2D.prototype.restore;
+  let originalBeginPath = CanvasRenderingContext2D.prototype.beginPath;
 
   function debugSave() {
     if (this.stackDepth === undefined) {

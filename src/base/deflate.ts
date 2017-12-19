@@ -26,9 +26,9 @@ module Shumway.ArrayUtilities {
     VERIFY_HEADER = 7
   }
 
-  var WINDOW_SIZE = 32768;
-  var WINDOW_SHIFT_POSITION = 65536;
-  var MAX_WINDOW_SIZE = WINDOW_SHIFT_POSITION + 258; /* plus max copy len */
+  let WINDOW_SIZE = 32768;
+  let WINDOW_SHIFT_POSITION = 65536;
+  let MAX_WINDOW_SIZE = WINDOW_SHIFT_POSITION + 258; /* plus max copy len */
 
   interface HuffmanTable {
     codes: Uint32Array;
@@ -77,12 +77,12 @@ module Shumway.ArrayUtilities {
 
     _processZLibHeader(buffer: Uint8Array, start: number, end: number): number {
       /* returns -1 - bad header, 0 - not enough data, 1+ - number of bytes processed */
-      var ZLIB_HEADER_SIZE = 2;
+      let ZLIB_HEADER_SIZE = 2;
       if (start + ZLIB_HEADER_SIZE > end) {
         return 0;
       }
-      var header = (buffer[start] << 8) | buffer[start + 1];
-      var error: string = null;
+      let header = (buffer[start] << 8) | buffer[start + 1];
+      let error: string = null;
       if ((header & 0x0f00) !== 0x0800) {
         error = 'inflate: unknown compression method';
       } else if ((header % 31) !== 0) {
@@ -101,14 +101,14 @@ module Shumway.ArrayUtilities {
     }
 
     public static inflate(data: Uint8Array, expectedLength: number, zlibHeader: boolean): Uint8Array {
-      var output = new Uint8Array(expectedLength);
-      var position = 0;
-      var inflate = Inflate.create(zlibHeader);
+      let output = new Uint8Array(expectedLength);
+      let position = 0;
+      let inflate = Inflate.create(zlibHeader);
       inflate.onData = function (data) {
         // Make sure we don't cause an exception here when trying to set out-of-bound data by clamping the number of
         // bytes to write to the remaining space in our output buffer. The Flash Player ignores data that goes over the
         // expected length, so should we.
-        var length = Math.min(data.length, output.length - position);
+        let length = Math.min(data.length, output.length - position);
         if (length) {
           memCopy(output, data, position, 0, length);
         }
@@ -169,7 +169,7 @@ module Shumway.ArrayUtilities {
     }
     public push(data: Uint8Array) {
       if (!this._buffer || this._buffer.length < this._bufferSize + data.length) {
-        var newBuffer = new Uint8Array(this._bufferSize + data.length);
+        let newBuffer = new Uint8Array(this._bufferSize + data.length);
         if (this._buffer) {
           newBuffer.set(this._buffer);
         }
@@ -179,9 +179,9 @@ module Shumway.ArrayUtilities {
       this._bufferSize += data.length;
       this._bufferPosition = 0;
 
-      var incomplete = false;
+      let incomplete = false;
       do {
-        var lastPosition = this._windowPosition;
+        let lastPosition = this._windowPosition;
         if (this._state === InflateState.INIT) {
           incomplete = this._decodeInitState();
           if (incomplete) {
@@ -209,7 +209,7 @@ module Shumway.ArrayUtilities {
             this._bufferPosition = this._bufferSize;
             break;
           case InflateState.VERIFY_HEADER:
-            var processed = this._processZLibHeader(this._buffer, this._bufferPosition, this._bufferSize);
+            let processed = this._processZLibHeader(this._buffer, this._bufferPosition, this._bufferSize);
             if (processed > 0) {
               this._bufferPosition += processed;
               this._state = InflateState.INIT;
@@ -221,7 +221,7 @@ module Shumway.ArrayUtilities {
             break;
         }
 
-        var decoded = this._windowPosition - lastPosition;
+        let decoded = this._windowPosition - lastPosition;
         if (decoded > 0) {
           this.onData(this._window.subarray(lastPosition, this._windowPosition));
         }
@@ -255,10 +255,10 @@ module Shumway.ArrayUtilities {
         return false;
       }
 
-      var buffer = this._buffer, bufferSize = this._bufferSize;
-      var bitBuffer = this._bitBuffer, bitLength = this._bitLength;
-      var state;
-      var position = this._bufferPosition;
+      let buffer = this._buffer, bufferSize = this._bufferSize;
+      let bitBuffer = this._bitBuffer, bitLength = this._bitLength;
+      let state;
+      let position = this._bufferPosition;
       if (((bufferSize - position) << 3) + bitLength < 3) {
         return true;
       }
@@ -266,7 +266,7 @@ module Shumway.ArrayUtilities {
         bitBuffer |= buffer[position++] << bitLength;
         bitLength += 8;
       }
-      var type = bitBuffer & 7;
+      let type = bitBuffer & 7;
       bitBuffer >>= 3;
       bitLength -= 3;
       switch (type >> 1) {
@@ -277,8 +277,8 @@ module Shumway.ArrayUtilities {
             return true;
           }
 
-          var length = buffer[position] | (buffer[position + 1] << 8);
-          var length2 = buffer[position + 2] | (buffer[position + 3] << 8);
+          let length = buffer[position] | (buffer[position + 1] << 8);
+          let length2 = buffer[position + 2] | (buffer[position + 3] << 8);
           position += 4;
           if ((length ^ length2) !== 0xFFFF) {
             this._error('inflate: invalid block 0 length');
@@ -306,11 +306,11 @@ module Shumway.ArrayUtilities {
             bitBuffer |= buffer[position++] << bitLength;
             bitLength += 8;
           }
-          var numLengthCodes = ((bitBuffer >> 10) & 15) + 4;
+          let numLengthCodes = ((bitBuffer >> 10) & 15) + 4;
           if (((bufferSize - position) << 3) + bitLength < 14 + 3 * numLengthCodes) {
             return true;
           }
-          var block2State: DeflateBlock2State = {
+          let block2State: DeflateBlock2State = {
             numLiteralCodes: (bitBuffer & 31) + 257,
             numDistanceCodes: ((bitBuffer >> 5) & 31) + 1,
             codeLengthTable: undefined,
@@ -320,8 +320,8 @@ module Shumway.ArrayUtilities {
           };
           bitBuffer >>= 14;
           bitLength -= 14;
-          var codeLengths = new Uint8Array(19);
-          for (var i = 0; i < numLengthCodes; ++i) {
+          let codeLengths = new Uint8Array(19);
+          for (let i = 0; i < numLengthCodes; ++i) {
             if (bitLength < 3) {
               bitBuffer |= buffer[position++] << bitLength;
               bitLength += 8;
@@ -357,13 +357,13 @@ module Shumway.ArrayUtilities {
       }
     }
     private _decodeBlock0() {
-      var position = this._bufferPosition;
-      var windowPosition = this._windowPosition;
-      var toRead = this._block0Read;
-      var leftInWindow = MAX_WINDOW_SIZE - windowPosition;
-      var leftInBuffer = this._bufferSize - position;
-      var incomplete = leftInBuffer < toRead;
-      var canFit = Math.min(leftInWindow, leftInBuffer, toRead);
+      let position = this._bufferPosition;
+      let windowPosition = this._windowPosition;
+      let toRead = this._block0Read;
+      let leftInWindow = MAX_WINDOW_SIZE - windowPosition;
+      let leftInBuffer = this._bufferSize - position;
+      let incomplete = leftInBuffer < toRead;
+      let canFit = Math.min(leftInWindow, leftInBuffer, toRead);
       this._window.set(this._buffer.subarray(position, position + canFit),
         windowPosition);
       this._windowPosition = windowPosition + canFit;
@@ -378,11 +378,11 @@ module Shumway.ArrayUtilities {
       return incomplete && leftInWindow < leftInBuffer;
     }
     private _readBits(size) {
-      var bitBuffer = this._bitBuffer;
-      var bitLength = this._bitLength;
+      let bitBuffer = this._bitBuffer;
+      let bitLength = this._bitLength;
       if (size > bitLength) {
-        var pos = this._bufferPosition;
-        var end = this._bufferSize;
+        let pos = this._bufferPosition;
+        let end = this._bufferSize;
         do {
           if (pos >= end) {
             this._bufferPosition = pos;
@@ -400,12 +400,12 @@ module Shumway.ArrayUtilities {
       return bitBuffer & ((1 << size) - 1);
     }
     private _readCode(codeTable) {
-      var bitBuffer = this._bitBuffer;
-      var bitLength = this._bitLength;
-      var maxBits = codeTable.maxBits;
+      let bitBuffer = this._bitBuffer;
+      let bitLength = this._bitLength;
+      let maxBits = codeTable.maxBits;
       if (maxBits > bitLength) {
-        var pos = this._bufferPosition;
-        var end = this._bufferSize;
+        let pos = this._bufferPosition;
+        let end = this._bufferSize;
         do {
           if (pos >= end) {
             this._bufferPosition = pos;
@@ -419,8 +419,8 @@ module Shumway.ArrayUtilities {
         this._bufferPosition = pos;
       }
 
-      var code = codeTable.codes[bitBuffer & ((1 << maxBits) - 1)];
-      var len = code >> 16;
+      let code = codeTable.codes[bitBuffer & ((1 << maxBits) - 1)];
+      let len = code >> 16;
       if ((code & 0x8000)) {
         this._error('inflate: invalid encoding');
         this._state = InflateState.ERROR;
@@ -432,13 +432,13 @@ module Shumway.ArrayUtilities {
       return code & 0xffff;
     }
     private _decodeBlock2Pre() {
-      var block2State = this._block2State;
-      var numCodes = block2State.numLiteralCodes + block2State.numDistanceCodes;
-      var bitLengths = block2State.bitLengths;
-      var i = block2State.codesRead;
-      var prev = i > 0 ? bitLengths[i - 1] : 0;
-      var codeLengthTable = block2State.codeLengthTable;
-      var j;
+      let block2State = this._block2State;
+      let numCodes = block2State.numLiteralCodes + block2State.numDistanceCodes;
+      let bitLengths = block2State.bitLengths;
+      let i = block2State.codesRead;
+      let prev = i > 0 ? bitLengths[i - 1] : 0;
+      let codeLengthTable = block2State.codeLengthTable;
+      let j;
       if (block2State.dupBits > 0) {
         j = this._readBits(block2State.dupBits);
         if (j < 0) {
@@ -450,7 +450,7 @@ module Shumway.ArrayUtilities {
         block2State.dupBits = 0;
       }
       while (i < numCodes) {
-        var sym = this._readCode(codeLengthTable);
+        let sym = this._readCode(codeLengthTable);
         if (sym < 0) {
           block2State.codesRead = i;
           return true;
@@ -458,7 +458,7 @@ module Shumway.ArrayUtilities {
           bitLengths[i++] = (prev = sym);
           continue;
         }
-        var j, dupBits;
+        let j, dupBits;
         switch (sym) {
           case 16:
             dupBits = 2;
@@ -497,11 +497,11 @@ module Shumway.ArrayUtilities {
       return false;
     }
     private _decodeBlock(): boolean {
-      var literalTable = this._literalTable, distanceTable = this._distanceTable;
-      var output = this._window, pos = this._windowPosition;
-      var copyState = this._copyState;
-      var i: number, j: number, sym: number;
-      var len: number, lenBits: number, dist: number, distBits: number;
+      let literalTable = this._literalTable, distanceTable = this._distanceTable;
+      let output = this._window, pos = this._windowPosition;
+      let copyState = this._copyState;
+      let i: number, j: number, sym: number;
+      let len: number, lenBits: number, dist: number, distBits: number;
 
       if (copyState.state !== 0) {
         // continuing len/distance operation
@@ -593,61 +593,61 @@ module Shumway.ArrayUtilities {
     }
   }
 
-  var codeLengthOrder: Uint8Array;
-  var distanceCodes: Uint16Array;
-  var distanceExtraBits: Uint8Array;
-  var fixedDistanceTable: HuffmanTable;
-  var lengthCodes: Uint16Array;
-  var lengthExtraBits: Uint8Array;
-  var fixedLiteralTable: HuffmanTable;
+  let codeLengthOrder: Uint8Array;
+  let distanceCodes: Uint16Array;
+  let distanceExtraBits: Uint8Array;
+  let fixedDistanceTable: HuffmanTable;
+  let lengthCodes: Uint16Array;
+  let lengthExtraBits: Uint8Array;
+  let fixedLiteralTable: HuffmanTable;
 
-  var areTablesInitialized: boolean = false;
+  let areTablesInitialized: boolean = false;
 
   function initializeTables() {
     codeLengthOrder = new Uint8Array([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]);
 
     distanceCodes = new Uint16Array(30);
     distanceExtraBits = new Uint8Array(30);
-    for (var i = 0, j = 0, code = 1; i < 30; ++i) {
+    for (let i = 0, j = 0, code = 1; i < 30; ++i) {
       distanceCodes[i] = code;
       code += 1 << (distanceExtraBits[i] = ~~((j += (i > 2 ? 1 : 0)) / 2));
     }
 
-    var bitLengths = new Uint8Array(288);
-    for (var i = 0; i < 32; ++i) {
+    let bitLengths = new Uint8Array(288);
+    for (let i = 0; i < 32; ++i) {
       bitLengths[i] = 5;
     }
     fixedDistanceTable = makeHuffmanTable(bitLengths.subarray(0, 32));
 
     lengthCodes = new Uint16Array(29);
     lengthExtraBits = new Uint8Array(29);
-    for (var i = 0, j = 0, code = 3; i < 29; ++i) {
+    for (let i = 0, j = 0, code = 3; i < 29; ++i) {
       lengthCodes[i] = code - (i == 28 ? 1 : 0);
       code += 1 << (lengthExtraBits[i] = ~~(((j += (i > 4 ? 1 : 0)) / 4) % 6));
     }
-    for (var i = 0; i < 288; ++i) {
+    for (let i = 0; i < 288; ++i) {
       bitLengths[i] = i < 144 || i > 279 ? 8 : (i < 256 ? 9 : 7);
     }
     fixedLiteralTable = makeHuffmanTable(bitLengths);
   }
 
   function makeHuffmanTable(bitLengths: Uint8Array): HuffmanTable {
-    var maxBits = Math.max.apply(null, bitLengths);
-    var numLengths = bitLengths.length;
-    var size = 1 << maxBits;
-    var codes = new Uint32Array(size);
+    let maxBits = Math.max.apply(null, bitLengths);
+    let numLengths = bitLengths.length;
+    let size = 1 << maxBits;
+    let codes = new Uint32Array(size);
     // avoiding len == 0: using max number of bits
-    var dummyCode = (maxBits << 16) | 0xFFFF;
-    for (var j = 0; j < size; j++) {
+    let dummyCode = (maxBits << 16) | 0xFFFF;
+    for (let j = 0; j < size; j++) {
       codes[j] = dummyCode;
     }
-    for (var code = 0, len = 1, skip = 2; len <= maxBits; code <<= 1, ++len, skip <<= 1) {
-      for (var val = 0; val < numLengths; ++val) {
+    for (let code = 0, len = 1, skip = 2; len <= maxBits; code <<= 1, ++len, skip <<= 1) {
+      for (let val = 0; val < numLengths; ++val) {
         if (bitLengths[val] === len) {
-          var lsb = 0;
-          for (var i = 0; i < len; ++i)
+          let lsb = 0;
+          for (let i = 0; i < len; ++i)
             lsb = (lsb * 2) + ((code >> i) & 1);
-          for (var i = lsb; i < size; i += skip)
+          for (let i = lsb; i < size; i += skip)
             codes[i] = (len << 16) | val;
           ++code;
         }
@@ -676,7 +676,7 @@ module Shumway.ArrayUtilities {
 
     public push(data: Uint8Array) {
       if (this._verifyHeader) {
-        var buffer;
+        let buffer;
         if (this._buffer) {
           buffer = new Uint8Array(this._buffer.length + data.length);
           buffer.set(this._buffer);
@@ -685,7 +685,7 @@ module Shumway.ArrayUtilities {
         } else {
           buffer = new Uint8Array(data);
         }
-        var processed = this._processZLibHeader(buffer, 0, buffer.length);
+        let processed = this._processZLibHeader(buffer, 0, buffer.length);
         if (processed === 0) {
           this._buffer = buffer;
           return;
@@ -722,9 +722,9 @@ module Shumway.ArrayUtilities {
     }
 
     public update(data: Uint8Array, start: number, end: number) {
-      var a = this.a;
-      var b = this.b;
-      for (var i = start; i < end; ++i) {
+      let a = this.a;
+      let b = this.b;
+      for (let i = start; i < end; ++i) {
         a = (a + (data[i] & 0xff)) % 65521;
         b = (b + a) % 65521;
       }
@@ -757,11 +757,11 @@ module Shumway.ArrayUtilities {
         this._state = DeflateState.WRITE;
       }
       // simple non-compressing algorithm for now
-      var len = data.length;
-      var outputSize = len + Math.ceil(len / 0xFFFF) * 5;
-      var output = new Uint8Array(outputSize);
-      var outputPos = 0;
-      var pos = 0;
+      let len = data.length;
+      let outputSize = len + Math.ceil(len / 0xFFFF) * 5;
+      let output = new Uint8Array(outputSize);
+      let outputPos = 0;
+      let pos = 0;
       while (len > 0xFFFF) {
         output.set(new Uint8Array([
           0x00,
@@ -798,7 +798,7 @@ module Shumway.ArrayUtilities {
         0xFF, 0xFF
       ]));
       if (this._adler32) {
-        var checksum = this._adler32.getChecksum();
+        let checksum = this._adler32.getChecksum();
         this.onData(new Uint8Array([
           checksum & 0xff, (checksum >> 8) & 0xff,
           (checksum >> 16) & 0xff, (checksum >>> 24) & 0xff

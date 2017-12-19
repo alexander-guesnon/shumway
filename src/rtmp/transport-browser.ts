@@ -15,8 +15,8 @@
  */
 
 module RtmpJs.Browser {
-  var DEFAULT_RTMP_PORT = 1935;
-  var COMBINE_RTMPT_DATA = true;
+  let DEFAULT_RTMP_PORT = 1935;
+  let COMBINE_RTMPT_DATA = true;
 
   export class RtmpTransport extends BaseTransport {
     host: string;
@@ -36,7 +36,7 @@ module RtmpJs.Browser {
     }
 
     connect(properties, args?) {
-      var TCPSocket = typeof navigator !== 'undefined' &&
+      let TCPSocket = typeof navigator !== 'undefined' &&
                       (<any>navigator).mozTCPSocket;
 
       if (!TCPSocket) {
@@ -44,21 +44,21 @@ module RtmpJs.Browser {
           'Currenly only Firefox with enabled mozTCPSocket is allowed (see README.md).');
       }
 
-      var channel = this._initChannel(properties, args);
+      let channel = this._initChannel(properties, args);
 
-      var writeQueue = [], socketError = false;
-      var socket: any = typeof ShumwayComRtmpSocket !== 'undefined' && ShumwayComRtmpSocket.isAvailable ?
+      let writeQueue = [], socketError = false;
+      let socket: any = typeof ShumwayComRtmpSocket !== 'undefined' && ShumwayComRtmpSocket.isAvailable ?
         new ShumwayComRtmpSocket(this.host, this.port, { useSecureTransport: this.ssl, binaryType: 'arraybuffer' }) :
         TCPSocket.open(this.host, this.port, { useSecureTransport: this.ssl, binaryType: 'arraybuffer' });
 
 
-      var sendData = function (data) {
+      let sendData = function (data) {
         return socket.send(data.buffer, data.byteOffset, data.byteLength);
       };
 
       socket.onopen = function (e) {
         channel.ondata = function (data) {
-          var buf = new Uint8Array(data);
+          let buf = new Uint8Array(data);
           writeQueue.push(buf);
           if (writeQueue.length > 1) {
             return;
@@ -116,8 +116,8 @@ module RtmpJs.Browser {
     constructor(connectionSettings) {
       super();
 
-      var host = connectionSettings.host || 'localhost';
-      var url = (connectionSettings.ssl ? 'https' : 'http') + '://' + host;
+      let host = connectionSettings.host || 'localhost';
+      let url = (connectionSettings.ssl ? 'https' : 'http') + '://' + host;
       if (connectionSettings.port) {
         url += ':' + connectionSettings.port;
       }
@@ -130,7 +130,7 @@ module RtmpJs.Browser {
     }
 
     connect(properties, args?) {
-      var channel = this._initChannel(properties, args);
+      let channel = this._initChannel(properties, args);
       channel.ondata = function (data) {
         release || console.log('Bytes written: ' + data.length);
         this.data.push(new Uint8Array(data));
@@ -156,12 +156,12 @@ module RtmpJs.Browser {
     }
 
     tick() {
-      var continueSend = function (data, status) {
+      let continueSend = function (data, status) {
         if (status !== 200) {
           throw new Error('Invalid HTTP status');
         }
 
-        var idle = data[0];
+        let idle = data[0];
         if (data.length > 1) {
           this.channel.push(data.subarray(1));
         }
@@ -176,13 +176,13 @@ module RtmpJs.Browser {
       }
 
       if (this.data.length > 0) {
-        var data;
+        let data;
         if (COMBINE_RTMPT_DATA) {
-          var length = 0;
+          let length = 0;
           this.data.forEach(function (i) {
             length += i.length;
           });
-          var pos = 0;
+          let pos = 0;
           data = new Uint8Array(length);
           this.data.forEach(function (i) {
             data.set(i, pos);
@@ -201,12 +201,12 @@ module RtmpJs.Browser {
     }
   }
 
-  var emptyPostData = new Uint8Array([0]);
+  let emptyPostData = new Uint8Array([0]);
 
   function post(path, data, onload) {
     data || (data = emptyPostData);
 
-    var xhr: any = typeof ShumwayComRtmpXHR !== 'undefined' && ShumwayComRtmpXHR.isAvailable ?
+    let xhr: any = typeof ShumwayComRtmpXHR !== 'undefined' && ShumwayComRtmpXHR.isAvailable ?
       new ShumwayComRtmpXHR() : new (<any>XMLHttpRequest)({mozSystem: true});
     xhr.open('POST', path, true);
     xhr.responseType = 'arraybuffer';

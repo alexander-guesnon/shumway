@@ -4,16 +4,16 @@ module Shumway.GFX.Canvas2D {
   import assert = Shumway.Debug.assert;
   import clamp = Shumway.NumberUtilities.clamp;
 
-  declare var registerScratchCanvas;
+  declare let registerScratchCanvas;
 
-  var isFirefox = navigator.userAgent.indexOf('Firefox') != -1;
+  let isFirefox = navigator.userAgent.indexOf('Firefox') != -1;
 
   /**
     * Scale blur radius for each quality level. The scale constants were gathered
     * experimentally.
     */
   function getBlurScale(ratio: number, quality: number) {
-    var blurScale = ratio / 2; // For some reason we always have to scale by 1/2 first.
+    let blurScale = ratio / 2; // For some reason we always have to scale by 1/2 first.
     switch (quality) {
       case 0:
         return 0;
@@ -57,69 +57,69 @@ module Shumway.GFX.Canvas2D {
       if (Filters._svgBlurFilter) {
         return;
       }
-      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svg.setAttribute("style", "display:block;width:0px;height:0px");
-      var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      let defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
 
       // Blur Filter
-      var blurFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      let blurFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
       blurFilter.setAttribute("id", "svgBlurFilter");
-      var feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
+      let feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
       feGaussianFilter.setAttribute("stdDeviation", "0 0");
       blurFilter.appendChild(feGaussianFilter);
       defs.appendChild(blurFilter);
       Filters._svgBlurFilter = feGaussianFilter;
 
       // Drop Shadow Filter
-      var dropShadowFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      let dropShadowFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
       dropShadowFilter.setAttribute("id", "svgDropShadowFilter");
-      var feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
+      let feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
       feGaussianFilter.setAttribute("in", "SourceAlpha");
       feGaussianFilter.setAttribute("stdDeviation", "3");
       dropShadowFilter.appendChild(feGaussianFilter);
       Filters._svgDropshadowFilterBlur = feGaussianFilter;
 
-      var feOffset = document.createElementNS("http://www.w3.org/2000/svg", "feOffset");
+      let feOffset = document.createElementNS("http://www.w3.org/2000/svg", "feOffset");
       feOffset.setAttribute("dx", "0");
       feOffset.setAttribute("dy", "0");
       feOffset.setAttribute("result", "offsetblur");
       dropShadowFilter.appendChild(feOffset);
       Filters._svgDropshadowFilterOffset = feOffset;
 
-      var feFlood = document.createElementNS("http://www.w3.org/2000/svg", "feFlood");
+      let feFlood = document.createElementNS("http://www.w3.org/2000/svg", "feFlood");
       feFlood.setAttribute("flood-color", "rgba(0,0,0,1)");
       dropShadowFilter.appendChild(feFlood);
       Filters._svgDropshadowFilterFlood = feFlood;
 
-      var feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+      let feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
       feComposite.setAttribute("in2", "offsetblur");
       feComposite.setAttribute("operator", "in");
       dropShadowFilter.appendChild(feComposite);
-      var feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+      let feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
       feComposite.setAttribute("in2", "SourceAlpha");
       feComposite.setAttribute("operator", "out");
       feComposite.setAttribute("result", "outer");
       dropShadowFilter.appendChild(feComposite);
 
-      var feMerge = document.createElementNS("http://www.w3.org/2000/svg", "feMerge");
-      var feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
+      let feMerge = document.createElementNS("http://www.w3.org/2000/svg", "feMerge");
+      let feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
       feMerge.appendChild(feMergeNode);
-      var feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
+      let feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
       feMerge.appendChild(feMergeNode);
       Filters._svgDropshadowMergeNode = feMergeNode;
       dropShadowFilter.appendChild(feMerge);
       defs.appendChild(dropShadowFilter);
 
-      var colorMatrixFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      let colorMatrixFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
       colorMatrixFilter.setAttribute("id", "svgColorMatrixFilter");
-      var feColorMatrix = document.createElementNS("http://www.w3.org/2000/svg", "feColorMatrix");
+      let feColorMatrix = document.createElementNS("http://www.w3.org/2000/svg", "feColorMatrix");
       // Color interpolation in linear RGB doesn't seem to match Flash's results.
       feColorMatrix.setAttribute("color-interpolation-filters", "sRGB");
       feColorMatrix.setAttribute("in", "SourceGraphic");
       feColorMatrix.setAttribute("type", "matrix");
       colorMatrixFilter.appendChild(feColorMatrix);
       
-      var feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+      let feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
       feComposite.setAttribute("in2", "SourceAlpha");
       feComposite.setAttribute("operator", "in");
       colorMatrixFilter.appendChild(feComposite);
@@ -136,17 +136,17 @@ module Shumway.GFX.Canvas2D {
       }
       Filters._prepareSVGFilters();
       Filters._removeFilter(context);
-      var scale = ratio;
+      let scale = ratio;
       if (filter instanceof BlurFilter) {
-        var blurFilter = <BlurFilter>filter;
-        var blurScale = getBlurScale(ratio, blurFilter.quality);
+        let blurFilter = <BlurFilter>filter;
+        let blurScale = getBlurScale(ratio, blurFilter.quality);
         Filters._svgBlurFilter.setAttribute("stdDeviation",
           blurFilter.blurX * blurScale + " " +
             blurFilter.blurY * blurScale);
         context.filter = "url(#svgBlurFilter)";
       } else if (filter instanceof DropshadowFilter) {
-        var dropshadowFilter = <DropshadowFilter>filter;
-        var blurScale = getBlurScale(ratio, dropshadowFilter.quality);
+        let dropshadowFilter = <DropshadowFilter>filter;
+        let blurScale = getBlurScale(ratio, dropshadowFilter.quality);
         Filters._svgDropshadowFilterBlur.setAttribute("stdDeviation",
           dropshadowFilter.blurX * blurScale + " " +
             dropshadowFilter.blurY * blurScale
@@ -161,7 +161,7 @@ module Shumway.GFX.Canvas2D {
           dropshadowFilter.knockout ? "outer" : "SourceGraphic");
         context.filter = "url(#svgDropShadowFilter)";
       } else if (filter instanceof ColorMatrix) {
-        var colorMatrix = <ColorMatrix>filter;
+        let colorMatrix = <ColorMatrix>filter;
         Filters._svgColorMatrixFilter.setAttribute("values", colorMatrix.toSVGFilterMatrix());
         context.filter = "url(#svgColorMatrixFilter)";
       }
@@ -223,7 +223,7 @@ module Shumway.GFX.Canvas2D {
     // - BlendMode.Erase (destination-out)
     // - BlendMode.Layer [defines backdrop]
 
-    var compositeOp: string = "source-over";
+    let compositeOp: string = "source-over";
     switch (blendMode) {
       case BlendMode.Normal:
       case BlendMode.Layer:
@@ -278,7 +278,7 @@ module Shumway.GFX.Canvas2D {
     }
 
     private static _ensureCopyCanvasSize(w: number, h: number) {
-      var canvas;
+      let canvas;
       if (!Canvas2DSurfaceRegion._copyCanvasContext) {
         canvas = document.createElement("canvas");
         if (typeof registerScratchCanvas !== "undefined") {
@@ -300,7 +300,7 @@ module Shumway.GFX.Canvas2D {
                 colorMatrix: ColorMatrix, blendMode: BlendMode, filters: Filter [],
                 devicePixelRatio: number) {
       this.context.setTransform(1, 0, 0, 1, 0, 0);
-      var sourceContext, copyContext, sx = 0, sy = 0;
+      let sourceContext, copyContext, sx = 0, sy = 0;
       // Handle copying from and to the same canvas.
       if (source.context.canvas === this.context.canvas) {
         Canvas2DSurfaceRegion._ensureCopyCanvasSize(w, h);
@@ -319,8 +319,8 @@ module Shumway.GFX.Canvas2D {
         sx = source.region.x;
         sy = source.region.y;
       }
-      var canvas = this.context.canvas;
-      var clip = blendModeShouldClip(blendMode);
+      let canvas = this.context.canvas;
+      let clip = blendModeShouldClip(blendMode);
       if (clip) {
         this.context.save();
         this.context.beginPath();
@@ -334,13 +334,13 @@ module Shumway.GFX.Canvas2D {
         if (colorMatrix && !colorMatrix.isIdentity()) {
           filters = filters.concat(colorMatrix);
         }
-        var i = 0;
+        let i = 0;
         if (filters.length > 1) {
           // If there are more than one filter defined on this node, we create another temporary
           // surface and keep drawing back and forth between them till all filters are applied,
           // except of the last one which gets applied when actually drawing into the target after
           // this block, to safe a drawImage call.
-          var dx, dy, _cc, _sx, _sy;
+          let dx, dy, _cc, _sx, _sy;
           if (copyContext) {
             _cc = copyContext;
             copyContext = sourceContext;
@@ -390,7 +390,7 @@ module Shumway.GFX.Canvas2D {
     }
 
     public reset() {
-      var context = this.surface.context;
+      let context = this.surface.context;
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.fillStyle = '#000000';
       context.strokeStyle = '#000000';
@@ -400,13 +400,13 @@ module Shumway.GFX.Canvas2D {
     }
 
     public fill(fillStyle: any) {
-      var context = this.surface.context, region = this.region;
+      let context = this.surface.context, region = this.region;
       context.fillStyle = fillStyle;
       context.fillRect(region.x, region.y, region.w, region.h);
     }
 
     public clear(rectangle?: Rectangle) {
-      var context = this.surface.context, region = this.region;
+      let context = this.surface.context, region = this.region;
       if (!rectangle) {
         rectangle = region;
       }
@@ -428,7 +428,7 @@ module Shumway.GFX.Canvas2D {
       this._regionAllocator = regionAllocator;
     }
     allocate(w: number, h: number): Canvas2DSurfaceRegion {
-      var region = this._regionAllocator.allocate(w, h);
+      let region = this._regionAllocator.allocate(w, h);
       if (region) {
         return new Canvas2DSurfaceRegion(this, region, w, h);
       }

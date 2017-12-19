@@ -29,12 +29,12 @@ module Shumway.GFX {
     }
   }
 
-  var EPS = 0.000000001;
+  let EPS = 0.000000001;
   // Step widths for blur based filters, for quality values 1..15:
   // If we plot the border width added by expandBlurBounds for each blurX (or blurY) value, the
   // step width is the amount of blurX that adds one pixel to the border width. I.e. for quality = 1,
   // the border width increments at blurX = 2, 4, 6, ...
-  var blurFilterStepWidths = [
+  let blurFilterStepWidths = [
     2,
     1 / 1.05,
     1 / 1.35,
@@ -54,22 +54,22 @@ module Shumway.GFX {
   
   function expandBlurBounds(bounds: Rectangle, quality: number,
                             blurX: number, blurY: number, isBlurFilter: boolean) {
-    var stepWidth = blurFilterStepWidths[quality - 1];
-    var bx = blurX;
-    var by = blurY;
+    let stepWidth = blurFilterStepWidths[quality - 1];
+    let bx = blurX;
+    let by = blurY;
     if (isBlurFilter) {
       // BlurFilter behaves slightly different from other blur based filters:
       // Given ascending blurX/blurY values, a BlurFilter expands the source rect later than with
       // i.e. GlowFilter. The difference appears to be stepWidth / 4 for all quality values.
-      var stepWidth4 = stepWidth / 4;
+      let stepWidth4 = stepWidth / 4;
       bx -= stepWidth4;
       by -= stepWidth4;
     }
     // Calculate horizontal and vertical borders:
     // blurX/blurY values <= 1 are always rounded up to 1, which means that we always expand the
     // source rect, even when blurX/blurY is 0.
-    var bh = (Math.ceil((bx < 1 ? 1 : bx) / (stepWidth - EPS)));
-    var bv = (Math.ceil((by < 1 ? 1 : by) / (stepWidth - EPS)));
+    let bh = (Math.ceil((bx < 1 ? 1 : bx) / (stepWidth - EPS)));
+    let bv = (Math.ceil((by < 1 ? 1 : by) / (stepWidth - EPS)));
     bounds.x -= bh;
     bounds.w += bh * 2;
     bounds.y -= bv;
@@ -130,13 +130,13 @@ module Shumway.GFX {
       // }
       expandBlurBounds(bounds, this.quality, this.blurX, this.blurY, false);
       if (this.distance) {
-        var a = this.angle * Math.PI / 180;
-        var dx = Math.cos(a) * this.distance;
-        var dy = Math.sin(a) * this.distance;
-        var xMin = bounds.x + (dx >= 0 ? 0 : Math.floor(dx));
-        var xMax = bounds.x + bounds.w + Math.ceil(Math.abs(dx));
-        var yMin = bounds.y + (dy >= 0 ? 0 : Math.floor(dy));
-        var yMax = bounds.y + bounds.h + Math.ceil(Math.abs(dy));
+        let a = this.angle * Math.PI / 180;
+        let dx = Math.cos(a) * this.distance;
+        let dy = Math.sin(a) * this.distance;
+        let xMin = bounds.x + (dx >= 0 ? 0 : Math.floor(dx));
+        let xMax = bounds.x + bounds.w + Math.ceil(Math.abs(dx));
+        let yMin = bounds.y + (dy >= 0 ? 0 : Math.floor(dy));
+        let yMax = bounds.y + bounds.h + Math.ceil(Math.abs(dy));
         bounds.x = xMin;
         bounds.w = xMax - xMin;
         bounds.y = yMin;
@@ -192,7 +192,7 @@ module Shumway.GFX {
     }
 
     public clone(): ColorMatrix {
-      var colorMatrix = new ColorMatrix(this._data);
+      let colorMatrix = new ColorMatrix(this._data);
       colorMatrix._type = this._type;
       return colorMatrix;
     }
@@ -218,7 +218,7 @@ module Shumway.GFX {
       if (this._type & ColorMatrixType.Identity) {
         return true;
       }
-      var m = this._data;
+      let m = this._data;
       return m[0]  == 1 && m[1]  == 0 && m[2]  == 0 && m[3]  == 0 &&
              m[4]  == 0 && m[5]  == 1 && m[6]  == 0 && m[7]  == 0 &&
              m[8]  == 0 && m[9]  == 0 && m[10] == 1 && m[11] == 0 &&
@@ -227,7 +227,7 @@ module Shumway.GFX {
     }
 
     public static createIdentity(): ColorMatrix {
-      var colorMatrix = new ColorMatrix ([
+      let colorMatrix = new ColorMatrix ([
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -240,8 +240,8 @@ module Shumway.GFX {
 
     public setMultipliersAndOffsets(redMultiplier: number, greenMultiplier: number, blueMultiplier: number, alphaMultiplier: number,
                                     redOffset: number, greenOffset: number, blueOffset: number, alphaOffset: number) {
-      var m: Float32Array = this._data;
-      for (var i = 0; i < m.length; i++) {
+      let m: Float32Array = this._data;
+      for (let i = 0; i < m.length; i++) {
         m[i] = 0;
       }
       m[0] = redMultiplier;
@@ -256,16 +256,16 @@ module Shumway.GFX {
     }
 
     public transformRGBA(rgba: number) {
-      var r = (rgba >> 24) & 0xff;
-      var g = (rgba >> 16) & 0xff;
-      var b = (rgba >>  8) & 0xff;
-      var a = rgba & 0xff;
+      let r = (rgba >> 24) & 0xff;
+      let g = (rgba >> 16) & 0xff;
+      let b = (rgba >>  8) & 0xff;
+      let a = rgba & 0xff;
 
-      var m: Float32Array = this._data;
-      var R = clampByte(r * m[0]  + g * m[1]  + b * m[2]  + a * m[3]  + m[16] * 255);
-      var G = clampByte(r * m[4]  + g * m[5]  + b * m[6]  + a * m[7]  + m[17] * 255);
-      var B = clampByte(r * m[8]  + g * m[9]  + b * m[10] + a * m[11] + m[18] * 255);
-      var A = clampByte(r * m[12] + g * m[13] + b * m[14] + a * m[15] + m[19] * 255);
+      let m: Float32Array = this._data;
+      let R = clampByte(r * m[0]  + g * m[1]  + b * m[2]  + a * m[3]  + m[16] * 255);
+      let G = clampByte(r * m[4]  + g * m[5]  + b * m[6]  + a * m[7]  + m[17] * 255);
+      let B = clampByte(r * m[8]  + g * m[9]  + b * m[10] + a * m[11] + m[18] * 255);
+      let A = clampByte(r * m[12] + g * m[13] + b * m[14] + a * m[15] + m[19] * 255);
 
       return R << 24 | G << 16 | B << 8 | A;
     }
@@ -274,48 +274,48 @@ module Shumway.GFX {
       if (other._type & ColorMatrixType.Identity) {
         return;
       }
-      var a = this._data, b = other._data;
-      var a00 = a[0 * 4 + 0];
-      var a01 = a[0 * 4 + 1];
-      var a02 = a[0 * 4 + 2];
-      var a03 = a[0 * 4 + 3];
-      var a10 = a[1 * 4 + 0];
-      var a11 = a[1 * 4 + 1];
-      var a12 = a[1 * 4 + 2];
-      var a13 = a[1 * 4 + 3];
-      var a20 = a[2 * 4 + 0];
-      var a21 = a[2 * 4 + 1];
-      var a22 = a[2 * 4 + 2];
-      var a23 = a[2 * 4 + 3];
-      var a30 = a[3 * 4 + 0];
-      var a31 = a[3 * 4 + 1];
-      var a32 = a[3 * 4 + 2];
-      var a33 = a[3 * 4 + 3];
-      var a40 = a[4 * 4 + 0];
-      var a41 = a[4 * 4 + 1];
-      var a42 = a[4 * 4 + 2];
-      var a43 = a[4 * 4 + 3];
+      let a = this._data, b = other._data;
+      let a00 = a[0 * 4 + 0];
+      let a01 = a[0 * 4 + 1];
+      let a02 = a[0 * 4 + 2];
+      let a03 = a[0 * 4 + 3];
+      let a10 = a[1 * 4 + 0];
+      let a11 = a[1 * 4 + 1];
+      let a12 = a[1 * 4 + 2];
+      let a13 = a[1 * 4 + 3];
+      let a20 = a[2 * 4 + 0];
+      let a21 = a[2 * 4 + 1];
+      let a22 = a[2 * 4 + 2];
+      let a23 = a[2 * 4 + 3];
+      let a30 = a[3 * 4 + 0];
+      let a31 = a[3 * 4 + 1];
+      let a32 = a[3 * 4 + 2];
+      let a33 = a[3 * 4 + 3];
+      let a40 = a[4 * 4 + 0];
+      let a41 = a[4 * 4 + 1];
+      let a42 = a[4 * 4 + 2];
+      let a43 = a[4 * 4 + 3];
 
-      var b00 = b[0 * 4 + 0];
-      var b01 = b[0 * 4 + 1];
-      var b02 = b[0 * 4 + 2];
-      var b03 = b[0 * 4 + 3];
-      var b10 = b[1 * 4 + 0];
-      var b11 = b[1 * 4 + 1];
-      var b12 = b[1 * 4 + 2];
-      var b13 = b[1 * 4 + 3];
-      var b20 = b[2 * 4 + 0];
-      var b21 = b[2 * 4 + 1];
-      var b22 = b[2 * 4 + 2];
-      var b23 = b[2 * 4 + 3];
-      var b30 = b[3 * 4 + 0];
-      var b31 = b[3 * 4 + 1];
-      var b32 = b[3 * 4 + 2];
-      var b33 = b[3 * 4 + 3];
-      var b40 = b[4 * 4 + 0];
-      var b41 = b[4 * 4 + 1];
-      var b42 = b[4 * 4 + 2];
-      var b43 = b[4 * 4 + 3];
+      let b00 = b[0 * 4 + 0];
+      let b01 = b[0 * 4 + 1];
+      let b02 = b[0 * 4 + 2];
+      let b03 = b[0 * 4 + 3];
+      let b10 = b[1 * 4 + 0];
+      let b11 = b[1 * 4 + 1];
+      let b12 = b[1 * 4 + 2];
+      let b13 = b[1 * 4 + 3];
+      let b20 = b[2 * 4 + 0];
+      let b21 = b[2 * 4 + 1];
+      let b22 = b[2 * 4 + 2];
+      let b23 = b[2 * 4 + 3];
+      let b30 = b[3 * 4 + 0];
+      let b31 = b[3 * 4 + 1];
+      let b32 = b[3 * 4 + 2];
+      let b33 = b[3 * 4 + 3];
+      let b40 = b[4 * 4 + 0];
+      let b41 = b[4 * 4 + 1];
+      let b42 = b[4 * 4 + 2];
+      let b43 = b[4 * 4 + 3];
 
       a[0 * 4 + 0] = a00 * b00 + a10 * b01 + a20 * b02 + a30 * b03;
       a[0 * 4 + 1] = a01 * b00 + a11 * b01 + a21 * b02 + a31 * b03;
@@ -346,7 +346,7 @@ module Shumway.GFX {
     }
 
     public hasOnlyAlphaMultiplier(): boolean {
-      var m = this._data;
+      let m = this._data;
       return m[0]  == 1 && m[1]  == 0 && m[2]  == 0 && m[3]  == 0 &&
              m[4]  == 0 && m[5]  == 1 && m[6]  == 0 && m[7]  == 0 &&
              m[8]  == 0 && m[9]  == 0 && m[10] == 1 && m[11] == 0 &&
@@ -360,9 +360,9 @@ module Shumway.GFX {
       } else if (this._type === other._type && this._type === ColorMatrixType.Identity) {
         return true;
       }
-      var a = this._data;
-      var b = other._data;
-      for (var i = 0; i < 20; i++) {
+      let a = this._data;
+      let b = other._data;
+      for (let i = 0; i < 20; i++) {
         if (Math.abs(a[i] - b[i]) > 0.001) {
           return false;
         }
@@ -371,7 +371,7 @@ module Shumway.GFX {
     }
 
     public toSVGFilterMatrix(): string {
-      var m = this._data;
+      let m = this._data;
       return [m[0], m[4], m[8],  m[12], m[16],
               m[1], m[5], m[9],  m[13], m[17],
               m[2], m[6], m[10], m[14], m[18],

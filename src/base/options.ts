@@ -20,19 +20,19 @@
  * Options are configuration settings sprinkled throughout the code. They can be grouped into sets of
  * options called |OptionSets| which can form a hierarchy of options. For instance:
  *
- * var set = new OptionSet();
- * var opt = set.register(new Option("v", "verbose", "boolean", false, "Enables verbose logging."));
+ * let set = new OptionSet();
+ * let opt = set.register(new Option("v", "verbose", "boolean", false, "Enables verbose logging."));
  *
  * creates an option set with one option in it. The option can be changed directly using |opt.value = true| or
  * automatically using the |ArgumentParser|:
  *
- * var parser = new ArgumentParser();
+ * let parser = new ArgumentParser();
  * parser.addBoundOptionSet(set);
  * parser.parse(["-v"]);
  *
  * The |ArgumentParser| can also be used directly:
  *
- * var parser = new ArgumentParser();
+ * let parser = new ArgumentParser();
  * argumentParser.addArgument("h", "help", "boolean", {parse: function (x) {
  *   printUsage();
  * }});
@@ -83,18 +83,18 @@ module Shumway.Options {
       this.args = [];
     }
     public addArgument(shortName, longName, type, options) {
-      var argument = new Argument(shortName, longName, type, options);
+      let argument = new Argument(shortName, longName, type, options);
       this.args.push(argument);
       return argument;
     }
     public addBoundOption(option) {
-      var options = {parse: function (x) {
+      let options = {parse: function (x) {
         option.value = x;
       }};
       this.args.push(new Argument(option.shortName, option.longName, option.type, options));
     }
     public addBoundOptionSet(optionSet) {
-      var self = this;
+      let self = this;
       optionSet.options.forEach(function (x) {
         if (OptionSet.isOptionSet(x)) {
           self.addBoundOptionSet(x);
@@ -105,7 +105,7 @@ module Shumway.Options {
       });
     }
     public getUsage () {
-      var str = "";
+      let str = "";
       this.args.forEach(function (x) {
         if (!x.positional) {
           str += "[-" + x.shortName + "|--" + x.longName + (x.type === "boolean" ? "" : " " + x.type[0].toUpperCase()) + "]";
@@ -117,8 +117,8 @@ module Shumway.Options {
       return str;
     }
     public parse (args) {
-      var nonPositionalArgumentMap = {};
-      var positionalArgumentList = [];
+      let nonPositionalArgumentMap = {};
+      let positionalArgumentList = [];
       this.args.forEach(function (x) {
         if (x.positional) {
           positionalArgumentList.push(x);
@@ -128,11 +128,11 @@ module Shumway.Options {
         }
       });
 
-      var leftoverArguments = [];
+      let leftoverArguments = [];
 
       while (args.length) {
-        var argString = args.shift();
-        var argument = null, value = argString;
+        let argString = args.shift();
+        let argument = null, value = argString;
         if (argString == '--') {
           leftoverArguments = leftoverArguments.concat(args);
           break;
@@ -193,8 +193,8 @@ module Shumway.Options {
     public register(option) {
       if (OptionSet.isOptionSet(option)) {
         // check for duplicate option sets (bail if found)
-        for (var i = 0; i < this.options.length; i++) {
-          var optionSet = this.options[i];
+        for (let i = 0; i < this.options.length; i++) {
+          let optionSet = this.options[i];
           if (OptionSet.isOptionSet(optionSet) && optionSet.name === option.name) {
             return optionSet;
           }
@@ -203,7 +203,7 @@ module Shumway.Options {
       this.options.push(option);
       if (this.settings) {
         if (OptionSet.isOptionSet(option)) {
-          var optionSettings = this.settings[option.name];
+          let optionSettings = this.settings[option.name];
           if (isObject(optionSettings)) {
             option.settings = optionSettings.settings;
             option.open = optionSettings.open;
@@ -236,7 +236,7 @@ module Shumway.Options {
       writer.leave("}");
     }
     public getSettings() {
-      var settings = {};
+      let settings = {};
       this.options.forEach(function(option) {
         if (OptionSet.isOptionSet(option)) {
           settings[option.name] = {

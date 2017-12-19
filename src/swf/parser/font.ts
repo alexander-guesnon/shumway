@@ -16,17 +16,17 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
-  var pow = Math.pow;
-  var min = Math.min;
-  var max = Math.max;
-  var logE = Math.log;
-  var fromCharCode = String.fromCharCode;
+  let pow = Math.pow;
+  let min = Math.min;
+  let max = Math.max;
+  let logE = Math.log;
+  let fromCharCode = String.fromCharCode;
 
-  var nextFontId = 1;
+  let nextFontId = 1;
 
   function maxPower2(num) {
-    var maxPower = 0;
-    var val = num;
+    let maxPower = 0;
+    let val = num;
     while (val >= 2) {
       val /= 2;
       ++maxPower;
@@ -47,17 +47,17 @@ module Shumway.SWF.Parser {
    * then the font coordinates were scaled by 20.
    */
   function isScaledFont2(glyphs) {
-    var xMin = 0, yMin = 0, xMax = 0, yMax = 0;
-    for (var i = 0; i < glyphs.length; i++) {
-      var records = glyphs[i];
+    let xMin = 0, yMin = 0, xMax = 0, yMax = 0;
+    for (let i = 0; i < glyphs.length; i++) {
+      let records = glyphs[i];
       if (!records) {
         continue;
       }
-      var record;
-      var x = 0;
-      var y = 0;
+      let record;
+      let x = 0;
+      let y = 0;
 
-      for (var j = 0; j < records.length; j++) {
+      for (let j = 0; j < records.length; j++) {
         record = records[j];
         if (record.type) {
           if (record.flags & ShapeRecordFlags.IsStraight) {
@@ -90,15 +90,15 @@ module Shumway.SWF.Parser {
         }
       }
     }
-    var maxDimension = Math.max(xMax - xMin, yMax - yMin);
+    let maxDimension = Math.max(xMax - xMin, yMax - yMin);
     return maxDimension > 5000;
   }
 
   export function defineFont(tag: FontTag) {
-    var uniqueName = 'swf-font-' + tag.id;
-    var fontName = tag.name || uniqueName;
+    let uniqueName = 'swf-font-' + tag.id;
+    let fontName = tag.name || uniqueName;
 
-    var font = {
+    let font = {
       type: 'font',
       id: tag.id,
       name: fontName,
@@ -110,33 +110,33 @@ module Shumway.SWF.Parser {
       originalSize: false
     };
 
-    var glyphs = tag.glyphs;
-    var glyphCount = glyphs ? glyphs.length : 0;
+    let glyphs = tag.glyphs;
+    let glyphCount = glyphs ? glyphs.length : 0;
 
     if (!glyphCount) {
       return font;
     }
 
-    var tables = { };
-    var codes = [];
-    var glyphIndex = { };
-    var ranges = [];
+    let tables = { };
+    let codes = [];
+    let glyphIndex = { };
+    let ranges = [];
 
-    var originalCode;
-    var generateAdvancement = !('advance' in tag);
-    var correction = 0;
-    var isFont2 = tag.code === SwfTagCode.CODE_DEFINE_FONT2;
-    var isFont3 = tag.code === SwfTagCode.CODE_DEFINE_FONT3;
+    let originalCode;
+    let generateAdvancement = !('advance' in tag);
+    let correction = 0;
+    let isFont2 = tag.code === SwfTagCode.CODE_DEFINE_FONT2;
+    let isFont3 = tag.code === SwfTagCode.CODE_DEFINE_FONT3;
 
     if (generateAdvancement) {
       tag.advance = [];
     }
 
-    var maxCode = Math.max.apply(null, tag.codes) || 35;
+    let maxCode = Math.max.apply(null, tag.codes) || 35;
 
     if (tag.codes) {
-      for (var i = 0; i < tag.codes.length; i++) {
-        var code = tag.codes[i];
+      for (let i = 0; i < tag.codes.length; i++) {
+        let code = tag.codes[i];
         if (code < 32 || code in glyphIndex) {
           maxCode++;
           if (maxCode == 8232) {
@@ -153,12 +153,12 @@ module Shumway.SWF.Parser {
       codes.sort(function (a, b) {
         return a - b;
       });
-      var i = 0;
-      var code: number;
-      var indices;
+      let i = 0;
+      let code: number;
+      let indices;
       while ((code = codes[i++]) !== undefined) {
-        var start = code;
-        var end = start;
+        let start = code;
+        let end = start;
         indices = [i - 1];
         while (((code = codes[i]) !== undefined) && end + 1 === code) {
           ++end;
@@ -169,8 +169,8 @@ module Shumway.SWF.Parser {
       }
     } else {
       indices = [];
-      var UAC_OFFSET = 0xe000;
-      for (var i = 0; i < glyphCount; i++) {
+      let UAC_OFFSET = 0xe000;
+      for (let i = 0; i < glyphCount; i++) {
         code = UAC_OFFSET + i;
         codes.push(code);
         glyphIndex[code] = i;
@@ -180,27 +180,27 @@ module Shumway.SWF.Parser {
       originalCode = codes.concat();
     }
 
-    var resolution = tag.resolution || 1;
+    let resolution = tag.resolution || 1;
     if (isFont2 && isScaledFont2(glyphs)) {
       // some DefineFont2 without layout using DefineFont3 resolution, why?
       resolution = 20;
       font.originalSize = true;
     }
-    var ascent = Math.ceil(tag.ascent / resolution) || 1024;
-    var descent = -Math.ceil(tag.descent / resolution) || 0;
-    var leading = (tag.leading / resolution) || 0;
+    let ascent = Math.ceil(tag.ascent / resolution) || 1024;
+    let descent = -Math.ceil(tag.descent / resolution) || 0;
+    let leading = (tag.leading / resolution) || 0;
     tables['OS/2'] = '';
 
-    var startCount = '';
-    var endCount = '';
-    var idDelta = '';
-    var idRangeOffset = '';
-    var i = 0;
-    var range;
+    let startCount = '';
+    let endCount = '';
+    let idDelta = '';
+    let idRangeOffset = '';
+    let i = 0;
+    let range;
     while ((range = ranges[i++])) {
-      var start: number = range[0];
-      var end: number = range[1];
-      var code: number = range[2][0];
+      let start: number = range[0];
+      let end: number = range[1];
+      let code: number = range[2][0];
       startCount += toString16(start);
       endCount += toString16(end);
       idDelta += toString16(((code - start) + 1) & 0xffff);
@@ -210,10 +210,10 @@ module Shumway.SWF.Parser {
     startCount += '\xff\xff';
     idDelta += '\x00\x01';
     idRangeOffset += '\x00\x00';
-    var segCount = ranges.length + 1;
-    var searchRange = maxPower2(segCount) * 2;
-    var rangeShift = (2 * segCount) - searchRange;
-    var format314 =
+    let segCount = ranges.length + 1;
+    let searchRange = maxPower2(segCount) * 2;
+    let rangeShift = (2 * segCount) - searchRange;
+    let format314 =
         '\x00\x00' + // language
         toString16(segCount * 2) + // segCountX2
         toString16(searchRange) +
@@ -236,30 +236,30 @@ module Shumway.SWF.Parser {
       format314
     ;
 
-    var glyf = '\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x31\x00';
-    var loca = '\x00\x00';
-    var offset = 16;
-    var maxPoints = 0;
-    var xMins = [];
-    var xMaxs = [];
-    var yMins = [];
-    var yMaxs = [];
-    var maxContours = 0;
-    var i = 0;
-    var code: number;
-    var rawData = {};
+    let glyf = '\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x31\x00';
+    let loca = '\x00\x00';
+    let offset = 16;
+    let maxPoints = 0;
+    let xMins = [];
+    let xMaxs = [];
+    let yMins = [];
+    let yMaxs = [];
+    let maxContours = 0;
+    let i = 0;
+    let code: number;
+    let rawData = {};
     while ((code = codes[i++]) !== undefined) {
-      var records = glyphs[glyphIndex[code]];
-      var x = 0;
-      var y = 0;
+      let records = glyphs[glyphIndex[code]];
+      let x = 0;
+      let y = 0;
 
-      var myFlags = '';
-      var myEndpts = '';
-      var endPoint = 0;
-      var segments = [];
-      var segmentIndex = -1;
+      let myFlags = '';
+      let myEndpts = '';
+      let endPoint = 0;
+      let segments = [];
+      let segmentIndex = -1;
 
-      for (var j = 0; j < records.length; j++) {
+      for (let j = 0; j < records.length; j++) {
         record = records[j];
         if (record.type) {
           if (segmentIndex < 0) {
@@ -268,20 +268,20 @@ module Shumway.SWF.Parser {
           }
           if (record.flags & ShapeRecordFlags.IsStraight) {
             segments[segmentIndex].commands.push(2);
-            var dx = (record.deltaX || 0) / resolution;
-            var dy = -(record.deltaY || 0) / resolution;
+            let dx = (record.deltaX || 0) / resolution;
+            let dy = -(record.deltaY || 0) / resolution;
             x += dx;
             y += dy;
             segments[segmentIndex].data.push(x, y);
           } else {
             segments[segmentIndex].commands.push(3);
-            var cx = record.controlDeltaX / resolution;
-            var cy = -record.controlDeltaY / resolution;
+            let cx = record.controlDeltaX / resolution;
+            let cy = -record.controlDeltaY / resolution;
             x += cx;
             y += cy;
             segments[segmentIndex].data.push(x, y);
-            var dx = record.anchorDeltaX / resolution;
-            var dy = -record.anchorDeltaY / resolution;
+            let dx = record.anchorDeltaX / resolution;
+            let dy = -record.anchorDeltaY / resolution;
             x += dx;
             y += dy;
             segments[segmentIndex].data.push(x, y);
@@ -291,10 +291,10 @@ module Shumway.SWF.Parser {
             segmentIndex++;
             segments[segmentIndex] = { data: [], commands: [], xMin: 0, xMax: 0, yMin: 0, yMax: 0 };
             segments[segmentIndex].commands.push(1);
-            var moveX = record.moveX / resolution;
-            var moveY = -record.moveY / resolution;
-            var dx = moveX - x;
-            var dy = moveY - y;
+            let moveX = record.moveX / resolution;
+            let moveY = -record.moveY / resolution;
+            let dx = moveX - x;
+            let dy = moveY - y;
             x = moveX;
             y = moveY;
             segments[segmentIndex].data.push(x, y);
@@ -328,28 +328,28 @@ module Shumway.SWF.Parser {
 
     i = 0;
     while ((code = codes[i++]) !== undefined) {
-      var records = glyphs[glyphIndex[code]];
+      let records = glyphs[glyphIndex[code]];
       segments = rawData[code];
-      var numberOfContours = 1;
-      var endPoint = 0;
-      var endPtsOfContours = '';
-      var flags = '';
-      var xCoordinates = '';
-      var yCoordinates = '';
-      var x = 0;
-      var y = 0;
-      var xMin = 0;
-      var xMax = -1024;
-      var yMin = 0;
-      var yMax = -1024;
+      let numberOfContours = 1;
+      let endPoint = 0;
+      let endPtsOfContours = '';
+      let flags = '';
+      let xCoordinates = '';
+      let yCoordinates = '';
+      let x = 0;
+      let y = 0;
+      let xMin = 0;
+      let xMax = -1024;
+      let yMin = 0;
+      let yMax = -1024;
 
-      var myFlags = '';
-      var myEndpts = '';
-      var endPoint = 0;
-      var segmentIndex = -1;
+      let myFlags = '';
+      let myEndpts = '';
+      let endPoint = 0;
+      let segmentIndex = -1;
 
-      var data = [];
-      var commands = [];
+      let data = [];
+      let commands = [];
 
       for (j = 0; j < segments.length; j++) {
         data = data.concat(segments[j].data);
@@ -358,16 +358,16 @@ module Shumway.SWF.Parser {
 
       x = 0;
       y = 0;
-      var nx = 0;
-      var ny = 0;
-      var myXCoordinates = '';
-      var myYCoordinates = '';
-      var dataIndex = 0;
-      var endPoint = 0;
-      var numberOfContours = 1;
-      var myEndpts = '';
+      let nx = 0;
+      let ny = 0;
+      let myXCoordinates = '';
+      let myYCoordinates = '';
+      let dataIndex = 0;
+      let endPoint = 0;
+      let numberOfContours = 1;
+      let myEndpts = '';
       for (j = 0; j < commands.length; j++) {
-        var command = commands[j];
+        let command = commands[j];
         if (command === 1) {
           if (endPoint) {
             ++numberOfContours;
@@ -375,8 +375,8 @@ module Shumway.SWF.Parser {
           }
           nx = data[dataIndex++];
           ny = data[dataIndex++];
-          var dx = nx - x;
-          var dy = ny - y;
+          let dx = nx - x;
+          let dy = ny - y;
           myFlags += '\x01';
           myXCoordinates += toString16(dx);
           myYCoordinates += toString16(dy);
@@ -385,8 +385,8 @@ module Shumway.SWF.Parser {
         } else if (command === 2) {
           nx = data[dataIndex++];
           ny = data[dataIndex++];
-          var dx = nx - x;
-          var dy = ny - y;
+          let dx = nx - x;
+          let dy = ny - y;
           myFlags += '\x01';
           myXCoordinates += toString16(dx);
           myYCoordinates += toString16(dy);
@@ -395,8 +395,8 @@ module Shumway.SWF.Parser {
         } else if (command === 3) {
           nx = data[dataIndex++];
           ny = data[dataIndex++];
-          var cx = nx - x;
-          var cy = ny - y;
+          let cx = nx - x;
+          let cy = ny - y;
           myFlags += '\x00';
           myXCoordinates += toString16(cx);
           myYCoordinates += toString16(cy);
@@ -406,8 +406,8 @@ module Shumway.SWF.Parser {
 
           nx = data[dataIndex++];
           ny = data[dataIndex++];
-          var cx = nx - x;
-          var cy = ny - y;
+          let cx = nx - x;
+          let cy = ny - y;
           myFlags += '\x01';
           myXCoordinates += toString16(cx);
           myYCoordinates += toString16(cy);
@@ -442,7 +442,7 @@ module Shumway.SWF.Parser {
         xMin = xMax = yMin = yMax = 0;
         flags += '\x31';
       }
-      var entry =
+      let entry =
         toString16(numberOfContours) +
         toString16(xMin) +
         toString16(yMin) +
@@ -478,7 +478,7 @@ module Shumway.SWF.Parser {
     tables['glyf'] = glyf;
 
     if (!isFont3) {
-      var minYmin = Math.min.apply(null, yMins);
+      let minYmin = Math.min.apply(null, yMins);
       if (minYmin < 0) {
         descent = descent || minYmin;
       }
@@ -539,7 +539,7 @@ module Shumway.SWF.Parser {
       '\x00\x00' // glyphDataFormat
     ;
 
-    var advance = tag.advance;
+    let advance = tag.advance;
     tables['hhea'] =
       '\x00\x01\x00\x00' + // version
       toString16(ascent) + // ascender
@@ -560,17 +560,17 @@ module Shumway.SWF.Parser {
       toString16(glyphCount + 1) // numberOfHMetrics
     ;
 
-    var hmtx = '\x00\x00\x00\x00';
-    for (var i = 0; i < glyphCount; ++i) {
+    let hmtx = '\x00\x00\x00\x00';
+    for (let i = 0; i < glyphCount; ++i) {
       hmtx += toString16(advance ? (advance[i] / resolution) : 1024) + '\x00\x00';
     }
     tables['hmtx'] = hmtx;
 
     if (tag.kerning && tag.kerning.length) {
-      var kerning = tag.kerning;
-      var nPairs = kerning.length;
-      var searchRange = maxPower2(nPairs) * 2;
-      var kern =
+      let kerning = tag.kerning;
+      let nPairs = kerning.length;
+      let searchRange = maxPower2(nPairs) * 2;
+      let kern =
         '\x00\x00' + // version
         '\x00\x01' + // nTables
         '\x00\x00' + // subtable version
@@ -581,8 +581,8 @@ module Shumway.SWF.Parser {
         toString16(logE(nPairs) / logE(2)) + // entrySelector
         toString16((2 * nPairs) - searchRange) // rangeShift
       ;
-      var i = 0;
-      var record;
+      let i = 0;
+      let record;
       while ((record = kerning[i++])) {
         kern +=
           toString16(glyphIndex[record.code1]) + // left
@@ -613,8 +613,8 @@ module Shumway.SWF.Parser {
       '\x00\x00' // maxComponentDepth
     ;
 
-    var psName = fontName.replace(/ /g, '');
-    var strings = [
+    let psName = fontName.replace(/ /g, '');
+    let strings = [
       tag.copyright || 'Original licence', // 0. Copyright
       fontName, // 1. Font family
       'Unknown', // 2. Font subfamily
@@ -626,14 +626,14 @@ module Shumway.SWF.Parser {
       'Unknown', // 8. Manufacturer
       'Unknown' // 9. Designer
     ];
-    var count = strings.length;
-    var name =
+    let count = strings.length;
+    let name =
       '\x00\x00' + // format
       toString16(count) + // count
       toString16((count * 12) + 6); // stringOffset
-    var offset = 0;
-    var i = 0;
-    var str;
+    let offset = 0;
+    let i = 0;
+    let str;
     while ((str = strings[i++])) {
       name +=
         '\x00\x01' + // platformID
@@ -658,21 +658,21 @@ module Shumway.SWF.Parser {
       '\x00\x00\x00\x00' // maxMemType1
     ;
 
-    var names = Object.keys(tables);
-    var numTables = names.length;
-    var header =
+    let names = Object.keys(tables);
+    let numTables = names.length;
+    let header =
       '\x00\x01\x00\x00' + // version
       toString16(numTables) +
       '\x00\x80' + // searchRange
       '\x00\x03' + // entrySelector
       '\x00\x20' // rangeShift
     ;
-    var dataString = '';
-    var offset = (numTables * 16) + header.length;
-    var i = 0;
+    let dataString = '';
+    let offset = (numTables * 16) + header.length;
+    let i = 0;
     while ((name = names[i++])) {
-      var table = tables[name];
-      var length = table.length;
+      let table = tables[name];
+      let length = table.length;
       header +=
         name +
         '\x00\x00\x00\x00' + // checkSum
@@ -689,17 +689,17 @@ module Shumway.SWF.Parser {
       }
       offset += length;
     }
-    var otf = header + dataString;
-    var unitPerEm = 1024;
-    var metrics = {
+    let otf = header + dataString;
+    let unitPerEm = 1024;
+    let metrics = {
       ascent: ascent / unitPerEm,
       descent: -descent / unitPerEm,
       leading: leading / unitPerEm
     };
 
     // TODO: use a buffer to generate font data
-    var dataBuffer = new Uint8Array(otf.length);
-    for (var i = 0; i < otf.length; i++) {
+    let dataBuffer = new Uint8Array(otf.length);
+    for (let i = 0; i < otf.length; i++) {
       dataBuffer[i] = otf.charCodeAt(i) & 0xff;
     }
 

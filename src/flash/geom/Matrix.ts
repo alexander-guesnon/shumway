@@ -20,10 +20,10 @@ module Shumway.AVMX.AS.flash.geom {
   import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
   import Bounds = Shumway.Bounds;
 
-  var PI = Math.PI;
-  var HalfPI = PI / 2;
-  var PacPI = PI + HalfPI;
-  var TwoPI = PI * 2;
+  let PI = Math.PI;
+  let HalfPI = PI / 2;
+  let PacPI = PI + HalfPI;
+  let TwoPI = PI * 2;
 
   function cos(angle: number): number {
     switch (angle) {
@@ -66,7 +66,7 @@ module Shumway.AVMX.AS.flash.geom {
                 ty: number = 0)
     {
       super();
-      var m = this._data = new Float64Array(6);
+      let m = this._data = new Float64Array(6);
       m[0] = a;
       m[1] = b;
       m[2] = c;
@@ -150,13 +150,13 @@ module Shumway.AVMX.AS.flash.geom {
      * this = this * other
      */
     public concat(other: Matrix): void {
-      var m = this._data, n = other._data;
-      var a =  m[0] * n[0];
-      var b =  0.0;
-      var c =  0.0;
-      var d =  m[3] * n[3];
-      var tx = m[4] * n[0] + n[4];
-      var ty = m[5] * n[3] + n[5];
+      let m = this._data, n = other._data;
+      let a =  m[0] * n[0];
+      let b =  0.0;
+      let c =  0.0;
+      let d =  m[3] * n[3];
+      let tx = m[4] * n[0] + n[4];
+      let ty = m[5] * n[3] + n[5];
 
       if (m[1] !== 0.0 || m[2] !== 0.0 || n[1] !== 0.0 || n[2] !== 0.0) {
         a  += m[1] * n[2];
@@ -186,13 +186,13 @@ module Shumway.AVMX.AS.flash.geom {
      * target = other * this
      */
     public preMultiplyInto(other: Matrix, target: Matrix): void {
-      var m = this._data, n = other._data, t = target._data;
-      var a =  n[0] * m[0];
-      var b =  0.0;
-      var c =  0.0;
-      var d =  n[3] * m[3];
-      var tx = n[4] * m[0] + m[4];
-      var ty = n[5] * m[3] + m[5];
+      let m = this._data, n = other._data, t = target._data;
+      let a =  n[0] * m[0];
+      let b =  0.0;
+      let c =  0.0;
+      let d =  n[3] * m[3];
+      let tx = n[4] * m[0] + m[4];
+      let ty = n[5] * m[3] + m[5];
 
       if (n[1] !== 0.0 || n[2] !== 0.0 || m[1] !== 0.0 || m[2] !== 0.0) {
         a  += n[1] * m[2];
@@ -216,22 +216,22 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public invertInto(target: Matrix): void {
-      var m = this._data, t = target._data;
-      var b  = m[1];
-      var c  = m[2];
-      var tx = m[4];
-      var ty = m[5];
+      let m = this._data, t = target._data;
+      let b  = m[1];
+      let c  = m[2];
+      let tx = m[4];
+      let ty = m[5];
       if (b === 0 && c === 0) {
-        var a = t[0] = 1 / m[0];
-        var d = t[3] = 1 / m[3];
+        let a = t[0] = 1 / m[0];
+        let d = t[3] = 1 / m[3];
         t[1] = t[2] = 0;
         t[4] = -a * tx;
         t[5] = -d * ty;
         return;
       }
-      var a = m[0];
-      var d = m[3];
-      var determinant = a * d - b * c;
+      let a = m[0];
+      let d = m[3];
+      let determinant = a * d - b * c;
       if (determinant === 0) {
         target.identity();
         return;
@@ -242,7 +242,7 @@ module Shumway.AVMX.AS.flash.geom {
        * two: 1/2, 1/4 ...
        */
       determinant = 1 / determinant;
-      var k = 0;
+      let k = 0;
       k = t[0] =  d * determinant;
       b = t[1] = -b * determinant;
       c = t[2] = -c * determinant;
@@ -252,16 +252,16 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public identity(): void {
-      var m = this._data;
+      let m = this._data;
       m[0] = m[3] = 1;
       m[1] = m[2] = m[4] = m[5] = 0;
     }
 
     public createBox(scaleX: number, scaleY: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
-      var m = this._data;
+      let m = this._data;
       if (rotation !== 0) {
-        var u = cos(rotation);
-        var v = sin(rotation);
+        let u = cos(rotation);
+        let v = sin(rotation);
         m[0] =  u * scaleX;
         m[1] =  v * scaleY;
         m[2] = -v * scaleX;
@@ -283,15 +283,15 @@ module Shumway.AVMX.AS.flash.geom {
     public rotate(angle: number): void {
       angle = +angle;
       if (angle !== 0) {
-        var m = this._data;
-        var u = cos(angle);
-        var v = sin(angle);
-        var ta = m[0];
-        var tb = m[1];
-        var tc = m[2];
-        var td = m[3];
-        var ttx = m[4];
-        var tty = m[5];
+        let m = this._data;
+        let u = cos(angle);
+        let v = sin(angle);
+        let ta = m[0];
+        let tb = m[1];
+        let tc = m[2];
+        let td = m[3];
+        let ttx = m[4];
+        let tty = m[5];
         m[0] = ta  * u - tb  * v;
         m[1] = ta  * v + tb  * u;
         m[2] = tc  * u - td  * v;
@@ -302,13 +302,13 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public translate(dx: number, dy: number): void {
-      var m = this._data;
+      let m = this._data;
       m[4] += dx;
       m[5] += dy;
     }
 
     public scale(sx: number, sy: number): void {
-      var m = this._data;
+      let m = this._data;
       if (sx !== 1) {
         m[0] *= sx;
         m[2] *= sx;
@@ -322,58 +322,58 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public deltaTransformPoint(point: Point): Point {
-      var x = this._data[0] * point.x + this._data[2] * point.y;
-      var y = this._data[1] * point.x + this._data[3] * point.y;
+      let x = this._data[0] * point.x + this._data[2] * point.y;
+      let y = this._data[1] * point.x + this._data[3] * point.y;
       return new this.sec.flash.geom.Point(x, y);
     }
 
     public transformX(x: number, y: number): number {
-      var m = this._data;
+      let m = this._data;
       return m[0] * x + m[2] * y + m[4];
     }
 
     public transformY(x: number, y: number): number {
-      var m = this._data;
+      let m = this._data;
       return m[1] * x + m[3] * y + m[5];
     }
 
     public transformPoint(point: Point): Point {
-      var m = this._data;
+      let m = this._data;
       return new this.sec.flash.geom.Point(m[0] * point.x + m[2] * point.y + m[4],
                                            m[1] * point.x + m[3] * point.y + m[5]);
     }
 
     public transformPointInPlace(point): Point {
-      var m = this._data;
+      let m = this._data;
       point.setTo(m[0] * point.x + m[2] * point.y + m[4],
                   m[1] * point.x + m[3] * point.y + m[5]);
       return point;
     }
 
     transformBounds(bounds: Bounds): void {
-      var m = this._data;
-      var a  = m[0];
-      var b  = m[1];
-      var c  = m[2];
-      var d  = m[3];
-      var tx = m[4];
-      var ty = m[5];
+      let m = this._data;
+      let a  = m[0];
+      let b  = m[1];
+      let c  = m[2];
+      let d  = m[3];
+      let tx = m[4];
+      let ty = m[5];
 
-      var x = bounds.xMin;
-      var y = bounds.yMin;
-      var w = bounds.width;
-      var h = bounds.height;
+      let x = bounds.xMin;
+      let y = bounds.yMin;
+      let w = bounds.width;
+      let h = bounds.height;
 
-      var x0 = Math.round(a * x + c * y + tx);
-      var y0 = Math.round(b * x + d * y + ty);
-      var x1 = Math.round(a * (x + w) + c * y + tx);
-      var y1 = Math.round(b * (x + w) + d * y + ty);
-      var x2 = Math.round(a * (x + w) + c * (y + h) + tx);
-      var y2 = Math.round(b * (x + w) + d * (y + h) + ty);
-      var x3 = Math.round(a * x + c * (y + h) + tx);
-      var y3 = Math.round(b * x + d * (y + h) + ty);
+      let x0 = Math.round(a * x + c * y + tx);
+      let y0 = Math.round(b * x + d * y + ty);
+      let x1 = Math.round(a * (x + w) + c * y + tx);
+      let y1 = Math.round(b * (x + w) + d * y + ty);
+      let x2 = Math.round(a * (x + w) + c * (y + h) + tx);
+      let y2 = Math.round(b * (x + w) + d * (y + h) + ty);
+      let x3 = Math.round(a * x + c * (y + h) + tx);
+      let y3 = Math.round(b * x + d * (y + h) + ty);
 
-      var tmp = 0;
+      let tmp = 0;
 
       // Manual Min/Max is a lot faster than calling Math.min/max
       // X Min-Max
@@ -392,25 +392,25 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     getDeterminant() {
-      var m = this._data;
+      let m = this._data;
       return m[0] * m[3] - m[1] * m[2];
     }
 
     getScaleX(): number {
-      var m = this._data;
+      let m = this._data;
       if (m[0] === 1 && m[1] === 0) {
         return 1;
       }
-      var result = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
+      let result = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
       return this.getDeterminant() < 0 ? -result : result;
     }
 
     getScaleY(): number {
-      var m = this._data;
+      let m = this._data;
       if (m[2] === 0 && m[3] === 1) {
         return 1;
       }
-      var result = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
+      let result = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
       return this.getDeterminant() < 0 ? -result : result;
     }
 
@@ -431,7 +431,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyFrom(other: Matrix): void {
-      var m = this._data, n = other._data;
+      let m = this._data, n = other._data;
       m[0] = n[0];
       m[1] = n[1];
       m[2] = n[2];
@@ -441,7 +441,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyFromUntyped(object: any) {
-      var m = this._data;
+      let m = this._data;
       m[0] = object.a;
       m[1] = object.b;
       m[2] = object.c;
@@ -451,7 +451,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public setTo(a: number, b: number, c: number, d: number, tx: number, ty: number): void {
-      var m = this._data;
+      let m = this._data;
       m[0] = a;
       m[1] = b;
       m[2] = c;
@@ -461,21 +461,21 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public toTwipsInPlace(): Matrix {
-      var m = this._data;
+      let m = this._data;
       m[4] = (m[4] * 20) | 0;
       m[5] = (m[5] * 20) | 0;
       return this;
     }
 
     public toPixelsInPlace(): Matrix {
-      var m = this._data;
+      let m = this._data;
       m[4] /= 20;
       m[5] /= 20;
       return this;
     }
 
     public toSerializedScaleInPlace(): Matrix {
-      var m = this._data;
+      let m = this._data;
       m[0] *= 819.2;
       m[1] *= 819.2;
       m[2] *= 819.2;
@@ -484,7 +484,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyRowTo(row: number, vector3D: Vector3D): void {
-      var m = this._data;
+      let m = this._data;
       row = row >>> 0;
       if (row === 0) {
         vector3D.x = m[0];
@@ -502,7 +502,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyColumnTo(column: number, vector3D: Vector3D): void {
-      var m = this._data;
+      let m = this._data;
       column = column >>> 0;
       if (column === 0) {
         vector3D.x = m[0];
@@ -520,7 +520,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyRowFrom(row: number, vector3D: Vector3D): void {
-      var m = this._data;
+      let m = this._data;
       row = row >>> 0;
       if (row === 0) {
         m[0] = vector3D.x;
@@ -534,7 +534,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public copyColumnFrom(column: number, vector3D: Vector3D): void {
-      var m = this._data;
+      let m = this._data;
       column = column >>> 0;
       if (column === 0) {
         m[0] = vector3D.x;
@@ -551,7 +551,7 @@ module Shumway.AVMX.AS.flash.geom {
      * Updates the scale and skew componenets of the matrix.
      */
     public updateScaleAndRotation(scaleX: number, scaleY: number, skewX: number, skewY: number) {
-      var m = this._data;
+      let m = this._data;
 
       // The common case.
       if ((skewX === 0 || skewX === TwoPI) && (skewY === 0 || skewY === TwoPI)) {
@@ -561,8 +561,8 @@ module Shumway.AVMX.AS.flash.geom {
         return;
       }
 
-      var u = cos(skewX);
-      var v = sin(skewX);
+      let u = cos(skewX);
+      let v = sin(skewX);
       if (skewX === skewY) {
         m[0] = u * scaleX;
         m[1] = v * scaleX;
@@ -575,25 +575,25 @@ module Shumway.AVMX.AS.flash.geom {
     }
 
     public clone(): Matrix {
-      var m = this._data;
+      let m = this._data;
       return new this.sec.flash.geom.Matrix(m[0], m[1], m[2], m[3], m[4], m[5]);
     }
 
     public equals(other: Matrix): boolean {
-      var m = this._data, n = other._data;
+      let m = this._data, n = other._data;
       return m[0] === n[0] && m[1] === n[1] &&
              m[2] === n[2] && m[3] === n[3] &&
              m[4] === n[4] && m[5] === n[5];
     }
 
     public toString(): string {
-      var m = this._data;
+      let m = this._data;
       return "(a=" + m[0] + ", b=" + m[1] + ", c=" + m[2] + ", d=" + m[3] + ", tx=" + m[4] + ", ty=" + m[5] + ")";
     }
 
     // Keep in sync with static FromDataBuffer above!
     public writeExternal(output: DataBuffer) {
-      var m = this._data;
+      let m = this._data;
       output.writeFloat(m[0]);
       output.writeFloat(m[1]);
       output.writeFloat(m[2]);

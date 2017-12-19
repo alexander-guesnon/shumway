@@ -28,7 +28,7 @@ module Shumway.AVM1.Natives {
     }
 
     _initializePrototype() {
-      var context = this.context;
+      let context = this.context;
       alDefineObjectProperties(this, {
         constructor: {
           value: context.builtins.Object,
@@ -85,7 +85,7 @@ module Shumway.AVM1.Natives {
       if (!alIsFunction(setter) && setter !== null) {
         return false;
       }
-      var desc = this.alGetOwnProperty(name);
+      let desc = this.alGetOwnProperty(name);
       if (desc && !!(desc.flags & AVM1PropertyFlags.DONT_DELETE)) {
         return false; // protected property
       }
@@ -99,7 +99,7 @@ module Shumway.AVM1.Natives {
     }
 
     public isPropertyEnumerable(name): boolean {
-      var desc = this.alGetProperty(name);
+      let desc = this.alGetProperty(name);
       return !(desc.flags & AVM1PropertyFlags.DONT_ENUM);
     }
 
@@ -125,7 +125,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = context.builtins.Object.alGetPrototypeProperty();
+      let proto = context.builtins.Object.alGetPrototypeProperty();
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -142,7 +142,7 @@ module Shumway.AVM1.Natives {
 
     public alConstruct(args?: any[]): AVM1Object {
       if (args) {
-        var value = args[0];
+        let value = args[0];
         if (value instanceof AVM1Object) {
           return value;
         }
@@ -173,7 +173,7 @@ module Shumway.AVM1.Natives {
     }
 
     _initializePrototype() {
-      var context = this.context;
+      let context = this.context;
       this.alPrototype = context.builtins.Object.alGetPrototypeProperty();
       alDefineObjectProperties(this, {
         constructor: {
@@ -186,13 +186,13 @@ module Shumway.AVM1.Natives {
     }
 
     public call(thisArg: any, ...args: any[]): any {
-      var fn = alEnsureType<AVM1Function>(this, AVM1Function);
+      let fn = alEnsureType<AVM1Function>(this, AVM1Function);
       return fn.alCall(thisArg, args);
     }
 
     public apply(thisArg: any, args?: AVM1ArrayNative): any {
-      var fn = alEnsureType<AVM1Function>(this, AVM1Function);
-      var nativeArgs = !args ? undefined :
+      let fn = alEnsureType<AVM1Function>(this, AVM1Function);
+      let nativeArgs = !args ? undefined :
         alEnsureType<AVM1ArrayNative>(args, AVM1ArrayNative).value;
       return fn.alCall(thisArg, nativeArgs);
     }
@@ -203,7 +203,7 @@ module Shumway.AVM1.Natives {
       super(context);
 
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = context.builtins.Function.alGetPrototypeProperty();
+      let proto = context.builtins.Function.alGetPrototypeProperty();
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -260,12 +260,12 @@ module Shumway.AVM1.Natives {
     }
 
     public _valueOf() {
-      var native = alEnsureType<AVM1BooleanNative>(this, AVM1BooleanNative);
+      let native = alEnsureType<AVM1BooleanNative>(this, AVM1BooleanNative);
       return native.value;
     }
 
     public _toString() {
-      var native = alEnsureType<AVM1BooleanNative>(this, AVM1BooleanNative);
+      let native = alEnsureType<AVM1BooleanNative>(this, AVM1BooleanNative);
       return native.value ? 'true' : 'false';
     }
   }
@@ -274,7 +274,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1BooleanPrototype(context);
+      let proto = new AVM1BooleanPrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -283,13 +283,13 @@ module Shumway.AVM1.Natives {
     }
 
     public alConstruct(args?: any[]): AVM1Object {
-      var value = args ? alToBoolean(this.context, args[0]) : false;
+      let value = args ? alToBoolean(this.context, args[0]) : false;
       return new AVM1BooleanNative(this.context, value);
     }
 
     public alCall(thisArg: any, args?: any[]): any {
       // TODO returns boolean value?
-      var value = args ? alToBoolean(this.context, args[0]) : false;
+      let value = args ? alToBoolean(this.context, args[0]) : false;
       return value;
     }
   }
@@ -332,12 +332,12 @@ module Shumway.AVM1.Natives {
     }
 
     public _valueOf() {
-      var native = alEnsureType<AVM1NumberNative>(this, AVM1NumberNative);
+      let native = alEnsureType<AVM1NumberNative>(this, AVM1NumberNative);
       return native.value;
     }
 
     public _toString(radix) {
-      var native = alEnsureType<AVM1NumberNative>(this, AVM1NumberNative);
+      let native = alEnsureType<AVM1NumberNative>(this, AVM1NumberNative);
       return native.value.toString(radix || 10);
     }
   }
@@ -346,7 +346,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1NumberPrototype(context);
+      let proto = new AVM1NumberPrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -361,13 +361,13 @@ module Shumway.AVM1.Natives {
     }
 
     public alConstruct(args?: any[]): AVM1Object {
-      var value = args ? alToNumber(this.context, args[0]) : 0;
+      let value = args ? alToNumber(this.context, args[0]) : 0;
       return new AVM1NumberNative(this.context, value);
     }
 
     public alCall(thisArg: any, args?: any[]): any {
       // TODO returns number value?
-      var value = args ? alToNumber(this.context, args[0]) : 0;
+      let value = args ? alToNumber(this.context, args[0]) : 0;
       return value;
     }
   }
@@ -458,47 +458,47 @@ module Shumway.AVM1.Natives {
     }
 
     public _valueOf() {
-      var native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
+      let native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
       return native.value;
     }
 
     public _toString() {
-      var native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
+      let native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
       return native.value;
     }
 
     public getLength(): number {
-      var native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
+      let native = alEnsureType<AVM1StringNative>(this, AVM1StringNative);
       return native.value.length;
     }
 
     public charAt(index: number): string {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       return value.charAt(alToInteger(this.context, index));
     }
 
     public charCodeAt(index: number): number {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       return value.charCodeAt(alToInteger(this.context, index));
     }
 
     public concat(...items: AVM1Object[]): string {
-      var stringItems: string[] = [alToString(this.context, this)];
-      for (var i = 0; i < items.length; ++i) {
+      let stringItems: string[] = [alToString(this.context, this)];
+      for (let i = 0; i < items.length; ++i) {
         stringItems.push(alToString(this.context, items[i]));
       }
       return stringItems.join('');
     }
 
     public indexOf(searchString: string, position?: number): number {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       searchString = alToString(this.context, searchString);
       position = alToInteger(this.context, position);
       return value.indexOf(searchString, position);
     }
 
     public lastIndexOf(searchString: string, position?: number): number {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       searchString = alToString(this.context, searchString);
       position = arguments.length < 2 ? NaN : alToNumber(this.context, position); // SWF6 alToNumber(undefined) === 0
       if (position < 0) {
@@ -513,14 +513,14 @@ module Shumway.AVM1.Natives {
         // Different from JS
         return undefined;
       }
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       start = alToInteger(this.context, start);
       end = end === undefined ? undefined : alToInteger(this.context, end);
       return value.slice(start, end);
     }
 
     public split(separator: any, limit?: number): AVM1ArrayNative {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       // TODO separator as regular expression?
       separator = alToString(this.context, separator);
       limit = (limit === undefined ? ~0 : alToInt32(this.context, limit)) >>> 0;
@@ -529,8 +529,8 @@ module Shumway.AVM1.Natives {
 
     public substr(start: number, length?: number): string {
       // Different from JS
-      var value = alToString(this.context, this);
-      var valueLength = value.length;
+      let value = alToString(this.context, this);
+      let valueLength = value.length;
       start = alToInteger(this.context, start);
       length = length === undefined ? valueLength : alToInteger(this.context, length);
       if (start < 0) {
@@ -546,7 +546,7 @@ module Shumway.AVM1.Natives {
     }
 
     public substring(start: number, end?: number): string {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       start = alToInteger(this.context, start);
       if (start >= value.length) {
         // Different from JS
@@ -557,12 +557,12 @@ module Shumway.AVM1.Natives {
     }
 
     public toLowerCase(): string {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       return value.toLowerCase();
     }
 
     public toUpperCase(): string {
-      var value = alToString(this.context, this);
+      let value = alToString(this.context, this);
       return value.toUpperCase();
     }
   }
@@ -571,7 +571,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1StringPrototype(context);
+      let proto = new AVM1StringPrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -583,12 +583,12 @@ module Shumway.AVM1.Natives {
     }
 
     public alConstruct(args?: any[]): AVM1Object {
-      var value = args ? alToString(this.context, args[0]) : '';
+      let value = args ? alToString(this.context, args[0]) : '';
       return new AVM1StringNative(this.context, value);
     }
 
     public alCall(thisArg: any, args?: any[]): any {
-      var value = args ? alToString(this.context, args[0]) : '';
+      let value = args ? alToString(this.context, args[0]) : '';
       return value;
     }
 
@@ -600,7 +600,7 @@ module Shumway.AVM1.Natives {
 
   // Array natives
 
-  var cachedArrayPropertyDescriptor = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA,
+  let cachedArrayPropertyDescriptor = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA,
                                                                  undefined);
 
   export class AVM1ArrayNative extends AVM1Object {
@@ -615,7 +615,7 @@ module Shumway.AVM1.Natives {
 
     public alGetOwnProperty(p): AVM1PropertyDescriptor  {
       if (alIsIndex(this.context, p)) {
-        var index = alToInt32(this.context, p);
+        let index = alToInt32(this.context, p);
         if (Object.getOwnPropertyDescriptor(this.value, <any>index)) {
           cachedArrayPropertyDescriptor.value = this.value[index];
           return cachedArrayPropertyDescriptor;
@@ -626,7 +626,7 @@ module Shumway.AVM1.Natives {
 
     public alSetOwnProperty(p, v: AVM1PropertyDescriptor) {
       if (alIsIndex(this.context, p)) {
-        var index = alToInt32(this.context, p);
+        let index = alToInt32(this.context, p);
         if (!(v.flags & AVM1PropertyFlags.DATA) ||
             !!(v.flags & AVM1PropertyFlags.DONT_ENUM) ||
             !!(v.flags & AVM1PropertyFlags.DONT_DELETE)) {
@@ -640,7 +640,7 @@ module Shumway.AVM1.Natives {
 
     public alDeleteOwnProperty(p) {
       if (alIsIndex(this.context, p)) {
-        var index = alToInt32(this.context, p);
+        let index = alToInt32(this.context, p);
         delete this.value[index];
         return;
       }
@@ -648,9 +648,9 @@ module Shumway.AVM1.Natives {
     }
 
     public alGetOwnPropertiesKeys(): string[] {
-      var keys = super.alGetOwnPropertiesKeys();
-      var itemIndices = [];
-      for (var i in this.value) {
+      let keys = super.alGetOwnPropertiesKeys();
+      let itemIndices = [];
+      for (let i in this.value) {
         itemIndices.push(i);
       }
       return itemIndices.concat(keys);
@@ -672,7 +672,7 @@ module Shumway.AVM1.Natives {
         // TODO generate proper AVM1 exception.
         throw new Error('Invalid type'); // Interpreter will catch this.
       }
-      var result = [];
+      let result = [];
       alIterateArray(arr.context, arr, (item: any, index: number) => {
         result.push(fn.call(thisArg, item, index));
       });
@@ -751,12 +751,12 @@ module Shumway.AVM1.Natives {
     }
 
     public _toString() {
-      var join = this.context.builtins.Array.alGetPrototypeProperty().alGet('join');
+      let join = this.context.builtins.Array.alGetPrototypeProperty().alGet('join');
       return join.alCall(this);
     }
 
     public getLength(): number {
-      var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+      let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
       return arr.length;
     }
 
@@ -766,15 +766,15 @@ module Shumway.AVM1.Natives {
       }
       length = alToInt32(this.context, length) >>> 0;
 
-      var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+      let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
       arr.length = length;
     }
 
     public concat(...items: any[]): AVM1Object {
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
-        for (var i = 0; i < arr.length; i++) {
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        for (let i = 0; i < arr.length; i++) {
           if (items[i] instanceof AVM1ArrayNative) {
             items[i] = alEnsureType<AVM1ArrayNative>(items[i], AVM1ArrayNative).value;
           }
@@ -783,10 +783,10 @@ module Shumway.AVM1.Natives {
           Array.prototype.concat.apply(arr, items));
       }
       // Generic behavior
-      var a = [];
-      var e: any = this;
-      var isArrayObject = alIsArrayLike(this.context, this);
-      var i = 0;
+      let a = [];
+      let e: any = this;
+      let isArrayObject = alIsArrayLike(this.context, this);
+      let i = 0;
       while (true) {
         if (isArrayObject) {
           alIterateArray(this.context, e, (value) => a.push(value));
@@ -806,7 +806,7 @@ module Shumway.AVM1.Natives {
       separator = separator === undefined ? ',' : alCoerceString(this.context, separator);
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         if (arr.length === 0) {
           return '';
         }
@@ -814,14 +814,14 @@ module Shumway.AVM1.Natives {
           return arr.join(separator);
         }
       }
-      var context = this.context;
-      var length = alToInt32(context, this.alGet('length')) >>> 0;
+      let context = this.context;
+      let length = alToInt32(context, this.alGet('length')) >>> 0;
       if (length === 0) {
         return '';
       }
-      var result = [];
-      for (var i = 0; i < length; i++) {
-        var item = this.alGet(i);
+      let result = [];
+      for (let i = 0; i < length; i++) {
+        let item = this.alGet(i);
         result[i] = item === null || item === undefined ? '' : alCoerceString(context, item);
       }
       return result.join(separator);
@@ -830,15 +830,15 @@ module Shumway.AVM1.Natives {
     public pop(): any {
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return arr.pop();
       }
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
       if (length === 0) {
         return undefined;
       }
-      var i = length - 1;
-      var result = this.alGet(i);
+      let i = length - 1;
+      let result = this.alGet(i);
       this.alDeleteProperty(i);
       this.alPut('length', i);
       return result;
@@ -847,11 +847,11 @@ module Shumway.AVM1.Natives {
     public push(...items: any[]): number {
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return Array.prototype.push.apply(arr, items);
       }
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
-      for (var i = 0; i < items.length; i++) {
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      for (let i = 0; i < items.length; i++) {
         this.alPut(length, items[i]);
         length++; // TODO check overflow
       }
@@ -862,15 +862,15 @@ module Shumway.AVM1.Natives {
     public shift(): any {
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return arr.shift();
       }
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
       if (length === 0) {
         return undefined;
       }
-      var result = this.alGet(0);
-      for (var i = 1; i < length; i++) {
+      let result = this.alGet(0);
+      for (let i = 1; i < length; i++) {
         if (this.alHasProperty(i)) {
           this.alPut(i - 1, this.alGet(i));
         } else {
@@ -887,15 +887,15 @@ module Shumway.AVM1.Natives {
       end = end !== undefined ? alToInteger(this.context, end) : undefined;
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return new AVM1ArrayNative(this.context, arr.slice(start, end));
       }
-      var a = [];
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      let a = [];
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
       start = start < 0 ? Math.max(length + start, 0) : Math.min(length, start);
       end = end === undefined ? length :
         (end < 0 ? Math.max(length + end, 0) : Math.min(length, end));
-      for (var i = start, j = 0; i < end; i++, j++) {
+      for (let i = start, j = 0; i < end; i++, j++) {
         if (this.alHasProperty(i)) {
           a[j] = this.alGet(i);
         }
@@ -908,34 +908,34 @@ module Shumway.AVM1.Natives {
       deleteCount = alToInteger(this.context, deleteCount);
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return new AVM1ArrayNative(this.context,
           Array.prototype.splice.apply(arr, [start, deleteCount].concat(items)));
       }
-      var a = [];
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      let a = [];
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
       start = start < 0 ? Math.max(length + start, 0) : Math.min(length, start);
       deleteCount = Math.min(Math.max(deleteCount, 0), length - start);
-      for (var i = 0; i < deleteCount; i++) {
+      for (let i = 0; i < deleteCount; i++) {
         if (this.alHasProperty(start + i)) {
           a[i] = this.alGet(start + i);
         }
       }
-      var delta = items.length - deleteCount;
+      let delta = items.length - deleteCount;
       if (delta < 0) {
-        for (var i = start - delta; i < length; i++) {
+        for (let i = start - delta; i < length; i++) {
           if (this.alHasProperty(i)) {
             this.alPut(i + delta, this.alGet(i));
           } else {
             this.alDeleteProperty(i + delta);
           }
         }
-        for (var i = delta; i < 0; i++) {
+        for (let i = delta; i < 0; i++) {
           this.alDeleteProperty(length + i);
         }
       } else if (delta > 0) {
         // TODO check overflow
-        for (var i = length - 1; i >= start + delta; i--) {
+        for (let i = length - 1; i >= start + delta; i--) {
           if (this.alHasProperty(i)) {
             this.alPut(i + delta, this.alGet(i));
           } else {
@@ -943,7 +943,7 @@ module Shumway.AVM1.Natives {
           }
         }
       }
-      for (var i = 0; i < items.length; i++) {
+      for (let i = 0; i < items.length; i++) {
         this.alPut(start + i, items[i]);
       }
       this.alPut('length', length + delta);
@@ -951,11 +951,11 @@ module Shumway.AVM1.Natives {
     }
 
     public sort(comparefn?: AVM1Function): AVM1Object {
-      var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+      let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
       if (!alIsFunction(comparefn)) {
         arr.sort();
       } else {
-        var args = [undefined, undefined];
+        let args = [undefined, undefined];
         arr.sort(function (a, b) {
           args[0] = a;
           args[1] = b;
@@ -966,26 +966,26 @@ module Shumway.AVM1.Natives {
     }
 
     public sortOn(fieldNames: AVM1Object, options: any): AVM1Object {
-      var context = this.context;
+      let context = this.context;
       // The field names and options we'll end up using.
-      var fieldNamesList: string[] = [];
-      var optionsList: number[] = [];
+      let fieldNamesList: string[] = [];
+      let optionsList: number[] = [];
       if (alIsString(context, fieldNames)) {
         fieldNamesList = [alToString(context, fieldNames)];
         optionsList = [alToInt32(context, options)];
       } else if (alIsArray(context, fieldNames)) {
         fieldNamesList = [];
         optionsList = [];
-        var optionsArray: AVM1Object = alIsArray(context, options) ? options : null;
-        var length = alToInteger(context, fieldNames.alGet('length'));
+        let optionsArray: AVM1Object = alIsArray(context, options) ? options : null;
+        let length = alToInteger(context, fieldNames.alGet('length'));
         if (optionsArray) {
           // checking in length of fieldNames == options
-          var optionsLength = alToInteger(context, optionsArray.alGet('length'));
+          let optionsLength = alToInteger(context, optionsArray.alGet('length'));
           if (length !== optionsLength) {
             optionsArray = null;
           }
         }
-        for (var i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
           fieldNamesList.push(alToString(context, fieldNames.alGet(i)));
           optionsList.push(optionsArray ? alToInt32(context, optionsArray.alGet(i)) : 0);
         }
@@ -995,27 +995,27 @@ module Shumway.AVM1.Natives {
       }
 
       // TODO revisit this code
-      var optionsVal: number = optionsList[0];
+      let optionsVal: number = optionsList[0];
       release || Shumway.Debug.assertNotImplemented(!(optionsVal & AVM1ArraySortOnOptions.UNIQUESORT), "UNIQUESORT");
       release || Shumway.Debug.assertNotImplemented(!(optionsVal & AVM1ArraySortOnOptions.RETURNINDEXEDARRAY), "RETURNINDEXEDARRAY");
 
-      var comparer = (a, b) => {
-        var aObj = alToObject(context, a);
-        var bObj = alToObject(context, b);
+      let comparer = (a, b) => {
+        let aObj = alToObject(context, a);
+        let bObj = alToObject(context, b);
         if (!a || !b) {
           return !a ? !b ? 0 : -1 : +1;
         }
-        for (var i = 0; i < fieldNamesList.length; i++) {
-          var aField = aObj.alGet(fieldNamesList[i]);
-          var bField = bObj.alGet(fieldNamesList[i]);
-          var result;
+        for (let i = 0; i < fieldNamesList.length; i++) {
+          let aField = aObj.alGet(fieldNamesList[i]);
+          let bField = bObj.alGet(fieldNamesList[i]);
+          let result;
           if (optionsList[i] & AVM1ArraySortOnOptions.NUMERIC) {
-            var aNum = alToNumber(context, aField);
-            var bNum = alToNumber(context, bField);
+            let aNum = alToNumber(context, aField);
+            let bNum = alToNumber(context, bField);
             result = aNum < bNum ? -1 : aNum > bNum ? +1 : 0;
           } else {
-            var aStr = alToString(context, aField);
-            var bStr = alToString(context, bField);
+            let aStr = alToString(context, aField);
+            let bStr = alToString(context, bField);
             if (optionsList[i] & AVM1ArraySortOnOptions.CASEINSENSITIVE) {
               aStr = aStr.toLowerCase();
               bStr = bStr.toLowerCase();
@@ -1029,7 +1029,7 @@ module Shumway.AVM1.Natives {
         return 0;
       };
 
-      var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+      let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
       arr.sort(comparer);
 
       // Strange, the documentation said to do not return anything.
@@ -1039,13 +1039,13 @@ module Shumway.AVM1.Natives {
     public unshift(...items: any[]): number {
       if (this instanceof AVM1ArrayNative) {
         // Faster case for native array implementation
-        var arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
+        let arr = alEnsureType<AVM1ArrayNative>(this, AVM1ArrayNative).value;
         return Array.prototype.unshift.apply(arr, items);
       }
-      var length = alToInt32(this.context, this.alGet('length')) >>> 0;
-      var insertCount = items.length;
+      let length = alToInt32(this.context, this.alGet('length')) >>> 0;
+      let insertCount = items.length;
       // TODO check overflow
-      for (var i = length - 1; i >= 0; i--) {
+      for (let i = length - 1; i >= 0; i--) {
         if (this.alHasProperty(i)) {
           this.alPut(i + insertCount, this.alGet(i));
         } else {
@@ -1053,7 +1053,7 @@ module Shumway.AVM1.Natives {
         }
       }
 
-      for (var i = 0; i < items.length; i++) {
+      for (let i = 0; i < items.length; i++) {
         this.alPut(i, items[i]);
       }
       length += insertCount;
@@ -1066,7 +1066,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1ArrayPrototype(context);
+      let proto = new AVM1ArrayPrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -1079,7 +1079,7 @@ module Shumway.AVM1.Natives {
         return new AVM1ArrayNative(this.context, []);
       }
       if (args.length === 1 && typeof args[0] === 'number') {
-        var len = args[0];
+        let len = args[0];
         if (len >>> 0 !== len) {
           throw new Error('Range error'); // TODO avm1 native
         }
@@ -1408,17 +1408,17 @@ module Shumway.AVM1.Natives {
     }
 
     public _valueOf() {
-      var native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
+      let native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
       return native.value.valueOf();
     }
 
     public _toString() {
-      var native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
+      let native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
       return native.value.toString();
     }
 
     public _toLocaleString(): string {
-      var native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
+      let native = alEnsureType<AVM1DateNative>(this, AVM1DateNative);
       return native.value.toLocaleString();
     }
 
@@ -1684,7 +1684,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1DatePrototype(context);
+      let proto = new AVM1DatePrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -1697,8 +1697,8 @@ module Shumway.AVM1.Natives {
     }
 
     public alConstruct(args?: any[]): AVM1Object {
-      var context = this.context;
-      var value: Date;
+      let context = this.context;
+      let value: Date;
       switch (args.length) {
         case 0:
           value = new Date();
@@ -1707,8 +1707,8 @@ module Shumway.AVM1.Natives {
           value = new Date(alToPrimitive(context, args[0]));
           break;
         default: // case 2-7
-          var numbers = [];
-          for (var i = 0; i < args.length; i++) {
+          let numbers = [];
+          for (let i = 0; i < args.length; i++) {
             numbers.push(alToNumber(context, args[i]));
           }
           value = new Date(
@@ -1729,7 +1729,7 @@ module Shumway.AVM1.Natives {
     }
 
     public _UTC(year: number, month: number, date?: number, hours?: number, seconds?: number, ms?: number): number {
-      var context = this.context;
+      let context = this.context;
       return Date.UTC(
         alToNumber(context, arguments[0]),
         alToNumber(context, arguments[1]),
@@ -1787,7 +1787,7 @@ module Shumway.AVM1.Natives {
     public constructor(context: IAVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Function.alGetPrototypeProperty();
-      var proto = new AVM1ErrorPrototype(context);
+      let proto = new AVM1ErrorPrototype(context);
       alDefineObjectProperties(this, {
         prototype: {
           value: proto
@@ -1796,12 +1796,12 @@ module Shumway.AVM1.Natives {
     }
 
     public alConstruct(args?: any[]): AVM1Object {
-      var value: string = args && args[0] !== undefined ? alCoerceString(this.context, args[0]) : undefined;
+      let value: string = args && args[0] !== undefined ? alCoerceString(this.context, args[0]) : undefined;
       return new AVM1ErrorNative(this.context, value);
     }
 
     public alCall(thisArg: any, args?: any[]): any {
-      var value: string = args && args[0] !== undefined ? alCoerceString(this.context, args[0]) : undefined;
+      let value: string = args && args[0] !== undefined ? alCoerceString(this.context, args[0]) : undefined;
       return new AVM1ErrorNative(this.context, value);
     }
   }
@@ -1819,15 +1819,15 @@ module Shumway.AVM1.Natives {
    * @param {IAVM1Context} context
    */
   export function installBuiltins(context: IAVM1Context): void {
-    var builtins = context.builtins;
+    let builtins = context.builtins;
 
     // Resolving cyclic dependency between Object/Function functions and their prototypes.
-    var objectProto = new AVM1ObjectPrototype(context);
-    var dummyObject = new AVM1Object(context);
+    let objectProto = new AVM1ObjectPrototype(context);
+    let dummyObject = new AVM1Object(context);
     dummyObject.alSetOwnPrototypeProperty(objectProto);
     builtins.Object = dummyObject;
-    var functionProto = new AVM1FunctionPrototype(context);
-    var dummyFunction = new AVM1Object(context);
+    let functionProto = new AVM1FunctionPrototype(context);
+    let dummyFunction = new AVM1Object(context);
     dummyFunction.alSetOwnPrototypeProperty(functionProto);
     builtins.Function = dummyFunction;
     objectProto._initializePrototype();

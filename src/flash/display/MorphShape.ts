@@ -55,7 +55,7 @@ module Shumway.AVMX.AS.flash.display {
 
     _containsPointDirectly(localX: number, localY: number,
                            globalX: number, globalY: number): boolean {
-      var graphics = this._getGraphics();
+      let graphics = this._getGraphics();
       return graphics && graphics._containsPoint(localX, localY, true, this._ratio / 0xffff);
     }
   }
@@ -68,7 +68,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     static FromData(data: any, loaderInfo: flash.display.LoaderInfo): MorphShapeSymbol {
-      var symbol = new MorphShapeSymbol(data, loaderInfo.sec);
+      let symbol = new MorphShapeSymbol(data, loaderInfo.sec);
       symbol._setBoundsFromData(data);
       symbol.graphics = flash.display.Graphics.FromData(data, loaderInfo);
       symbol.processRequires(data.require, loaderInfo);

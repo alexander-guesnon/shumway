@@ -16,44 +16,44 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
-  var SOUND_SIZE_8_BIT  = 0;
-  var SOUND_SIZE_16_BIT = 1;
-  var SOUND_TYPE_MONO   = 0;
-  var SOUND_TYPE_STEREO = 1;
+  let SOUND_SIZE_8_BIT  = 0;
+  let SOUND_SIZE_16_BIT = 1;
+  let SOUND_TYPE_MONO   = 0;
+  let SOUND_TYPE_STEREO = 1;
 
-  var SOUND_FORMAT_PCM_BE        = 0;
-  var SOUND_FORMAT_ADPCM         = 1;
-  var SOUND_FORMAT_MP3           = 2;
-  var SOUND_FORMAT_PCM_LE        = 3;
-  var SOUND_FORMAT_NELLYMOSER_16 = 4;
-  var SOUND_FORMAT_NELLYMOSER_8  = 5;
-  var SOUND_FORMAT_NELLYMOSER    = 6;
-  var SOUND_FORMAT_SPEEX         = 11;
+  let SOUND_FORMAT_PCM_BE        = 0;
+  let SOUND_FORMAT_ADPCM         = 1;
+  let SOUND_FORMAT_MP3           = 2;
+  let SOUND_FORMAT_PCM_LE        = 3;
+  let SOUND_FORMAT_NELLYMOSER_16 = 4;
+  let SOUND_FORMAT_NELLYMOSER_8  = 5;
+  let SOUND_FORMAT_NELLYMOSER    = 6;
+  let SOUND_FORMAT_SPEEX         = 11;
 
-  var SOUND_RATES = [5512, 11250, 22500, 44100];
+  let SOUND_RATES = [5512, 11250, 22500, 44100];
 
-  var WaveHeader = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00,
+  let WaveHeader = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00,
     0x57, 0x41, 0x56, 0x45, 0x66, 0x6D, 0x74, 0x20, 0x10, 0x00, 0x00, 0x00,
     0x01, 0x00, 0x02, 0x00, 0x44, 0xAC, 0x00, 0x00, 0x10, 0xB1, 0x02, 0x00,
     0x04, 0x00, 0x10, 0x00, 0x64, 0x61, 0x74, 0x61, 0x00, 0x00, 0x00, 0x00]);
 
   function packageWave(data, sampleRate, channels, size, swapBytes) {
-    var sizeInBytes = size >> 3;
-    var sizePerSecond = channels * sampleRate * sizeInBytes;
-    var sizePerSample = channels * sizeInBytes;
-    var dataLength = data.length + (data.length & 1);
-    var buffer = new ArrayBuffer(WaveHeader.length + dataLength);
-    var bytes = new Uint8Array(buffer);
+    let sizeInBytes = size >> 3;
+    let sizePerSecond = channels * sampleRate * sizeInBytes;
+    let sizePerSample = channels * sizeInBytes;
+    let dataLength = data.length + (data.length & 1);
+    let buffer = new ArrayBuffer(WaveHeader.length + dataLength);
+    let bytes = new Uint8Array(buffer);
     bytes.set(WaveHeader);
     if (swapBytes) {
-      for (var i = 0, j = WaveHeader.length; i < data.length; i += 2, j += 2) {
+      for (let i = 0, j = WaveHeader.length; i < data.length; i += 2, j += 2) {
         bytes[j] = data[i + 1];
         bytes[j + 1] = data[i];
       }
     } else {
       bytes.set(data, WaveHeader.length);
     }
-    var view = new DataView(buffer);
+    let view = new DataView(buffer);
     view.setUint32(4, dataLength + 36, true);
     view.setUint16(22, channels, true);
     view.setUint32(24, sampleRate, true);
@@ -68,21 +68,21 @@ module Shumway.SWF.Parser {
   }
 
   export function defineSound(tag: SoundTag) {
-    var channels = tag.soundType == SOUND_TYPE_STEREO ? 2 : 1;
-    var samplesCount = tag.samplesCount;
-    var sampleRate = SOUND_RATES[tag.soundRate];
+    let channels = tag.soundType == SOUND_TYPE_STEREO ? 2 : 1;
+    let samplesCount = tag.samplesCount;
+    let sampleRate = SOUND_RATES[tag.soundRate];
 
-    var data = tag.soundData;
-    var pcm, packaged;
+    let data = tag.soundData;
+    let pcm, packaged;
     switch (tag.soundFormat) {
       case SOUND_FORMAT_PCM_BE:
         pcm = new Float32Array(samplesCount * channels);
         if (tag.soundSize == SOUND_SIZE_16_BIT) {
-          for (var i = 0, j = 0; i < pcm.length; i++, j += 2)
+          for (let i = 0, j = 0; i < pcm.length; i++, j += 2)
             pcm[i] = ((data[j] << 24) | (data[j + 1] << 16)) / 2147483648;
           packaged = packageWave(data, sampleRate, channels, 16, true);
         } else {
-          for (var i = 0; i < pcm.length; i++)
+          for (let i = 0; i < pcm.length; i++)
             pcm[i] = (data[i] - 128) / 128;
           packaged = packageWave(data, sampleRate, channels, 8, false);
         }
@@ -90,11 +90,11 @@ module Shumway.SWF.Parser {
       case SOUND_FORMAT_PCM_LE:
         pcm = new Float32Array(samplesCount * channels);
         if (tag.soundSize == SOUND_SIZE_16_BIT) {
-          for (var i = 0, j = 0; i < pcm.length; i++, j += 2)
+          for (let i = 0, j = 0; i < pcm.length; i++, j += 2)
             pcm[i] = ((data[j + 1] << 24) | (data[j] << 16)) / 2147483648;
           packaged = packageWave(data, sampleRate, channels, 16, false);
         } else {
-          for (var i = 0; i < pcm.length; i++)
+          for (let i = 0; i < pcm.length; i++)
             pcm[i] = (data[i] - 128) / 128;
           packaged = packageWave(data, sampleRate, channels, 8, false);
         }
@@ -106,10 +106,10 @@ module Shumway.SWF.Parser {
         };
         break;
       case SOUND_FORMAT_ADPCM:
-        var pcm16 = new Int16Array(samplesCount * channels);
+        let pcm16 = new Int16Array(samplesCount * channels);
         decodeACPCMSoundData(data, pcm16, channels);
         pcm = new Float32Array(samplesCount * channels);
-        for (var i = 0; i < pcm.length; i++)
+        for (let i = 0; i < pcm.length; i++)
           pcm[i] = pcm16[i] / 32768;
         packaged = packageWave(new Uint8Array(pcm16.buffer), sampleRate, channels,
           16, !(new Uint8Array(new Uint16Array([1]).buffer))[0]);
@@ -118,7 +118,7 @@ module Shumway.SWF.Parser {
         Debug.warning('Unsupported audio format: ' + tag.soundFormat);
     }
 
-    var sound = {
+    let sound = {
       type: 'sound',
       id: tag.id,
       sampleRate: sampleRate,
@@ -132,14 +132,14 @@ module Shumway.SWF.Parser {
     return sound;
   }
 
-  var ACPCMIndexTables = [
+  let ACPCMIndexTables = [
     [-1, 2],
     [-1, -1, 2, 4],
     [-1, -1, -1, -1, 2, 4, 6, 8],
     [-1, -1, -1, -1, -1, -1, -1, -1, 1, 2, 4, 6, 8, 10, 13, 16]
   ];
 
-  var ACPCMStepSizeTable = [
+  let ACPCMStepSizeTable = [
     7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45,
     50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230,
     253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963,
@@ -157,26 +157,26 @@ module Shumway.SWF.Parser {
       dataBufferLength -= n;
       return (dataBuffer >>> dataBufferLength) & ((1 << n) - 1);
     }
-    var dataPosition = 0;
-    var dataBuffer = 0;
-    var dataBufferLength = 0;
+    let dataPosition = 0;
+    let dataBuffer = 0;
+    let dataBufferLength = 0;
 
-    var pcmPosition = 0;
-    var codeSize = readBits(2);
-    var indexTable = ACPCMIndexTables[codeSize];
+    let pcmPosition = 0;
+    let codeSize = readBits(2);
+    let indexTable = ACPCMIndexTables[codeSize];
     while (pcmPosition < pcm16.length) {
-      var x = pcm16[pcmPosition++] = (readBits(16) << 16) >> 16, x2;
-      var stepIndex = readBits(6), stepIndex2;
+      let x = pcm16[pcmPosition++] = (readBits(16) << 16) >> 16, x2;
+      let stepIndex = readBits(6), stepIndex2;
       if (channels > 1) {
         x2 = pcm16[pcmPosition++] = (readBits(16) << 16) >> 16;
         stepIndex2 = readBits(6);
       }
-      var signMask = 1 << (codeSize + 1);
-      for (var i = 0; i < 4095; i++) {
-        var nibble = readBits(codeSize + 2);
-        var step = ACPCMStepSizeTable[stepIndex];
-        var sum = 0;
-        for (var currentBit = signMask >> 1; currentBit; currentBit >>= 1, step >>= 1) {
+      let signMask = 1 << (codeSize + 1);
+      for (let i = 0; i < 4095; i++) {
+        let nibble = readBits(codeSize + 2);
+        let step = ACPCMStepSizeTable[stepIndex];
+        let sum = 0;
+        for (let currentBit = signMask >> 1; currentBit; currentBit >>= 1, step >>= 1) {
           if (nibble & currentBit) sum += step;
         }
         x += (nibble & signMask ? -1 : 1) * (sum + step);
@@ -187,7 +187,7 @@ module Shumway.SWF.Parser {
           nibble = readBits(codeSize + 2);
           step = ACPCMStepSizeTable[stepIndex2];
           sum = 0;
-          for (var currentBit = signMask >> 1; currentBit; currentBit >>= 1, step >>= 1) {
+          for (let currentBit = signMask >> 1; currentBit; currentBit >>= 1, step >>= 1) {
             if (nibble & currentBit) sum += step;
           }
           x2 += (nibble & signMask ? -1 : 1) * (sum + step);
@@ -200,7 +200,7 @@ module Shumway.SWF.Parser {
     }
   }
 
-  var nextSoundStreamId = 0;
+  let nextSoundStreamId = 0;
 
   export interface DecodedSound {
     streamId: number;
@@ -230,10 +230,10 @@ module Shumway.SWF.Parser {
     }
 
     static FromTag(tag): SoundStream {
-      var channels = tag.streamType == SOUND_TYPE_STEREO ? 2 : 1;
-      var samplesCount = tag.samplesCount;
-      var sampleRate = SOUND_RATES[tag.streamRate];
-      var stream = new SoundStream(samplesCount, sampleRate, channels);
+      let channels = tag.streamType == SOUND_TYPE_STEREO ? 2 : 1;
+      let samplesCount = tag.samplesCount;
+      let sampleRate = SOUND_RATES[tag.streamRate];
+      let stream = new SoundStream(samplesCount, sampleRate, channels);
 
       switch (tag.streamCompression) {
         case SOUND_FORMAT_PCM_BE:
@@ -261,8 +261,8 @@ module Shumway.SWF.Parser {
   }
 
   function SwfSoundStream_decode_PCM(data) : DecodedSound {
-    var pcm = new Float32Array(data.length);
-    for (var i = 0; i < pcm.length; i++)
+    let pcm = new Float32Array(data.length);
+    for (let i = 0; i < pcm.length; i++)
       pcm[i] = (data[i] - 128) / 128;
     this.currentSample += pcm.length / this.channels;
     return {
@@ -273,8 +273,8 @@ module Shumway.SWF.Parser {
   }
 
   function SwfSoundStream_decode_PCM_be(data) : DecodedSound {
-    var pcm = new Float32Array(data.length / 2);
-    for (var i = 0, j = 0; i < pcm.length; i++, j += 2)
+    let pcm = new Float32Array(data.length / 2);
+    for (let i = 0, j = 0; i < pcm.length; i++, j += 2)
       pcm[i] = ((data[j] << 24) | (data[j + 1] << 16)) / 2147483648;
     this.currentSample += pcm.length / this.channels;
     return {
@@ -285,8 +285,8 @@ module Shumway.SWF.Parser {
   }
 
   function SwfSoundStream_decode_PCM_le(data) : DecodedSound {
-    var pcm = new Float32Array(data.length / 2);
-    for (var i = 0, j = 0; i < pcm.length; i++, j += 2)
+    let pcm = new Float32Array(data.length / 2);
+    for (let i = 0, j = 0; i < pcm.length; i++, j += 2)
       pcm[i] = ((data[j + 1] << 24) | (data[j] << 16)) / 2147483648;
     this.currentSample += pcm.length / this.channels;
     return {
@@ -297,8 +297,8 @@ module Shumway.SWF.Parser {
   }
 
   function SwfSoundStream_decode_MP3(data) : DecodedSound {
-    var samplesCount = (data[1] << 8) | data[0];
-    var seek = (data[3] << 8) | data[2];
+    let samplesCount = (data[1] << 8) | data[0];
+    let seek = (data[3] << 8) | data[2];
     this.currentSample += samplesCount;
     return {
       streamId: this.streamId,

@@ -56,9 +56,9 @@ module Shumway.Timeline {
       release || assert (isInteger(data.id));
       this.data = data;
       if (data.className) {
-        var app = data.env.app;
+        let app = data.env.app;
         try {
-          var symbolClass = app.getClass(AVMX.Multiname.FromFQNString(data.className,
+          let symbolClass = app.getClass(AVMX.Multiname.FromFQNString(data.className,
                                                                       AVMX.NamespaceType.Public));
           this.symbolClass = <ASClass><any>symbolClass;
           // The symbolClass should have received a lazy symbol resolver in Loader#_applyLoadUpdate.
@@ -110,7 +110,7 @@ module Shumway.Timeline {
     }
 
     static FromData(data: any, loaderInfo: flash.display.LoaderInfo): BinarySymbol {
-      var symbol = new BinarySymbol(data, loaderInfo.app.sec);
+      let symbol = new BinarySymbol(data, loaderInfo.app.sec);
       symbol.buffer = data.data;
       symbol.byteLength = data.data.byteLength;
       return symbol;

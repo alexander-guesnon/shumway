@@ -193,7 +193,7 @@ module Shumway.Remoting {
     TopRight      = Top | Right
   }
 
-  export var MouseEventNames: string[] = [
+  export let MouseEventNames: string[] = [
     'click',
     'dblclick',
     'mousedown',
@@ -203,7 +203,7 @@ module Shumway.Remoting {
     'mouseout'
   ];
 
-  export var KeyboardEventNames: string[] = [
+  export let KeyboardEventNames: string[] = [
     'keydown',
     'keypress',
     'keyup'
@@ -279,7 +279,7 @@ module Shumway.Remoting {
 
     set onSyncMessage(callback: (msg: any) => any) {
       this.window.addEventListener('syncmessage', function (e) {
-        var wrappedMessage = (<any>e).detail;
+        let wrappedMessage = (<any>e).detail;
         wrappedMessage.result = callback(wrappedMessage.msg);
       });
     }
@@ -293,8 +293,8 @@ module Shumway.Remoting {
     }
 
     sendSyncMessage(msg: any, transfers?: any[]): any {
-      var event = this.target.document.createEvent('CustomEvent');
-      var wrappedMessage = {
+      let event = this.target.document.createEvent('CustomEvent');
+      let wrappedMessage = {
         msg: msg,
         result: undefined
       };

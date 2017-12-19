@@ -20,9 +20,9 @@ module Shumway.AVMX.AS {
 
   export module flash.utils {
 
-    var proxyNamespace = internNamespace(NamespaceType.Public,
+    let proxyNamespace = internNamespace(NamespaceType.Public,
                                          "http://www.adobe.com/2006/actionscript/flash/proxy");
-    var proxyPrefix = '$' + proxyNamespace.mangledName;
+    let proxyPrefix = '$' + proxyNamespace.mangledName;
 
     /**
      * The Proxy class lets you override the default behavior of ActionScript operations
@@ -31,8 +31,8 @@ module Shumway.AVMX.AS {
     export class ASProxy extends ASObject {
 
       static classInitializer() {
-        var proto: any = this.dPrototype;
-        var asProto: any = ASProxy.prototype;
+        let proto: any = this.dPrototype;
+        let asProto: any = ASProxy.prototype;
 
         defineNonEnumerableProperty(proto, proxyPrefix + 'getProperty', asProto.native_getProperty);
         defineNonEnumerableProperty(proto, proxyPrefix + 'setProperty', asProto.native_setProperty);
@@ -90,10 +90,10 @@ module Shumway.AVMX.AS {
       }
 
       public axGetProperty(mn: Multiname) {
-        var value: any;
-        var trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
+        let value: any;
+        let trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
         if (trait) {
-          var name = trait.name.getMangledName();
+          let name = trait.name.getMangledName();
           value = this[name];
           if (typeof value === 'function') {
             return this.axGetMethod(name);
@@ -113,7 +113,7 @@ module Shumway.AVMX.AS {
       }
 
       public axSetProperty(mn: Multiname, value: any, bc: Bytecode) {
-        var trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
+        let trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
         if (trait) {
           super.axSetProperty(mn, value, bc);
           return;
@@ -122,11 +122,11 @@ module Shumway.AVMX.AS {
       }
 
       public axCallProperty(mn: Multiname, args: any[], isLex: boolean): any {
-        var trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
+        let trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
         if (trait) {
           return super.axCallProperty(mn, args, isLex);
         }
-        var callArgs = [this.sec.AXQName.FromMultiname(mn)].concat(args);
+        let callArgs = [this.sec.AXQName.FromMultiname(mn)].concat(args);
         return this[proxyPrefix + 'callProperty'].apply(this, callArgs);
       }
 
@@ -143,7 +143,7 @@ module Shumway.AVMX.AS {
       }
 
       public axHasOwnProperty(mn: Multiname): any {
-        var trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
+        let trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
         if (trait) {
           return true;
         }
@@ -151,7 +151,7 @@ module Shumway.AVMX.AS {
       }
 
       public axDeleteProperty(mn: Multiname): any {
-        var trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
+        let trait = typeof mn.name === 'string' ? this.traits.getTrait(mn.namespaces, mn.name) : null;
         if (trait) {
           return delete this[trait.name.getMangledName()];
         }
@@ -172,5 +172,5 @@ module Shumway.AVMX.AS {
     }
   }
 
-  var rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
+  let rn = new Multiname(null, 0, CONSTANT.RTQNameL, [], null);
 }

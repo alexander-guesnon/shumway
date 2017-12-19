@@ -20,7 +20,7 @@ module Shumway.AVMX.AS.flash.system {
   import somewhatImplemented = Shumway.Debug.somewhatImplemented;
   import toKeyValueArray = Shumway.ObjectUtilities.toKeyValueArray;
 
-  declare var window;
+  declare let window;
 
   export class Capabilities extends ASObject {
     
@@ -127,13 +127,13 @@ module Shumway.AVMX.AS.flash.system {
     }
     static get os(): string {
       if (Capabilities._os === null) {
-        var os;
-        var userAgent = window.navigator.userAgent;
+        let os;
+        let userAgent = window.navigator.userAgent;
         if (userAgent.indexOf("Macintosh") > 0) {
           if (userAgent.indexOf('Mac OS X ') === -1) {
             os = 'Mac OS 10.6';
           } else {
-            var versionStr = userAgent.split('Mac OS X ')[1];
+            let versionStr = userAgent.split('Mac OS X ')[1];
             os = versionStr.substr(0, versionStr.indexOf(';'));
           }
         } else if (userAgent.indexOf("Windows") > 0) {
@@ -158,7 +158,7 @@ module Shumway.AVMX.AS.flash.system {
       return Capabilities._playerType;
     }
     static get serverString(): string {
-      var str = toKeyValueArray({OS: Capabilities.os}).map(function (pair) {
+      let str = toKeyValueArray({OS: Capabilities.os}).map(function (pair) {
         return pair[0] + "=" + encodeURIComponent(pair[1]);
       }).join("&");
       release || somewhatImplemented("Capabilities.serverString: " + str);

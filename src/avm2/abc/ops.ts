@@ -1,6 +1,6 @@
 module Shumway.AVMX {
   import assert = Debug.assert;
-  var writer = new IndentingWriter();
+  let writer = new IndentingWriter();
 
   export const enum Bytecode {
     BKPT               = 0x01,
@@ -254,7 +254,7 @@ module Shumway.AVMX {
     END                = 0xFF
   }
 
-  var bytecodeNames = ["","BKPT","NOP","THROW","GETSUPER","SETSUPER","DXNS","DXNSLATE","KILL","LABEL","LF32X4","SF32X4","IFNLT","IFNLE","IFNGT","IFNGE","JUMP","IFTRUE","IFFALSE","IFEQ","IFNE","IFLT","IFLE","IFGT","IFGE","IFSTRICTEQ","IFSTRICTNE","LOOKUPSWITCH","PUSHWITH","POPSCOPE","NEXTNAME","HASNEXT","PUSHNULL","PUSHUNDEFINED","PUSHFLOAT","NEXTVALUE","PUSHBYTE","PUSHSHORT","PUSHTRUE","PUSHFALSE","PUSHNAN","POP","DUP","SWAP","PUSHSTRING","PUSHINT","PUSHUINT","PUSHDOUBLE","PUSHSCOPE","PUSHNAMESPACE","HASNEXT2",,,"LI8","LI16","LI32","LF32","LF64","SI8","SI16","SI32","SF32","SF64",,"NEWFUNCTION","CALL","CONSTRUCT","CALLMETHOD","CALLSTATIC","CALLSUPER","CALLPROPERTY","RETURNVOID","RETURNVALUE","CONSTRUCTSUPER","CONSTRUCTPROP","CALLSUPERID","CALLPROPLEX","CALLINTERFACE","CALLSUPERVOID","CALLPROPVOID","SXI1","SXI8","SXI16","APPLYTYPE","PUSHFLOAT4","NEWOBJECT","NEWARRAY","NEWACTIVATION","NEWCLASS","GETDESCENDANTS","NEWCATCH",,,"FINDPROPSTRICT","FINDPROPERTY","FINDDEF","GETLEX","SETPROPERTY","GETLOCAL","SETLOCAL","GETGLOBALSCOPE","GETSCOPEOBJECT","GETPROPERTY","GETOUTERSCOPE","INITPROPERTY","UNUSED_69","DELETEPROPERTY","UNUSED_6B","GETSLOT","SETSLOT","GETGLOBALSLOT","SETGLOBALSLOT","CONVERT_S","ESC_XELEM","ESC_XATTR","CONVERT_I","CONVERT_U","CONVERT_D","CONVERT_B","CONVERT_O","CHECKFILTER","CONVERT_F","UNPLUS","CONVERT_F4","BC_7C","BC_7D","BC_7E","BC_7F","COERCE","COERCE_B","COERCE_A","COERCE_I","COERCE_D","COERCE_S","ASTYPE","ASTYPELATE","COERCE_U","COERCE_O",,,,,,,"NEGATE","INCREMENT","INCLOCAL","DECREMENT","DECLOCAL","TYPEOF","NOT","BITNOT","UNUSED_98","UNUSED_99","UNUSED_9A","UNUSED_9B","UNUSED_9C","UNUSED_9D","UNUSED_9E","UNUSED_9F","ADD","SUBTRACT","MULTIPLY","DIVIDE","MODULO","LSHIFT","RSHIFT","URSHIFT","BITAND","BITOR","BITXOR","EQUALS","STRICTEQUALS","LESSTHAN","LESSEQUALS","GREATERTHAN","GREATEREQUALS","INSTANCEOF","ISTYPE","ISTYPELATE","IN","UNUSED_B5","UNUSED_B6","UNUSED_B7","UNUSED_B8","UNUSED_B9","UNUSED_BA","UNUSED_BB","UNUSED_BC","UNUSED_BD","UNUSED_BE","UNUSED_BF","INCREMENT_I","DECREMENT_I","INCLOCAL_I","DECLOCAL_I","NEGATE_I","ADD_I","SUBTRACT_I","MULTIPLY_I","UNUSED_C8","UNUSED_C9","UNUSED_CA","UNUSED_CB","UNUSED_CC","UNUSED_CD","UNUSED_CE","UNUSED_CF","GETLOCAL0","GETLOCAL1","GETLOCAL2","GETLOCAL3","SETLOCAL0","SETLOCAL1","SETLOCAL2","SETLOCAL3","UNUSED_D8","UNUSED_D9","UNUSED_DA","UNUSED_DB","UNUSED_DC","UNUSED_DD","UNUSED_DE","UNUSED_DF","UNUSED_E0","UNUSED_E1","UNUSED_E2","UNUSED_E3","UNUSED_E4","UNUSED_E5","UNUSED_E6","UNUSED_E7","UNUSED_E8","UNUSED_E9","UNUSED_EA","UNUSED_EB","UNUSED_EC","INVALID","UNUSED_EE","DEBUG","DEBUGLINE","DEBUGFILE","BKPTLINE","TIMESTAMP","RESTARGC","RESTARG","UNUSED_F6","UNUSED_F7","UNUSED_F8","UNUSED_F9","UNUSED_FA","UNUSED_FB","UNUSED_FC","UNUSED_FD","UNUSED_FE","END"];
+  let bytecodeNames = ["","BKPT","NOP","THROW","GETSUPER","SETSUPER","DXNS","DXNSLATE","KILL","LABEL","LF32X4","SF32X4","IFNLT","IFNLE","IFNGT","IFNGE","JUMP","IFTRUE","IFFALSE","IFEQ","IFNE","IFLT","IFLE","IFGT","IFGE","IFSTRICTEQ","IFSTRICTNE","LOOKUPSWITCH","PUSHWITH","POPSCOPE","NEXTNAME","HASNEXT","PUSHNULL","PUSHUNDEFINED","PUSHFLOAT","NEXTVALUE","PUSHBYTE","PUSHSHORT","PUSHTRUE","PUSHFALSE","PUSHNAN","POP","DUP","SWAP","PUSHSTRING","PUSHINT","PUSHUINT","PUSHDOUBLE","PUSHSCOPE","PUSHNAMESPACE","HASNEXT2",,,"LI8","LI16","LI32","LF32","LF64","SI8","SI16","SI32","SF32","SF64",,"NEWFUNCTION","CALL","CONSTRUCT","CALLMETHOD","CALLSTATIC","CALLSUPER","CALLPROPERTY","RETURNVOID","RETURNVALUE","CONSTRUCTSUPER","CONSTRUCTPROP","CALLSUPERID","CALLPROPLEX","CALLINTERFACE","CALLSUPERVOID","CALLPROPVOID","SXI1","SXI8","SXI16","APPLYTYPE","PUSHFLOAT4","NEWOBJECT","NEWARRAY","NEWACTIVATION","NEWCLASS","GETDESCENDANTS","NEWCATCH",,,"FINDPROPSTRICT","FINDPROPERTY","FINDDEF","GETLEX","SETPROPERTY","GETLOCAL","SETLOCAL","GETGLOBALSCOPE","GETSCOPEOBJECT","GETPROPERTY","GETOUTERSCOPE","INITPROPERTY","UNUSED_69","DELETEPROPERTY","UNUSED_6B","GETSLOT","SETSLOT","GETGLOBALSLOT","SETGLOBALSLOT","CONVERT_S","ESC_XELEM","ESC_XATTR","CONVERT_I","CONVERT_U","CONVERT_D","CONVERT_B","CONVERT_O","CHECKFILTER","CONVERT_F","UNPLUS","CONVERT_F4","BC_7C","BC_7D","BC_7E","BC_7F","COERCE","COERCE_B","COERCE_A","COERCE_I","COERCE_D","COERCE_S","ASTYPE","ASTYPELATE","COERCE_U","COERCE_O",,,,,,,"NEGATE","INCREMENT","INCLOCAL","DECREMENT","DECLOCAL","TYPEOF","NOT","BITNOT","UNUSED_98","UNUSED_99","UNUSED_9A","UNUSED_9B","UNUSED_9C","UNUSED_9D","UNUSED_9E","UNUSED_9F","ADD","SUBTRACT","MULTIPLY","DIVIDE","MODULO","LSHIFT","RSHIFT","URSHIFT","BITAND","BITOR","BITXOR","EQUALS","STRICTEQUALS","LESSTHAN","LESSEQUALS","GREATERTHAN","GREATEREQUALS","INSTANCEOF","ISTYPE","ISTYPELATE","IN","UNUSED_B5","UNUSED_B6","UNUSED_B7","UNUSED_B8","UNUSED_B9","UNUSED_BA","UNUSED_BB","UNUSED_BC","UNUSED_BD","UNUSED_BE","UNUSED_BF","INCREMENT_I","DECREMENT_I","INCLOCAL_I","DECLOCAL_I","NEGATE_I","ADD_I","SUBTRACT_I","MULTIPLY_I","UNUSED_C8","UNUSED_C9","UNUSED_CA","UNUSED_CB","UNUSED_CC","UNUSED_CD","UNUSED_CE","UNUSED_CF","GETLOCAL0","GETLOCAL1","GETLOCAL2","GETLOCAL3","SETLOCAL0","SETLOCAL1","SETLOCAL2","SETLOCAL3","UNUSED_D8","UNUSED_D9","UNUSED_DA","UNUSED_DB","UNUSED_DC","UNUSED_DD","UNUSED_DE","UNUSED_DF","UNUSED_E0","UNUSED_E1","UNUSED_E2","UNUSED_E3","UNUSED_E4","UNUSED_E5","UNUSED_E6","UNUSED_E7","UNUSED_E8","UNUSED_E9","UNUSED_EA","UNUSED_EB","UNUSED_EC","INVALID","UNUSED_EE","DEBUG","DEBUGLINE","DEBUGFILE","BKPTLINE","TIMESTAMP","RESTARGC","RESTARG","UNUSED_F6","UNUSED_F7","UNUSED_F8","UNUSED_F9","UNUSED_FA","UNUSED_FB","UNUSED_FC","UNUSED_FD","UNUSED_FE","END"];
 
   export function getBytecodeName(bytecode: Bytecode): string {
     return release ? "Bytecode: " + bytecode : bytecodeNames[bytecode];
@@ -272,11 +272,11 @@ module Shumway.AVMX {
   /**
    * A array that maps from a bytecode value to the set of {@link OPFlags} for the corresponding instruction.
    */
-  export var BytecodeFlags = new Uint32Array(256);
-  export var BytecodeFormat = new Array(256);
+  export let BytecodeFlags = new Uint32Array(256);
+  export let BytecodeFormat = new Array(256);
 
   function define(bytecode: Bytecode, format: string, flags: Flags = 0) {
-    var instructionLength = format.length;
+    let instructionLength = format.length;
     BytecodeFlags[bytecode] = flags;
     BytecodeFormat[bytecode] = format;
     // release || assert (!isConditionalBranch(opcode) || isBranch(opcode), "a conditional branch must also be a branch");
@@ -480,7 +480,7 @@ module Shumway.AVMX {
     }
 
     static s32(code: Uint8Array, i: number): number {
-      var result = code[i];
+      let result = code[i];
       if (result & 0x80) {
         result = result & 0x7f | code[i + 1] << 7;
         if (result & 0x4000) {
@@ -506,7 +506,7 @@ module Shumway.AVMX {
     }
 
     static s32Length(code: Uint8Array, i: number): number {
-      var result = code[i];
+      let result = code[i];
       if (result & 0x80) {
         result = result & 0x7f | code[i + 1] << 7;
         if (result & 0x4000) {
@@ -536,22 +536,22 @@ module Shumway.AVMX {
   }
 
   function lengthAt(code: Uint8Array, i: number): number {
-    var l = 1;
-    var bytecode = code[i];
+    let l = 1;
+    let bytecode = code[i];
     if (bytecode === Bytecode.LOOKUPSWITCH) {
       l += 3; // Default offset.
-      var n = Bytes.u30(code, i + l) + 1; // Offsets
+      let n = Bytes.u30(code, i + l) + 1; // Offsets
       l += Bytes.s32Length(code, i + l);
       l += n * 3;
       return l;
     }
-    var format = BytecodeFormat[bytecode];
+    let format = BytecodeFormat[bytecode];
     if (format === "") {
       return l;
     }
     assert(format, "OP: " + getBytecodeName(bytecode));
-    for (var j = 0; j < format.length; j++) {
-      var f = format[j].charCodeAt(0) - 97;
+    for (let j = 0; j < format.length; j++) {
+      let f = format[j].charCodeAt(0) - 97;
       switch (f) {
         case Sizes.u08:
         case Sizes.s08:
@@ -609,7 +609,7 @@ module Shumway.AVMX {
       this._currentBCI = bci;
       if (this._currentBCI < this._code.length) {
         this._bytecode = Bytes.u8(this._code, bci);
-        var l = lengthAt(this._code, bci);
+        let l = lengthAt(this._code, bci);
         this._nextBCI = bci + l;
       } else {
         this._bytecode = Bytecode.END;

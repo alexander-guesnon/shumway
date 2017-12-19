@@ -47,7 +47,7 @@ module Shumway.AVM1.Lib {
       name = alCoerceString(this.context, name);
       localPath = alCoerceString(this.context, localPath);
       secure = alToBoolean(this.context, secure);
-      var as3SharedObject = this.context.sec.flash.net.SharedObject.axClass.getLocal(name, localPath, secure);
+      let as3SharedObject = this.context.sec.flash.net.SharedObject.axClass.getLocal(name, localPath, secure);
       return new AVM1SharedObject(this.context, as3SharedObject);
     }
 
@@ -81,7 +81,7 @@ module Shumway.AVM1.Lib {
     public getData(): any {
       // TODO implement transform from AVM2 -> AVM1 objects
       Debug.somewhatImplemented('AVM1SharedObject.getData');
-      var data = (<any>this).__data || ((<any>this).__data = alNewObject(this.context));
+      let data = (<any>this).__data || ((<any>this).__data = alNewObject(this.context));
       return data;
     }
 

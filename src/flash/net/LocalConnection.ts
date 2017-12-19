@@ -22,7 +22,7 @@ module Shumway.AVMX.AS.flash.net {
   import ByteArray = flash.utils.ByteArray;
   import FileLoadingService = Shumway.FileLoadingService;
 
-  var forbiddenNames = ['send', 'connect', 'close', 'allowDomain', 'allowInsecureDomain', 'client',
+  let forbiddenNames = ['send', 'connect', 'close', 'allowDomain', 'allowInsecureDomain', 'client',
                         'domain'];
   Object.freeze(forbiddenNames);
 
@@ -39,7 +39,7 @@ module Shumway.AVMX.AS.flash.net {
       this._allowedSecureDomains = [];
 
       // tsc contains a definition for URL that's non-constructible.
-      var url = new (<any>URL)(Shumway.AVMX.getCurrentABC().env.url);
+      let url = new (<any>URL)(Shumway.AVMX.getCurrentABC().env.url);
       this._domain = url.hostname;
       this._secure = url.protocol === 'https:';
     }
@@ -59,7 +59,7 @@ module Shumway.AVMX.AS.flash.net {
     private _allowedSecureDomains: string[];
 
     close(): void {
-      var connectionName = this._connectionName;
+      let connectionName = this._connectionName;
       if (!connectionName) {
         this.sec.throwError('ArgumentError', Errors.CloseNotConnectedError);
       }
@@ -86,7 +86,7 @@ module Shumway.AVMX.AS.flash.net {
       if (this._connectionName) {
         this.sec.throwError('ArgumentError', Errors.AlreadyConnectedError);
       }
-      var result = LocalConnectionService.instance.createConnection(connectionName, this);
+      let result = LocalConnectionService.instance.createConnection(connectionName, this);
       if (result === LocalConnectionConnectResult.AlreadyTaken) {
         this.sec.throwError('ArgumentError', Errors.AlreadyConnectedError);
       }
@@ -120,12 +120,12 @@ module Shumway.AVMX.AS.flash.net {
       if (forbiddenNames.indexOf(methodName) > -1) {
         this.sec.throwError('ArgumentError', Errors.InvalidParamError);
       }
-      var serializedArgs = new this.sec.flash.utils.ByteArray();
+      let serializedArgs = new this.sec.flash.utils.ByteArray();
       serializedArgs.writeObject(this.sec.createArrayUnsafe(args));
       if (serializedArgs.length > 40 * 1024) {
         this.sec.throwError('ArgumentError', Errors.ArgumentSizeError);
       }
-      var argsBuffer = serializedArgs.getBytes().buffer;
+      let argsBuffer = serializedArgs.getBytes().buffer;
       try {
         LocalConnectionService.instance.send(connectionName, methodName, argsBuffer, this,
                                              this._domain, this._secure);
@@ -157,13 +157,13 @@ module Shumway.AVMX.AS.flash.net {
     }
 
     private _allowDomains(domains: string[], secure: boolean) {
-      var result: string[] = [];
+      let result: string[] = [];
       // If no connection has been made yet, store the domains for later retrieval.
       if (!this._connectionName) {
         result = secure ? this._allowedSecureDomains : this._allowedInsecureDomains;
       }
-      for (var i = 0; i < domains.length; i++) {
-        var domain = domains[i];
+      for (let i = 0; i < domains.length; i++) {
+        let domain = domains[i];
         if (!axIsTypeString(domain)) {
           this.sec.throwError('ArgumentError', Errors.AllowDomainArgumentError);
         }
@@ -177,22 +177,22 @@ module Shumway.AVMX.AS.flash.net {
     }
 
     public handleMessage(methodName: string, argsBuffer: ArrayBuffer): void {
-      var client = this._client;
-      var error: ASError;
+      let client = this._client;
+      let error: ASError;
       if (!client.axHasPublicProperty(methodName) || forbiddenNames.indexOf(methodName) > -1) {
         // Forbidden names really shouldn't reach this point, but should everything else fail,
         // we just pretend not to have found them here.
         error = <any>this.sec.createError('ReferenceError', Errors.ReadSealedError, methodName,
                                           client.axClass.name.name);
       } else {
-        var handler = client.axGetPublicProperty(methodName);
+        let handler = client.axGetPublicProperty(methodName);
         if (!axIsCallable(handler)) {
           // Non-callable handlers are just ignored.
           return;
         }
 
-        var ba: ByteArray = new this.sec.flash.utils.ByteArray(argsBuffer);
-        var args: ASArray = ba.readObject();
+        let ba: ByteArray = new this.sec.flash.utils.ByteArray(argsBuffer);
+        let args: ASArray = ba.readObject();
         if (!this.sec.AXArray.axIsType(args)) {
           error =
             <any>this.sec.createError('TypeError', Errors.CheckTypeFailedError, args, 'Array');
@@ -207,8 +207,8 @@ module Shumway.AVMX.AS.flash.net {
       if (!error) {
         return;
       }
-      var asyncErrorEventCtor = this.sec.flash.events.AsyncErrorEvent;
-      var errorEvent = new asyncErrorEventCtor('asyncError', false, false,
+      let asyncErrorEventCtor = this.sec.flash.events.AsyncErrorEvent;
+      let errorEvent = new asyncErrorEventCtor('asyncError', false, false,
                                                'Error #2095: flash.net.LocalConnection was' +
                                                ' unable to invoke' +
                                                ' callback ' + methodName + '.', error);

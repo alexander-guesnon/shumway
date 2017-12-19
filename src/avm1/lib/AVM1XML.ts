@@ -30,7 +30,7 @@ module Shumway.AVM1.Lib {
     if (!(as2Node instanceof AVM1Object)) {
       return null;
     }
-    var context = as2Node.context;
+    let context = as2Node.context;
     if (!alInstanceOf(context, as2Node, context.globals.XMLNode)) {
       return null;
     }
@@ -42,7 +42,7 @@ module Shumway.AVM1.Lib {
     if (isNullOrUndefined(as3Node)) {
       return undefined;
     }
-    var as2Node: AVM1Object = (<any>as3Node)._as2Node;
+    let as2Node: AVM1Object = (<any>as3Node)._as2Node;
     if (!as2Node) {
       as2Node = new AVM1Object(context);
       as2Node.alPrototype = context.globals.XMLNode.alGetPrototypeProperty();
@@ -65,13 +65,13 @@ module Shumway.AVM1.Lib {
         Debug.notImplemented('Unsupported amount of parameters for AVM1XMLNode constructor');
         return undefined;
       }
-      var type = alCoerceNumber(this.context, args[0]);
-      var value = alCoerceString(this.context, args[1]);
+      let type = alCoerceNumber(this.context, args[0]);
+      let value = alCoerceString(this.context, args[1]);
       if (type !== AVM1XMLNodeType.ELEMENT_NODE && type !== AVM1XMLNodeType.TEXT_NODE) {
         Debug.notImplemented('Unsupported AVM1XMLNode type: ' + type);
         return undefined;
       }
-      var obj = new AVM1Object(this.context);
+      let obj = new AVM1Object(this.context);
       obj.alPrototype = this.alGetPrototypeProperty();
       AVM1XMLNodePrototype.prototype.initializeNode.call(obj, type, value);
       return obj;
@@ -110,7 +110,7 @@ module Shumway.AVM1.Lib {
 
     alGetOwnProperty(p): AVM1PropertyDescriptor {
       if (alIsIndex(this.context, p)) {
-        var index = alToInteger(this.context, p);
+        let index = alToInteger(this.context, p);
         if (index >= 0 && index < this.as3ChildNodes.length) {
           this._cachedNodePropertyDescriptor.value = fromAS3XMLNode(this.context, this.as3ChildNodes[index]);
           return this._cachedNodePropertyDescriptor;
@@ -132,7 +132,7 @@ module Shumway.AVM1.Lib {
     }
 
     public alGetOwnProperty(p): AVM1PropertyDescriptor {
-      var name = alCoerceString(this.context, p);
+      let name = alCoerceString(this.context, p);
       if (this._as3Attributes.axHasPublicProperty(name)) {
         this._cachedNodePropertyDescriptor.value =
           this._as3Attributes.axGetPublicProperty(name);
@@ -142,25 +142,25 @@ module Shumway.AVM1.Lib {
     }
 
     public alSetOwnProperty(p, desc: AVM1PropertyDescriptor): void {
-      var name = alCoerceString(this.context, p);
+      let name = alCoerceString(this.context, p);
       if ((desc.flags & AVM1PropertyFlags.DATA)) {
-        var value = alCoerceString(this.context, desc.value);
+        let value = alCoerceString(this.context, desc.value);
         this._as3Attributes.axSetPublicProperty(name, value);
       }
     }
 
     public alHasOwnProperty(p): boolean  {
-      var name = alCoerceString(this.context, p);
+      let name = alCoerceString(this.context, p);
       return this._as3Attributes.axHasPublicProperty(name);
     }
 
     public alDeleteOwnProperty(p) {
-      var name = alCoerceString(this.context, p);
+      let name = alCoerceString(this.context, p);
       this._as3Attributes.axDeletePublicProperty(name);
     }
 
     public alGetOwnPropertiesKeys(): string[] {
-      var as3Keys = this._as3Attributes.axGetEnumerableKeys();
+      let as3Keys = this._as3Attributes.axGetEnumerableKeys();
       return as3Keys.map((key) => axCoerceString(key));
     }
   }
@@ -271,7 +271,7 @@ module Shumway.AVM1.Lib {
     }
 
     getAttributes(): AVM1Object {
-      var as3Attributes = this.as3XMLNode.axGetPublicProperty('attributes');
+      let as3Attributes = this.as3XMLNode.axGetPublicProperty('attributes');
       if (isNullOrUndefined(as3Attributes)) {
         return undefined;
       }
@@ -291,11 +291,11 @@ module Shumway.AVM1.Lib {
         this._attributes = value;
         return;
       }
-      var context = this.context;
-      var as3Attributes = context.sec.createObject();
+      let context = this.context;
+      let as3Attributes = context.sec.createObject();
       alForEachProperty(value, (prop) => {
-        var name = alCoerceString(context, prop);
-        var value = alCoerceString(context, this.alGet(prop));
+        let name = alCoerceString(context, prop);
+        let value = alCoerceString(context, this.alGet(prop));
         as3Attributes.axSetPublicProperty(name, value);
       }, this);
       this._attributes = new AVM1XMLNodeAttributes(context, as3Attributes);
@@ -310,7 +310,7 @@ module Shumway.AVM1.Lib {
 
     cloneNode(deepClone: boolean): AVM1Object {
       deepClone = alToBoolean(this.context, deepClone);
-      var clone = this.as3XMLNode.axCallPublicProperty('cloneNode', [deepClone]);
+      let clone = this.as3XMLNode.axCallPublicProperty('cloneNode', [deepClone]);
       return fromAS3XMLNode(this.context, clone);
     }
 
@@ -402,8 +402,8 @@ module Shumway.AVM1.Lib {
     }
 
     alConstruct(args?: any[]): AVM1Object  {
-      var text = args && alCoerceString(this.context, args[0]);
-      var obj = new AVM1Object(this.context);
+      let text = args && alCoerceString(this.context, args[0]);
+      let obj = new AVM1Object(this.context);
       obj.alPrototype = this.alGetPrototypeProperty();
       (<IAVM1DataObject><any>obj).isAVM1DataObject = true;
       AVM1XMLPrototype.prototype.initializeDocument.call(obj, text);
@@ -468,7 +468,7 @@ module Shumway.AVM1.Lib {
 
     initializeDocument(text: string) {
       text = alCoerceString(this.context, text) || null;
-      var as3Doc = new this.context.sec.flash.xml.XMLDocument(text);
+      let as3Doc = new this.context.sec.flash.xml.XMLDocument(text);
       AVM1XMLNodePrototype.prototype.initializeFromAS3Node.call(this, as3Doc);
       this.as3XMLDocument = as3Doc;
     }
@@ -479,13 +479,13 @@ module Shumway.AVM1.Lib {
 
     createElement(name: string): AVM1Object {
       name = alCoerceString(this.context, name);
-      var as3Node = this.as3XMLDocument.axCallPublicProperty('createElement', [name]);
+      let as3Node = this.as3XMLDocument.axCallPublicProperty('createElement', [name]);
       return fromAS3XMLNode(this.context, as3Node);
     }
 
     createTextNode(value: string) : AVM1Object {
       value = alCoerceString(this.context, value);
-      var as3Node = this.as3XMLDocument.axCallPublicProperty('createTextNode', [value]);
+      let as3Node = this.as3XMLDocument.axCallPublicProperty('createTextNode', [value]);
       return fromAS3XMLNode(this.context, as3Node);
     }
 
@@ -547,9 +547,9 @@ module Shumway.AVM1.Lib {
       }
       Debug.somewhatImplemented('AVM1XMLPrototype.send');
       // TODO check content types and test
-      var contentType = this.alGet('contentType');
+      let contentType = this.alGet('contentType');
       contentType = isNullOrUndefined(contentType) ? undefined : alCoerceString(this.context, contentType);
-      var data = alToString(this.context, this);
+      let data = alToString(this.context, this);
       loadAVM1DataObject(this.context, url, 'POST', contentType, data, <IAVM1DataObject><any>resultXML);
     }
   }

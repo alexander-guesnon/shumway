@@ -35,7 +35,7 @@ module Shumway.AVMX.AS.flash.xml {
     // Static   AS -> JS Bindings
     static escapeXML(value: string): string {
       value = axCoerceString(value);
-      var i = 0, length = value.length, ch;
+      let i = 0, length = value.length, ch;
       while (i < length) {
         ch = value.charCodeAt(i);
         if (ch === XMLSpecialChars.APOS || ch === XMLSpecialChars.AMP ||
@@ -48,7 +48,7 @@ module Shumway.AVMX.AS.flash.xml {
       if (i >= length) {
         return value;
       }
-      var parts = [value.substring(0, i)];
+      let parts = [value.substring(0, i)];
       while (i < length) {
         switch (ch) {
           case XMLSpecialChars.APOS:
@@ -68,7 +68,7 @@ module Shumway.AVMX.AS.flash.xml {
             break;
         }
         ++i;
-        var j = i;
+        let j = i;
         while (i < length) {
           ch = value.charCodeAt(i);
           if (ch === XMLSpecialChars.APOS || ch === XMLSpecialChars.AMP ||
@@ -180,8 +180,8 @@ module Shumway.AVMX.AS.flash.xml {
   }
 
   function isWhitespace(s: string) {
-    for (var i = 0; i < s.length; i++) {
-      var ch = s[i];
+    for (let i = 0; i < s.length; i++) {
+      let ch = s[i];
       if (!(ch === ' ' || ch === '\n' || ch === '\r' || ch === '\t')) {
         return false;
 
@@ -233,7 +233,7 @@ module Shumway.AVMX.AS.flash.xml {
     }
 
     onBeginElement(name: string, attributes: {name: string; value: string}[], isEmpty: boolean): void {
-      var attrObj = this.sec.createObject();
+      let attrObj = this.sec.createObject();
       attributes.forEach((a) => {
         attrObj.axSetPublicProperty(a.name, a.value);
       });
@@ -274,7 +274,7 @@ module Shumway.AVMX.AS.flash.xml {
       source = axCoerceString(source);
       ignoreWhite = !!ignoreWhite;
 
-      var parser = new XMLParserForXMLDocument(this.sec);
+      let parser = new XMLParserForXMLDocument(this.sec);
       parser.ignoreWhitespace = ignoreWhite;
       parser.parseXml(source);
       this.queue = parser.queue;
@@ -284,11 +284,11 @@ module Shumway.AVMX.AS.flash.xml {
       if (this.queue.length === 0) {
         return XMLParserErrorCode.EndOfDocument;
       }
-      var nextItem = this.queue.shift();
+      let nextItem = this.queue.shift();
       if (typeof nextItem === 'number') {
         return nextItem;
       }
-      var parseResult = <XMLParserResult>nextItem;
+      let parseResult = <XMLParserResult>nextItem;
       tag.type = parseResult.type;
       tag.value = parseResult.value;
       tag.empty = parseResult.empty || false;

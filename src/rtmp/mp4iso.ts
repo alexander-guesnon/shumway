@@ -17,9 +17,9 @@
 module RtmpJs.MP4.Iso {
   import utf8decode = Shumway.StringUtilities.utf8decode;
 
-  var START_DATE = -2082844800000;  /* midnight after Jan. 1, 1904 */
-  var DEFAULT_MOVIE_MATRIX: number[] = [1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0];
-  var DEFAULT_OP_COLOR: number[] = [0, 0, 0];
+  let START_DATE = -2082844800000;  /* midnight after Jan. 1, 1904 */
+  let DEFAULT_MOVIE_MATRIX: number[] = [1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0];
+  let DEFAULT_OP_COLOR: number[] = [0, 0, 0];
 
   function concatArrays<T>(arg0: T[], ...args: T[][]): T[] {
     return Array.prototype.concat.apply(arg0, args);
@@ -77,7 +77,7 @@ module RtmpJs.MP4.Iso {
      */
     public layout(offset: number): number {
       this.offset = offset;
-      var size = 8;
+      let size = 8;
       if (this.userType) {
         size += 16;
       }
@@ -100,8 +100,8 @@ module RtmpJs.MP4.Iso {
     }
 
     public toUint8Array(): Uint8Array {
-      var size = this.layout(0);
-      var data = new Uint8Array(size);
+      let size = this.layout(0);
+      let data = new Uint8Array(size);
       this.write(data);
       return data;
     }
@@ -123,7 +123,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, (this.version << 24) | this.flags);
       return offset + 4;
     }
@@ -147,7 +147,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, decodeInt32(this.majorBrand));
       writeInt32(data, this.offset + offset + 4, this.minorVersion);
       offset += 8;
@@ -167,7 +167,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset);
+      let size = super.layout(offset);
       this.children.forEach((child) => {
         if (!child) {
           return; // skipping undefined
@@ -178,7 +178,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       this.children.forEach((child) => {
         if (!child) {
           return; // skipping undefined
@@ -216,7 +216,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       // Only version 0
       writeInt32(data, this.offset + offset, encodeDate(this.creationTime));
       writeInt32(data, this.offset + offset + 4, encodeDate(this.modificationTime));
@@ -277,7 +277,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       // Only version 0
       writeInt32(data, this.offset + offset, encodeDate(this.creationTime));
       writeInt32(data, this.offset + offset + 4, encodeDate(this.modificationTime));
@@ -321,7 +321,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       // Only version 0
       writeInt32(data, this.offset + offset, encodeDate(this.creationTime));
       writeInt32(data, this.offset + offset + 4, encodeDate(this.modificationTime));
@@ -346,7 +346,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, 0);
       writeInt32(data, this.offset + offset + 4, decodeInt32(this.handlerType));
       writeInt32(data, this.offset + offset + 8, 0);
@@ -371,7 +371,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, encodeFloat_8_8(this.balance) << 16);
       return offset + 4;
     }
@@ -389,14 +389,14 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, (this.graphicsMode << 16) | this.opColor[0]);
       writeInt32(data, this.offset + offset + 4, (this.opColor[1] << 16) | this.opColor[2]);
       return offset + 8;
     }
   }
 
-  export var SELF_CONTAINED_DATA_REFERENCE_FLAG = 0x000001;
+  export let SELF_CONTAINED_DATA_REFERENCE_FLAG = 0x000001;
 
   export class DataEntryUrlBox extends FullBox {
     private _encodedLocation: Uint8Array;
@@ -410,7 +410,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset);
+      let size = super.layout(offset);
       if (this._encodedLocation) {
         size += this._encodedLocation.length + 1;
       }
@@ -418,7 +418,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       if (this._encodedLocation) {
         data.set(this._encodedLocation, this.offset + offset);
         data[this.offset + offset + this._encodedLocation.length] = 0;
@@ -434,7 +434,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset) + 4;
+      let size = super.layout(offset) + 4;
       this.entries.forEach((entry) => {
         size += entry.layout(offset + size);
       });
@@ -442,7 +442,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, this.entries.length);
       this.entries.forEach((entry) => {
         offset += entry.write(data);
@@ -463,7 +463,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset);
+      let size = super.layout(offset);
       size += 4;
       this.entries.forEach((entry) => {
         size += entry.layout(offset + size);
@@ -472,7 +472,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, this.entries.length);
       offset += 4;
       this.entries.forEach((entry) => {
@@ -530,7 +530,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, this.trackId);
       writeInt32(data, this.offset + offset + 4, this.defaultSampleDescriptionIndex);
       writeInt32(data, this.offset + offset + 8, this.defaultSampleDuration);
@@ -554,7 +554,7 @@ module RtmpJs.MP4.Iso {
       super('meta', 0, 0);
     }
     public layout(offset: number): number {
-      var size = super.layout(offset);
+      let size = super.layout(offset);
       size += this.handler.layout(offset + size);
       this.otherBoxes.forEach((box) => {
         size += box.layout(offset + size);
@@ -563,7 +563,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       offset += this.handler.write(data);
       this.otherBoxes.forEach((box) => {
         offset += box.write(data);
@@ -583,7 +583,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, this.sequenceNumber);
       return offset + 4;
     }
@@ -609,8 +609,8 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset) + 4;
-      var flags = this.flags;
+      let size = super.layout(offset) + 4;
+      let flags = this.flags;
       if (!!(flags & TrackFragmentFlags.BASE_DATA_OFFSET_PRESENT)) {
         size += 8;
       }
@@ -630,8 +630,8 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
-      var flags = this.flags;
+      let offset = super.write(data);
+      let flags = this.flags;
       writeInt32(data, this.offset + offset, this.trackId);
       offset += 4;
       if (!!(flags & TrackFragmentFlags.BASE_DATA_OFFSET_PRESENT)) {
@@ -670,7 +670,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, this.baseMediaDecodeTime);
       return offset + 4;
     }
@@ -721,9 +721,9 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset) + 4;
-      var samplesCount = this.samples.length;
-      var flags = this.flags;
+      let size = super.layout(offset) + 4;
+      let samplesCount = this.samples.length;
+      let flags = this.flags;
       if (!!(flags & TrackRunFlags.DATA_OFFSET_PRESENT)) {
         size += 4;
       }
@@ -746,9 +746,9 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
-      var samplesCount = this.samples.length;
-      var flags = this.flags;
+      let offset = super.write(data);
+      let samplesCount = this.samples.length;
+      let flags = this.flags;
       writeInt32(data, this.offset + offset, samplesCount);
       offset += 4;
       if (!!(flags & TrackRunFlags.DATA_OFFSET_PRESENT)) {
@@ -759,8 +759,8 @@ module RtmpJs.MP4.Iso {
         writeInt32(data, this.offset + offset, this.firstSampleFlags);
         offset += 4;
       }
-      for (var i = 0; i < samplesCount; i++) {
-        var sample = this.samples[i];
+      for (let i = 0; i < samplesCount; i++) {
+        let sample = this.samples[i];
         if (!!(flags & TrackRunFlags.SAMPLE_DURATION_PRESENT)) {
           writeInt32(data, this.offset + offset, sample.duration);
           offset += 4;
@@ -795,13 +795,13 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset);
+      let size = super.layout(offset);
       this.chunks.forEach((chunk) => { size += chunk.length; });
       return (this.size = size);
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       this.chunks.forEach((chunk) => {
         data.set(chunk, this.offset + offset);
         offset += chunk.length;
@@ -823,7 +823,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, 0);
       writeInt32(data, this.offset + offset + 4, this.dataReferenceIndex);
       return offset + 8;
@@ -841,7 +841,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset) + 20;
+      let size = super.layout(offset) + 20;
       this.otherBoxes && this.otherBoxes.forEach((box) => {
         size += box.layout(offset + size);
       });
@@ -849,7 +849,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, 0);
       writeInt32(data, this.offset + offset + 4, 0);
       writeInt32(data, this.offset + offset + 8, (this.channelCount << 16) | this.sampleSize);
@@ -863,7 +863,7 @@ module RtmpJs.MP4.Iso {
     }
   }
 
-  export var COLOR_NO_ALPHA_VIDEO_SAMPLE_DEPTH = 0x0018;
+  export let COLOR_NO_ALPHA_VIDEO_SAMPLE_DEPTH = 0x0018;
 
   export class VideoSampleEntry extends SampleEntry {
     constructor(codingName: string,
@@ -883,7 +883,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public layout(offset: number): number {
-      var size = super.layout(offset) + 16 + 12 + 4 + 2 + 32 + 2 + 2;
+      let size = super.layout(offset) + 16 + 12 + 4 + 2 + 32 + 2 + 2;
       this.otherBoxes && this.otherBoxes.forEach((box) => {
         size += box.layout(offset + size);
       });
@@ -891,7 +891,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       writeInt32(data, this.offset + offset, 0);
       writeInt32(data, this.offset + offset + 4, 0);
       writeInt32(data, this.offset + offset + 8, 0);
@@ -905,7 +905,7 @@ module RtmpJs.MP4.Iso {
       writeInt32(data, this.offset + offset + 4, (this.frameCount << 16));
       offset += 6; // weird offset
       data[this.offset + offset] = this.compressorName.length;
-      for (var i = 0; i < 31; i++) {
+      for (let i = 0; i < 31; i++) {
         data[this.offset + offset + i + 1] = i < this.compressorName.length ? (this.compressorName.charCodeAt(i) & 127) : 0;
       }
       offset += 32;
@@ -931,7 +931,7 @@ module RtmpJs.MP4.Iso {
     }
 
     public write(data: Uint8Array): number {
-      var offset = super.write(data);
+      let offset = super.write(data);
       data.set(this.data, this.offset + offset);
       return offset + this.data.length;
     }

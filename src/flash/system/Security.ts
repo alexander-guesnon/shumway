@@ -70,22 +70,22 @@ module Shumway.AVMX.AS.flash.system {
     static get pageDomain(): string {
       release || somewhatImplemented("public flash.system.Security::get pageDomain");
       // TODO: convert this to proper URI parsing.
-      var pageHost: string = Shumway.FileLoadingService.instance.resolveUrl('/');
-      var parts = pageHost.split('/'); parts.pop();
+      let pageHost: string = Shumway.FileLoadingService.instance.resolveUrl('/');
+      let parts = pageHost.split('/'); parts.pop();
       return parts.pop();
     }
     static allowDomain(): void {
       release || somewhatImplemented('public flash.system.Security::static allowDomain ["' +
         Array.prototype.join.call(arguments, '", "') + '"]');
-      var whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
-      for (var i = 0; i < arguments.length; i++) {
+      let whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
+      for (let i = 0; i < arguments.length; i++) {
         whitelist.addToSWFLoadingWhitelist(axCoerceString(arguments[i]) || '', false, false);
       }
     }
     static allowInsecureDomain(): void {
       release || somewhatImplemented("public flash.system.Security::static allowInsecureDomain");
-      var whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
-      for (var i = 0; i < arguments.length; i++) {
+      let whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
+      for (let i = 0; i < arguments.length; i++) {
         whitelist.addToSWFLoadingWhitelist(axCoerceString(arguments[i]) || '', true, false);
       }
     }

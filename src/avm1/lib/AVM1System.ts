@@ -19,7 +19,7 @@
 module Shumway.AVM1.Lib {
   import flash = Shumway.AVMX.AS.flash;
 
-  var capabilitiesProperties = [
+  let capabilitiesProperties = [
     'avHardwareDisable', 'hasAccessibility', 'hasAudio', 'hasAudioEncoder',
     'hasEmbeddedVideo', 'hasIME', 'hasMP3', 'hasPrinting', 'hasScreenBroadcast',
     'hasScreenPlayback', 'hasStreamingAudio', 'hasStreamingVideo',
@@ -33,10 +33,10 @@ module Shumway.AVM1.Lib {
     constructor(context: AVM1Context) {
       super(context);
       this.alPrototype = context.builtins.Object.alGetPrototypeProperty();
-      var as3Capabilities = context.sec.flash.system.Capabilities.axClass;
+      let as3Capabilities = context.sec.flash.system.Capabilities.axClass;
       capabilitiesProperties.forEach((name) => {
-        var getter = { alCall: function () { return as3Capabilities.axGetPublicProperty(name); }};
-        var desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
+        let getter = { alCall: function () { return as3Capabilities.axGetPublicProperty(name); }};
+        let desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.ACCESSOR |
                                               AVM1PropertyFlags.DONT_DELETE |
                                               AVM1PropertyFlags.DONT_ENUM,
                                               null, getter);
@@ -101,12 +101,12 @@ module Shumway.AVM1.Lib {
     }
 
     public static getCapabilities(context: AVM1Context) {
-      var staticState: typeof AVM1System = context.getStaticState(AVM1System);
+      let staticState: typeof AVM1System = context.getStaticState(AVM1System);
       return staticState._capabilities;
     }
 
     public static getSecurity(context: AVM1Context) {
-      var staticState: typeof AVM1System = context.getStaticState(AVM1System);
+      let staticState: typeof AVM1System = context.getStaticState(AVM1System);
       return staticState._security;
     }
   }

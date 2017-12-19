@@ -44,24 +44,24 @@ module Shumway.Remoting.GFX {
   import IDataInput = Shumway.ArrayUtilities.IDataInput;
   import IDataOutput = Shumway.ArrayUtilities.IDataOutput;
   import assert = Shumway.Debug.assert;
-  var writer = null; // new IndentingWriter();
+  let writer = null; // new IndentingWriter();
 
-  declare var registerInspectorAsset;
-  declare var registerInspectorStage;
+  declare let registerInspectorAsset;
+  declare let registerInspectorStage;
 
   export class GFXChannelSerializer {
     public output: IDataOutput;
     public outputAssets: any [];
 
     public writeMouseEvent(event: MouseEvent, point: Point) {
-      var output = this.output;
+      let output = this.output;
       output.writeInt(MessageTag.MouseEvent);
-      var typeId = Shumway.Remoting.MouseEventNames.indexOf(event.type);
+      let typeId = Shumway.Remoting.MouseEventNames.indexOf(event.type);
       output.writeInt(typeId);
       output.writeFloat(point.x);
       output.writeFloat(point.y);
       output.writeInt(event.buttons);
-      var flags =
+      let flags =
         (event.ctrlKey ? KeyboardEventFlags.CtrlKey : 0) |
         (event.altKey ? KeyboardEventFlags.AltKey : 0) |
         (event.shiftKey ? KeyboardEventFlags.ShiftKey : 0);
@@ -69,14 +69,14 @@ module Shumway.Remoting.GFX {
     }
 
     public writeKeyboardEvent(event: KeyboardEvent) {
-      var output = this.output;
+      let output = this.output;
       output.writeInt(MessageTag.KeyboardEvent);
-      var typeId = Shumway.Remoting.KeyboardEventNames.indexOf(event.type);
+      let typeId = Shumway.Remoting.KeyboardEventNames.indexOf(event.type);
       output.writeInt(typeId);
       output.writeInt(event.keyCode);
       output.writeInt(event.charCode);
       output.writeInt(event.location);
-      var flags =
+      let flags =
         (event.ctrlKey ? KeyboardEventFlags.CtrlKey : 0) |
         (event.altKey ? KeyboardEventFlags.AltKey : 0) |
         (event.shiftKey ? KeyboardEventFlags.ShiftKey : 0);
@@ -84,7 +84,7 @@ module Shumway.Remoting.GFX {
     }
 
     public writeFocusEvent(type: FocusEventType) {
-      var output = this.output;
+      let output = this.output;
       output.writeInt(MessageTag.FocusEvent);
       output.writeInt(type);
     }
@@ -100,15 +100,15 @@ module Shumway.Remoting.GFX {
     private _context: CanvasRenderingContext2D;
 
     constructor(easelHost: Shumway.GFX.EaselHost, root: Group, transparent: boolean) {
-      var stage = this.stage = new Stage(128, 512);
+      let stage = this.stage = new Stage(128, 512);
       if (typeof registerInspectorStage !== "undefined") {
         registerInspectorStage(stage);
       }
       function updateStageBounds(node) {
-        var stageBounds = node.getBounds(true);
+        let stageBounds = node.getBounds(true);
         // Easel stage is the root stage and is not scaled, our stage is so
         // we need to scale down.
-        var ratio = easelHost.easel.getRatio();
+        let ratio = easelHost.easel.getRatio();
         stageBounds.scale(1 / ratio, 1 / ratio);
         stageBounds.snap();
         stage.setBounds(stageBounds);
@@ -142,7 +142,7 @@ module Shumway.Remoting.GFX {
       if (id === -1) {
         return null;
       }
-      var node = null;
+      let node = null;
       if (id & IDMask.Asset) {
         id &= ~IDMask.Asset;
         node = this._assets[id].wrap();
@@ -196,8 +196,8 @@ module Shumway.Remoting.GFX {
      * oncomplete callback is invoked with the image dimensions.
      */
     _decodeImage(type: ImageType, data: Uint8Array, alphaData: Uint8Array, oncomplete: (data: any) => void) {
-      var image = new Image();
-      var asset = RenderableBitmap.FromImage(image, -1, -1);
+      let image = new Image();
+      let asset = RenderableBitmap.FromImage(image, -1, -1);
       image.src = URL.createObjectURL(new Blob([data], {type: getMIMETypeForImageType(type)}));
       image.onload = function () {
         release || assert(!asset.parent);
@@ -242,10 +242,10 @@ module Shumway.Remoting.GFX {
     private static _temporaryReadColorMatrixIdentity: ColorMatrix = ColorMatrix.createIdentity();
 
     public read() {
-      var tag = 0;
-      var input = this.input;
+      let tag = 0;
+      let input = this.input;
 
-      var data = {
+      let data = {
         bytesAvailable: input.bytesAvailable,
         updateGraphics: 0,
         updateBitmapData: 0,
@@ -311,9 +311,9 @@ module Shumway.Remoting.GFX {
     }
 
     private _readMatrix(): Matrix {
-      var input = this.input;
-      var matrix = GFXChannelDeserializer._temporaryReadMatrix;
-      var a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0;
+      let input = this.input;
+      let matrix = GFXChannelDeserializer._temporaryReadMatrix;
+      let a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0;
       switch (input.readInt()) {
         case MatrixEncoding.ScaleAndTranslationOnly:
           a = input.readFloat();
@@ -341,8 +341,8 @@ module Shumway.Remoting.GFX {
     }
 
     private _readRectangle(): Rectangle {
-      var input = this.input;
-      var rectangle = GFXChannelDeserializer._temporaryReadRectangle;
+      let input = this.input;
+      let rectangle = GFXChannelDeserializer._temporaryReadRectangle;
       rectangle.setElements (
         input.readInt() / 20,
         input.readInt() / 20,
@@ -353,10 +353,10 @@ module Shumway.Remoting.GFX {
     }
 
     private _readColorMatrix(): ColorMatrix {
-      var input = this.input;
-      var colorMatrix = GFXChannelDeserializer._temporaryReadColorMatrix;
-      var rm = 1, gm = 1, bm = 1, am = 1;
-      var ro = 0, go = 0, bo = 0, ao = 0;
+      let input = this.input;
+      let colorMatrix = GFXChannelDeserializer._temporaryReadColorMatrix;
+      let rm = 1, gm = 1, bm = 1, am = 1;
+      let ro = 0, go = 0, bo = 0, ao = 0;
       switch (input.readInt()) {
         case ColorTransformEncoding.Identity:
           return GFXChannelDeserializer._temporaryReadColorMatrixIdentity;
@@ -393,36 +393,36 @@ module Shumway.Remoting.GFX {
     }
 
     private _readAsset(): any {
-      var assetId = this.input.readInt();
-      var asset = this.inputAssets[assetId];
+      let assetId = this.input.readInt();
+      let asset = this.inputAssets[assetId];
       this.inputAssets[assetId] = null;
       return asset;
     }
 
     private _readUpdateGraphics() {
-      var input = this.input;
-      var context = this.context;
-      var id = input.readInt();
-      var symbolId = input.readInt();
-      var asset = <RenderableShape>context._getAsset(id);
-      var bounds = this._readRectangle();
-      var pathData = ShapeData.FromPlainObject(this._readAsset());
-      var numTextures = input.readInt();
-      var textures = [];
-      for (var i = 0; i < numTextures; i++) {
-        var bitmapId = input.readInt();
+      let input = this.input;
+      let context = this.context;
+      let id = input.readInt();
+      let symbolId = input.readInt();
+      let asset = <RenderableShape>context._getAsset(id);
+      let bounds = this._readRectangle();
+      let pathData = ShapeData.FromPlainObject(this._readAsset());
+      let numTextures = input.readInt();
+      let textures = [];
+      for (let i = 0; i < numTextures; i++) {
+        let bitmapId = input.readInt();
         textures.push(context._getBitmapAsset(bitmapId));
       }
       if (asset) {
         asset.update(pathData, textures, bounds);
       } else {
-        var renderable: RenderableShape;
+        let renderable: RenderableShape;
         if (pathData.morphCoordinates) {
           renderable = new RenderableMorphShape(id, pathData, textures, bounds);
         } else {
           renderable = new RenderableShape(id, pathData, textures, bounds);
         }
-        for (var i = 0; i < textures.length; i++) {
+        for (let i = 0; i < textures.length; i++) {
           textures[i] && textures[i].addRenderableParent(renderable);
         }
         context._registerAsset(id, symbolId, renderable);
@@ -430,14 +430,14 @@ module Shumway.Remoting.GFX {
     }
 
     private _readUpdateBitmapData() {
-      var input = this.input;
-      var context = this.context;
-      var id = input.readInt();
-      var symbolId = input.readInt();
-      var asset = context._getBitmapAsset(id);
-      var bounds = this._readRectangle();
-      var type: ImageType = input.readInt();
-      var dataBuffer = DataBuffer.FromPlainObject(this._readAsset());
+      let input = this.input;
+      let context = this.context;
+      let id = input.readInt();
+      let symbolId = input.readInt();
+      let asset = context._getBitmapAsset(id);
+      let bounds = this._readRectangle();
+      let type: ImageType = input.readInt();
+      let dataBuffer = DataBuffer.FromPlainObject(this._readAsset());
       if (!asset) {
         asset = RenderableBitmap.FromDataBuffer(type, dataBuffer, bounds);
         context._registerAsset(id, symbolId, asset);
@@ -450,23 +450,23 @@ module Shumway.Remoting.GFX {
     }
 
     private _readUpdateTextContent() {
-      var input = this.input;
-      var context = this.context;
-      var id = input.readInt();
-      var symbolId = input.readInt();
-      var asset = context._getTextAsset(id);
-      var bounds = this._readRectangle();
-      var matrix = this._readMatrix();
-      var backgroundColor = input.readInt();
-      var borderColor = input.readInt();
-      var autoSize = input.readInt();
-      var wordWrap = input.readBoolean();
-      var scrollV = input.readInt();
-      var scrollH = input.readInt();
-      var plainText = this._readAsset();
-      var textRunData = DataBuffer.FromPlainObject(this._readAsset());
-      var coords = null;
-      var numCoords = input.readInt();
+      let input = this.input;
+      let context = this.context;
+      let id = input.readInt();
+      let symbolId = input.readInt();
+      let asset = context._getTextAsset(id);
+      let bounds = this._readRectangle();
+      let matrix = this._readMatrix();
+      let backgroundColor = input.readInt();
+      let borderColor = input.readInt();
+      let autoSize = input.readInt();
+      let wordWrap = input.readBoolean();
+      let scrollV = input.readInt();
+      let scrollH = input.readInt();
+      let plainText = this._readAsset();
+      let textRunData = DataBuffer.FromPlainObject(this._readAsset());
+      let coords = null;
+      let numCoords = input.readInt();
       if (numCoords) {
         coords = new DataBuffer(numCoords * 4);
         input.readBytes(coords, 0, numCoords * 4);
@@ -484,14 +484,14 @@ module Shumway.Remoting.GFX {
         asset.reflow(autoSize, wordWrap);
       }
       if (this.output) {
-        var rect = asset.textRect;
+        let rect = asset.textRect;
         this.output.writeInt(rect.w * 20);
         this.output.writeInt(rect.h * 20);
         this.output.writeInt(rect.x * 20);
-        var lines = asset.lines;
-        var numLines = lines.length;
+        let lines = asset.lines;
+        let numLines = lines.length;
         this.output.writeInt(numLines);
-        for (var i = 0; i < numLines; i++) {
+        for (let i = 0; i < numLines; i++) {
           this._writeLineMetrics(lines[i]);
         }
       }
@@ -507,34 +507,34 @@ module Shumway.Remoting.GFX {
     }
 
     private _readUpdateStage() {
-      var context = this.context;
-      var id = this.input.readInt();
+      let context = this.context;
+      let id = this.input.readInt();
       if (!context._nodes[id]) {
         context._nodes[id] = context.stage.content;
       }
-      var color = this.input.readInt();
-      var bounds = this._readRectangle();
+      let color = this.input.readInt();
+      let bounds = this._readRectangle();
       // TODO: Need to updateContentMatrix on stage here.
       context.stage.content.setBounds(bounds);
       context.stage.color = Color.FromARGB(color);
       context.stage.align = this.input.readInt();
       context.stage.scaleMode = this.input.readInt();
-      var displayState = this.input.readInt();
+      let displayState = this.input.readInt();
       context._easelHost.fullscreen = displayState === 0 || displayState === 1;
     }
 
     private _readUpdateCurrentMouseTarget() {
-      var context = this.context;
-      var currentMouseTarget = this.input.readInt();
-      var cursor = this.input.readInt();
+      let context = this.context;
+      let currentMouseTarget = this.input.readInt();
+      let cursor = this.input.readInt();
       context._easelHost.cursor = Shumway.UI.toCSSCursor(cursor);
     }
 
     private _readUpdateNetStream() {
-      var context = this.context;
-      var id = this.input.readInt();
-      var asset = context._getVideoAsset(id);
-      var rectangle = this._readRectangle();
+      let context = this.context;
+      let id = this.input.readInt();
+      let asset = context._getVideoAsset(id);
+      let rectangle = this._readRectangle();
       if (!asset) {
         context.registerVideo(id);
         asset = context._getVideoAsset(id);
@@ -543,12 +543,12 @@ module Shumway.Remoting.GFX {
     }
 
     private _readFilters(node: Node) {
-      var input = this.input;
-      var count = input.readInt();
-      var filters = [];
+      let input = this.input;
+      let count = input.readInt();
+      let filters = [];
       if (count) {
-        for (var i = 0; i < count; i++) {
-          var type: FilterType = input.readInt();
+        for (let i = 0; i < count; i++) {
+          let type: FilterType = input.readInt();
           switch (type) {
             case FilterType.Blur:
               filters.push(new BlurFilter (
@@ -573,7 +573,7 @@ module Shumway.Remoting.GFX {
               ));
               break;
             case FilterType.ColorMatrix:
-              var matrix = new Float32Array(20);
+              let matrix = new Float32Array(20);
               matrix[0] = input.readFloat();
               matrix[4] = input.readFloat();
               matrix[8] = input.readFloat();
@@ -606,16 +606,16 @@ module Shumway.Remoting.GFX {
     }
 
     private _readUpdateFrame() {
-      var input = this.input;
-      var context = this.context;
-      var id = input.readInt();
-      var ratio = 0;
+      let input = this.input;
+      let context = this.context;
+      let id = input.readInt();
+      let ratio = 0;
       writer && writer.writeLn("Receiving UpdateFrame: " + id);
-      var node = context._nodes[id];
+      let node = context._nodes[id];
       if (!node) {
         node = context._nodes[id] = new Group();
       }
-      var hasBits = input.readInt();
+      let hasBits = input.readInt();
       if (hasBits & MessageBits.HasMatrix) {
         node.getTransform().setMatrix(this._readMatrix());
       }
@@ -623,7 +623,7 @@ module Shumway.Remoting.GFX {
         node.getTransform().setColorMatrix(this._readColorMatrix());
       }
       if (hasBits & MessageBits.HasMask) {
-        var maskId = input.readInt();
+        let maskId = input.readInt();
         node.getLayer().mask = maskId >= 0 ? context._makeNode(maskId) : null;
       }
       if (hasBits & MessageBits.HasClip) {
@@ -640,19 +640,19 @@ module Shumway.Remoting.GFX {
         node.toggleFlags(NodeFlags.ImageSmoothing, !!input.readInt());
       }
       if (hasBits & MessageBits.HasChildren) {
-        var count = input.readInt();
-        var container = <Group>node;
+        let count = input.readInt();
+        let container = <Group>node;
         container.clearChildren();
-        for (var i = 0; i < count; i++) {
-          var childId = input.readInt();
-          var child = context._makeNode(childId);
+        for (let i = 0; i < count; i++) {
+          let childId = input.readInt();
+          let child = context._makeNode(childId);
           release || assert (child, "Child " + childId + " of " + id + " has not been sent yet.");
           container.addChild(child);
         }
       }
       if (ratio) {
-        var group = <Group>node;
-        var child = group.getChildren()[0];
+        let group = <Group>node;
+        let child = group.getChildren()[0];
         if (child instanceof Shape) {
           child.ratio = ratio;
         }
@@ -660,14 +660,14 @@ module Shumway.Remoting.GFX {
     }
 
     private _readDrawToBitmap() {
-      var input = this.input;
-      var context = this.context;
-      var targetId = input.readInt();
-      var sourceId = input.readInt();
-      var hasBits = input.readInt();
-      var matrix;
-      var colorMatrix;
-      var clipRect;
+      let input = this.input;
+      let context = this.context;
+      let targetId = input.readInt();
+      let sourceId = input.readInt();
+      let hasBits = input.readInt();
+      let matrix;
+      let colorMatrix;
+      let clipRect;
       if (hasBits & MessageBits.HasMatrix) {
         matrix = this._readMatrix().clone();
       } else {
@@ -679,10 +679,10 @@ module Shumway.Remoting.GFX {
       if (hasBits & MessageBits.HasClipRect) {
         clipRect = this._readRectangle();
       }
-      var blendMode = input.readInt();
+      let blendMode = input.readInt();
       input.readBoolean(); // Smoothing
-      var target = context._getBitmapAsset(targetId);
-      var source = context._makeNode(sourceId);
+      let target = context._getBitmapAsset(targetId);
+      let source = context._makeNode(sourceId);
       if (!target) {
         context._registerAsset(targetId, -1, RenderableBitmap.FromNode(source, matrix, colorMatrix, blendMode, clipRect));
       } else {
@@ -691,11 +691,11 @@ module Shumway.Remoting.GFX {
     }
 
     private _readRequestBitmapData() {
-      var input = this.input;
-      var output = this.output;
-      var context = this.context;
-      var id = input.readInt();
-      var renderableBitmap = context._getBitmapAsset(id);
+      let input = this.input;
+      let output = this.output;
+      let context = this.context;
+      let id = input.readInt();
+      let renderableBitmap = context._getBitmapAsset(id);
       renderableBitmap.readImageData(output);
     }
   }

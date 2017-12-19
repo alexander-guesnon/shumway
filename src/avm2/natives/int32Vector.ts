@@ -46,8 +46,8 @@ module Shumway.AVMX.AS {
     static RETURNINDEXEDARRAY = 8;
 
     static classInitializer() {
-      var proto: any = this.dPrototype;
-      var tProto: any = this.tPrototype;
+      let proto: any = this.dPrototype;
+      let tProto: any = this.tPrototype;
 
       // Fix up MOP handlers to not apply to the dynamic prototype, which is a plain object.
       tProto.axGetProperty = proto.axGetProperty;
@@ -68,7 +68,7 @@ module Shumway.AVMX.AS {
       proto.axNextNameIndex = ASObject.prototype.axNextNameIndex;
       proto.axNextValue = ASObject.prototype.axNextValue;
 
-      var asProto: any = Int32Vector.prototype;
+      let asProto: any = Int32Vector.prototype;
       defineNonEnumerableProperty(proto, '$Bgjoin', asProto.join);
       // Same as join, see VectorImpl.as in Tamarin repository.
       defineNonEnumerableProperty(proto, '$BgtoString', asProto.join);
@@ -114,14 +114,14 @@ module Shumway.AVMX.AS {
     }
 
     static axApply(_: AXObject, args: any[]) {
-      var object = args[0];
+      let object = args[0];
       if (this.axIsType(object)) {
         return object;
       }
-      var length = object.axGetPublicProperty("length");
+      let length = object.axGetPublicProperty("length");
       if (length !== undefined) {
-        var v = this.axConstruct([length, false]);
-        for (var i = 0; i < length; i++) {
+        let v = this.axConstruct([length, false]);
+        for (let i = 0; i < length; i++) {
           v.axSetNumericProperty(i, object.axGetPublicProperty(i));
         }
         return v;
@@ -130,10 +130,10 @@ module Shumway.AVMX.AS {
     }
 
     internalToString() {
-      var str = "";
-      var start = this._offset;
-      var end = start + this._length;
-      for (var i = 0; i < this._buffer.length; i++) {
+      let str = "";
+      let start = this._offset;
+      let end = start + this._length;
+      for (let i = 0; i < this._buffer.length; i++) {
         if (i === start) {
           str += "[";
         }
@@ -152,8 +152,8 @@ module Shumway.AVMX.AS {
     }
 
     toString() {
-      var str = "";
-      for (var i = 0; i < this._length; i++) {
+      let str = "";
+      for (let i = 0; i < this._length; i++) {
         str += this._buffer[this._offset + i];
         if (i < this._length - 1) {
           str += ",";
@@ -163,8 +163,8 @@ module Shumway.AVMX.AS {
     }
 
     toLocaleString() {
-      var str = "";
-      for (var i = 0; i < this._length; i++) {
+      let str = "";
+      for (let i = 0; i < this._length; i++) {
         str += this._buffer[this._offset + i];
         if (i < this._length - 1) {
           str += ",";
@@ -180,32 +180,32 @@ module Shumway.AVMX.AS {
     }
 
     _ensureCapacity(length) {
-      var minCapacity = this._offset + length;
+      let minCapacity = this._offset + length;
       if (minCapacity < this._buffer.length) {
         return;
       }
       if (length <= this._buffer.length) {
         // New length exceeds bounds at current offset but fits in the buffer, so we center it.
-        var offset = (this._buffer.length - length) >> 2;
+        let offset = (this._buffer.length - length) >> 2;
         this._buffer.set(this._view(), offset);
         this._offset = offset;
         return;
       }
       // New length doesn't fit at all, resize buffer.
-      var oldCapacity = this._buffer.length;
-      var newCapacity = ((oldCapacity * 3) >> 1) + 1;
+      let oldCapacity = this._buffer.length;
+      let newCapacity = ((oldCapacity * 3) >> 1) + 1;
       if (newCapacity < minCapacity) {
         newCapacity = minCapacity;
       }
-      var buffer = new Int32Array(newCapacity);
+      let buffer = new Int32Array(newCapacity);
       buffer.set(this._buffer, 0);
       this._buffer = buffer;
     }
 
     concat() {
-      var length = this._length;
-      for (var i = 0; i < arguments.length; i++) {
-        var vector: Int32Vector = arguments[i];
+      let length = this._length;
+      for (let i = 0; i < arguments.length; i++) {
+        let vector: Int32Vector = arguments[i];
         if (!(vector._buffer instanceof Int32Array)) {
           assert(false); // TODO
           // this.sec.throwError('TypeError', Errors.CheckTypeFailedError,
@@ -213,12 +213,12 @@ module Shumway.AVMX.AS {
         }
         length += vector._length;
       }
-      var result = new this.sec.Int32Vector(length);
-      var buffer = result._buffer;
+      let result = new this.sec.Int32Vector(length);
+      let buffer = result._buffer;
       buffer.set(this._buffer);
-      var offset = this._length;
-      for (var i = 0; i < arguments.length; i++) {
-        var vector: Int32Vector = arguments[i];
+      let offset = this._length;
+      for (let i = 0; i < arguments.length; i++) {
+        let vector: Int32Vector = arguments[i];
         if (offset + vector._buffer.length < vector._buffer.length) {
           buffer.set(vector._buffer, offset);
         } else {
@@ -238,7 +238,7 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return true;
       }
-      for (var i = 0; i < this._length; i++) {
+      for (let i = 0; i < this._length; i++) {
         if (!callback.call(thisObject, this._buffer[this._offset + i], i, this)) {
           return false;
         }
@@ -252,11 +252,11 @@ module Shumway.AVMX.AS {
      * |thisObject| as |this| for each of the elements in the vector.
      */
     filter(callback, thisObject) {
-      var v = new this.sec.Int32Vector();
+      let v = new this.sec.Int32Vector();
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return v;
       }
-      for (var i = 0; i < this._length; i++) {
+      for (let i = 0; i < this._length; i++) {
         if (callback.call(thisObject, this._buffer[this._offset + i], i, this)) {
           v.push(this._buffer[this._offset + i]);
         }
@@ -265,11 +265,11 @@ module Shumway.AVMX.AS {
     }
 
     map(callback, thisObject) {
-      var v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
+      let v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return v;
       }
-      for (var i = 0; i < this._length; i++) {
+      for (let i = 0; i < this._length; i++) {
         v[i] = callback.call(thisObject, this._buffer[this._offset + i], i, this);
       }
       return v;
@@ -279,7 +279,7 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return false;
       }
-      for (var i = 0; i < this._length; i++) {
+      for (let i = 0; i < this._length; i++) {
         if (callback.call(thisObject, this._buffer[this._offset + i], i, this)) {
           return true;
         }
@@ -291,17 +291,17 @@ module Shumway.AVMX.AS {
       if (!this.checkVectorMethodArgs(callback, thisObject)) {
         return;
       }
-      for (var i = 0; i < this._length; i++) {
+      for (let i = 0; i < this._length; i++) {
         callback.call(thisObject, this._buffer[this._offset + i], i, this);
       }
     }
 
     join(separator: string = ',') {
-      var limit = this.length;
-      var buffer = this._buffer;
-      var offset = this._offset;
-      var result = "";
-      for (var i = 0; i < limit - 1; i++) {
+      let limit = this.length;
+      let buffer = this._buffer;
+      let offset = this._offset;
+      let result = "";
+      for (let i = 0; i < limit - 1; i++) {
         result += buffer[offset + i] + separator;
       }
       if (limit > 0) {
@@ -311,8 +311,8 @@ module Shumway.AVMX.AS {
     }
 
     indexOf(searchElement, fromIndex = 0) {
-      var length = this._length;
-      var start = fromIndex|0;
+      let length = this._length;
+      let start = fromIndex|0;
       if (start < 0) {
         start = start + length;
         if (start < 0) {
@@ -321,12 +321,12 @@ module Shumway.AVMX.AS {
       } else if (start >= length) {
         return -1;
       }
-      var buffer = this._buffer;
-      var length = this._length;
-      var offset = this._offset;
+      let buffer = this._buffer;
+      let length = this._length;
+      let offset = this._offset;
       start += offset;
-      var end = offset + length;
-      for (var i = start; i < end; i++) {
+      let end = offset + length;
+      for (let i = start; i < end; i++) {
         if (buffer[i] === searchElement) {
           return i - offset;
         }
@@ -335,8 +335,8 @@ module Shumway.AVMX.AS {
     }
 
     lastIndexOf(searchElement, fromIndex = 0x7fffffff) {
-      var length = this._length;
-      var start = fromIndex|0;
+      let length = this._length;
+      let start = fromIndex|0;
       if (start < 0) {
         start = start + length;
         if (start < 0) {
@@ -345,11 +345,11 @@ module Shumway.AVMX.AS {
       } else if (start >= length) {
         start = length;
       }
-      var buffer = this._buffer;
-      var offset = this._offset;
+      let buffer = this._buffer;
+      let offset = this._offset;
       start += offset;
-      var end = offset;
-      for (var i = start; i-- > end;) {
+      let end = offset;
+      for (let i = start; i-- > end;) {
         if (buffer[i] === searchElement) {
           return i - offset;
         }
@@ -360,7 +360,7 @@ module Shumway.AVMX.AS {
     push(arg1?, arg2?, arg3?, arg4?, arg5?, arg6?, arg7?, arg8?/*...rest*/) {
       this._checkFixed();
       this._ensureCapacity(this._length + arguments.length);
-      for (var i = 0; i < arguments.length; i++) {
+      for (let i = 0; i < arguments.length; i++) {
         this._buffer[this._offset + this._length++] = arguments[i];
       }
     }
@@ -376,11 +376,11 @@ module Shumway.AVMX.AS {
     }
 
     reverse() {
-      var l = this._offset;
-      var r = this._offset + this._length - 1;
-      var b = this._buffer;
+      let l = this._offset;
+      let r = this._offset + this._length - 1;
+      let b = this._buffer;
       while (l < r) {
-        var t = b[l];
+        let t = b[l];
         b[l] = b[r];
         b[r] = t;
         l ++;
@@ -398,7 +398,7 @@ module Shumway.AVMX.AS {
         Array.prototype.sort.call(this._view(), sortBehavior.value);
         return this;
       }
-      var options = sortBehavior | 0;
+      let options = sortBehavior | 0;
       release || assertNotImplemented(!(options & Int32Vector.UNIQUESORT), "UNIQUESORT");
       release || assertNotImplemented(!(options & Int32Vector.RETURNINDEXEDARRAY),
                                       "RETURNINDEXEDARRAY");
@@ -428,43 +428,43 @@ module Shumway.AVMX.AS {
       this._slide(arguments.length);
       this._offset -= arguments.length;
       this._length += arguments.length;
-      for (var i = 0; i < arguments.length; i++) {
+      for (let i = 0; i < arguments.length; i++) {
         this._buffer[this._offset + i] = arguments[i];
       }
     }
 
     slice(start = 0, end = 0x7fffffff) {
-      var buffer = this._buffer;
-      var length = this._length;
-      var first = Math.min(Math.max(start, 0), length);
-      var last = Math.min(Math.max(end, first), length);
-      var result = new this.sec.Int32Vector(last - first, this.fixed);
+      let buffer = this._buffer;
+      let length = this._length;
+      let first = Math.min(Math.max(start, 0), length);
+      let last = Math.min(Math.max(end, first), length);
+      let result = new this.sec.Int32Vector(last - first, this.fixed);
       result._buffer.set(buffer.subarray(this._offset + first, this._offset + last),
                          result._offset);
       return result;
     }
 
     splice(start: number, deleteCount_: number /*, ...items: number[] */) {
-      var buffer = this._buffer;
-      var length = this._length;
-      var first = Math.min(Math.max(start, 0), length);
-      var startOffset = this._offset + first;
+      let buffer = this._buffer;
+      let length = this._length;
+      let first = Math.min(Math.max(start, 0), length);
+      let startOffset = this._offset + first;
 
-      var deleteCount = Math.min(Math.max(deleteCount_, 0), length - first);
-      var insertCount = arguments.length - 2;
-      var deletedItems;
+      let deleteCount = Math.min(Math.max(deleteCount_, 0), length - first);
+      let insertCount = arguments.length - 2;
+      let deletedItems;
 
-      var result = new this.sec.Int32Vector(deleteCount, this.fixed);
+      let result = new this.sec.Int32Vector(deleteCount, this.fixed);
       if (deleteCount > 0) {
         deletedItems = buffer.subarray(startOffset, startOffset + deleteCount);
         result._buffer.set(deletedItems, result._offset);
       }
       this._ensureCapacity(length - deleteCount + insertCount);
-      var right = startOffset + deleteCount;
-      var slice = buffer.subarray(right, length);
+      let right = startOffset + deleteCount;
+      let slice = buffer.subarray(right, length);
       buffer.set(slice, startOffset + insertCount);
       this._length += insertCount - deleteCount;
-      for (var i = 0; i < insertCount; i++) {
+      for (let i = 0; i < insertCount; i++) {
         buffer[startOffset + i] = arguments[i + 2];
       }
 
@@ -484,7 +484,7 @@ module Shumway.AVMX.AS {
       value = value >>> 0;
       if (value > this._length) {
         this._ensureCapacity(value);
-        for (var i = this._offset + this._length, j = this._offset + value; i < j; i++) {
+        for (let i = this._offset + this._length, j = this._offset + value; i < j; i++) {
           this._buffer[i] = Int32Vector.DEFAULT_VALUE;
         }
       }
@@ -507,8 +507,8 @@ module Shumway.AVMX.AS {
 
     axGetNumericProperty(nm: number) {
       release || assert(isNumeric(nm));
-      var length = this._length;
-      var idx = nm | 0;
+      let length = this._length;
+      let idx = nm | 0;
       if (idx < 0 || idx >= length || idx != nm) {
         this.sec.throwError("RangeError", Errors.OutOfRangeError, nm, length);
       }
@@ -517,8 +517,8 @@ module Shumway.AVMX.AS {
 
     axSetNumericProperty(nm: number, v: any) {
       release || assert(isNumeric(nm));
-      var length = this._length;
-      var idx = nm | 0;
+      let length = this._length;
+      let idx = nm | 0;
       if (idx < 0 || idx > length || idx != nm || (idx === length && this._fixed)) {
         this.sec.throwError("RangeError", Errors.OutOfRangeError, nm, length);
       }
@@ -535,9 +535,9 @@ module Shumway.AVMX.AS {
         release || assert(mn.isRuntimeName());
         return mn.name >= 0 && mn.name < this._length;
       }
-      var name = axCoerceName(mn.name);
+      let name = axCoerceName(mn.name);
       if (mn.isRuntimeName() && isIndex(name)) {
-        var index = <any>name >>> 0;
+        let index = <any>name >>> 0;
         return index >= 0 && index < this._length;
       }
       return this.axResolveMultiname(mn) in this;
@@ -548,7 +548,7 @@ module Shumway.AVMX.AS {
     }
 
     axNextNameIndex(index: number): number {
-      var nextNameIndex = index + 1;
+      let nextNameIndex = index + 1;
       if (nextNameIndex <= this._length) {
         return nextNameIndex;
       }

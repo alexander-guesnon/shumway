@@ -29,6 +29,6 @@
 ///<reference path='remoting.ts' />
 ///<reference path='external.ts' />
 
-var throwError: (className: string, error: any, replacement1?: any,
+let throwError: (className: string, error: any, replacement1?: any,
                  replacement2?: any, replacement3?: any, replacement4?: any) => void;
-var Errors: any;
+let Errors: any;

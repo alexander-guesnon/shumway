@@ -22,7 +22,7 @@ module Shumway.Shell {
     }
   }
   
-  var jsGlobal = (function() { return this || (1, eval)('this//# sourceURL=jsGlobal-getter'); })();
+  let jsGlobal = (function() { return this || (1, eval)('this//# sourceURL=jsGlobal-getter'); })();
 
   export class MicroTasksQueue {
     private tasks: MicroTask[] = [];
@@ -38,21 +38,21 @@ module Shumway.Shell {
     }
 
     public scheduleInterval(fn: () => any, args: any[], interval: number, repeat: boolean) {
-      var MIN_INTERVAL = 4;
+      let MIN_INTERVAL = 4;
       interval = Math.round((interval || 0)/10) * 10;
       if (interval < MIN_INTERVAL) {
         interval = MIN_INTERVAL;
       }
-      var taskId = this.nextId++;
-      var task = new MicroTask(taskId, fn, args, interval, repeat);
+      let taskId = this.nextId++;
+      let task = new MicroTask(taskId, fn, args, interval, repeat);
       this.enqueue(task);
       return task;
     }
 
     public enqueue(task: MicroTask) {
-      var tasks = this.tasks;
+      let tasks = this.tasks;
       task.runAt = this.time + task.interval;
-      var i = tasks.length;
+      let i = tasks.length;
       while (i > 0 && tasks[i - 1].runAt > task.runAt) {
         i--;
       }
@@ -64,14 +64,14 @@ module Shumway.Shell {
     }
 
     public dequeue(): MicroTask {
-      var task = this.tasks.shift();
+      let task = this.tasks.shift();
       this.time = task.runAt;
       return task;
     }
 
     public remove(id: number) {
-      var tasks = this.tasks;
-      for (var i = 0; i < tasks.length; i++) {
+      let tasks = this.tasks;
+      for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].id === id) {
           tasks.splice(i, 1);
           return;
@@ -92,8 +92,8 @@ module Shumway.Shell {
      */
     run(duration: number = 0, count: number = 0, clear: boolean = false, preCallback: Function = null) {
       this.stopped = false;
-      var executedTasks = 0;
-      var stopAt = Date.now() + duration;
+      let executedTasks = 0;
+      let stopAt = Date.now() + duration;
       while (!this.isEmpty && !this.stopped) {
         if (duration > 0 && Date.now() >= stopAt) {
           break;
@@ -101,7 +101,7 @@ module Shumway.Shell {
         if (count > 0 && executedTasks >= count) {
           break;
         }
-        var task = this.dequeue();
+        let task = this.dequeue();
         if (preCallback && !preCallback(task)) {
           return;
         }

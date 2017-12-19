@@ -37,8 +37,8 @@ module Shumway.AVM1.Lib {
       }
       try {
         context.sec.flash.external.ExternalInterface.axClass.addCallback(methodName, function () {
-          var args = Array.prototype.slice.call(arguments, 0);
-          var result = context.executeFunction(method, instance, args);
+          let args = Array.prototype.slice.call(arguments, 0);
+          let result = context.executeFunction(method, instance, args);
           return result;
         });
         return true;
@@ -48,13 +48,13 @@ module Shumway.AVM1.Lib {
     }
 
     public static call(context: AVM1Context, methodName: string, ...parameters: any[]): any {
-      var args = [alCoerceString(context, methodName)];
-      for (var i = 0; i < parameters.length; i++) {
+      let args = [alCoerceString(context, methodName)];
+      for (let i = 0; i < parameters.length; i++) {
         // TODO convert AVM1 objects to AVM2
         args.push(parameters[i]);
       }
       try {
-        var result = context.sec.flash.external.ExternalInterface.axClass.call.apply(
+        let result = context.sec.flash.external.ExternalInterface.axClass.call.apply(
           context.sec.flash.external.ExternalInterface.axClass, args);
         // TODO convert AVM2 result to AVM1
         return result;

@@ -30,12 +30,12 @@ module Shumway.AVM1.Lib {
     }
 
     public static initialize(context: AVM1Context, obj: AVM1Object): void {
-      var desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
+      let desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
                                             new Natives.AVM1ArrayNative(context, []));
       obj.alSetOwnProperty('_listeners', desc);
       desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
                                         new AVM1NativeFunction(context, function broadcastMessage(eventName: string, ...args): void {
-                                          var listenersField = this.alGet('_listeners');
+                                          let listenersField = this.alGet('_listeners');
                                           if (!(listenersField instanceof Natives.AVM1ArrayNative)) {
                                             return;
                                           }
@@ -44,11 +44,11 @@ module Shumway.AVM1.Lib {
       obj.alSetOwnProperty('broadcastMessage', desc);
       desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
                                         new AVM1NativeFunction(context, function addListener(listener: any): boolean {
-                                          var listenersField = this.alGet('_listeners');
+                                          let listenersField = this.alGet('_listeners');
                                           if (!(listenersField instanceof Natives.AVM1ArrayNative)) {
                                             return false;
                                           }
-                                          var listeners: any[] = (<Natives.AVM1ArrayNative>listenersField).value;
+                                          let listeners: any[] = (<Natives.AVM1ArrayNative>listenersField).value;
                                           listeners.push(listener);
                                           _updateAllSymbolEvents(<any>this);
                                           return true;
@@ -56,12 +56,12 @@ module Shumway.AVM1.Lib {
       obj.alSetOwnProperty('addListener', desc);
       desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
                                         new AVM1NativeFunction(context, function removeListener(listener: any): boolean {
-                                          var listenersField = this.alGet('_listeners');
+                                          let listenersField = this.alGet('_listeners');
                                           if (!(listenersField instanceof Natives.AVM1ArrayNative)) {
                                             return false;
                                           }
-                                          var listeners: any[] = (<Natives.AVM1ArrayNative>listenersField).value;
-                                          var i = listeners.indexOf(listener);
+                                          let listeners: any[] = (<Natives.AVM1ArrayNative>listenersField).value;
+                                          let i = listeners.indexOf(listener);
                                           if (i < 0) {
                                             return false;
                                           }

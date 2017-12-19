@@ -47,7 +47,7 @@ module Shumway.Tools.Profiler {
     }
 
     createProfile(buffers: TimelineBuffer [], startTime: number): Profile {
-      var profile = new Profile(buffers, startTime);
+      let profile = new Profile(buffers, startTime);
       profile.createSnapshots();
       this._profiles.push(profile);
       this.activateProfile(profile);
@@ -118,7 +118,7 @@ module Shumway.Tools.Profiler {
 
     private _createViews() {
       if (this._activeProfile) {
-        var self = this;
+        let self = this;
         this._overviewHeader = new Profiler.FlameChartHeader(this, FlameChartHeaderType.OVERVIEW);
         this._overview = new Profiler.FlameChartOverview(this, FlameChartOverviewMode.OVERLAY);
         this._activeProfile.forEachSnapshot(function (snapshot:TimelineBufferSnapshot, index:number) {
@@ -145,9 +145,9 @@ module Shumway.Tools.Profiler {
 
     private _initializeViews() {
       if (this._activeProfile) {
-        var self = this;
-        var startTime = this._activeProfile.startTime;
-        var endTime = this._activeProfile.endTime;
+        let self = this;
+        let startTime = this._activeProfile.startTime;
+        let endTime = this._activeProfile.endTime;
         this._overviewHeader.initialize(startTime, endTime);
         this._overview.initialize(startTime, endTime);
         this._activeProfile.forEachSnapshot(function (snapshot:TimelineBufferSnapshot, index:number) {
@@ -159,8 +159,8 @@ module Shumway.Tools.Profiler {
 
     private _onResize() {
       if (this._activeProfile) {
-        var self = this;
-        var width = this._container.offsetWidth;
+        let self = this;
+        let width = this._container.offsetWidth;
         this._overviewHeader.setSize(width);
         this._overview.setSize(width);
         this._activeProfile.forEachSnapshot(function (snapshot:TimelineBufferSnapshot, index:number) {
@@ -172,9 +172,9 @@ module Shumway.Tools.Profiler {
 
     private _updateViews() {
       if (this._activeProfile) {
-        var self = this;
-        var start = this._activeProfile.windowStart;
-        var end = this._activeProfile.windowEnd;
+        let self = this;
+        let start = this._activeProfile.windowStart;
+        let end = this._activeProfile.windowEnd;
         this._overviewHeader.setWindow(start, end);
         this._overview.setWindow(start, end);
         this._activeProfile.forEachSnapshot(function (snapshot:TimelineBufferSnapshot, index:number) {
@@ -186,7 +186,7 @@ module Shumway.Tools.Profiler {
 
     private _drawViews() {
       /*
-      var self = this;
+      let self = this;
       this._overviewHeader.draw();
       this._overview.setWindow(start, end);
       this._profile.forEachBuffer(function(buffer: TimelineBufferSnapshot, index: number) {
@@ -197,7 +197,7 @@ module Shumway.Tools.Profiler {
     }
 
     private _createTooltip() {
-      var el = document.createElement("div");
+      let el = document.createElement("div");
       el.classList.add("profiler-tooltip");
       el.style.display = "none";
       this._container.insertBefore(el, this._container.firstChild);
@@ -223,10 +223,10 @@ module Shumway.Tools.Profiler {
       this.removeTooltipContent();
       this._tooltip.appendChild(this.createTooltipContent(chart, frame));
       this._tooltip.style.display = "block";
-      var elContent = <HTMLElement>this._tooltip.firstChild;
-      var tooltipWidth = elContent.clientWidth;
-      var tooltipHeight = elContent.clientHeight;
-      var totalWidth = chart.canvas.clientWidth;
+      let elContent = <HTMLElement>this._tooltip.firstChild;
+      let tooltipWidth = elContent.clientWidth;
+      let tooltipHeight = elContent.clientHeight;
+      let totalWidth = chart.canvas.clientWidth;
       x += (x + tooltipWidth >= totalWidth - 50) ? -(tooltipWidth + 20) : 25;
       y += chart.canvas.offsetTop - tooltipHeight / 2;
       this._tooltip.style.left = x + "px";
@@ -238,38 +238,38 @@ module Shumway.Tools.Profiler {
     }
 
     createTooltipContent(chart: FlameChart, frame: TimelineFrame): HTMLElement {
-      var totalTime = Math.round(frame.totalTime * 100000) / 100000;
-      var selfTime = Math.round(frame.selfTime * 100000) / 100000;
-      var selfPercent = Math.round(frame.selfTime * 100 * 100 / frame.totalTime) / 100;
+      let totalTime = Math.round(frame.totalTime * 100000) / 100000;
+      let selfTime = Math.round(frame.selfTime * 100000) / 100000;
+      let selfPercent = Math.round(frame.selfTime * 100 * 100 / frame.totalTime) / 100;
 
-      var elContent = document.createElement("div");
+      let elContent = document.createElement("div");
 
-      var elName = document.createElement("h1");
+      let elName = document.createElement("h1");
       elName.textContent = frame.kind.name;
       elContent.appendChild(elName);
 
-      var elTotalTime = document.createElement("p");
+      let elTotalTime = document.createElement("p");
       elTotalTime.textContent = "Total: " + totalTime + " ms";
       elContent.appendChild(elTotalTime);
 
-      var elSelfTime = document.createElement("p");
+      let elSelfTime = document.createElement("p");
       elSelfTime.textContent = "Self: " + selfTime + " ms (" + selfPercent + "%)";
       elContent.appendChild(elSelfTime);
 
-      var statistics = chart.getStatistics(frame.kind);
+      let statistics = chart.getStatistics(frame.kind);
 
       if (statistics) {
-        var elAllCount = document.createElement("p");
+        let elAllCount = document.createElement("p");
         elAllCount.textContent = "Count: " + statistics.count;
         elContent.appendChild(elAllCount);
 
-        var allTotalTime = Math.round(statistics.totalTime * 100000) / 100000;
-        var elAllTotalTime = document.createElement("p");
+        let allTotalTime = Math.round(statistics.totalTime * 100000) / 100000;
+        let elAllTotalTime = document.createElement("p");
         elAllTotalTime.textContent = "All Total: " + allTotalTime + " ms";
         elContent.appendChild(elAllTotalTime);
 
-        var allSelfTime = Math.round(statistics.selfTime * 100000) / 100000;
-        var elAllSelfTime = document.createElement("p");
+        let allSelfTime = Math.round(statistics.selfTime * 100000) / 100000;
+        let elAllSelfTime = document.createElement("p");
         elAllSelfTime.textContent = "All Self: " + allSelfTime + " ms";
         elContent.appendChild(elAllSelfTime);
       }
@@ -283,9 +283,9 @@ module Shumway.Tools.Profiler {
     appendDataElements(el: HTMLElement, data: any) {
       if (!isNullOrUndefined(data)) {
         el.appendChild(document.createElement("hr"));
-        var elData:HTMLElement;
+        let elData:HTMLElement;
         if (isObject(data)) {
-          for (var key in data) {
+          for (let key in data) {
             elData = document.createElement("p");
             elData.textContent = key + ": " + data[key];
             el.appendChild(elData);
@@ -299,7 +299,7 @@ module Shumway.Tools.Profiler {
     }
 
     removeTooltipContent() {
-      var el = this._tooltip;
+      let el = this._tooltip;
       while (el.firstChild) {
         el.removeChild(el.firstChild);
       }

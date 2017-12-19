@@ -50,20 +50,20 @@ module Shumway.AVMX.AS.flash.external {
 
     static call(functionName: string) {
       this.ensureInitialized();
-      var argsExpr: String = '';
+      let argsExpr: String = '';
       if (arguments.length > 1) {
-        var args = [];
-        for (var i = 1; i < arguments.length; i++) {
+        let args = [];
+        for (let i = 1; i < arguments.length; i++) {
           args.push(this.convertToJSString(arguments[i]));
         }
         argsExpr = args.join(',');
       }
-      var catchExpr = this.$BgmarshallExceptions ?
+      let catchExpr = this.$BgmarshallExceptions ?
                       '"<exception>" + e + "</exception>";' :
                       '"<undefined/>";';
-      var evalExpr = 'try {' + '__flash__toXML(' + functionName + '(' + argsExpr + '));' +
+      let evalExpr = 'try {' + '__flash__toXML(' + functionName + '(' + argsExpr + '));' +
                      '} catch (e) {' + catchExpr + '}';
-      var result = this._evalJS(evalExpr);
+      let result = this._evalJS(evalExpr);
       if (result == null) {
         return null;
       }
@@ -77,14 +77,14 @@ module Shumway.AVMX.AS.flash.external {
         return;
       }
 
-      var self = this;
+      let self = this;
 
       this._addCallback(functionName, function (request: string, args: any[]) {
-        var returnAsJS: Boolean = true;
+        let returnAsJS: Boolean = true;
         if (args) {
-          var wrappedArgs = [];
-          for (var i = 0; i < args.length; i++) {
-            var arg = args[i];
+          let wrappedArgs = [];
+          for (let i = 0; i < args.length; i++) {
+            let arg = args[i];
             // Objects have to be converted into proper AS objects in the current security domain.
             if (typeof arg === 'object' && arg) {
               wrappedArgs.push(self.sec.createObjectFromJS(arg, true));
@@ -94,17 +94,17 @@ module Shumway.AVMX.AS.flash.external {
           }
           args = wrappedArgs;
         } else {
-          var xml = this.convertToXML(request);
-          var returnTypeAttr = xml.attribute('returntype');
+          let xml = this.convertToXML(request);
+          let returnTypeAttr = xml.attribute('returntype');
           returnAsJS = returnTypeAttr && returnTypeAttr._value == 'javascript';
           args = [];
-          for (var i = 0; i < xml._children.length; i++) {
-            var x = xml._children[i];
+          for (let i = 0; i < xml._children.length; i++) {
+            let x = xml._children[i];
             args.push(this.convertFromXML(x));
           }
         }
 
-        var result;
+        let result;
         try {
           result = closure.axApply(null, args);
         } catch (e) {
@@ -140,7 +140,7 @@ module Shumway.AVMX.AS.flash.external {
     }
 
     private static _callIn(functionName: string, args: any[]) {
-      var callback = ExternalInterface.registeredCallbacks[functionName];
+      let callback = ExternalInterface.registeredCallbacks[functionName];
       if (!callback) {
         return;
       }
@@ -153,10 +153,10 @@ module Shumway.AVMX.AS.flash.external {
     }
 
     static convertToXML(s: String): ASXML {
-      var xmlClass = <AXXMLClass>this.sec.system.getClass(Multiname.FromSimpleName('XML'));
-      var savedIgnoreWhitespace = xmlClass.ignoreWhitespace;
+      let xmlClass = <AXXMLClass>this.sec.system.getClass(Multiname.FromSimpleName('XML'));
+      let savedIgnoreWhitespace = xmlClass.ignoreWhitespace;
       xmlClass.ignoreWhitespace = false;
-      var xml: ASXML = xmlClass.Create(s);
+      let xml: ASXML = xmlClass.Create(s);
       xmlClass.ignoreWhitespace = savedIgnoreWhitespace;
       return xml;
     }
@@ -184,20 +184,20 @@ module Shumway.AVMX.AS.flash.external {
             return '<null/>'; // not sure?
           }
         }
-          var result: string[] = [];
+          let result: string[] = [];
           // Looks like length is used to detect array. (obj is Array) is better?
           if (obj.hasOwnProperty('$Bglength')) {
-            var len = obj.$Bglength;
-            for (var i = 0; i < len; i++) {
-              var entry = this.convertToXMLString(obj.axGetNumericProperty(i));
+            let len = obj.$Bglength;
+            for (let i = 0; i < len; i++) {
+              let entry = this.convertToXMLString(obj.axGetNumericProperty(i));
               result.push('<property id="' + i + '">' + entry + '</property>');
             }
             return '<array>' + result.join('') + '</array>';
           }
-          var keys = obj.axGetEnumerableKeys();
-          for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            var entry = this.convertToXMLString(obj.axGetPublicProperty(key));
+          let keys = obj.axGetEnumerableKeys();
+          for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let entry = this.convertToXMLString(obj.axGetPublicProperty(key));
             result.push('<property id="' + key + '">' + entry + '</property>');
           }
           return '<object>' + result.join('') + '</object>';
@@ -227,16 +227,16 @@ module Shumway.AVMX.AS.flash.external {
           return undefined;
         case 'array':
         case 'object':
-          var obj: AXObject = xml._name.name === 'object' ?
+          let obj: AXObject = xml._name.name === 'object' ?
                               this.sec.createObject() :
                               this.sec.createArrayUnsafe([]);
-          for (var i = 0; i < xml._children.length; i++) {
-            var x = xml._children[i];
+          for (let i = 0; i < xml._children.length; i++) {
+            let x = xml._children[i];
             obj.axSetPublicProperty(extractId(x), this.convertFromXML(x._children[0]));
           }
           return obj;
         case 'class':
-          var className = Multiname.FromFQNString(String(xml.children()), NamespaceType.Public);
+          let className = Multiname.FromFQNString(String(xml.children()), NamespaceType.Public);
           return this.sec.application.getClass(className);
         default:
           return undefined;
@@ -248,9 +248,9 @@ module Shumway.AVMX.AS.flash.external {
         return '"' + obj.split('\r').join('\\r').split('\n').join('\\n').split('"').join('\\"') + '"';
       }
       if (this.sec.AXArray.axIsInstanceOf(obj)) {
-        var parts: string[] = [];
-        var arr = obj.value;
-        for (var i = 0; i < arr.length; i++) {
+        let parts: string[] = [];
+        let arr = obj.value;
+        for (let i = 0; i < arr.length; i++) {
           parts.push(this.convertToJSString(arr[i]));
         }
         return '[' + parts.join(',') + ']';
@@ -262,10 +262,10 @@ module Shumway.AVMX.AS.flash.external {
         return 'throw "' + obj + '"';
       }
       if (typeof obj === 'object' && obj !== null) {
-        var parts: string[] = [];
-        var keys = obj.axGetEnumerableKeys();
-        for (var i = 0; i < keys.length; i++) {
-          var key = keys[i];
+        let parts: string[] = [];
+        let keys = obj.axGetEnumerableKeys();
+        for (let i = 0; i < keys.length; i++) {
+          let key = keys[i];
           parts.push(key + ':' + this.convertToJSString(obj.axGetPublicProperty(key)));
         }
         return '({' + parts.join(',') + '})';
@@ -275,8 +275,8 @@ module Shumway.AVMX.AS.flash.external {
   }
 
   function extractId(node: ASXML) {
-    for (var i = 0; i < node._attributes.length; i++) {
-      var attribute = node._attributes[i];
+    for (let i = 0; i < node._attributes.length; i++) {
+      let attribute = node._attributes[i];
       if (attribute._name.name === 'id') {
         return attribute._value;
       }

@@ -77,18 +77,18 @@ module Shumway.Tools.Profiler {
     }
 
     forEachSnapshot(visitor: (snapshot: TimelineBufferSnapshot, index: number) => void) {
-      for (var i = 0, n = this.snapshotCount; i < n; i++) {
+      for (let i = 0, n = this.snapshotCount; i < n; i++) {
         visitor(this._snapshots[i], i);
       }
     }
 
     createSnapshots() {
-      var endTime = Number.MIN_VALUE;
-      var maxDepth = 0;
+      let endTime = Number.MIN_VALUE;
+      let maxDepth = 0;
       this._snapshots = [];
       while (this._buffers.length > 0) {
-        var buffer = this._buffers.shift();
-        var snapshot = buffer.createSnapshot();
+        let buffer = this._buffers.shift();
+        let snapshot = buffer.createSnapshot();
         if (snapshot) {
           if (endTime < snapshot.endTime) {
             endTime = snapshot.endTime;
@@ -106,11 +106,11 @@ module Shumway.Tools.Profiler {
 
     setWindow(start: number, end: number) {
       if (start > end) {
-        var tmp = start;
+        let tmp = start;
         start = end;
         end = tmp;
       }
-      var length = Math.min(end - start, this.totalTime);
+      let length = Math.min(end - start, this.totalTime);
       if (start < this._startTime) {
         start = this._startTime;
         end = this._startTime + length;

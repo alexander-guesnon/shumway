@@ -28,12 +28,12 @@ module Shumway.AVMX.AS.flash.display {
     applySymbol() {
       release || assert(this._symbol);
       this._initializeFields();
-      var symbol = this._symbol;
-      var symbolClass = symbol.symbolClass;
+      let symbol = this._symbol;
+      let symbolClass = symbol.symbolClass;
       // If the symbol class inherits from Bitmap, we are already within its initializer.
       // Make sure to create a BitmapData instance here to avoid recursively calling the
       // initializer again.
-      var bitmapClass = this.sec.flash.display.Bitmap.axClass;
+      let bitmapClass = this.sec.flash.display.Bitmap.axClass;
       if (bitmapClass.dPrototype.isPrototypeOf((<any>symbolClass).dPrototype)) {
         symbolClass = this.sec.flash.display.BitmapData.axClass;
       }

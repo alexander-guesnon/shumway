@@ -32,7 +32,7 @@ module Shumway.AVMX.AS.flash.ui {
      * Converts DOM keyboard event data into AS3 keyboard events.
      */
     public dispatchKeyboardEvent(event: KeyboardEventData) {
-      var keyCode = event.keyCode;
+      let keyCode = event.keyCode;
       if (event.type === 'keydown') {
         this._lastKeyCode = keyCode;
         // Trying to capture charCode for ASCII keys.
@@ -53,7 +53,7 @@ module Shumway.AVMX.AS.flash.ui {
       }
 
       if (this.target) {
-        var isKeyUp = event.type === 'keyup';
+        let isKeyUp = event.type === 'keyup';
         this.target.dispatchEvent(new this.target.sec.flash.events.KeyboardEvent (
           isKeyUp ? 'keyUp' : 'keyDown',
           true,

@@ -21,12 +21,12 @@ module Shumway.AVMX.AS.flash.media {
   import assert = Debug.assert;
   import Telemetry = Shumway.Telemetry;
 
-  declare var Blob;
-  declare var URL;
-  declare var decodeMP3;
+  declare let Blob;
+  declare let URL;
+  declare let decodeMP3;
 
   function getAudioDescription(soundData, onComplete) {
-    var audioElement = document.createElement('audio');
+    let audioElement = document.createElement('audio');
     if (!audioElement.canPlayType(soundData.mimeType)) {
       onComplete({
         duration: 0
@@ -34,7 +34,7 @@ module Shumway.AVMX.AS.flash.media {
       return;
     }
     audioElement.preload = 'metadata'; // for mobile devices
-    var blob = new Blob([soundData.data], {type: soundData.mimeType});
+    let blob = new Blob([soundData.data], {type: soundData.mimeType});
     audioElement.src = URL.createObjectURL(blob);
     audioElement.load();
     audioElement.addEventListener("loadedmetadata", function () {
@@ -72,9 +72,9 @@ module Shumway.AVMX.AS.flash.media {
       this._isURLInaccessible = false;
       this._isBuffering = false;
 
-      var symbol = this._symbol;
+      let symbol = this._symbol;
       if (symbol) {
-        var soundData = new SoundData();
+        let soundData = new SoundData();
         soundData.sampleRate = symbol.sampleRate;
         soundData.channels = symbol.channels;
         soundData.completed = true;
@@ -86,7 +86,7 @@ module Shumway.AVMX.AS.flash.media {
           soundData.data = symbol.packaged.data.buffer;
           soundData.mimeType = symbol.packaged.mimeType;
         }
-        var self = this;
+        let self = this;
         getAudioDescription(soundData, function (description) {
           self._length = description.duration;
         });
@@ -95,7 +95,7 @@ module Shumway.AVMX.AS.flash.media {
     }
 
     static initializeFromPCMData(sec: ISecurityDomain, data: any): Sound {
-      var sound = new sec.flash.media.Sound();
+      let sound = new sec.flash.media.Sound();
       sound._symbol = data;
       sound.applySymbol();
       return sound;
@@ -172,7 +172,7 @@ module Shumway.AVMX.AS.flash.media {
     }
     play(startTime: number = 0, loops: number /*int*/ = 0, sndTransform: flash.media.SoundTransform = null): flash.media.SoundChannel {
       startTime = +startTime; loops = loops | 0;
-      var channel = new this.sec.flash.media.SoundChannel();
+      let channel = new this.sec.flash.media.SoundChannel();
       channel._sound = this;
       channel._soundTransform = isNullOrUndefined(sndTransform) ?
                                 new this.sec.flash.media.SoundTransform() :
@@ -217,16 +217,16 @@ module Shumway.AVMX.AS.flash.media {
         return;
       }
 
-      var checkPolicyFile: boolean = context ? context.checkPolicyFile : false;
-      var bufferTime: number = context ? context.bufferTime : 1000;
+      let checkPolicyFile: boolean = context ? context.checkPolicyFile : false;
+      let bufferTime: number = context ? context.bufferTime : 1000;
 
-      var _this = this;
-      var stream = this._stream = new this.sec.flash.net.URLStream();
-      var data = new this.sec.flash.utils.ByteArray();
-      var dataPosition = 0;
-      var playUsingWebAudio = webAudioOption.value;
-      var mp3DecodingSession = null;
-      var soundData = new SoundData();
+      let _this = this;
+      let stream = this._stream = new this.sec.flash.net.URLStream();
+      let data = new this.sec.flash.utils.ByteArray();
+      let dataPosition = 0;
+      let playUsingWebAudio = webAudioOption.value;
+      let mp3DecodingSession = null;
+      let soundData = new SoundData();
       soundData.completed = false;
 
       stream.addEventListener("progress", function (event) {
@@ -250,7 +250,7 @@ module Shumway.AVMX.AS.flash.media {
           });
         }
 
-        var bytesAvailable = stream.bytesAvailable;
+        let bytesAvailable = stream.bytesAvailable;
         stream.readBytes(data, dataPosition, bytesAvailable);
         if (mp3DecodingSession) {
           mp3DecodingSession.pushData(new Uint8Array((<any> data)._buffer, dataPosition, bytesAvailable));
@@ -298,7 +298,7 @@ module Shumway.AVMX.AS.flash.media {
     }
 
     static FromData(data: any, loaderInfo: display.LoaderInfo): SoundSymbol {
-      var symbol = new SoundSymbol(data, loaderInfo.sec);
+      let symbol = new SoundSymbol(data, loaderInfo.sec);
       symbol.channels = data.channels;
       symbol.sampleRate = data.sampleRate;
       symbol.pcm = data.pcm;

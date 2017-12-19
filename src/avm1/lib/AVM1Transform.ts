@@ -40,32 +40,32 @@ module Shumway.AVM1.Lib {
     }
 
     public getMatrix(): AVM1Object {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       return AVM1Matrix.fromAS3Matrix(this.context, transform.matrix);
     }
 
     public setMatrix(value: AVM1Matrix) {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       transform.matrix = toAS3Matrix(value);
     }
 
     public getConcatenatedMatrix(): AVM1Matrix {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       return AVM1Matrix.fromAS3Matrix(this.context, transform.concatenatedMatrix);
     }
 
     public getColorTransform(): AVM1ColorTransform {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       return AVM1ColorTransform.fromAS3ColorTransform(this.context, transform.colorTransform);
     }
 
     public setColorTransform(value: AVM1ColorTransform) {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       transform.colorTransform = toAS3ColorTransform(value);
     }
 
     public getPixelBounds(): AVM1Rectangle {
-      var transform = this._targetAS3Object.transform;
+      let transform = this._targetAS3Object.transform;
       return AVM1Rectangle.fromAS3Rectangle(this.context, transform.pixelBounds);
     }
   }

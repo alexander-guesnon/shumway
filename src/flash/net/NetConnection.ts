@@ -89,13 +89,13 @@ module Shumway.AVMX.AS.flash.net {
 
       release || somewhatImplemented("public flash.net.NetConnection::connect");
       this._uri = command;
-      var netStatusEventCtor = this.sec.flash.events.NetStatusEvent;
+      let netStatusEventCtor = this.sec.flash.events.NetStatusEvent;
       if (!command) {
         this._connected = true;
         this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS, false, false,
           this.sec.createObjectFromJS({ level : 'status', code : 'NetConnection.Connect.Success'})));
       } else {
-        var parsedURL = RtmpJs.parseConnectionString(command);
+        let parsedURL = RtmpJs.parseConnectionString(command);
         if (!parsedURL || !parsedURL.host ||
             (parsedURL.protocol !== 'rtmp' && parsedURL.protocol !== 'rtmpt' && parsedURL.protocol !== 'rtmps')) {
           this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS, false, false,
@@ -103,9 +103,9 @@ module Shumway.AVMX.AS.flash.net {
           return;
         }
 
-        var service: display.IRootElementService = this.sec.player;
+        let service: display.IRootElementService = this.sec.player;
 
-        var rtmpProps = this.sec.createObjectFromJS({
+        let rtmpProps = this.sec.createObjectFromJS({
           app: parsedURL.app,
           flashver: flash.system.Capabilities.version,
           swfUrl: service.swfUrl,
@@ -120,10 +120,10 @@ module Shumway.AVMX.AS.flash.net {
 
         this._protocol = parsedURL.protocol;
 
-        var secured = parsedURL.protocol === 'rtmps' ||
+        let secured = parsedURL.protocol === 'rtmps' ||
                       (parsedURL.protocol === 'rtmpt' && (parsedURL.port === 443 || parsedURL.port === 8443));
         this._usingTLS = secured;
-        var rtmpConnection: RtmpJs.BaseTransport = parsedURL.protocol === 'rtmp' || parsedURL.protocol === 'rtmps' ?
+        let rtmpConnection: RtmpJs.BaseTransport = parsedURL.protocol === 'rtmp' || parsedURL.protocol === 'rtmps' ?
           new RtmpJs.Browser.RtmpTransport({ host: parsedURL.host, port: parsedURL.port || 1935, ssl: secured }) :
           new RtmpJs.Browser.RtmptTransport({ host: parsedURL.host, port: parsedURL.port || 80, ssl: secured });
         this._rtmpConnection = rtmpConnection;
@@ -143,7 +143,7 @@ module Shumway.AVMX.AS.flash.net {
         }.bind(this);
         rtmpConnection.onstreamcreated = function (e) {
           console.log('#streamcreated: ' + e.streamId);
-          var callback = this._rtmpCreateStreamCallbacks[e.transactionId];
+          let callback = this._rtmpCreateStreamCallbacks[e.transactionId];
           delete this._rtmpCreateStreamCallbacks[e.transactionId];
           callback(e.stream, e.streamId);
         }.bind(this);
@@ -151,7 +151,7 @@ module Shumway.AVMX.AS.flash.net {
       }
     }
     _createRtmpStream(callback) {
-      var transactionId = this._rtmpCreateStreamCallbacks.length;
+      let transactionId = this._rtmpCreateStreamCallbacks.length;
       this._rtmpCreateStreamCallbacks[transactionId] = callback;
       this._rtmpConnection.createStream(transactionId, null);
     }
@@ -221,8 +221,8 @@ module Shumway.AVMX.AS.flash.net {
       return this._invoke(index, Array.prototype.slice.call(arguments, 1));
     }
     private _invoke(index: number, args: any[]): any {
-      var simulated = false;
-      var result;
+      let simulated = false;
+      let result;
       switch (index) {
         case 1: // close
         case 2: // call, e.g. with ('createStream', <Responder>)

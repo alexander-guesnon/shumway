@@ -24,8 +24,8 @@ module Shumway.AVMX.AS.flash.system {
     }
 
     static get currentDomain(): flash.system.SecurityDomain {
-      var currentABC = getCurrentABC();
-      var sec = currentABC ? currentABC.env.app.sec : this.sec;
+      let currentABC = getCurrentABC();
+      let sec = currentABC ? currentABC.env.app.sec : this.sec;
       // TODO: memoize the flash.system.SecurityDomain instance
       return Object.create(sec.flash.system.SecurityDomain.axClass.tPrototype);
     }

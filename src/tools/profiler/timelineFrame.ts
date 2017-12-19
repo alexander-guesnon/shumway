@@ -57,10 +57,10 @@ module Shumway.Tools.Profiler {
     }
 
     get selfTime(): number {
-      var selfTime = this.totalTime;
+      let selfTime = this.totalTime;
       if (this.children) {
-        for (var i = 0, n = this.children.length; i < n; i++) {
-          var child = this.children[i];
+        for (let i = 0, n = this.children.length; i < n; i++) {
+          let child = this.children[i];
           selfTime -= (child.endTime - child.startTime);
         }
       }
@@ -71,9 +71,9 @@ module Shumway.Tools.Profiler {
      * Gets the child index of the first child to overlap the specified time.
      */
     public getChildIndex(time: number): number {
-      var children = this.children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      let children = this.children;
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (child.endTime > time) {
           return i;
         }
@@ -86,11 +86,11 @@ module Shumway.Tools.Profiler {
      */
     public getChildRange(startTime: number, endTime: number): TimelineFrameRange {
       if (this.children && startTime <= this.endTime && endTime >= this.startTime && endTime >= startTime) {
-        var startIdx = this._getNearestChild(startTime);
-        var endIdx = this._getNearestChildReverse(endTime);
+        let startIdx = this._getNearestChild(startTime);
+        let endIdx = this._getNearestChildReverse(endTime);
         if (startIdx <= endIdx) {
-          var startTime = this.children[startIdx].startTime;
-          var endTime = this.children[endIdx].endTime;
+          let startTime = this.children[startIdx].startTime;
+          let endTime = this.children[endIdx].endTime;
           return {
             startIndex: startIdx,
             endIndex: endIdx,
@@ -104,17 +104,17 @@ module Shumway.Tools.Profiler {
     }
 
     private _getNearestChild(time: number): number {
-      var children = this.children;
+      let children = this.children;
       if (children && children.length) {
         if (time <= children[0].endTime) {
           return 0;
         }
-        var imid;
-        var imin = 0;
-        var imax = children.length - 1;
+        let imid;
+        let imin = 0;
+        let imax = children.length - 1;
         while (imax > imin) {
           imid = ((imin + imax) / 2) | 0;
-          var child = children[imid];
+          let child = children[imid];
           if (time >= child.startTime && time <= child.endTime) {
             return imid;
           } else if (time > child.endTime) {
@@ -130,17 +130,17 @@ module Shumway.Tools.Profiler {
     }
 
     private _getNearestChildReverse(time: number): number {
-      var children = this.children;
+      let children = this.children;
       if (children && children.length) {
-        var imax = children.length - 1;
+        let imax = children.length - 1;
         if (time >= children[imax].startTime) {
           return imax;
         }
-        var imid;
-        var imin = 0;
+        let imid;
+        let imin = 0;
         while (imax > imin) {
           imid = Math.ceil((imin + imax) / 2);
-          var child = children[imid];
+          let child = children[imid];
           if (time >= child.startTime && time <= child.endTime) {
             return imid;
           } else if (time > child.endTime) {
@@ -162,13 +162,13 @@ module Shumway.Tools.Profiler {
       if (time < this.startTime || time > this.endTime) {
         return null;
       }
-      var children = this.children;
+      let children = this.children;
       if (children && children.length > 0) {
-        var child: TimelineFrame;
-        var imin = 0;
-        var imax = children.length - 1;
+        let child: TimelineFrame;
+        let imin = 0;
+        let imax = children.length - 1;
         while (imax > imin) {
-          var imid = ((imin + imax) / 2) | 0;
+          let imid = ((imin + imax) / 2) | 0;
           child = children[imid];
           if (time >= child.startTime && time <= child.endTime) {
             return child.query(time);
@@ -194,7 +194,7 @@ module Shumway.Tools.Profiler {
      * More often than not we don't have to start at the very top.
      */
     public queryNext(time: number): TimelineFrame {
-      var frame = this;
+      let frame = this;
       while (time > frame.endTime) {
         if (frame.parent) {
           frame = frame.parent;
@@ -209,8 +209,8 @@ module Shumway.Tools.Profiler {
      * Gets this frame's distance to the root.
      */
     public getDepth(): number {
-      var depth = 0;
-      var self = this;
+      let depth = 0;
+      let self = this;
       while (self) {
         depth ++;
         self = self.parent;
@@ -219,10 +219,10 @@ module Shumway.Tools.Profiler {
     }
 
     public calculateStatistics() {
-      var statistics = this.statistics = [];
+      let statistics = this.statistics = [];
       function visit(frame: TimelineFrame) {
         if (frame.kind) {
-          var s = statistics[frame.kind.id] || (statistics[frame.kind.id] = new TimelineFrameStatistics(frame.kind));
+          let s = statistics[frame.kind.id] || (statistics[frame.kind.id] = new TimelineFrameStatistics(frame.kind));
           s.count ++;
           s.selfTime += frame.selfTime;
           s.totalTime += frame.totalTime;
@@ -235,11 +235,11 @@ module Shumway.Tools.Profiler {
     }
 
     public trace(writer: IndentingWriter) {
-      var s = (this.kind ? this.kind.name + ": " : "Profile: ") +
+      let s = (this.kind ? this.kind.name + ": " : "Profile: ") +
               (this.endTime - this.startTime).toFixed(2);
       if (this.children && this.children.length) {
         writer.enter(s);
-        for (var i = 0; i < this.children.length; i++) {
+        for (let i = 0; i < this.children.length; i++) {
           this.children[i].trace(writer);
         }
         writer.outdent();

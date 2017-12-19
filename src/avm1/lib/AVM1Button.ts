@@ -38,7 +38,7 @@ module Shumway.AVM1.Lib {
    * specific keys as the value.
    * @type {number[]}
    */
-  var AVM1KeyCodeMap = [-1, 37, 39, 36, 35, 45, 46, -1, 8, -1, -1, -1, -1, 13, 38, 40, 33, 34, 9, 27];
+  let AVM1KeyCodeMap = [-1, 37, 39, 36, 35, 45, 46, -1, 8, -1, -1, -1, -1, 13, 38, 40, 33, 34, 9, 27];
 
   export class AVM1Button extends AVM1SymbolBase<flash.display.SimpleButton> {
     private _requiredListeners: any;
@@ -57,7 +57,7 @@ module Shumway.AVM1.Lib {
     public initAVM1SymbolInstance(context: AVM1Context, as3Object: flash.display.SimpleButton) {
       super.initAVM1SymbolInstance(context, as3Object);
 
-      var nativeButton = this._as3Object;
+      let nativeButton = this._as3Object;
       if (!nativeButton._symbol || !nativeButton._symbol.data.buttonActions) {
         this._initEventsHandlers();
         return;
@@ -65,10 +65,10 @@ module Shumway.AVM1.Lib {
       nativeButton.buttonMode = true;
       nativeButton.addEventListener('addedToStage', this._addListeners.bind(this));
       nativeButton.addEventListener('removedFromStage', this._removeListeners.bind(this));
-      var requiredListeners = this._requiredListeners = Object.create(null);
-      var actions = this._actions = nativeButton._symbol.data.buttonActions;
-      for (var i = 0; i < actions.length; i++) {
-        var action = actions[i];
+      let requiredListeners = this._requiredListeners = Object.create(null);
+      let actions = this._actions = nativeButton._symbol.data.buttonActions;
+      for (let i = 0; i < actions.length; i++) {
+        let action = actions[i];
         if (!action.actionsBlock) {
           action.actionsBlock = context.actionsDataFactory.createActionsData(
             action.actionsData, 's' + nativeButton._symbol.id + 'e' + i);
@@ -77,7 +77,7 @@ module Shumway.AVM1.Lib {
           requiredListeners['keyDown'] = this._keyDownHandler.bind(this);
           continue;
         }
-        var type: string;
+        let type: string;
         switch (action.stateTransitionFlags) {
           case StateTransitions.OutDownToIdle:
             type = 'releaseOutside';
@@ -137,19 +137,19 @@ module Shumway.AVM1.Lib {
 
 
     private _addListeners() {
-      for (var type in this._requiredListeners) {
+      for (let type in this._requiredListeners) {
         // on(key) works even if the button doesn't have focus, so we listen on the stage.
         // TODO: we probably need to filter these events somehow if an AVM1 swf is loaded into
         // an AVM2 one.
-        var target: flash.events.EventDispatcher = type === 'keyDown' ?
+        let target: flash.events.EventDispatcher = type === 'keyDown' ?
           this._as3Object.stage :
           this._as3Object;
         target.addEventListener(type, this._requiredListeners[type]);
       }
     }
     private _removeListeners() {
-      for (var type in this._requiredListeners) {
-        var target: flash.events.EventDispatcher = type === 'keyDown' ?
+      for (let type in this._requiredListeners) {
+        let target: flash.events.EventDispatcher = type === 'keyDown' ?
           this._as3Object.stage :
           this._as3Object;
         target.removeEventListener(type, this._requiredListeners[type]);
@@ -157,9 +157,9 @@ module Shumway.AVM1.Lib {
     }
 
     private _keyDownHandler(event) {
-      var actions = this._actions;
-      for (var i = 0; i < actions.length; i++) {
-        var action = actions[i];
+      let actions = this._actions;
+      for (let i = 0; i < actions.length; i++) {
+        let action = actions[i];
         if (!action.keyCode) {
           continue;
         }
@@ -173,9 +173,9 @@ module Shumway.AVM1.Lib {
     }
 
     private _mouseEventHandler(type: number) {
-      var actions = this._actions;
-      for (var i = 0; i < actions.length; i++) {
-        var action = actions[i];
+      let actions = this._actions;
+      for (let i = 0; i < actions.length; i++) {
+        let action = actions[i];
         if (action.stateTransitionFlags === type) {
           this._runAction(action);
         }
@@ -183,7 +183,7 @@ module Shumway.AVM1.Lib {
     }
 
     private _runAction(action: ButtonAction) {
-      var avm1Context = this._as3Object.loaderInfo._avm1Context;
+      let avm1Context = this._as3Object.loaderInfo._avm1Context;
       avm1Context.executeActions(action.actionsBlock,
         getAVM1Object(this._as3Object._parent, this.context));
     }

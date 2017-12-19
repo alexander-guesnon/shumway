@@ -175,18 +175,18 @@ module Shumway.AVM1 {
       return this._stream.end;
     }
     readNext() : ParsedAction {
-      var stream = this._stream;
-      var currentPosition = stream.position;
-      var actionCode = stream.readUI8();
-      var length = actionCode >= 0x80 ? stream.readUI16() : 0;
-      var nextPosition = stream.position + length;
+      let stream = this._stream;
+      let currentPosition = stream.position;
+      let actionCode = stream.readUI8();
+      let length = actionCode >= 0x80 ? stream.readUI16() : 0;
+      let nextPosition = stream.position + length;
 
-      var args: any[] = null;
+      let args: any[] = null;
       switch (actionCode | 0) {
         case ActionCode.ActionGotoFrame:
-          var frame = stream.readUI16();
-          var nextActionCode = stream.readUI8();
-          var play = false;
+          let frame = stream.readUI16();
+          let nextActionCode = stream.readUI8();
+          let play = false;
           if (nextActionCode !== 0x06 && nextActionCode !== 0x07) {
             stream.position--;
           } else {
@@ -196,23 +196,23 @@ module Shumway.AVM1 {
           args = [frame, play];
           break;
         case ActionCode.ActionGetURL:
-          var urlString = stream.readString();
-          var targetString = stream.readString();
+          let urlString = stream.readString();
+          let targetString = stream.readString();
           args = [urlString, targetString];
           break;
         case ActionCode.ActionWaitForFrame:
-          var frame = stream.readUI16();
-          var count = stream.readUI8();
+          let frame = stream.readUI16();
+          let count = stream.readUI8();
           args = [frame, count];
           break;
         case ActionCode.ActionSetTarget:
-          var targetName = stream.readString();
+          let targetName = stream.readString();
           args = [targetName];
           break;
         case ActionCode.ActionGoToLabel:
-          var label = stream.readString();
-          var nextActionCode = stream.readUI8();
-          var play = false;
+          let label = stream.readString();
+          let nextActionCode = stream.readUI8();
+          let play = false;
           if (nextActionCode !== 0x06 && nextActionCode !== 0x07) {
             stream.position--;
           } else {
@@ -222,7 +222,7 @@ module Shumway.AVM1 {
           args = [label, play];
           break;
         case ActionCode.ActionPush:
-          var type, value;
+          let type, value;
           args = [];
           while (stream.position < nextPosition) {
             type = stream.readUI8();
@@ -266,72 +266,72 @@ module Shumway.AVM1 {
           }
           break;
         case ActionCode.ActionJump:
-          var offset = stream.readSI16();
+          let offset = stream.readSI16();
           args = [offset];
           break;
         case ActionCode.ActionIf:
-          var offset = stream.readSI16();
+          let offset = stream.readSI16();
           args = [offset];
           break;
         case ActionCode.ActionGetURL2:
-          var flags = stream.readUI8();
+          let flags = stream.readUI8();
           args = [flags];
           break;
         case ActionCode.ActionGotoFrame2:
-          var flags = stream.readUI8();
+          let flags = stream.readUI8();
           args = [flags];
           if (!!(flags & 2)) {
             args.push(stream.readUI16());
           }
           break;
         case ActionCode.ActionWaitForFrame2:
-          var count = stream.readUI8();
+          let count = stream.readUI8();
           args = [count];
           break;
         case ActionCode.ActionConstantPool:
-          var count = stream.readUI16();
-          var constantPool = [];
-          for (var i = 0; i < count; i++) {
+          let count = stream.readUI16();
+          let constantPool = [];
+          for (let i = 0; i < count; i++) {
             constantPool.push(stream.readString());
           }
           args = [constantPool];
           break;
         case ActionCode.ActionDefineFunction:
-          var functionName = stream.readString();
-          var count = stream.readUI16();
-          var functionParams = [];
-          for (var i = 0; i < count; i++) {
+          let functionName = stream.readString();
+          let count = stream.readUI16();
+          let functionParams = [];
+          for (let i = 0; i < count; i++) {
             functionParams.push(stream.readString());
           }
 
-          var codeSize = stream.readUI16();
+          let codeSize = stream.readUI16();
           nextPosition += codeSize;
-          var functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
+          let functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
             this.dataId + '_f' + stream.position, this._actionsData);
 
           args = [functionBody, functionName, functionParams];
           break;
         case ActionCode.ActionWith:
-          var codeSize = stream.readUI16();
+          let codeSize = stream.readUI16();
           nextPosition += codeSize;
-          var withBody = new AVM1ActionsData(stream.readBytes(codeSize),
+          let withBody = new AVM1ActionsData(stream.readBytes(codeSize),
             this.dataId + '_w' + stream.position, this._actionsData);
           args = [withBody];
           break;
         case ActionCode.ActionStoreRegister:
-          var register = stream.readUI8();
+          let register = stream.readUI8();
           args = [register];
           break;
         case ActionCode.ActionDefineFunction2:
-          var functionName = stream.readString();
-          var count = stream.readUI16();
-          var registerCount = stream.readUI8();
-          var flags = stream.readUI16();
-          var registerAllocation: ArgumentAssignment[] = [];
-          var functionParams = [];
-          for (var i = 0; i < count; i++) {
-            var register = stream.readUI8();
-            var paramName = stream.readString();
+          let functionName = stream.readString();
+          let count = stream.readUI16();
+          let registerCount = stream.readUI8();
+          let flags = stream.readUI16();
+          let registerAllocation: ArgumentAssignment[] = [];
+          let functionParams = [];
+          for (let i = 0; i < count; i++) {
+            let register = stream.readUI8();
+            let paramName = stream.readString();
             functionParams.push(paramName);
             if (register) {
               registerAllocation[register] = {
@@ -342,7 +342,7 @@ module Shumway.AVM1 {
             }
           }
 
-          var j = 1;
+          let j = 1;
           // order this, arguments, super, _root, _parent, and _global
           if (flags & 0x0001) { // preloadThis
             registerAllocation[j++] = { type: ArgumentAssignmentType.This };
@@ -363,7 +363,7 @@ module Shumway.AVM1 {
             registerAllocation[j++] = { type: ArgumentAssignmentType.Global };
           }
 
-          var suppressArguments: ArgumentAssignmentType = 0;
+          let suppressArguments: ArgumentAssignmentType = 0;
           if (flags & 0x0002) { // suppressThis
             suppressArguments |= ArgumentAssignmentType.This;
           }
@@ -374,38 +374,38 @@ module Shumway.AVM1 {
             suppressArguments |= ArgumentAssignmentType.Super;
           }
 
-          var codeSize = stream.readUI16();
+          let codeSize = stream.readUI16();
           nextPosition += codeSize;
-          var functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
+          let functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
             this.dataId + '_f' + stream.position, this._actionsData);
 
           args = [functionBody, functionName, functionParams, registerCount,
             registerAllocation, suppressArguments];
           break;
         case ActionCode.ActionTry:
-          var flags = stream.readUI8();
-          var catchIsRegisterFlag = !!(flags & 4);
-          var finallyBlockFlag = !!(flags & 2);
-          var catchBlockFlag = !!(flags & 1);
-          var trySize = stream.readUI16();
-          var catchSize = stream.readUI16();
-          var finallySize = stream.readUI16();
-          var catchTarget: any = catchIsRegisterFlag ? stream.readUI8() : stream.readString();
+          let flags = stream.readUI8();
+          let catchIsRegisterFlag = !!(flags & 4);
+          let finallyBlockFlag = !!(flags & 2);
+          let catchBlockFlag = !!(flags & 1);
+          let trySize = stream.readUI16();
+          let catchSize = stream.readUI16();
+          let finallySize = stream.readUI16();
+          let catchTarget: any = catchIsRegisterFlag ? stream.readUI8() : stream.readString();
 
           nextPosition += trySize + catchSize + finallySize;
 
-          var tryBody = new AVM1ActionsData(stream.readBytes(trySize),
+          let tryBody = new AVM1ActionsData(stream.readBytes(trySize),
             this.dataId + '_t' + stream.position, this._actionsData);
-          var catchBody = new AVM1ActionsData(stream.readBytes(catchSize),
+          let catchBody = new AVM1ActionsData(stream.readBytes(catchSize),
             this.dataId + '_c' + stream.position, this._actionsData);
-          var finallyBody = new AVM1ActionsData(stream.readBytes(finallySize),
+          let finallyBody = new AVM1ActionsData(stream.readBytes(finallySize),
             this.dataId + '_z' + stream.position, this._actionsData);
 
           args = [catchIsRegisterFlag, catchTarget, tryBody,
             catchBlockFlag, catchBody, finallyBlockFlag, finallyBody];
           break;
         case ActionCode.ActionStrictMode:
-          var mode = stream.readUI8();
+          let mode = stream.readUI8();
           args = [mode];
           break;
       }
@@ -418,17 +418,17 @@ module Shumway.AVM1 {
       };
     }
     skip(count) {
-      var stream = this._stream;
+      let stream = this._stream;
       while (count > 0 && stream.position < stream.end) {
-        var actionCode = stream.readUI8();
-        var length = actionCode >= 0x80 ? stream.readUI16() : 0;
+        let actionCode = stream.readUI8();
+        let length = actionCode >= 0x80 ? stream.readUI16() : 0;
         stream.position += length;
         count--;
       }
     }
   }
 
-  var ActionNamesMap = {
+  let ActionNamesMap = {
     0x00: 'EOA',
     0x04: 'ActionNextFrame',
     0x05: 'ActionPreviousFrame',

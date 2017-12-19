@@ -43,7 +43,7 @@ module Shumway.AVMX.AS.flash.display {
       if (n === 0) {
         return "";
       }
-      var s = "";
+      let s = "";
       if (n & StageAlignFlags.Top) {
         s += "T";
       }
@@ -65,7 +65,7 @@ module Shumway.AVMX.AS.flash.display {
      * alignment value "TBLR" even though there is no enum for it.
      */
     static toNumber(value: string): number {
-      var n = 0;
+      let n = 0;
       value = value.toUpperCase();
       if (value.indexOf("T") >= 0) {
         n |= StageAlignFlags.Top;

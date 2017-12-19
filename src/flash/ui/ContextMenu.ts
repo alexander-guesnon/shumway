@@ -89,7 +89,7 @@ module Shumway.AVMX.AS.flash.ui {
     }
 
     hideBuiltInItems(): void {
-      var items = this.builtInItems;
+      let items = this.builtInItems;
       if (!items) {
         return;
       }
@@ -104,12 +104,12 @@ module Shumway.AVMX.AS.flash.ui {
     }
 
     clone(): ContextMenu {
-      var result: ContextMenu = new this.sec.flash.ui.ContextMenu();
+      let result: ContextMenu = new this.sec.flash.ui.ContextMenu();
       result._builtInItems = this._builtInItems.clone();
 
       this.cloneLinkAndClipboardProperties(result);
-      var customItems = this._customItems;
-      for (var i = 0; i < customItems.length; i++) {
+      let customItems = this._customItems;
+      for (let i = 0; i < customItems.length; i++) {
         result._customItems.push(customItems[i].clone());
       }
       return result;

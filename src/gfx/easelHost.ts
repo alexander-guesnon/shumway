@@ -26,7 +26,7 @@ module Shumway.GFX {
   import DisplayParameters = Shumway.Remoting.DisplayParameters;
 
   // Set to -1 to enable events for right button.
-  export var ContextMenuButton = 2;
+  export let ContextMenuButton = 2;
 
   export class EaselHost {
     private static _mouseEvents = Shumway.Remoting.MouseEventNames;
@@ -40,8 +40,8 @@ module Shumway.GFX {
 
     constructor(easel: Easel) {
       this._easel = easel;
-      var group = easel.world;
-      var transparent = easel.transparent;
+      let group = easel.world;
+      let transparent = easel.transparent;
       this._group = group;
       this._content = null;
       this._fullscreen = false;
@@ -86,34 +86,34 @@ module Shumway.GFX {
         // Disable all events for right button -- usually it triggers context menu.
         return;
       }
-      // var position = this._easel.getMouseWorldPosition(event);
-      var position = this._easel.getMousePosition(event, this._content);
-      var point = new Point(position.x, position.y);
+      // let position = this._easel.getMouseWorldPosition(event);
+      let position = this._easel.getMousePosition(event, this._content);
+      let point = new Point(position.x, position.y);
 
-      var buffer = new DataBuffer();
-      var serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
+      let buffer = new DataBuffer();
+      let serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
       serializer.output = buffer;
       serializer.writeMouseEvent(event, point);
       this.onSendUpdates(buffer, []);
     }
 
     private _keyboardEventListener(event: KeyboardEvent) {
-      var buffer = new DataBuffer();
-      var serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
+      let buffer = new DataBuffer();
+      let serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
       serializer.output = buffer;
       serializer.writeKeyboardEvent(event);
       this.onSendUpdates(buffer, []);
     }
 
     _addEventListeners() {
-      var mouseEventListener = this._mouseEventListener.bind(this);
-      var keyboardEventListener = this._keyboardEventListener.bind(this);
-      var mouseEvents = EaselHost._mouseEvents;
-      for (var i = 0; i < mouseEvents.length; i++) {
+      let mouseEventListener = this._mouseEventListener.bind(this);
+      let keyboardEventListener = this._keyboardEventListener.bind(this);
+      let mouseEvents = EaselHost._mouseEvents;
+      for (let i = 0; i < mouseEvents.length; i++) {
         window.addEventListener(mouseEvents[i], mouseEventListener);
       }
-      var keyboardEvents = EaselHost._keyboardEvents;
-      for (var i = 0; i < keyboardEvents.length; i++) {
+      let keyboardEvents = EaselHost._keyboardEvents;
+      for (let i = 0; i < keyboardEvents.length; i++) {
         window.addEventListener(keyboardEvents[i], keyboardEventListener);
       }
       this._addFocusEventListeners();
@@ -122,15 +122,15 @@ module Shumway.GFX {
     }
 
     private _sendFocusEvent(type: Shumway.Remoting.FocusEventType) {
-      var buffer = new DataBuffer();
-      var serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
+      let buffer = new DataBuffer();
+      let serializer = new Shumway.Remoting.GFX.GFXChannelSerializer();
       serializer.output = buffer;
       serializer.writeFocusEvent(type);
       this.onSendUpdates(buffer, []);
     }
 
     private _addFocusEventListeners() {
-      var self = this;
+      let self = this;
       document.addEventListener('visibilitychange', function(event) {
         self._sendFocusEvent(document.hidden ?
           Shumway.Remoting.FocusEventType.DocumentHidden :
@@ -153,7 +153,7 @@ module Shumway.GFX {
     }
 
     processUpdates(updates: DataBuffer, assets: Array<DataBuffer>, output: DataBuffer = null) {
-      var deserializer = new Shumway.Remoting.GFX.GFXChannelDeserializer();
+      let deserializer = new Shumway.Remoting.GFX.GFXChannelDeserializer();
       deserializer.input = updates;
       deserializer.inputAssets = assets;
       deserializer.output = output;
@@ -162,8 +162,8 @@ module Shumway.GFX {
     }
 
     processVideoControl(id: number, eventType: VideoControlEvent, data: any): any {
-      var context = this._context;
-      var asset = context._getVideoAsset(id);
+      let context = this._context;
+      let asset = context._getVideoAsset(id);
       if (!asset) {
         if (eventType !== VideoControlEvent.Init) {
           return undefined;

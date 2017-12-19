@@ -59,7 +59,7 @@ module Shumway.AVMX.AS.flash.filters {
 
     private _expandArray(a: number [], newLen: number /*uint*/, value: number = 0): number [] {
       if (a) {
-        var i: number = a.length;
+        let i: number = a.length;
         while (i < newLen) {
           a[i++] = 0;
         }
@@ -84,11 +84,11 @@ module Shumway.AVMX.AS.flash.filters {
       if (isNullOrUndefined(value_)) {
         this.sec.throwError("TypeError", Errors.NullPointerError, "matrix");
       }
-      var value: number[] = value_.value;
-      var actualLen = this._matrixX * this._matrixY;
-      var minLen = Math.min(value.length, actualLen);
-      var matrix = Array(minLen);
-      for (var i = 0; i < minLen; i++) {
+      let value: number[] = value_.value;
+      let actualLen = this._matrixX * this._matrixY;
+      let minLen = Math.min(value.length, actualLen);
+      let matrix = Array(minLen);
+      for (let i = 0; i < minLen; i++) {
         matrix[i] = toNumber(value[i]);
       }
       this._expandArray(matrix, actualLen);
@@ -99,7 +99,7 @@ module Shumway.AVMX.AS.flash.filters {
       return this._matrixX;
     }
     set matrixX(value: number) {
-      var mx: number = NumberUtilities.clamp(+value, 0, 15) | 0;
+      let mx: number = NumberUtilities.clamp(+value, 0, 15) | 0;
       if (this._matrixX !== mx) {
         this._matrixX = mx;
         this._expandArray(this._matrix, mx * this._matrixY);
@@ -110,7 +110,7 @@ module Shumway.AVMX.AS.flash.filters {
       return this._matrixY;
     }
     set matrixY(value: number) {
-      var my: number = NumberUtilities.clamp(+value, 0, 15) | 0;
+      let my: number = NumberUtilities.clamp(+value, 0, 15) | 0;
       if (this._matrixY !== my) {
         this._matrixY = my;
         this._expandArray(this._matrix, my * this._matrixX);

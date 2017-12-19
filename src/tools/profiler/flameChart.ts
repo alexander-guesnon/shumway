@@ -63,8 +63,8 @@ module Shumway.Tools.Profiler {
     }
 
     draw() {
-      var context = this._context;
-      var ratio = window.devicePixelRatio;
+      let context = this._context;
+      let ratio = window.devicePixelRatio;
 
       ColorStyle.reset();
 
@@ -81,10 +81,10 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawChildren(parent: TimelineFrame, depth: number = 0) {
-      var range = parent.getChildRange(this._windowStart, this._windowEnd);
+      let range = parent.getChildRange(this._windowStart, this._windowEnd);
       if (range) {
-        for (var i = range.startIndex; i <= range.endIndex; i++) {
-          var child = parent.children[i];
+        for (let i = range.startIndex; i <= range.endIndex; i++) {
+          let child = parent.children[i];
           if (this._drawFrame(child, depth)) {
             this._drawChildren(child, depth + 1);
           }
@@ -93,11 +93,11 @@ module Shumway.Tools.Profiler {
     }
 
     private _drawFrame(frame: TimelineFrame, depth: number): boolean {
-      var context = this._context;
-      var frameHPadding = 0.5;
-      var left = this._toPixels(frame.startTime);
-      var right = this._toPixels(frame.endTime);
-      var width = right - left;
+      let context = this._context;
+      let frameHPadding = 0.5;
+      let left = this._toPixels(frame.startTime);
+      let right = this._toPixels(frame.endTime);
+      let width = right - left;
       if (width <= this._minFrameWidthInPixels) {
         context.fillStyle = this._controller.theme.tabToolbar(1);
         context.fillRect(left, depth * (12 + frameHPadding), this._minFrameWidthInPixels, 12 + (frame.maxDepth - frame.depth) * 12.5);
@@ -107,10 +107,10 @@ module Shumway.Tools.Profiler {
         right = width + left;
         left = 0;
       }
-      var adjustedWidth = right - left;
-      var style = this._kindStyle[frame.kind.id];
+      let adjustedWidth = right - left;
+      let style = this._kindStyle[frame.kind.id];
       if (!style) {
-        var background = ColorStyle.randomStyle();
+        let background = ColorStyle.randomStyle();
         style = this._kindStyle[frame.kind.id] = {
           bgColor: background,
           textColor: ColorStyle.contrastStyle(background)
@@ -124,9 +124,9 @@ module Shumway.Tools.Profiler {
       context.fillRect(left, depth * (12 + frameHPadding), adjustedWidth, 12);
 
       if (width > 12) {
-        var label = frame.kind.name;
+        let label = frame.kind.name;
         if (label && label.length) {
-          var labelHPadding = 2;
+          let labelHPadding = 2;
           label = this._prepareText(context, label, adjustedWidth - labelHPadding * 2);
           if (label.length) {
             context.fillStyle = style.textColor;
@@ -140,14 +140,14 @@ module Shumway.Tools.Profiler {
     }
 
     private _prepareText(context: CanvasRenderingContext2D, title: string, maxSize: number):string {
-      var titleWidth = this._measureWidth(context, title);
+      let titleWidth = this._measureWidth(context, title);
       if (maxSize > titleWidth) {
         return title;
       }
-      var l = 3;
-      var r = title.length;
+      let l = 3;
+      let r = title.length;
       while (l < r) {
-        var m = (l + r) >> 1;
+        let m = (l + r) >> 1;
         if (this._measureWidth(context, trimMiddle(title, m)) < maxSize) {
           l = m + 1;
         } else {
@@ -163,7 +163,7 @@ module Shumway.Tools.Profiler {
     }
 
     private _measureWidth(context: CanvasRenderingContext2D, text: string): number {
-      var width = this._textWidth[text];
+      let width = this._textWidth[text];
       if (!width) {
         width = context.measureText(text).width;
         this._textWidth[text] = width;
@@ -188,9 +188,9 @@ module Shumway.Tools.Profiler {
     }
 
     private _getFrameAtPosition(x: number, y: number): TimelineFrame {
-      var time = this._toTime(x);
-      var depth = 1 + (y / 12.5) | 0;
-      var frame = this._snapshot.query(time);
+      let time = this._toTime(x);
+      let depth = 1 + (y / 12.5) | 0;
+      let frame = this._snapshot.query(time);
       if (frame && frame.depth >= depth) {
         while (frame && frame.depth > depth) {
           frame = frame.parent;
@@ -216,11 +216,11 @@ module Shumway.Tools.Profiler {
     onMouseOut() {}
 
     onDrag(startX: number, startY: number, currentX: number, currentY: number, deltaX: number, deltaY: number) {
-      var dragInfo = this._dragInfo;
+      let dragInfo = this._dragInfo;
       if (dragInfo) {
-        var delta = this._toTimeRelative(-deltaX);
-        var windowStart = dragInfo.windowStartInitial + delta;
-        var windowEnd = dragInfo.windowEndInitial + delta;
+        let delta = this._toTimeRelative(-deltaX);
+        let windowStart = dragInfo.windowStartInitial + delta;
+        let windowEnd = dragInfo.windowEndInitial + delta;
         this._controller.setWindow(windowStart, windowEnd);
       }
     }
@@ -236,7 +236,7 @@ module Shumway.Tools.Profiler {
     }
 
     onHoverStart(x: number, y: number) {
-      var frame = this._getFrameAtPosition(x, y);
+      let frame = this._getFrameAtPosition(x, y);
       if (frame) {
         this._hoveredFrame = frame;
         this._controller.showTooltip(this, frame, x, y);
@@ -253,7 +253,7 @@ module Shumway.Tools.Profiler {
     }
 
     getStatistics(kind: TimelineItemKind): TimelineFrameStatistics {
-      var snapshot = this._snapshot;
+      let snapshot = this._snapshot;
       if (!snapshot.statistics) {
         snapshot.calculateStatistics();
       }

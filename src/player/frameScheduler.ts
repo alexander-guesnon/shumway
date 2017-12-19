@@ -47,9 +47,9 @@ module Shumway {
       if (this._drawsSkipped >= FrameScheduler.MAX_DRAWS_TO_SKIP) {
         return false;
       }
-      var averageDraw = this._drawStats.length < FrameScheduler.STATS_TO_REMEMBER ? 0 :
+      let averageDraw = this._drawStats.length < FrameScheduler.STATS_TO_REMEMBER ? 0 :
         this._drawStatsSum / this._drawStats.length;
-      var estimatedDrawEnd = performance.now() + averageDraw;
+      let estimatedDrawEnd = performance.now() + averageDraw;
       return estimatedDrawEnd + FrameScheduler.INTERVAL_PADDING_MS > this._expectedNextFrameAt;
     }
 
@@ -62,10 +62,10 @@ module Shumway {
     }
 
     startFrame(frameRate) {
-      var interval = 1000 / frameRate;
+      let interval = 1000 / frameRate;
 
-      var adjustedInterval = interval;
-      var delta = this._onTimeDelta + this._delta;
+      let adjustedInterval = interval;
+      let delta = this._onTimeDelta + this._delta;
       if (delta !== 0) {
         if (delta < 0) {
           adjustedInterval *= FrameScheduler.SPEED_ADJUST_RATE;
@@ -80,7 +80,7 @@ module Shumway {
     }
 
     endFrame() {
-      var estimatedNextFrameStart = performance.now() + FrameScheduler.INTERVAL_PADDING_MS;
+      let estimatedNextFrameStart = performance.now() + FrameScheduler.INTERVAL_PADDING_MS;
       if (estimatedNextFrameStart > this._expectedNextFrameAt) {
         if (this._trackDelta) {
           this._onTimeDelta += (this._expectedNextFrameAt - estimatedNextFrameStart);
@@ -97,7 +97,7 @@ module Shumway {
     }
 
     endDraw() {
-      var drawTime = performance.now() - this._drawStarted;
+      let drawTime = performance.now() - this._drawStarted;
       this._drawStats.push(drawTime);
       this._drawStatsSum += drawTime;
       while (this._drawStats.length > FrameScheduler.STATS_TO_REMEMBER) {

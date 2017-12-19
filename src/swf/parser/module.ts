@@ -18,11 +18,11 @@
 module Shumway.SWF.Parser.LowLevel {
   function parseBbox(stream): Bbox {
     stream.align();
-    var bits = stream.readUb(5);
-    var xMin = stream.readSb(bits);
-    var xMax = stream.readSb(bits);
-    var yMin = stream.readSb(bits);
-    var yMax = stream.readSb(bits);
+    let bits = stream.readUb(5);
+    let xMin = stream.readSb(bits);
+    let xMax = stream.readSb(bits);
+    let yMin = stream.readSb(bits);
+    let yMax = stream.readSb(bits);
     stream.align();
     return <Bbox>{ xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax };
   }
@@ -43,21 +43,21 @@ module Shumway.SWF.Parser.LowLevel {
   }
 
   function parseMatrix(stream): Matrix {
-    var matrix: Matrix = { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 };
+    let matrix: Matrix = { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 };
     stream.align();
-    var hasScale = stream.readUb(1);
+    let hasScale = stream.readUb(1);
     if (hasScale) {
-      var bits = stream.readUb(5);
+      let bits = stream.readUb(5);
       matrix.a = stream.readFb(bits);
       matrix.d = stream.readFb(bits);
     }
-    var hasRotate = stream.readUb(1);
+    let hasRotate = stream.readUb(1);
     if (hasRotate) {
-      var bits = stream.readUb(5);
+      let bits = stream.readUb(5);
       matrix.b = stream.readFb(bits);
       matrix.c = stream.readFb(bits);
     }
-    var bits = stream.readUb(5);
+    let bits = stream.readUb(5);
     matrix.tx = stream.readSb(bits);
     matrix.ty = stream.readSb(bits);
     stream.align();
@@ -65,7 +65,7 @@ module Shumway.SWF.Parser.LowLevel {
   }
 
   function parseColorTransform(stream, hasAlpha: boolean): ColorTransform {
-    var cxform: ColorTransform = {
+    let cxform: ColorTransform = {
       redMultiplier: 0xff,
       greenMultiplier: 0xff,
       blueMultiplier: 0xff,
@@ -76,9 +76,9 @@ module Shumway.SWF.Parser.LowLevel {
       alphaOffset: 0,
     };
     stream.align();
-    var hasOffsets = stream.readUb(1);
-    var hasMultipliers = stream.readUb(1);
-    var bits = stream.readUb(4);
+    let hasOffsets = stream.readUb(1);
+    let hasMultipliers = stream.readUb(1);
+    let bits = stream.readUb(4);
     if (hasMultipliers) {
       cxform.redMultiplier = stream.readSb(bits);
       cxform.greenMultiplier = stream.readSb(bits);
@@ -101,7 +101,7 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parsePlaceObjectTag(stream: Stream, swfVersion: number, tagCode: number,
                                tagEnd: number): PlaceObjectTag {
-    var tag: PlaceObjectTag = <any>{ code: tagCode };
+    let tag: PlaceObjectTag = <any>{ code: tagCode };
     tag.actionBlocksPrecedence = stream.pos;
     if (tagCode === SwfTagCode.CODE_PLACE_OBJECT) {
       tag.symbolId = stream.readUi16();
@@ -114,7 +114,7 @@ module Shumway.SWF.Parser.LowLevel {
       }
       return tag;
     }
-    var flags = tag.flags = tagCode > SwfTagCode.CODE_PLACE_OBJECT2 ?
+    let flags = tag.flags = tagCode > SwfTagCode.CODE_PLACE_OBJECT2 ?
                             stream.readUi16() :
                             stream.readUi8();
     tag.depth = stream.readUi16();
@@ -140,8 +140,8 @@ module Shumway.SWF.Parser.LowLevel {
       tag.clipDepth = stream.readUi16();
     }
     if (flags & PlaceObjectFlags.HasFilterList) {
-      var count = stream.readUi8();
-      var filters: Filter[] = tag.filters = [];
+      let count = stream.readUi8();
+      let filters: Filter[] = tag.filters = [];
       while (count--) {
         filters.push(parseFilter(stream));
       }
@@ -159,10 +159,10 @@ module Shumway.SWF.Parser.LowLevel {
       tag.backgroundColor = parseArgb(stream);
     }
     if (flags & PlaceObjectFlags.HasClipActions) {
-      var reserved = stream.readUi16();
-      var allFlags = swfVersion >= 6 ? stream.readUi32() : stream.readUi16();
-      var allEvents: ClipEvents[] = tag.events = [];
-      var events: ClipEvents;
+      let reserved = stream.readUi16();
+      let allFlags = swfVersion >= 6 ? stream.readUi32() : stream.readUi16();
+      let allEvents: ClipEvents[] = tag.events = [];
+      let events: ClipEvents;
       while (events = parseEvents(stream, swfVersion)) {
         if (stream.pos > tagEnd) {
           Debug.warning('PlaceObject handler attempted to read clip events beyond tag end');
@@ -176,52 +176,52 @@ module Shumway.SWF.Parser.LowLevel {
   }
   
   function parseEvents(stream: Stream, swfVersion: number): ClipEvents {
-    var flags = swfVersion >= 6 ? stream.readUi32() : stream.readUi16();
+    let flags = swfVersion >= 6 ? stream.readUi32() : stream.readUi16();
     if (!flags) {
       // `true` means this is the EndOfEvents marker.
       return null;
     }
-    var events: ClipEvents = <any>{};
+    let events: ClipEvents = <any>{};
     // The Construct event is only allowed in 7+. It can't be set in < 6, so mask it out for 6.
     if (swfVersion === 6) {
       flags = flags & ~AVM1ClipEvents.Construct;
     }
     events.flags = flags;
-    var length = stream.readUi32();
+    let length = stream.readUi32();
     if (flags & AVM1ClipEvents.KeyPress) {
       events.keyCode = stream.readUi8();
       length--;
     }
-    var end = stream.pos + length;
+    let end = stream.pos + length;
     events.actionsBlock = stream.bytes.subarray(stream.pos, end);
     stream.pos = end;
     return events;
   }
 
   function parseFilter(stream: Stream): Filter {
-    var filter: Filter = <any>{};
-    var type = filter.type = stream.readUi8();
+    let filter: Filter = <any>{};
+    let type = filter.type = stream.readUi8();
     switch (type) {
       case 0:
       case 2:
       case 3:
       case 4:
       case 7:
-        var glow = <GlowFilter>filter;
-        var count: number;
+        let glow = <GlowFilter>filter;
+        let count: number;
         if (type === 4 || type === 7) {
           count = stream.readUi8();
         } else {
           count = type === 3 ? 2 : 1;
         }
-        var colors: number[] = glow.colors = [];
-        var i = count;
+        let colors: number[] = glow.colors = [];
+        let i = count;
         while (i--) {
           colors.push(parseRgba(stream));
         }
         if (type === 4 || type === 7) {
-          var ratios: number[] = glow.ratios = [];
-          var i = count;
+          let ratios: number[] = glow.ratios = [];
+          let i = count;
           while (i--) {
             ratios.push(stream.readUi8());
           }
@@ -244,32 +244,32 @@ module Shumway.SWF.Parser.LowLevel {
         }
         return glow;
       case 1:
-        var blur = <BlurFilter>filter;
+        let blur = <BlurFilter>filter;
         blur.blurX = stream.readFixed();
         blur.blurY = stream.readFixed();
         blur.quality = stream.readUb(5);
         stream.readUb(3);
         return blur;
       case 5:
-        var conv = <ConvolutionFilter>filter;
-        var matrixX = conv.matrixX = stream.readUi8();
-        var matrixY = conv.matrixY = stream.readUi8();
+        let conv = <ConvolutionFilter>filter;
+        let matrixX = conv.matrixX = stream.readUi8();
+        let matrixY = conv.matrixY = stream.readUi8();
         conv.divisor = stream.readFloat();
         conv.bias = stream.readFloat();
-        var matrix: number[] = conv.matrix = [];
-        var i = matrixX * matrixY;
+        let matrix: number[] = conv.matrix = [];
+        let i = matrixX * matrixY;
         while (i--) {
           matrix.push(stream.readFloat());
         }
         conv.color = parseRgba(stream);
-        var reserved = stream.readUb(6);
+        let reserved = stream.readUb(6);
         conv.clamp = !!stream.readUb(1);
         conv.preserveAlpha = !!stream.readUb(1);
         return conv;
       case 6:
-        var cm = <ColorMatrixFilter>filter;
-        var matrix: number[] = cm.matrix = [];
-        var i = 20;
+        let cm = <ColorMatrixFilter>filter;
+        let matrix: number[] = cm.matrix = [];
+        let i = 20;
         while (i--) {
           matrix.push(stream.readFloat());
         }
@@ -281,7 +281,7 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseRemoveObjectTag(stream: Stream, swfVersion: number,
                                 tagCode: number): RemoveObjectTag {
-    var tag: RemoveObjectTag = <any>{ code: tagCode };
+    let tag: RemoveObjectTag = <any>{ code: tagCode };
     if (tagCode === SwfTagCode.CODE_REMOVE_OBJECT) {
       tag.depth = stream.readUi16();
       tag.symbolId = stream.readUi16();
@@ -293,11 +293,11 @@ module Shumway.SWF.Parser.LowLevel {
 
   export function parseDefineImageTag(stream: Stream, swfVersion: number, tagCode: number,
                                       tagEnd: number, jpegTables: Uint8Array): ImageTag {
-    var tag: ImageTag = <any>{ code: tagCode };
+    let tag: ImageTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var imgData: Uint8Array;
+    let imgData: Uint8Array;
     if (tagCode > SwfTagCode.CODE_DEFINE_BITS_JPEG2) {
-      var alphaDataOffset = stream.readUi32();
+      let alphaDataOffset = stream.readUi32();
       if (tagCode === SwfTagCode.CODE_DEFINE_BITS_JPEG4) {
         tag.deblock = stream.readFixed8();
       }
@@ -331,10 +331,10 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseDefineButtonTag(stream: Stream, swfVersion: number, tagCode: number,
                                 tagEnd: number): ButtonTag {
-    var tag: ButtonTag = <any>{ code: tagCode };
+    let tag: ButtonTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var characters: ButtonCharacter[] = tag.characters = [];
-    var character: ButtonCharacter;
+    let characters: ButtonCharacter[] = tag.characters = [];
+    let character: ButtonCharacter;
     if (tagCode == SwfTagCode.CODE_DEFINE_BUTTON) {
       while (character = parseButtonCharacter(stream, swfVersion, tagCode)) {
         characters.push(character);
@@ -342,16 +342,16 @@ module Shumway.SWF.Parser.LowLevel {
       tag.actionsData = stream.bytes.subarray(stream.pos, tagEnd);
       stream.pos = tagEnd;
     } else {
-      var trackFlags = stream.readUi8();
+      let trackFlags = stream.readUi8();
       tag.trackAsMenu = !!(trackFlags >> 7 & 1);
-      var actionOffset = stream.readUi16();
+      let actionOffset = stream.readUi16();
       while (character = parseButtonCharacter(stream, swfVersion, tagCode)) {
         characters.push(character);
       };
       if (!!actionOffset) {
-        var buttonActions = tag.buttonActions = [];
+        let buttonActions = tag.buttonActions = [];
         while (stream.pos < tagEnd) {
-          var action = parseButtonCondAction(stream, tagEnd);
+          let action = parseButtonCondAction(stream, tagEnd);
           // Ignore actions that exceed the tag length.
           if (stream.pos > tagEnd) {
             break;
@@ -366,11 +366,11 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseButtonCharacter(stream: Stream, swfVersion: number,
                                 tagCode: number): ButtonCharacter {
-    var flags = stream.readUi8();
+    let flags = stream.readUi8();
     if (!flags) {
       return null;
     }
-    var character: ButtonCharacter = <any>{};
+    let character: ButtonCharacter = <any>{};
     if (swfVersion < 8) {
       // Clear HasBlendMode and HasFilterList flags.
       flags &= ~(PlaceObjectFlags.HasBlendMode | PlaceObjectFlags.HasFilterList);
@@ -383,9 +383,9 @@ module Shumway.SWF.Parser.LowLevel {
       character.cxform = parseColorTransform(stream, true);
     }
     if (character.flags & ButtonCharacterFlags.HasFilterList) {
-      var count = stream.readUi8();
-      var filters: Filter[] = character.filters = [];
-      var i = count;
+      let count = stream.readUi8();
+      let filters: Filter[] = character.filters = [];
+      let i = count;
       while (i--) {
         filters.push(parseFilter(stream));
       }
@@ -397,11 +397,11 @@ module Shumway.SWF.Parser.LowLevel {
   }
   
   function parseButtonCondAction(stream: Stream, tagEnd: number): ButtonCondAction {
-    var start = stream.pos;
-    var tagSize = stream.readUi16();
+    let start = stream.pos;
+    let tagSize = stream.readUi16();
     // If no tagSize is given, read to the tag's end.
-    var end = tagSize ? start + tagSize : tagEnd;
-    var conditions = stream.readUi16();
+    let end = tagSize ? start + tagSize : tagEnd;
+    let conditions = stream.readUi16();
     stream.pos = end;
     return <ButtonCondAction>{
       // The 7 upper bits hold a key code the button should respond to.
@@ -415,7 +415,7 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseDefineBinaryDataTag(stream: Stream, swfVersion: number,
                                     tagCode: number, tagEnd: number): BinaryDataTag {
-    var tag: BinaryDataTag = <any>{ code: tagCode };
+    let tag: BinaryDataTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
     stream.pos += 4; // Reserved
     tag.data = stream.bytes.subarray(stream.pos, tagEnd);
@@ -425,18 +425,18 @@ module Shumway.SWF.Parser.LowLevel {
 
   export function parseDefineFontTag(stream: Stream, swfVersion: number,
                                      tagCode: number): FontTag {
-    var tag: FontTag = <any>{ code: tagCode };
+    let tag: FontTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var firstOffset = stream.readUi16();
-    var glyphCount = firstOffset / 2;
-    var restOffsets: number[] = [];
-    var i = glyphCount - 1;
+    let firstOffset = stream.readUi16();
+    let glyphCount = firstOffset / 2;
+    let restOffsets: number[] = [];
+    let i = glyphCount - 1;
     while (i--) {
       restOffsets.push(stream.readUi16());
     }
     tag.offsets = [firstOffset].concat(restOffsets);
-    var glyphs: Glyph[] = tag.glyphs = [];
-    var i = glyphCount;
+    let glyphs: Glyph[] = tag.glyphs = [];
+    let i = glyphCount;
     while (i--) {
       glyphs.push(parseGlyph(stream, swfVersion, tagCode));
     }
@@ -445,20 +445,20 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseGlyph(stream: Stream, swfVersion: number, tagCode: number): Glyph {
     stream.align();
-    var fillBits = stream.readUb(4);
-    var lineBits = stream.readUb(4);
+    let fillBits = stream.readUb(4);
+    let lineBits = stream.readUb(4);
     return parseShapeRecords(stream, swfVersion, tagCode, false, fillBits, lineBits, false);
   }
 
   function parseDefineTextTag(stream: Stream, swfVersion, tagCode: number): StaticTextTag {
-    var tag: StaticTextTag = <any>{ code: tagCode };
+    let tag: StaticTextTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
     tag.bbox = parseBbox(stream);
     tag.matrix = parseMatrix(stream);
-    var glyphBits = stream.readUi8();
-    var advanceBits = stream.readUi8();
-    var records: TextRecord[] = tag.records = [];
-    var record: TextRecord;
+    let glyphBits = stream.readUi8();
+    let advanceBits = stream.readUi8();
+    let records: TextRecord[] = tag.records = [];
+    let record: TextRecord;
     while (record = parseTextRecord(stream, swfVersion, tagCode, glyphBits, advanceBits)) {
       records.push(record);
     }
@@ -468,11 +468,11 @@ module Shumway.SWF.Parser.LowLevel {
   function parseTextRecord(stream: Stream, swfVersion: number, tagCode: number, glyphBits: number,
                            advanceBits: number): TextRecord {
     stream.align();
-    var flags = stream.readUb(8);
+    let flags = stream.readUb(8);
     if (!flags) {
       return null;
     }
-    var record: TextRecord = <any>{};
+    let record: TextRecord = <any>{};
     record.flags = flags;
     if (flags & TextRecordFlags.HasFont) {
       record.fontId = stream.readUi16();
@@ -491,12 +491,12 @@ module Shumway.SWF.Parser.LowLevel {
     if (flags & TextRecordFlags.HasFont) {
       record.fontHeight = stream.readUi16();
     }
-    var glyphCount = stream.readUi8();
+    let glyphCount = stream.readUi8();
     if (swfVersion <= 6) {
       glyphCount = glyphCount; // & 0x7f ???;
     }
-    var entries: TextEntry[] = record.entries = [];
-    var i = glyphCount;
+    let entries: TextEntry[] = record.entries = [];
+    let i = glyphCount;
     while (i--) {
       entries.push({
         glyphIndex: stream.readUb(glyphBits),
@@ -508,9 +508,9 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseDefineSoundTag(stream: Stream, swfVersion: number, tagCode: number,
                                tagEnd: number): SoundTag {
-    var tag: SoundTag = <any>{ code: tagCode };
+    let tag: SoundTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var soundFlags = stream.readUi8();
+    let soundFlags = stream.readUi8();
     tag.soundFormat = soundFlags >> 4 & 15;
     tag.soundRate = soundFlags >> 2 & 3;
     tag.soundSize = soundFlags >> 1 & 1;
@@ -523,7 +523,7 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseStartSoundTag(stream: Stream, swfVersion: number,
                               tagCode: number): StartSoundTag {
-    var tag: StartSoundTag = <any>{ code: tagCode };
+    let tag: StartSoundTag = <any>{ code: tagCode };
     if (tagCode == SwfTagCode.CODE_START_SOUND) {
       tag.soundId = stream.readUi16();
     }
@@ -535,8 +535,8 @@ module Shumway.SWF.Parser.LowLevel {
   }
 
   function parseSoundInfo(stream: Stream): SoundInfo {
-    var info: SoundInfo = <any>{};
-    var flags = info.flags = stream.readUi8();
+    let info: SoundInfo = <any>{};
+    let flags = info.flags = stream.readUi8();
     if (flags & SoundInfoFlags.HasInPoint) {
       info.inPoint = stream.readUi32();
     }
@@ -547,9 +547,9 @@ module Shumway.SWF.Parser.LowLevel {
       info.loopCount = stream.readUi16();
     }
     if (flags & SoundInfoFlags.HasEnvelope) {
-      var envelopeCount = stream.readUi8();
-      var envelopes: SoundEnvelope[] = info.envelopes = [];
-      var i = envelopeCount;
+      let envelopeCount = stream.readUi8();
+      let envelopes: SoundEnvelope[] = info.envelopes = [];
+      let i = envelopeCount;
       while (i--) {
         envelopes.push({
           pos44: stream.readUi32(),
@@ -562,13 +562,13 @@ module Shumway.SWF.Parser.LowLevel {
   }
 
   export function parseSoundStreamHeadTag(stream: Stream, tagEnd: number): SoundStreamHeadTag {
-    var tag: SoundStreamHeadTag = <any>{};
-    var playbackFlags = stream.readUi8();
+    let tag: SoundStreamHeadTag = <any>{};
+    let playbackFlags = stream.readUi8();
     tag.playbackRate = playbackFlags >> 2 & 3;
     tag.playbackSize = playbackFlags >> 1 & 1;
     tag.playbackType = playbackFlags & 1;
-    var streamFlags = stream.readUi8();
-    var streamCompression = tag.streamCompression = streamFlags >> 4 & 15;
+    let streamFlags = stream.readUi8();
+    let streamCompression = tag.streamCompression = streamFlags >> 4 & 15;
     tag.streamRate = streamFlags >> 2 & 3;
     tag.streamSize = streamFlags >> 1 & 1;
     tag.streamType = streamFlags & 1;
@@ -581,9 +581,9 @@ module Shumway.SWF.Parser.LowLevel {
 
   export function parseDefineBitmapTag(stream: Stream, swfVersion: number, tagCode: number,
                                        tagEnd: number): BitmapTag {
-    var tag: BitmapTag = <any>{ code: tagCode };
+    let tag: BitmapTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var format = tag.format = stream.readUi8();
+    let format = tag.format = stream.readUi8();
     tag.width = stream.readUi16();
     tag.height = stream.readUi16();
     tag.hasAlpha = tagCode === SwfTagCode.CODE_DEFINE_BITS_LOSSLESS2;
@@ -596,10 +596,10 @@ module Shumway.SWF.Parser.LowLevel {
   }
 
   function parseDefineEditTextTag(stream: Stream, swfVersion: number, tagCode: number): TextTag {
-    var tag: TextTag = <any>{ code: tagCode };
+    let tag: TextTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
     tag.bbox = parseBbox(stream);
-    var flags = tag.flags = stream.readUi16();
+    let flags = tag.flags = stream.readUi16();
     if (flags & TextFlags.HasFont) {
       tag.fontId = stream.readUi16();
     }
@@ -631,10 +631,10 @@ module Shumway.SWF.Parser.LowLevel {
 
   export function parseDefineFont2Tag(stream: Stream, swfVersion: number, tagCode: number,
                                       tagEnd: number): FontTag {
-    var tag: FontTag = <any>{ code: tagCode };
+    let tag: FontTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var flags = tag.flags = stream.readUi8();
-    var wide = !!(flags & FontFlags.WideOrHasFontData);
+    let flags = tag.flags = stream.readUi8();
+    let wide = !!(flags & FontFlags.WideOrHasFontData);
     if (swfVersion > 5) {
       tag.language = stream.readUi8();
     } else {
@@ -644,19 +644,19 @@ module Shumway.SWF.Parser.LowLevel {
       stream.pos += 1;
       tag.language = 0;
     }
-    var nameLength = stream.readUi8();
+    let nameLength = stream.readUi8();
     tag.name = stream.readString(nameLength);
     if (tagCode === SwfTagCode.CODE_DEFINE_FONT3) {
       tag.resolution = 20;
     }
-    var glyphCount = stream.readUi16();
+    let glyphCount = stream.readUi16();
     // The SWF format docs doesn't say that, but the DefineFont{2,3} tag ends here for device fonts.
     if (glyphCount === 0) {
       return tag;
     }
-    var startpos = stream.pos;
-    var offsets: number[] = tag.offsets = [];
-    var i = glyphCount;
+    let startpos = stream.pos;
+    let offsets: number[] = tag.offsets = [];
+    let i = glyphCount;
     if (flags & FontFlags.WideOffset) {
       while (i--) {
         offsets.push(stream.readUi32());
@@ -668,10 +668,10 @@ module Shumway.SWF.Parser.LowLevel {
       }
       tag.mapOffset = stream.readUi16();
     }
-    var glyphs: Glyph[] = tag.glyphs = [];
-    var i = glyphCount;
+    let glyphs: Glyph[] = tag.glyphs = [];
+    let i = glyphCount;
     while (i--) {
-      var dist = tag.offsets[glyphCount - i] + startpos - stream.pos;
+      let dist = tag.offsets[glyphCount - i] + startpos - stream.pos;
       // when just one byte difference between two offsets, just read that and insert an empty glyph.
       if (dist === 1) {
         stream.pos += 1;
@@ -680,8 +680,8 @@ module Shumway.SWF.Parser.LowLevel {
       }
       glyphs.push(parseGlyph(stream, swfVersion, tagCode));
     }
-    var codes: number[] = tag.codes = [];
-    var i = glyphCount;
+    let codes: number[] = tag.codes = [];
+    let i = glyphCount;
     while (i--) {
       codes.push(wide ? stream.readUi16() : stream.readUi8());
     }
@@ -689,19 +689,19 @@ module Shumway.SWF.Parser.LowLevel {
       tag.ascent = stream.readUi16();
       tag.descent = stream.readUi16();
       tag.leading = stream.readSi16();
-      var advance: number[] = tag.advance = [];
-      var i = glyphCount;
+      let advance: number[] = tag.advance = [];
+      let i = glyphCount;
       while (i--) {
         advance.push(stream.readSi16());
       }
-      var bbox: Bbox[] = tag.bbox = [];
-      var i = glyphCount;
+      let bbox: Bbox[] = tag.bbox = [];
+      let i = glyphCount;
       while (i--) {
         bbox.push(parseBbox(stream));
       }
-      var kerningCount = stream.readUi16();
-      var kernings: Kerning[] = tag.kerning = [];
-      var i = kerningCount;
+      let kerningCount = stream.readUi16();
+      let kernings: Kerning[] = tag.kerning = [];
+      let i = kerningCount;
       // DefineFont2 tags tend to have a wrong kerning count so we have to make sure here that there is enough unread
       // data remaining before parsing the next kerning record. If not, we have to bail out earlier in the following
       // loop to avoid reading out of bound.
@@ -713,7 +713,7 @@ module Shumway.SWF.Parser.LowLevel {
   }
   
   function parseKerning(stream: Stream, wide: boolean): Kerning {
-    var kerning: Kerning = <any>{};
+    let kerning: Kerning = <any>{};
     if (wide) {
       kerning.code1 = stream.readUi16();
       kerning.code2 = stream.readUi16();
@@ -728,9 +728,9 @@ module Shumway.SWF.Parser.LowLevel {
 
   export function parseDefineFont4Tag(stream: Stream, swfVersion: number, tagCode: number,
                                       tagEnd: number): FontTag {
-    var tag: FontTag = <any>{ code: tagCode };
+    let tag: FontTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
-    var flags = tag.flags = stream.readUi8();
+    let flags = tag.flags = stream.readUi8();
     tag.name = stream.readString(-1);
     if (flags & FontFlags.WideOrHasFontData) {
       tag.data = stream.bytes.subarray(stream.pos, tagEnd);
@@ -741,26 +741,26 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseDefineScalingGridTag(stream: Stream, swfVersion: number,
                                      tagCode: number): ScalingGridTag {
-    var tag: ScalingGridTag = <any>{ code: tagCode };
+    let tag: ScalingGridTag = <any>{ code: tagCode };
     tag.symbolId = stream.readUi16();
     tag.splitter = parseBbox(stream);
     return tag;
   }
 
   export function parseDefineSceneTag(stream: Stream, tagCode: number): SceneTag {
-    var tag: SceneTag = <any>{ code: tagCode };
-    var sceneCount = stream.readEncodedU32();
-    var scenes: Scene[] = tag.scenes = [];
-    var i = sceneCount;
+    let tag: SceneTag = <any>{ code: tagCode };
+    let sceneCount = stream.readEncodedU32();
+    let scenes: Scene[] = tag.scenes = [];
+    let i = sceneCount;
     while (i--) {
       scenes.push({
         offset: stream.readEncodedU32(),
         name: stream.readString(-1)
       });
     }
-    var labelCount = stream.readEncodedU32();
-    var labels: Label[] = tag.labels = [];
-    var i = labelCount;
+    let labelCount = stream.readEncodedU32();
+    let labels: Label[] = tag.labels = [];
+    let i = labelCount;
     while (i--) {
       labels.push({
         frame: stream.readEncodedU32(),
@@ -771,20 +771,20 @@ module Shumway.SWF.Parser.LowLevel {
   }
   
   function parseDefineShapeTag(stream: Stream, swfVersion: number, tagCode: number): ShapeTag {
-    var tag: ShapeTag = <any>{ code: tagCode };
+    let tag: ShapeTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
     tag.lineBounds = parseBbox(stream);
-    var flags = 0;
-    var isMorph = tagCode === SwfTagCode.CODE_DEFINE_MORPH_SHAPE ||
+    let flags = 0;
+    let isMorph = tagCode === SwfTagCode.CODE_DEFINE_MORPH_SHAPE ||
                   tagCode === SwfTagCode.CODE_DEFINE_MORPH_SHAPE2;
     if (isMorph) {
       flags |= ShapeFlags.IsMorph;
       tag.lineBoundsMorph = parseBbox(stream);
     }
-    var canHaveStrokes = tagCode === SwfTagCode.CODE_DEFINE_SHAPE4 ||
+    let canHaveStrokes = tagCode === SwfTagCode.CODE_DEFINE_SHAPE4 ||
                          tagCode === SwfTagCode.CODE_DEFINE_MORPH_SHAPE2;
     if (canHaveStrokes) {
-      var fillBounds = tag.fillBounds = parseBbox(stream);
+      let fillBounds = tag.fillBounds = parseBbox(stream);
       if (isMorph) {
         tag.fillBoundsMorph = parseBbox(stream);
       }
@@ -797,8 +797,8 @@ module Shumway.SWF.Parser.LowLevel {
     tag.fillStyles = parseFillStyles(stream, swfVersion, tagCode, isMorph);
     tag.lineStyles = parseLineStyles(stream, swfVersion, tagCode, isMorph, canHaveStrokes);
     stream.align();
-    var fillBits = stream.readUb(4);
-    var lineBits = stream.readUb(4);
+    let fillBits = stream.readUb(4);
+    let lineBits = stream.readUb(4);
     tag.records = parseShapeRecords(stream, swfVersion, tagCode, isMorph, fillBits, lineBits,
                                     canHaveStrokes);
     if (isMorph) {
@@ -814,26 +814,26 @@ module Shumway.SWF.Parser.LowLevel {
   function parseShapeRecords(stream: Stream, swfVersion: number, tagCode: number,
                              isMorph: boolean, fillBits: number, lineBits: number,
                              hasStrokes: boolean): ShapeRecord[] {
-    var records: ShapeRecord[] = [];
-    var bits: number;
+    let records: ShapeRecord[] = [];
+    let bits: number;
     do {
-      var record: any = {};
-      var type = record.type = stream.readUb(1);
-      var flags = stream.readUb(5);
+      let record: any = {};
+      let type = record.type = stream.readUb(1);
+      let flags = stream.readUb(5);
       if (!(type || flags)) {
         break;
       }
       if (type) {
-        var bits = (flags & 0x0f) + 2;
+        let bits = (flags & 0x0f) + 2;
         flags = (flags & 0xf0) << 1;
         if (flags & ShapeRecordFlags.IsStraight) {
-          var isGeneral = record.isGeneral = stream.readUb(1);
+          let isGeneral = record.isGeneral = stream.readUb(1);
           if (isGeneral) {
             flags |= ShapeRecordFlags.IsGeneral;
             record.deltaX = stream.readSb(bits);
             record.deltaY = stream.readSb(bits);
           } else {
-            var isVertical = record.isVertical = stream.readUb(1);
+            let isVertical = record.isVertical = stream.readUb(1);
             if (isVertical) {
               flags |= ShapeRecordFlags.IsVertical;
               record.deltaY = stream.readSb(bits);
@@ -882,12 +882,12 @@ module Shumway.SWF.Parser.LowLevel {
 
   function parseFillStyles(stream: Stream, swfVersion: number, tagCode: number,
                            isMorph: boolean): FillStyle[] {
-    var count = stream.readUi8();
+    let count = stream.readUi8();
     if (tagCode > SwfTagCode.CODE_DEFINE_SHAPE && count === 255) {
       count = stream.readUi16();
     }
-    var styles: FillStyle[] = [];
-    var i = count;
+    let styles: FillStyle[] = [];
+    let i = count;
     while (i--) {
       styles.push(parseFillStyle(stream, swfVersion, tagCode, isMorph));
     }
@@ -896,11 +896,11 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseFillStyle(stream: Stream, swfVersion: number, tagCode: number,
                           isMorph: boolean): FillStyle {
-    var style: FillStyle = <any>{};
-    var type = style.type = stream.readUi8();
+    let style: FillStyle = <any>{};
+    let type = style.type = stream.readUi8();
     switch (type) {
       case 0:
-        var solid = <SolidFill>style;
+        let solid = <SolidFill>style;
         solid.color = tagCode > SwfTagCode.CODE_DEFINE_SHAPE2 || isMorph ?
                       parseRgba(stream) :
                       parseRgb(stream);
@@ -911,7 +911,7 @@ module Shumway.SWF.Parser.LowLevel {
       case 16:
       case 18:
       case 19:
-        var gradient = <GradientFill>style;
+        let gradient = <GradientFill>style;
         gradient.matrix = parseMatrix(stream);
         if (isMorph) {
           gradient.matrixMorph = parseMatrix(stream);
@@ -922,9 +922,9 @@ module Shumway.SWF.Parser.LowLevel {
         } else {
           stream.readUb(4);
         }
-        var count = stream.readUb(4);
-        var records: GradientRecord[] = gradient.records = [];
-        var j = count;
+        let count = stream.readUb(4);
+        let records: GradientRecord[] = gradient.records = [];
+        let j = count;
         while (j--) {
           records.push(parseGradientRecord(stream, tagCode, isMorph));
         }
@@ -939,7 +939,7 @@ module Shumway.SWF.Parser.LowLevel {
       case 65:
       case 66:
       case 67:
-        var pattern = <BitmapFill>style;
+        let pattern = <BitmapFill>style;
         pattern.bitmapId = stream.readUi16();
         pattern.condition = type === 64 || type === 67;
         pattern.matrix = parseMatrix(stream);
@@ -953,7 +953,7 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseGradientRecord(stream: Stream, tagCode: number,
                                isMorph: boolean): GradientRecord {
-    var record: GradientRecord = <any>{};
+    let record: GradientRecord = <any>{};
     record.ratio = stream.readUi8();
     if (tagCode > SwfTagCode.CODE_DEFINE_SHAPE2) {
       record.color = parseRgba(stream);
@@ -969,14 +969,14 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseLineStyles(stream: Stream, swfVersion: number, tagCode: number,
                            isMorph: boolean, hasStrokes: boolean): LineStyle[] {
-    var count = stream.readUi8();
+    let count = stream.readUi8();
     if (tagCode > SwfTagCode.CODE_DEFINE_SHAPE && count === 255) {
       count = stream.readUi16();
     }
-    var styles: LineStyle[] = [];
-    var i = count;
+    let styles: LineStyle[] = [];
+    let i = count;
     while (i--) {
-      var style: any = {};
+      let style: any = {};
       style.width = stream.readUi16();
       if (isMorph) {
         style.widthMorph = stream.readUi16();
@@ -984,8 +984,8 @@ module Shumway.SWF.Parser.LowLevel {
       if (hasStrokes) {
         stream.align();
         style.startCapsStyle = stream.readUb(2);
-        var jointStyle = style.jointStyle = stream.readUb(2);
-        var hasFill = style.hasFill = stream.readUb(1);
+        let jointStyle = style.jointStyle = stream.readUb(2);
+        let hasFill = style.hasFill = stream.readUb(1);
         style.noHscale = !!stream.readUb(1);
         style.noVscale = !!stream.readUb(1);
         style.pixelHinting = !!stream.readUb(1);
@@ -1020,7 +1020,7 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseDefineVideoStreamTag(stream: Stream, swfVersion: number,
                                      tagCode: number): VideoStreamTag {
-    var tag: VideoStreamTag = <any>{ code: tagCode };
+    let tag: VideoStreamTag = <any>{ code: tagCode };
     tag.id = stream.readUi16();
     tag.numFrames = stream.readUi16();
     tag.width = stream.readUi16();
@@ -1034,7 +1034,7 @@ module Shumway.SWF.Parser.LowLevel {
   
   function parseVideoFrameTag(stream: Stream, swfVersion: number,
                               tagCode: number, tagEnd: number): VideoFrameTag {
-    var tag: VideoFrameTag = <any>{ code: tagCode };
+    let tag: VideoFrameTag = <any>{ code: tagCode };
     tag.streamId = stream.readUi16();
     tag.frameNum = stream.readUi16();
     tag.videoData = stream.bytes.subarray(stream.pos, tagEnd);
@@ -1042,7 +1042,7 @@ module Shumway.SWF.Parser.LowLevel {
     return tag;
   }
   
-  export var tagHandlers: any = {
+  export let tagHandlers: any = {
     /* End */                            0: undefined,
     /* ShowFrame */                      1: undefined,
     /* DefineShape */                    2: parseDefineShapeTag,
@@ -1111,15 +1111,15 @@ module Shumway.SWF.Parser.LowLevel {
   };
 
   export function parseHeader(stream: Stream) {
-    var bits = stream.readUb(5);
-    var xMin = stream.readSb(bits);
-    var xMax = stream.readSb(bits);
-    var yMin = stream.readSb(bits);
-    var yMax = stream.readSb(bits);
+    let bits = stream.readUb(5);
+    let xMin = stream.readSb(bits);
+    let xMax = stream.readSb(bits);
+    let yMin = stream.readSb(bits);
+    let yMax = stream.readSb(bits);
     stream.align();
-    var frameRateFraction = stream.readUi8();
-    var frameRate = stream.readUi8() + frameRateFraction / 256;
-    var frameCount = stream.readUi16();
+    let frameRateFraction = stream.readUi8();
+    let frameRate = stream.readUi8() + frameRateFraction / 256;
+    let frameCount = stream.readUi16();
     return {
       frameRate: frameRate,
       frameCount: frameCount,

@@ -61,8 +61,8 @@ module Shumway.Remoting.Player {
 
     remoteObjects() {
       this.phase = Remoting.RemotingPhase.Objects;
-      var roots = this.roots;
-      for (var i = 0; i < roots.length; i++) {
+      let roots = this.roots;
+      for (let i = 0; i < roots.length; i++) {
         Shumway.Player.enterTimeline("remoting objects");
         this.writeDirtyDisplayObjects(roots[i], false);
         Shumway.Player.leaveTimeline("remoting objects");
@@ -71,8 +71,8 @@ module Shumway.Remoting.Player {
 
     remoteReferences() {
       this.phase = Remoting.RemotingPhase.References;
-      var roots = this.roots;
-      for (var i = 0; i < roots.length; i++) {
+      let roots = this.roots;
+      for (let i = 0; i < roots.length; i++) {
         Shumway.Player.enterTimeline("remoting references");
         this.writeDirtyDisplayObjects(roots[i], true);
         Shumway.Player.leaveTimeline("remoting references");
@@ -87,20 +87,20 @@ module Shumway.Remoting.Player {
      * Serializes dirty display objects starting at the specified root |displayObject| node.
      */
     writeDirtyDisplayObjects(displayObject: DisplayObject, clearDirtyDescendentsFlag: boolean) {
-      var self = this;
-      var roots = this.roots;
+      let self = this;
+      let roots = this.roots;
       displayObject.visit(function (displayObject) {
         if (displayObject._hasAnyDirtyFlags(DisplayObjectDirtyFlags.Dirty)) {
           self.writeUpdateFrame(displayObject);
           // Collect more roots?
           if (roots && displayObject.mask) {
-            var root = displayObject.mask._findFurthestAncestorOrSelf();
+            let root = displayObject.mask._findFurthestAncestorOrSelf();
             Shumway.ArrayUtilities.pushUnique(roots, root)
           }
         }
         // TODO: Checking if we need to write assets this way is kinda expensive, do better here.
         self.writeDirtyAssets(displayObject);
-        var hasDirtyDescendents = displayObject._hasFlags(DisplayObjectFlags.DirtyDescendents);
+        let hasDirtyDescendents = displayObject._hasFlags(DisplayObjectFlags.DirtyDescendents);
         if (hasDirtyDescendents) {
           if (clearDirtyDescendentsFlag) {
             // We need this flag to make sure we don't clear the flag in the first remoting pass.
@@ -118,7 +118,7 @@ module Shumway.Remoting.Player {
         return;
       }
       writer && writer.writeLn("Sending Stage");
-      var serializer = this;
+      let serializer = this;
       this.output.writeInt(MessageTag.UpdateStage);
       this.output.writeInt(stage._id);
       this.output.writeInt(stage.color);
@@ -132,15 +132,15 @@ module Shumway.Remoting.Player {
     writeCurrentMouseTarget(stage: Stage, currentMouseTarget: flash.display.InteractiveObject) {
       this.output.writeInt(MessageTag.UpdateCurrentMouseTarget);
 
-      var sec = stage.sec;
-      var Mouse = sec.flash.ui.Mouse.axClass;
-      var cursor = Mouse.cursor;
+      let sec = stage.sec;
+      let Mouse = sec.flash.ui.Mouse.axClass;
+      let cursor = Mouse.cursor;
       if (currentMouseTarget) {
-        var SimpleButton = sec.flash.display.SimpleButton.axClass;
-        var Sprite = sec.flash.display.Sprite.axClass;
+        let SimpleButton = sec.flash.display.SimpleButton.axClass;
+        let Sprite = sec.flash.display.Sprite.axClass;
         this.output.writeInt(currentMouseTarget._id);
         if (cursor === MouseCursor.AUTO) {
-          var node = currentMouseTarget;
+          let node = currentMouseTarget;
           do {
             if (SimpleButton.axIsType(node) ||
                 (Sprite.axIsType(node) && (<flash.display.Sprite>node).buttonMode) &&
@@ -162,9 +162,9 @@ module Shumway.Remoting.Player {
       if (!graphics._isDirty) {
         return;
       }
-      var textures = graphics.getUsedTextures();
-      var numTextures = textures.length;
-      for (var i = 0; i < numTextures; i++) {
+      let textures = graphics.getUsedTextures();
+      let numTextures = textures.length;
+      for (let i = 0; i < numTextures; i++) {
         textures[i] && this.writeBitmapData(textures[i]);
       }
       this.output.writeInt(MessageTag.UpdateGraphics);
@@ -173,7 +173,7 @@ module Shumway.Remoting.Player {
       this._writeRectangle(graphics._getContentBounds());
       this._writeAsset(graphics.getGraphicsData().toPlainObject());
       this.output.writeInt(numTextures);
-      for (var i = 0; i < numTextures; i++) {
+      for (let i = 0; i < numTextures; i++) {
         this.output.writeInt(textures[i] ? textures[i]._id : -1);
       }
       graphics._isDirty = false;
@@ -220,7 +220,7 @@ module Shumway.Remoting.Player {
       this.output.writeInt(textContent._id);
       this.output.writeInt(-1);
       this._writeRectangle(textContent.bounds);
-      var identity = textContent.sec.flash.geom.Matrix.axClass.FROZEN_IDENTITY_MATRIX;
+      let identity = textContent.sec.flash.geom.Matrix.axClass.FROZEN_IDENTITY_MATRIX;
       this._writeMatrix(textContent.matrix || identity);
       this.output.writeInt(textContent.backgroundColor);
       this.output.writeInt(textContent.borderColor);
@@ -230,11 +230,11 @@ module Shumway.Remoting.Player {
       this.output.writeInt(textContent.scrollH);
       this._writeAsset(textContent.plainText);
       this._writeAsset(textContent.textRunData.toPlainObject());
-      var coords = textContent.coords;
+      let coords = textContent.coords;
       if (coords) {
-        var numCoords = coords.length;
+        let numCoords = coords.length;
         this.output.writeInt(numCoords);
-        for (var i = 0; i < numCoords; i++) {
+        for (let i = 0; i < numCoords; i++) {
           this.output.writeInt(coords[i]);
         }
       } else {
@@ -251,14 +251,14 @@ module Shumway.Remoting.Player {
         // Clips in GFX land don't use absolute clip depth numbers. Instead we need to encode
         // the number of siblings you want to clip. If children are removed or added, GFX clip
         // values need to be recomputed.
-        var i = displayObject._parent.getChildIndex(displayObject);
-        var j = displayObject._parent.getClipDepthIndex(displayObject._clipDepth);
+        let i = displayObject._parent.getChildIndex(displayObject);
+        let j = displayObject._parent.getClipDepthIndex(displayObject._clipDepth);
         // An invalid SWF can contain a clipping mask that doesn't clip anything, but pretends to.
         if (j - i < 0) {
           this.output.writeInt(-1);
           return;
         }
-        for (var k = i + 1; k <= i; k++) {
+        for (let k = i + 1; k <= i; k++) {
           // assert(displayObject._parent.getChildAt(k)._depth > displayObject._depth && displayObject._parent.getChildAt(k)._depth <= displayObject._clipDepth);
         }
         this.output.writeInt(j - i);
@@ -274,18 +274,18 @@ module Shumway.Remoting.Player {
 
       writer && writer.writeLn("Sending UpdateFrame: " + displayObject.debugName(true));
 
-      var hasMask = false;
-      var hasMatrix = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyMatrix);
-      var hasColorTransform = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyColorTransform);
-      var hasMiscellaneousProperties = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyMiscellaneousProperties);
+      let hasMask = false;
+      let hasMatrix = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyMatrix);
+      let hasColorTransform = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyColorTransform);
+      let hasMiscellaneousProperties = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyMiscellaneousProperties);
 
-      var video: Video = null;
+      let video: Video = null;
       if (displayObject.sec.flash.media.Video.axClass.axIsType(displayObject)) {
         video = <Video>displayObject;
       }
 
       // Check if any children need to be written. These are remoting children, not just display object children.
-      var hasRemotableChildren = false;
+      let hasRemotableChildren = false;
       if (this.phase === RemotingPhase.References) {
         hasRemotableChildren = displayObject._hasAnyDirtyFlags (
           DisplayObjectDirtyFlags.DirtyChildren     |
@@ -296,16 +296,16 @@ module Shumway.Remoting.Player {
         );
         hasMask = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyMask);
       }
-      var bitmap: Bitmap = null;
+      let bitmap: Bitmap = null;
       if (displayObject.sec.flash.display.Bitmap.axClass.axIsType(displayObject)) {
         bitmap = <Bitmap>displayObject;
       }
 
       // Checks if the computed clip value needs to be written.
-      var hasClip = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyClipDepth);
+      let hasClip = displayObject._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyClipDepth);
 
       // Write Has Bits
-      var hasBits = 0;
+      let hasBits = 0;
       hasBits |= hasMatrix                  ? MessageBits.HasMatrix                  : 0;
       hasBits |= hasColorTransform          ? MessageBits.HasColorTransform          : 0;
       hasBits |= hasMask                    ? MessageBits.HasMask                    : 0;
@@ -343,8 +343,8 @@ module Shumway.Remoting.Player {
         }
       }
 
-      var graphics = displayObject._getGraphics();
-      var textContent = displayObject._getTextContent();
+      let graphics = displayObject._getGraphics();
+      let textContent = displayObject._getTextContent();
       if (hasRemotableChildren) {
         writer && writer.enter("Children: {");
         if (bitmap) {
@@ -363,8 +363,8 @@ module Shumway.Remoting.Player {
           }
         } else {
           // Check if we have a graphics or text object and write that as a child first.
-          var count = (graphics || textContent) ? 1 : 0;
-          var children = displayObject._children;
+          let count = (graphics || textContent) ? 1 : 0;
+          let children = displayObject._children;
           if (children) {
             count += children.length;
           }
@@ -378,7 +378,7 @@ module Shumway.Remoting.Player {
           }
           // Write all the display object children.
           if (children) {
-            for (var i = 0; i < children.length; i++) {
+            for (let i = 0; i < children.length; i++) {
               writer && writer.writeLn("Reference DisplayObject: " + children[i].debugName());
               this.output.writeInt(children[i]._id);
               // Make sure children with a clip depth are getting visited.
@@ -399,19 +399,19 @@ module Shumway.Remoting.Player {
      * Visit remotable child objects that are not otherwise visited.
      */
     writeDirtyAssets(displayObject: DisplayObject) {
-      var graphics = displayObject._getGraphics();
+      let graphics = displayObject._getGraphics();
       if (graphics) {
         this.writeGraphics(graphics);
         return;
       }
 
-      var textContent = displayObject._getTextContent();
+      let textContent = displayObject._getTextContent();
       if (textContent) {
         this.writeTextContent(textContent);
         return;
       }
 
-      var bitmap: Bitmap = null;
+      let bitmap: Bitmap = null;
       if (displayObject.sec.flash.display.Bitmap.axClass.axIsType(displayObject)) {
         bitmap = <Bitmap>displayObject;
         if (bitmap.bitmapData) {
@@ -420,7 +420,7 @@ module Shumway.Remoting.Player {
         return;
       }
 
-      var video: Video = null;
+      let video: Video = null;
       if (displayObject.sec.flash.media.Video.axClass.axIsType(displayObject)) {
         video = <Video>displayObject;
         if (video._netStream) {
@@ -443,7 +443,7 @@ module Shumway.Remoting.Player {
         this.output.writeInt(source._id);
       }
 
-      var hasBits = 0;
+      let hasBits = 0;
       hasBits |= matrix         ? MessageBits.HasMatrix : 0;
       hasBits |= colorTransform ? MessageBits.HasColorTransform : 0;
       hasBits |= clipRect       ? MessageBits.HasClipRect : 0;
@@ -485,7 +485,7 @@ module Shumway.Remoting.Player {
     }
 
     private _writeRectangle(bounds: Bounds) {
-      var output = this.output;
+      let output = this.output;
       // TODO: check if we should write bounds instead. Depends on what's more useful in GFX-land.
       output.write4Ints(bounds.xMin, bounds.yMin, bounds.width, bounds.height);
     }
@@ -500,13 +500,13 @@ module Shumway.Remoting.Player {
         this.output.writeInt(0);
         return;
       }
-      var sec = filters[0].sec;
-      var count = 0;
-      var blurFilterClass = sec.flash.filters.BlurFilter.axClass;
-      var dropShadowFilterClass = sec.flash.filters.DropShadowFilter.axClass;
-      var glowFilterClass = sec.flash.filters.GlowFilter.axClass;
-      var colorMatrixFilterClass = sec.flash.filters.ColorMatrixFilter.axClass;
-      for (var i = 0; i < filters.length; i++) {
+      let sec = filters[0].sec;
+      let count = 0;
+      let blurFilterClass = sec.flash.filters.BlurFilter.axClass;
+      let dropShadowFilterClass = sec.flash.filters.DropShadowFilter.axClass;
+      let glowFilterClass = sec.flash.filters.GlowFilter.axClass;
+      let colorMatrixFilterClass = sec.flash.filters.ColorMatrixFilter.axClass;
+      for (let i = 0; i < filters.length; i++) {
         if (blurFilterClass.axIsType(filters[i]) ||
             dropShadowFilterClass.axIsType(filters[i]) ||
             glowFilterClass.axIsType(filters[i]) ||
@@ -517,16 +517,16 @@ module Shumway.Remoting.Player {
         }
       }
       this.output.writeInt(count);
-      for (var i = 0; i < filters.length; i++) {
-        var filter = filters[i];
+      for (let i = 0; i < filters.length; i++) {
+        let filter = filters[i];
         if (blurFilterClass.axIsType(filter)) {
-          var blurFilter = <flash.filters.BlurFilter>filter;
+          let blurFilter = <flash.filters.BlurFilter>filter;
           this.output.writeInt(FilterType.Blur);
           this.output.writeFloat(blurFilter.blurX);
           this.output.writeFloat(blurFilter.blurY);
           this.output.writeInt(blurFilter.quality);
         } else if (dropShadowFilterClass.axIsType(filter)) {
-          var dropShadowFilter = <flash.filters.DropShadowFilter>filter;
+          let dropShadowFilter = <flash.filters.DropShadowFilter>filter;
           this.output.writeInt(FilterType.DropShadow);
           this.output.writeFloat(dropShadowFilter.alpha);
           this.output.writeFloat(dropShadowFilter.angle);
@@ -540,7 +540,7 @@ module Shumway.Remoting.Player {
           this.output.writeInt(dropShadowFilter.quality);
           this.output.writeFloat(dropShadowFilter.strength);
         } else if (glowFilterClass.axIsType(filter)) {
-          var glowFilter = <flash.filters.GlowFilter>filter;
+          let glowFilter = <flash.filters.GlowFilter>filter;
           this.output.writeInt(FilterType.DropShadow);
           this.output.writeFloat(glowFilter.alpha);
           this.output.writeFloat(0); // angle
@@ -554,9 +554,9 @@ module Shumway.Remoting.Player {
           this.output.writeInt(glowFilter.quality);
           this.output.writeFloat(glowFilter.strength);
         } else if (colorMatrixFilterClass.axIsType(filter)) {
-          var matrix = (<flash.filters.ColorMatrixFilter>filter).matrix.value;
+          let matrix = (<flash.filters.ColorMatrixFilter>filter).matrix.value;
           this.output.writeInt(FilterType.ColorMatrix);
-          for (var j = 0; j < 20; j++) {
+          for (let j = 0; j < 20; j++) {
             this.output.writeFloat(matrix[j]);
           }
         }
@@ -564,18 +564,18 @@ module Shumway.Remoting.Player {
     }
 
     private _writeColorTransform(colorTransform: flash.geom.ColorTransform) {
-      var output = this.output;
-      var rM = colorTransform.redMultiplier;
-      var gM = colorTransform.greenMultiplier;
-      var bM = colorTransform.blueMultiplier;
-      var aM = colorTransform.alphaMultiplier;
-      var rO = colorTransform.redOffset;
-      var gO = colorTransform.greenOffset;
-      var bO = colorTransform.blueOffset;
-      var aO = colorTransform.alphaOffset;
+      let output = this.output;
+      let rM = colorTransform.redMultiplier;
+      let gM = colorTransform.greenMultiplier;
+      let bM = colorTransform.blueMultiplier;
+      let aM = colorTransform.alphaMultiplier;
+      let rO = colorTransform.redOffset;
+      let gO = colorTransform.greenOffset;
+      let bO = colorTransform.blueOffset;
+      let aO = colorTransform.alphaOffset;
 
-      var identityOffset          = rO === gO && gO === bO && bO === aO && aO === 0;
-      var identityColorMultiplier = rM === gM && gM === bM && bM === 1;
+      let identityOffset          = rO === gO && gO === bO && bO === aO && aO === 0;
+      let identityColorMultiplier = rM === gM && gM === bM && bM === 1;
 
       if (identityOffset && identityColorMultiplier) {
         if (aM === 1) {
@@ -585,7 +585,7 @@ module Shumway.Remoting.Player {
           output.writeFloat(aM);
         }
       } else {
-        var zeroNonAlphaMultipliers = rM === 0 && gM === 0 && bM === 0;
+        let zeroNonAlphaMultipliers = rM === 0 && gM === 0 && bM === 0;
         if (zeroNonAlphaMultipliers) {
           output.writeInt(ColorTransformEncoding.AlphaMultiplierWithOffsets);
           output.writeFloat(aM);
@@ -626,8 +626,8 @@ module Shumway.Remoting.Player {
     }
 
     public read(): any {
-      var input = this.input;
-      var tag = input.readInt();
+      let input = this.input;
+      let tag = input.readInt();
       switch (<MessageTag>tag) {
         case MessageTag.MouseEvent:
           return this._readMouseEvent();
@@ -640,8 +640,8 @@ module Shumway.Remoting.Player {
     }
 
     private _readFocusEvent(): FocusEventData {
-      var input = this.input;
-      var typeId = input.readInt();
+      let input = this.input;
+      let typeId = input.readInt();
       return {
         tag: MessageTag.FocusEvent,
         type: <FocusEventType>typeId
@@ -649,13 +649,13 @@ module Shumway.Remoting.Player {
     }
 
     private _readMouseEvent(): MouseEventAndPointData {
-      var input = this.input;
-      var typeId = input.readInt();
-      var type = Shumway.Remoting.MouseEventNames[typeId];
-      var pX = input.readFloat();
-      var pY = input.readFloat();
-      var buttons = input.readInt();
-      var flags = input.readInt();
+      let input = this.input;
+      let typeId = input.readInt();
+      let type = Shumway.Remoting.MouseEventNames[typeId];
+      let pX = input.readFloat();
+      let pY = input.readFloat();
+      let buttons = input.readInt();
+      let flags = input.readInt();
       return {
         tag: MessageTag.MouseEvent,
         type: type,
@@ -668,13 +668,13 @@ module Shumway.Remoting.Player {
     }
 
     private _readKeyboardEvent(): KeyboardEventData {
-      var input = this.input;
-      var typeId = input.readInt();
-      var type = Shumway.Remoting.KeyboardEventNames[typeId];
-      var keyCode = input.readInt();
-      var charCode = input.readInt();
-      var location = input.readInt();
-      var flags = input.readInt();
+      let input = this.input;
+      let typeId = input.readInt();
+      let type = Shumway.Remoting.KeyboardEventNames[typeId];
+      let keyCode = input.readInt();
+      let charCode = input.readInt();
+      let location = input.readInt();
+      let flags = input.readInt();
       return {
         tag: MessageTag.KeyboardEvent,
         type: type,

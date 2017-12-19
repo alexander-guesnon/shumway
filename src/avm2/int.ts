@@ -47,9 +47,9 @@ module Shumway.AVMX {
         }
         this.scopes = [];
       }
-      var parent = this.parent;
-      for (var i = 0; i < this.stack.length; i++) {
-        var object = this.stack[i], isWith = this.isWith[i], scope = this.scopes[i];
+      let parent = this.parent;
+      for (let i = 0; i < this.stack.length; i++) {
+        let object = this.stack[i], isWith = this.isWith[i], scope = this.scopes[i];
         if (!scope || scope.parent !== parent || scope.object !== object || scope.isWith !== isWith) {
           scope = this.scopes[i] = new Scope(parent, object, isWith);
         }
@@ -64,7 +64,7 @@ module Shumway.AVMX {
     rn.id = mn.id;
     rn.kind = mn.kind;
     if (mn.isRuntimeName()) {
-      var name = stack.pop();
+      let name = stack.pop();
       // Unwrap content script-created AXQName instances.
       if (name && name.axClass && name.axClass === name.sec.AXQName) {
         name = name.name;
@@ -81,7 +81,7 @@ module Shumway.AVMX {
       rn.name = mn.name;
     }
     if (mn.isRuntimeNamespace()) {
-      var ns = stack.pop();
+      let ns = stack.pop();
       // Unwrap content script-created AXNamespace instances.
       if (ns._ns) {
         release || assert(ns.sec && ns.axClass === ns.sec.AXNamespace);
@@ -100,7 +100,7 @@ module Shumway.AVMX {
                             callee: AXFunction) {
     executionWriter && executionWriter.enter("> " + methodInfo);
     try {
-      var result = _interpret(self, methodInfo, savedScope, args, callee);
+      let result = _interpret(self, methodInfo, savedScope, args, callee);
       executionWriter && executionWriter.leave("< " + methodInfo.trait);
       return result;
     } catch (e) {
@@ -123,18 +123,18 @@ module Shumway.AVMX {
 
     constructor(receiver: Object, methodInfo: MethodInfo, parentScope: Scope, callArgs: any[],
                 callee: AXFunction) {
-      var body = this.body = methodInfo.getBody();
+      let body = this.body = methodInfo.getBody();
       this.code = body.code;
       this.scopes = new ScopeStack(parentScope);
-      var locals = this.locals = [receiver];
+      let locals = this.locals = [receiver];
 
-      var app = this.app = methodInfo.abc.applicationDomain;
-      var sec = this.sec = app.sec;
+      let app = this.app = methodInfo.abc.applicationDomain;
+      let sec = this.sec = app.sec;
 
-      var argCount = callArgs.length;
-      var arg;
-      for (var i = 0, j = methodInfo.parameters.length; i < j; i++) {
-        var p = methodInfo.parameters[i];
+      let argCount = callArgs.length;
+      let arg;
+      for (let i = 0, j = methodInfo.parameters.length; i < j; i++) {
+        let p = methodInfo.parameters[i];
         if (i < argCount) {
           arg = callArgs[i];
         } else if (p.hasOptionalValue()) {
@@ -142,9 +142,9 @@ module Shumway.AVMX {
         } else {
           arg = undefined;
         }
-        var rn = p.getType();
+        let rn = p.getType();
         if (rn && !rn.isAnyName()) {
-          var type = parentScope.getScopeProperty(rn, true, false);
+          let type = parentScope.getScopeProperty(rn, true, false);
           if (!type) {
             // During class initialization the class' constructor isn't in scope and can't be
             // resolved as a scope property: trying to do so yields `null`.
@@ -170,8 +170,8 @@ module Shumway.AVMX {
       if (methodInfo.needsRest()) {
         locals.push(sec.createArrayUnsafe(sliceArguments(callArgs, methodInfo.parameters.length)));
       } else if (methodInfo.needsArguments()) {
-        var argsArray = sliceArguments(callArgs, 0);
-        var argumentsArray = Object.create(sec.argumentsPrototype);
+        let argsArray = sliceArguments(callArgs, 0);
+        let argumentsArray = Object.create(sec.argumentsPrototype);
         argumentsArray.value = argsArray;
         argumentsArray.callee = callee;
         argumentsArray.receiver = receiver;
@@ -189,9 +189,9 @@ module Shumway.AVMX {
     }
 
     u30(): number {
-      var code = this.code;
-      var pc = this.pc;
-      var result = code[pc++];
+      let code = this.code;
+      let pc = this.pc;
+      let result = code[pc++];
       if (result & 0x80) {
         result = result & 0x7f | code[pc++] << 7;
         if (result & 0x4000) {
@@ -210,16 +210,16 @@ module Shumway.AVMX {
     }
 
     s24(): number {
-      var code = this.code;
-      var pc = this.pc;
-      var u = code[pc] | (code[pc + 1] << 8) | (code[pc + 2] << 16);
+      let code = this.code;
+      let pc = this.pc;
+      let u = code[pc] | (code[pc + 1] << 8) | (code[pc + 2] << 16);
       this.pc = pc + 3;
       return (u << 8) >> 8;
     }
 
     getHasNext2Info(): HasNext2Info {
-      var pc = this.pc;
-      var hasNext2Infos = this.hasNext2Infos;
+      let pc = this.pc;
+      let hasNext2Infos = this.hasNext2Infos;
       if (!hasNext2Infos) {
         hasNext2Infos = this.hasNext2Infos = [];
       }
@@ -232,20 +232,20 @@ module Shumway.AVMX {
 
   function _interpret(self: Object, methodInfo: MethodInfo, savedScope: Scope, callArgs: any [],
                       callee: AXFunction) {
-    var frame = new InterpreterFrame(self, methodInfo, savedScope, callArgs, callee);
-    var stack = frame.stack;
-    var locals = frame.locals;
-    var scopes = frame.scopes;
-    var sec = frame.sec;
-    var abc = methodInfo.abc;
+    let frame = new InterpreterFrame(self, methodInfo, savedScope, callArgs, callee);
+    let stack = frame.stack;
+    let locals = frame.locals;
+    let scopes = frame.scopes;
+    let sec = frame.sec;
+    let abc = methodInfo.abc;
 
-    var rn = new Multiname(abc, 0, null, null, null);
+    let rn = new Multiname(abc, 0, null, null, null);
 
-    var value, object, receiver, type, a, b, offset, index, result;
-    var args = [];
-    var argCount = 0;
+    let value, object, receiver, type, a, b, offset, index, result;
+    let args = [];
+    let argCount = 0;
 
-    var scopeStacksHeight = scopeStacks.length;
+    let scopeStacksHeight = scopeStacks.length;
     scopeStacks.push(frame.scopes);
 
     interpretLabel:
@@ -255,7 +255,7 @@ module Shumway.AVMX {
                                   frame.stack.map(x => stringifyStackEntry(x)).join(", ") + "]");
       }
       try {
-        var bc = frame.bc();
+        let bc = frame.bc();
         switch (bc) {
           case Bytecode.LABEL:
             continue;
@@ -376,9 +376,9 @@ module Shumway.AVMX {
             }
             continue;
           case Bytecode.LOOKUPSWITCH:
-            var basePC = frame.pc - 1;
+            let basePC = frame.pc - 1;
             offset = frame.s24();
-            var caseCount = frame.u30();
+            let caseCount = frame.u30();
             index = stack.pop();
             if (index <= caseCount) {
               frame.pc += 3 * index; // Jump to case offset.
@@ -400,9 +400,9 @@ module Shumway.AVMX {
             stack[stack.length - 1] = receiver.axNextValue(index);
             break;
           case Bytecode.HASNEXT2:
-            var hasNext2Info = frame.getHasNext2Info();
-            var objectIndex = frame.u30();
-            var indexIndex = frame.u30();
+            let hasNext2Info = frame.getHasNext2Info();
+            let objectIndex = frame.u30();
+            let indexIndex = frame.u30();
             hasNext2Info.next(sec.box(locals[objectIndex]), <number>locals[indexIndex]);
             locals[objectIndex] = hasNext2Info.object;
             locals[indexIndex] = hasNext2Info.index;
@@ -538,7 +538,7 @@ module Shumway.AVMX {
           //  argCount = frame.u30();
           //  popManyInto(stack, argCount, args);
           //  value = abc.getMetadataInfo(index);
-          //  var receiver = box(stack[stack.length - 1]);
+          //  let receiver = box(stack[stack.length - 1]);
           //  stack.push(value.axApply(receiver, args));
           //  break;
           case Bytecode.APPLYTYPE:
@@ -550,7 +550,7 @@ module Shumway.AVMX {
             argCount = frame.u30();
             // For LIFO-order iteration to be correct, we have to add items highest on the stack
             // first.
-            for (var i = stack.length - argCount * 2; i < stack.length; i += 2) {
+            for (let i = stack.length - argCount * 2; i < stack.length; i += 2) {
               value = stack[i + 1];
               object.axSetPublicProperty(stack[i], value);
             }
@@ -560,7 +560,7 @@ module Shumway.AVMX {
           case Bytecode.NEWARRAY:
             object = [];
             argCount = frame.u30();
-            for (var i = stack.length - argCount; i < stack.length; i++) {
+            for (let i = stack.length - argCount; i < stack.length; i++) {
               object.push(stack[i]);
             }
             stack.length -= argCount;
@@ -812,7 +812,7 @@ module Shumway.AVMX {
             break;
           case Bytecode.IN:
             receiver = sec.box(stack.pop());
-            var name = stack[stack.length - 1];
+            let name = stack[stack.length - 1];
             if (name && name.axClass === sec.AXQName) {
               stack[stack.length - 1] = receiver.axHasProperty(name.name);
             } else {
@@ -890,11 +890,11 @@ module Shumway.AVMX {
           e = createValidException(sec, e, bc, value, receiver, a, b, rn, scopeStacksHeight + 1);
         }
 
-        var catchBlocks = frame.body.catchBlocks;
-        for (var i = 0; i < catchBlocks.length; i++) {
-          var handler = catchBlocks[i];
+        let catchBlocks = frame.body.catchBlocks;
+        for (let i = 0; i < catchBlocks.length; i++) {
+          let handler = catchBlocks[i];
           if (frame.pc >= handler.start && frame.pc <= handler.end) {
-            var typeName = handler.getType();
+            let typeName = handler.getType();
             if (!typeName || frame.app.getClass(typeName).axIsType(e)) {
               stack.length = 0;
               stack.push(e);
@@ -915,12 +915,12 @@ module Shumway.AVMX {
   function createValidException(sec: AXSecurityDomain, internalError, bc: Bytecode,
                                 value: any, receiver: any, a: any, b: any, mn: Multiname,
                                 expectedScopeStacksHeight: number) {
-    var isProperErrorObject = internalError instanceof Error &&
+    let isProperErrorObject = internalError instanceof Error &&
                               typeof internalError.name === 'string' &&
                               typeof internalError.message === 'string';
     if (isProperErrorObject) {
       if (internalError instanceof RangeError || internalError.name === 'InternalError') {
-        var obj = Object.create(sec.AXError.tPrototype);
+        let obj = Object.create(sec.AXError.tPrototype);
         obj._errorID = 1023;
         // Stack exhaustion errors are annoying to catch: Identifying them requires
         // pattern-matching of error messages, and throwing them must be done very
@@ -949,8 +949,8 @@ module Shumway.AVMX {
       }
     }
 
-    var message: string;
-    var isSuper = false;
+    let message: string;
+    let isSuper = false;
     switch (bc) {
       case Bytecode.CALL:
         if (!value || !value.axApply) {
@@ -983,7 +983,7 @@ module Shumway.AVMX {
           return sec.createError('TypeError', Errors.ConvertUndefinedToObjectError);
         }
         if (!(receiver.axResolveMultiname(mn) in receiver)) {
-          var axClass = isSuper ? receiver.axClass.superClass : receiver.axClass;
+          let axClass = isSuper ? receiver.axClass.superClass : receiver.axClass;
           if (axClass.classInfo.instanceInfo.isSealed()) {
             return sec.createError('ReferenceError', Errors.ReadSealedError, mn.name,
                                    axClass.name.toFQNString(false));
@@ -1017,7 +1017,7 @@ module Shumway.AVMX {
         if (receiver === undefined) {
           return sec.createError('TypeError', Errors.ConvertUndefinedToObjectError);
         }
-        var nm = receiver.axResolveMultiname(mn);
+        let nm = receiver.axResolveMultiname(mn);
         if (nm in receiver && getPropertyDescriptor(receiver, nm).writable === false) {
           return sec.createError('ReferenceError', Errors.ConstWriteError, nm,
                                  receiver.axClass.name.name);
@@ -1080,8 +1080,8 @@ module Shumway.AVMX {
           break;
         }
         message = internalError.message;
-        var stack = internalError.stack.split('\n');
-        var lastFunctionEntry = stack[0].indexOf('at ') === 0 ? stack[0].substr(3) : stack[0];
+        let stack = internalError.stack.split('\n');
+        let lastFunctionEntry = stack[0].indexOf('at ') === 0 ? stack[0].substr(3) : stack[0];
         switch (internalError.name) {
           case 'TypeError':
             if (lastFunctionEntry.indexOf('AXBasePrototype_valueOf') === 0 ||
@@ -1094,7 +1094,7 @@ module Shumway.AVMX {
     // To be sure we don't let VM exceptions flow into the player, box them manually here,
     // even in release builds.
     message = 'Uncaught VM-internal exception during op ' + getBytecodeName(bc) + ': ';
-    var stack;
+    let stack;
     try {
       message += internalError.toString();
       stack = internalError.stack;
@@ -1102,7 +1102,7 @@ module Shumway.AVMX {
       message += '[Failed to stringify exception]';
     }
     // In the extension, we can just kill all the things.
-    var player = sec['player'];
+    let player = sec['player'];
     console.error(message, '\n', stack);
     if (player) {
       //player.executeFSCommand('quit', [message]);

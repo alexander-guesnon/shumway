@@ -32,7 +32,7 @@ module Shumway.Tools.Terminal {
       this.length = 0;
     }
     append(line, color) {
-      var lines = this.lines;
+      let lines = this.lines;
       if (lines.length > 0 && lines[lines.length - 1] === line) {
         this.repeat[lines.length - 1] ++;
         return;
@@ -112,22 +112,22 @@ module Shumway.Tools.Terminal {
       canvas.addEventListener('focus', onFocusIn.bind(this), false);
       canvas.addEventListener('blur', onFocusOut.bind(this), false);
 
-      var PAGE_UP = 33;
-      var PAGE_DOWN = 34;
-      var HOME = 36;
-      var END = 35;
-      var UP = 38;
-      var DOWN = 40;
-      var LEFT = 37;
-      var RIGHT = 39;
-      var KEY_A = 65;
-      var KEY_C = 67;
-      var KEY_F = 70;
-      var ESCAPE = 27;
-      var KEY_N = 78;
-      var KEY_T = 84;
-      var KEY_H = 72;
-      var KEY_S = 83;
+      let PAGE_UP = 33;
+      let PAGE_DOWN = 34;
+      let HOME = 36;
+      let END = 35;
+      let UP = 38;
+      let DOWN = 40;
+      let LEFT = 37;
+      let RIGHT = 39;
+      let KEY_A = 65;
+      let KEY_C = 67;
+      let KEY_F = 70;
+      let ESCAPE = 27;
+      let KEY_N = 78;
+      let KEY_T = 84;
+      let KEY_H = 72;
+      let KEY_S = 83;
 
       function onFocusIn(event) {
         this.hasFocus = true;
@@ -137,7 +137,7 @@ module Shumway.Tools.Terminal {
       }
 
       function onKeyDown(event) {
-        var delta = 0;
+        let delta = 0;
         switch (event.keyCode) {
           case KEY_H:
             this.printHelp();
@@ -186,9 +186,9 @@ module Shumway.Tools.Terminal {
           case KEY_C:
           case KEY_S:
             if (event.metaKey || event.ctrlKey) {
-              var str = "";
+              let str = "";
               if (this.selection) {
-                for (var i = this.selection.start; i <= this.selection.end; i++) {
+                for (let i = this.selection.start; i <= this.selection.end; i++) {
                   str += this.buffer.get(i) + "\n";
                 }
               } else {
@@ -234,7 +234,7 @@ module Shumway.Tools.Terminal {
     }
 
     public printHelp(): void {
-      var lines = [
+      let lines = [
         'h - help',
         'n - turn on/off line numbers',
         't - turn on/off line time',
@@ -252,12 +252,12 @@ module Shumway.Tools.Terminal {
     }
 
     private _resizeHandler() {
-      var parent = this.canvas.parentElement;
-      var cw = parent.clientWidth;
-      var ch = parent.clientHeight && (parent.clientHeight - 1);
+      let parent = this.canvas.parentElement;
+      let cw = parent.clientWidth;
+      let ch = parent.clientHeight && (parent.clientHeight - 1);
 
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = 1;
+      let devicePixelRatio = window.devicePixelRatio || 1;
+      let backingStoreRatio = 1;
       if (devicePixelRatio !== backingStoreRatio) {
         this.ratio = devicePixelRatio / backingStoreRatio;
         this.canvas.width = cw * this.ratio;
@@ -287,30 +287,30 @@ module Shumway.Tools.Terminal {
       this.scrollIntoView();
     }
     paint() {
-      var lineCount = this.pageLineCount;
+      let lineCount = this.pageLineCount;
       if (this.pageIndex + lineCount > this.buffer.length) {
         lineCount = this.buffer.length - this.pageIndex;
       }
 
-      var charSize = 5;
-      var lineNumberMargin = this.textMarginLeft;
-      var lineTimeMargin = lineNumberMargin + (this.showLineNumbers ? (String(this.buffer.length).length + 2) * charSize: 0);
-      var lineRepeatMargin = lineTimeMargin + (this.showLineTime ? charSize * 8 : 2 * charSize);
-      var lineMargin = lineRepeatMargin + charSize * 5;
+      let charSize = 5;
+      let lineNumberMargin = this.textMarginLeft;
+      let lineTimeMargin = lineNumberMargin + (this.showLineNumbers ? (String(this.buffer.length).length + 2) * charSize: 0);
+      let lineRepeatMargin = lineTimeMargin + (this.showLineTime ? charSize * 8 : 2 * charSize);
+      let lineMargin = lineRepeatMargin + charSize * 5;
       this.context.font = this.fontSize + 'px Consolas, "Liberation Mono", Courier, monospace';
       this.context.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
 
-      var w = this.canvas.width;
-      var h = this.lineHeight;
+      let w = this.canvas.width;
+      let h = this.lineHeight;
 
-      for (var i = 0; i < lineCount; i++) {
-        var y = i * this.lineHeight;
-        var lineIndex = this.pageIndex + i;
-        var line = this.buffer.get(lineIndex);
-        var lineFormat = this.buffer.getFormat(lineIndex);
-        var lineRepeat = this.buffer.getRepeat(lineIndex);
-        // var lineTimeDelta = lineIndex > 1 ? this.buffer.getTime(lineIndex) - this.buffer.getTime(lineIndex - 1) : 0;
-        var lineTimeDelta = lineIndex > 1 ? this.buffer.getTime(lineIndex) - this.buffer.getTime(0) : 0;
+      for (let i = 0; i < lineCount; i++) {
+        let y = i * this.lineHeight;
+        let lineIndex = this.pageIndex + i;
+        let line = this.buffer.get(lineIndex);
+        let lineFormat = this.buffer.getFormat(lineIndex);
+        let lineRepeat = this.buffer.getRepeat(lineIndex);
+        // let lineTimeDelta = lineIndex > 1 ? this.buffer.getTime(lineIndex) - this.buffer.getTime(lineIndex - 1) : 0;
+        let lineTimeDelta = lineIndex > 1 ? this.buffer.getTime(lineIndex) - this.buffer.getTime(0) : 0;
 
         this.context.fillStyle = lineIndex % 2 ? this.lineColor : this.alternateLineColor;
         if (lineFormat && lineFormat.backgroundFillStyle) {
@@ -333,7 +333,7 @@ module Shumway.Tools.Terminal {
         if (this.columnIndex > 0) {
           line = line.substring(this.columnIndex);
         }
-        var marginTop = (i + 1) * this.lineHeight - this.textMarginBottom;
+        let marginTop = (i + 1) * this.lineHeight - this.textMarginBottom;
         if (this.showLineNumbers) {
           this.context.fillText(String(lineIndex), lineNumberMargin, marginTop);
         }
@@ -348,7 +348,7 @@ module Shumway.Tools.Terminal {
     }
 
     refreshEvery(ms) {
-      var that = this;
+      let that = this;
       this.refreshFrequency = ms;
       function refresh() {
         that.paint();

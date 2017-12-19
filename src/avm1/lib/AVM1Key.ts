@@ -31,7 +31,7 @@ module Shumway.AVM1.Lib {
     private static _lastKeyCode: number;
 
     public static createAVM1Class(context: AVM1Context): AVM1Object {
-      var wrapped = wrapAVM1NativeClass(context, false, AVM1Key,
+      let wrapped = wrapAVM1NativeClass(context, false, AVM1Key,
         ['DOWN', 'LEFT', 'RIGHT', 'UP', 'isDown', 'getCode'],
         []);
       return wrapped;
@@ -44,16 +44,16 @@ module Shumway.AVM1.Lib {
 
     public static bindStage(context: AVM1Context, cls: AVM1Object, stage: flash.display.Stage): void {
       stage.addEventListener('keyDown', function (e: flash.events.KeyboardEvent) {
-        var keyCode = e.axGetPublicProperty('keyCode');
-        var staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
+        let keyCode = e.axGetPublicProperty('keyCode');
+        let staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
         staticState._lastKeyCode = keyCode;
         staticState._keyStates[keyCode] = 1;
         alCallProperty(cls, 'broadcastMessage', ['onKeyDown']);
       }, false);
 
       stage.addEventListener('keyUp', function (e: flash.events.KeyboardEvent) {
-        var keyCode = e.axGetPublicProperty('keyCode');
-        var staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
+        let keyCode = e.axGetPublicProperty('keyCode');
+        let staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
         staticState._lastKeyCode = keyCode;
         delete staticState._keyStates[keyCode];
         alCallProperty(cls, 'broadcastMessage', ['onKeyUp']);
@@ -61,12 +61,12 @@ module Shumway.AVM1.Lib {
     }
 
     public static isDown(context: AVM1Context, code) {
-      var staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
+      let staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
       return !!staticState._keyStates[code];
     }
 
     public static getCode(context: AVM1Context): number {
-      var staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
+      let staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
       return staticState._lastKeyCode;
     }
   }

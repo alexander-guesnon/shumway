@@ -19,20 +19,20 @@ module Shumway.SWF.Parser {
   import assert = Shumway.Debug.assert;
 
   export function defineButton(tag: ButtonTag, dictionary: any): any {
-    var characters = tag.characters;
-    var states = {
+    let characters = tag.characters;
+    let states = {
       up: [],
       over: [],
       down: [],
       hitTest: []
     };
-    var i = 0, character;
+    let i = 0, character;
     while ((character = characters[i++])) {
-      var characterItem = dictionary[character.symbolId];
+      let characterItem = dictionary[character.symbolId];
       // The Flash Player ignores references to undefined symbols here. So should we.
       // TODO: What should happen if the symbol gets defined later in the file?
       if (characterItem) {
-        var cmd = {
+        let cmd = {
           symbolId: characterItem.id,
           code: SwfTagCode.CODE_PLACE_OBJECT,
           depth: character.depth,
@@ -51,7 +51,7 @@ module Shumway.SWF.Parser {
         release || Debug.warning('undefined character in button ' + tag.id);
       }
     }
-    var button = {
+    let button = {
       type: 'button',
       id: tag.id,
       buttonActions: tag.buttonActions,

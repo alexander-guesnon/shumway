@@ -52,7 +52,7 @@ module Shumway.AVM1 {
   export class ActionsDataFactory {
     private _cache: WeakMap<Uint8Array, AVM1ActionsData> = new WeakMap<Uint8Array, AVM1ActionsData>();
     public createActionsData(bytes: Uint8Array, id: string, parent: AVM1ActionsData = null): AVM1ActionsData {
-      var actionsData = this._cache.get(bytes);
+      let actionsData = this._cache.get(bytes);
       if (!actionsData) {
         actionsData = new AVM1ActionsData(bytes, id, parent);
         this._cache.set(bytes, actionsData);
@@ -142,7 +142,7 @@ module Shumway.AVM1 {
         default:
           name = alToString(this, name);
       }
-      var normalizedName = this._nameCache[name];
+      let normalizedName = this._nameCache[name];
       if (normalizedName) {
         return normalizedName;
       }
@@ -155,7 +155,7 @@ module Shumway.AVM1 {
       if (!this.isPropertyCaseSensitive) {
         propertyName = propertyName.toLowerCase();
       }
-      var observers = this.eventObservers[propertyName];
+      let observers = this.eventObservers[propertyName];
       if (observers) {
         return observers;
       }
@@ -167,22 +167,22 @@ module Shumway.AVM1 {
       return null;
     }
     public registerEventPropertyObserver(propertyName: string, observer: IAVM1EventPropertyObserver): void {
-      var observers = this._getEventPropertyObservers(propertyName, true);
+      let observers = this._getEventPropertyObservers(propertyName, true);
       observers.push(observer);
     }
     public unregisterEventPropertyObserver(propertyName: string, observer: IAVM1EventPropertyObserver): void {
-      var observers = this._getEventPropertyObservers(propertyName, false);
+      let observers = this._getEventPropertyObservers(propertyName, false);
       if (!observers) {
         return;
       }
-      var j = observers.indexOf(observer);
+      let j = observers.indexOf(observer);
       if (j < 0) {
         return;
       }
       observers.splice(j, 1);
     }
     public broadcastEventPropertyChange(propertyName: string): void {
-      var observers = this._getEventPropertyObservers(propertyName, false);
+      let observers = this._getEventPropertyObservers(propertyName, false);
       if (!observers) {
         return;
       }
@@ -200,7 +200,7 @@ module Shumway.AVM1 {
         this.utils.warn('Cannot register class for symbol: className is missing');
         return null;
       }
-      var symbolId = this.assets[className.toLowerCase()];
+      let symbolId = this.assets[className.toLowerCase()];
       if (symbolId === undefined) {
         this.utils.warn('Cannot register ' + className + ' class for symbol');
         return;
@@ -215,11 +215,11 @@ module Shumway.AVM1 {
       if (className === null) {
         return undefined;
       }
-      var symbolId = this.assets[className.toLowerCase()];
+      let symbolId = this.assets[className.toLowerCase()];
       if (symbolId === undefined) {
         return undefined;
       }
-      var symbol = this.assetsSymbols[symbolId];
+      let symbol = this.assetsSymbols[symbolId];
       if (!symbol) {
         symbol = this.loaderInfo.getSymbolById(symbolId);
         if (!symbol) {
@@ -241,10 +241,10 @@ module Shumway.AVM1 {
     }
 
     public getStaticState(cls): any {
-      var state = this.staticStates.get(cls);
+      let state = this.staticStates.get(cls);
       if (!state) {
         state = Object.create(null);
-        var initStatic: Function = (<any>cls).alInitStatic;
+        let initStatic: Function = (<any>cls).alInitStatic;
         if (initStatic) {
           initStatic.call(state, this);
         }
@@ -255,7 +255,7 @@ module Shumway.AVM1 {
 
     public resolveLevel(level: number): AVM1MovieClip {
       release || Debug.assert(typeof level === 'number');
-      var as3Root = this.levelsContainer._getRootForLevel(level);
+      let as3Root = this.levelsContainer._getRootForLevel(level);
       if (!as3Root) {
         this.utils.warn('Unable to resolve level ' + level + ' root');
         return undefined;

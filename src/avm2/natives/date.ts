@@ -19,8 +19,8 @@ module Shumway.AVMX.AS {
     value: Date;
 
     static classInitializer: any = function() {
-      var proto: any = this.dPrototype;
-      var asProto: any = ASDate.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASDate.prototype;
       addPrototypeFunctionAlias(proto, '$BgtoString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgtoLocaleString', asProto.toString);
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
@@ -103,8 +103,8 @@ module Shumway.AVMX.AS {
       // JS formats dates differently, so a little surgery is required here:
       // We need to move the year to the end, get rid of the timezone name, and remove leading 0
       // from the day.
-      var dateStr = this.value.toString();
-      var parts = dateStr.split(' ');
+      let dateStr = this.value.toString();
+      let parts = dateStr.split(' ');
       // Detect invalid dates. Not 100% sure all JS engines always print 'Invalid Date' here,
       // so we just check how many parts the resulting string has, with some margin for error.
       if (parts.length < 4) {
@@ -122,8 +122,8 @@ module Shumway.AVMX.AS {
       if (!(this.value instanceof Date)) {
         return 'Invalid Date';
       }
-      var dateStr = this.value.toDateString();
-      var parts = dateStr.split(' ');
+      let dateStr = this.value.toDateString();
+      let parts = dateStr.split(' ');
       // Detect invalid dates. Not 100% sure all JS engines always print 'Invalid Date' here,
       // so we just check how many parts the resulting string has, with some margin for error.
       if (parts.length < 4) {

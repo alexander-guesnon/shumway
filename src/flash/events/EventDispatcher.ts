@@ -50,10 +50,10 @@ module Shumway.AVMX.AS.flash.events {
     }
 
     insert(listener: EventHandler, useCapture: boolean, priority: number) {
-      var entries = this._entries;
-      var index = entries.length;
-      for (var i = index - 1; i >= 0; i--) {
-        var entry = entries[i];
+      let entries = this._entries;
+      let index = entries.length;
+      for (let i = index - 1; i >= 0; i--) {
+        let entry = entries[i];
         if (entry.listener === listener) {
           return;
         }
@@ -71,7 +71,7 @@ module Shumway.AVMX.AS.flash.events {
      * Make sure we get a fresh list if it's been aliased.
      */
     private ensureNonAliasedEntries(): EventListenerEntry [] {
-      var entries = this._entries;
+      let entries = this._entries;
       if (this._aliasCount > 0) {
         entries = this._entries = entries.slice();
         this._aliasCount = 0;
@@ -80,9 +80,9 @@ module Shumway.AVMX.AS.flash.events {
     }
 
     remove(listener: EventHandler) {
-      var entries = this._entries;
-      for (var i = 0; i < entries.length; i++) {
-        var item = entries[i];
+      let entries = this._entries;
+      for (let i = 0; i < entries.length; i++) {
+        let item = entries[i];
         if (item.listener === listener) {
           this.ensureNonAliasedEntries().splice(i, 1);
           return;
@@ -135,7 +135,7 @@ module Shumway.AVMX.AS.flash.events {
 
     add(type: string, target: EventDispatcher) {
       release || assert (Event.isBroadcastEventType(type), "Can only register broadcast events.");
-      var queue = this._queues[type] || (this._queues[type] = []);
+      let queue = this._queues[type] || (this._queues[type] = []);
       if (queue.indexOf(target) >= 0) {
         return;
       }
@@ -144,9 +144,9 @@ module Shumway.AVMX.AS.flash.events {
 
     remove(type: string, target: EventDispatcher) {
       release || assert (Event.isBroadcastEventType(type), "Can only unregister broadcast events.");
-      var queue = this._queues[type];
+      let queue = this._queues[type];
       release || assert (queue, "There should already be a queue for this.");
-      var index = queue.indexOf(target);
+      let index = queue.indexOf(target);
       release || assert (index >= 0, "Target should be somewhere in this queue.");
       queue[index] = null;
       release || assert (queue.indexOf(target) < 0, "Target shouldn't be in this queue anymore.");
@@ -154,7 +154,7 @@ module Shumway.AVMX.AS.flash.events {
 
     dispatchEvent(event: flash.events.Event) {
       release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
-      var queue = this._queues[event._type];
+      let queue = this._queues[event._type];
       if (!queue) {
         return;
       }
@@ -162,9 +162,9 @@ module Shumway.AVMX.AS.flash.events {
         console.log('Broadcast event of type ' + event._type + ' to ' + queue.length +
                     ' listeners');
       }
-      var nullCount = 0;
-      for (var i = 0; i < queue.length; i++) {
-        var target = queue[i];
+      let nullCount = 0;
+      for (let i = 0; i < queue.length; i++) {
+        let target = queue[i];
         if (target === null) {
           nullCount++;
         } else {
@@ -173,8 +173,8 @@ module Shumway.AVMX.AS.flash.events {
       }
       // Compact the queue if there are too many holes in it.
       if (nullCount > 16 && nullCount > (queue.length >> 1)) {
-        var compactedQueue = [];
-        for (var i = 0; i < queue.length; i++) {
+        let compactedQueue = [];
+        for (let i = 0; i < queue.length; i++) {
           if (queue[i]) {
             compactedQueue.push(queue[i]);
           }
@@ -240,7 +240,7 @@ module Shumway.AVMX.AS.flash.events {
      * don't exist yet.
      */
     private _getListenersForType(useCapture: boolean, type: string) {
-      var listeners = useCapture ? this._captureListeners : this._targetOrBubblingListeners;
+      let listeners = useCapture ? this._captureListeners : this._targetOrBubblingListeners;
       if (listeners) {
         return listeners[type];
       }
@@ -279,8 +279,8 @@ module Shumway.AVMX.AS.flash.events {
       useCapture = !!useCapture;
       priority |= 0;
       useWeakReference = !!useWeakReference;
-      var listeners = this._getListeners(useCapture);
-      var list = listeners[type] || (listeners[type] = new EventListenerList());
+      let listeners = this._getListeners(useCapture);
+      let list = listeners[type] || (listeners[type] = new EventListenerList());
       list.insert(listener, useCapture, priority);
 
       // Notify the broadcast event queue. If |useCapture| is set then the Flash player
@@ -307,8 +307,8 @@ module Shumway.AVMX.AS.flash.events {
         this.sec.throwError("TypeError", Errors.NullPointerError, "type");
       }
       type = axCoerceString(type);
-      var listeners = this._getListeners(!!useCapture);
-      var list = listeners[type];
+      let listeners = this._getListeners(!!useCapture);
+      let list = listeners[type];
       if (list) {
         list.remove(listener);
         if (list.isEmpty()) {
@@ -363,7 +363,7 @@ module Shumway.AVMX.AS.flash.events {
         return true;
       }
       if (this.sec.flash.display.DisplayObject.axIsType(this)) {
-        var node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
+        let node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
         do {
           if (node._hasEventListener(type)) {
             return true;
@@ -386,7 +386,7 @@ module Shumway.AVMX.AS.flash.events {
         return true;
       } else if (event._bubbles && this.sec.flash.display.DisplayObject.axIsType(this)) {
         // Check to see if there are any event listeners on the path to the root.
-        for (var node = (<flash.display.DisplayObject>this)._parent; node; node = node._parent) {
+        for (let node = (<flash.display.DisplayObject>this)._parent; node; node = node._parent) {
           if (node._hasEventListener(event.type)) {
             return false;
           }
@@ -411,19 +411,19 @@ module Shumway.AVMX.AS.flash.events {
 
       release || counter.count("EventDispatcher::dispatchEvent");
 
-      var type = event._type;
-      var target = this._target;
+      let type = event._type;
+      let target = this._target;
 
       release || counter.count("EventDispatcher::dispatchEvent(" + type + ")");
 
       /**
        * 1. Capturing Phase
        */
-      var keepPropagating = true;
-      var ancestors: flash.display.DisplayObject [] = [];
+      let keepPropagating = true;
+      let ancestors: flash.display.DisplayObject [] = [];
 
       if (!event.isBroadcastEvent() && this.sec.flash.display.DisplayObject.axIsType(this)) {
-        var node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
+        let node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
 
         // Gather all parent display objects that have event listeners for this event type.
         while (node) {
@@ -433,12 +433,12 @@ module Shumway.AVMX.AS.flash.events {
           node = node._parent;
         }
 
-        for (var i = ancestors.length - 1; i >= 0 && keepPropagating; i--) {
-          var ancestor = ancestors[i];
+        for (let i = ancestors.length - 1; i >= 0 && keepPropagating; i--) {
+          let ancestor = ancestors[i];
           if (!ancestor._hasCaptureEventListener(type)) {
             continue;
           }
-          var list = ancestor._getListenersForType(true, type);
+          let list = ancestor._getListenersForType(true, type);
           release || assert(list);
           keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
                                                           EventPhase.CAPTURING_PHASE);
@@ -449,7 +449,7 @@ module Shumway.AVMX.AS.flash.events {
        * 2. At Target
        */
       if (keepPropagating) {
-        var list = this._getListenersForType(false, type);
+        let list = this._getListenersForType(false, type);
         if (list) {
           keepPropagating = EventDispatcher.callListeners(list, event, target, target,
                                                           EventPhase.AT_TARGET);
@@ -460,12 +460,12 @@ module Shumway.AVMX.AS.flash.events {
        * 3. Bubbling Phase
        */
       if (!event.isBroadcastEvent() && keepPropagating && event.bubbles) {
-        for (var i = 0; i < ancestors.length && keepPropagating; i++) {
-          var ancestor = ancestors[i];
+        for (let i = 0; i < ancestors.length && keepPropagating; i++) {
+          let ancestor = ancestors[i];
           if (!ancestor._hasTargetOrBubblingEventListener(type)) {
             continue;
           }
-          var list = ancestor._getListenersForType(false, type);
+          let list = ancestor._getListenersForType(false, type);
           keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
                                                           EventPhase.BUBBLING_PHASE);
         }
@@ -487,10 +487,10 @@ module Shumway.AVMX.AS.flash.events {
       if (event._target) {
         event = event.axCallPublicProperty('clone', null);
       }
-      var snapshot = list.snapshot();
+      let snapshot = list.snapshot();
       try {
-        for (var i = 0; i < snapshot.length; i++) {
-          var entry = snapshot[i];
+        for (let i = 0; i < snapshot.length; i++) {
+          let entry = snapshot[i];
           event._target = target;
           event._currentTarget = currentTarget;
           event._eventPhase = eventPhase;

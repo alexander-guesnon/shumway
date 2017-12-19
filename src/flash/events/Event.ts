@@ -25,12 +25,12 @@ module Shumway.AVMX.AS.flash.events {
     static _instances: Shumway.MapObject<Event>;
 
     static classInitializer: any = function () {
-      var self: typeof Event = this;
+      let self: typeof Event = this;
       self._instances = Shumway.ObjectUtilities.createMap<Event>();
     };
 
     static getInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
-      var instance = this._instances[type];
+      let instance = this._instances[type];
       if (!instance) {
         instance = new this.sec.flash.events.Event(type, bubbles, cancelable);
         this._instances[type] = instance;
@@ -41,7 +41,7 @@ module Shumway.AVMX.AS.flash.events {
     }
 
     static getBroadcastInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
-      var instance = this._instances[type];
+      let instance = this._instances[type];
       if (!instance) {
         instance = new this.sec.flash.events.Event(type, bubbles, cancelable);
         this._instances[type] = instance;
@@ -211,10 +211,10 @@ module Shumway.AVMX.AS.flash.events {
     }
 
     formatToString(className: string, ...args: string[]): string {
-      var str = '[' + className;
-      for (var i: number = 0; i < args.length; i++) {
-        var field = args[i];
-        var value: Object = this.axGetPublicProperty(field);
+      let str = '[' + className;
+      for (let i: number = 0; i < args.length; i++) {
+        let field = args[i];
+        let value: Object = this.axGetPublicProperty(field);
         if (typeof value === 'string') {
           value = '"' + value + '"';
         }

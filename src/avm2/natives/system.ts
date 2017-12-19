@@ -149,7 +149,7 @@ module Shumway.AVMX.AS {
         return "mixed";
       }
     }
-    export var OriginalSystem = System;
+    export let OriginalSystem = System;
   }
 }
 

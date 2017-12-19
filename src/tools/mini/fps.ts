@@ -66,11 +66,11 @@ module Shumway.Tools.Mini {
     }
 
     private _listenForContainerSizeChanges() {
-      var pollInterval = 10;
-      var w = this._containerWidth;
-      var h = this._containerHeight;
+      let pollInterval = 10;
+      let w = this._containerWidth;
+      let h = this._containerHeight;
       this._onContainerSizeChanged();
-      var self = this;
+      let self = this;
       setInterval(function () {
         if (w !== self._containerWidth || h !== self._containerHeight) {
           self._onContainerSizeChanged();
@@ -81,10 +81,10 @@ module Shumway.Tools.Mini {
     }
 
     private _onContainerSizeChanged() {
-      var cw = this._containerWidth;
-      var ch = this._containerHeight;
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = 1;
+      let cw = this._containerWidth;
+      let ch = this._containerHeight;
+      let devicePixelRatio = window.devicePixelRatio || 1;
+      let backingStoreRatio = 1;
       if (devicePixelRatio !== backingStoreRatio) {
         this._ratio = devicePixelRatio / backingStoreRatio;
         this._canvas.width = cw * this._ratio;
@@ -112,42 +112,42 @@ module Shumway.Tools.Mini {
         return;
       }
 
-      var elapsedTime = performance.now() - this._lastTime;
-      var weightRatio = 0; // Use ratio here if you want smoothing.
-      var weightedTime = elapsedTime * (1 - weightRatio) + this._lastWeightedTime * weightRatio;
+      let elapsedTime = performance.now() - this._lastTime;
+      let weightRatio = 0; // Use ratio here if you want smoothing.
+      let weightedTime = elapsedTime * (1 - weightRatio) + this._lastWeightedTime * weightRatio;
 
-      var context = this._context;
-      var w = 2 * this._ratio;
-      var wPadding = 1;
-      var fontSize = 8;
-      var tickOffset = this._ratio * 30;
-      var webkitPerformance: any = performance;
+      let context = this._context;
+      let w = 2 * this._ratio;
+      let wPadding = 1;
+      let fontSize = 8;
+      let tickOffset = this._ratio * 30;
+      let webkitPerformance: any = performance;
       if (webkitPerformance.memory) {
         tickOffset += this._ratio * 30;
       }
 
-      var count = ((this._canvas.width - tickOffset) / (w + wPadding)) | 0;
+      let count = ((this._canvas.width - tickOffset) / (w + wPadding)) | 0;
 
-      var index = this._index ++;
+      let index = this._index ++;
       if (this._index > count) {
         this._index = 0;
       }
 
-      var canvasHeight = this._canvas.height;
+      let canvasHeight = this._canvas.height;
       context.globalAlpha = 1;
       context.fillStyle = "black";
       context.fillRect(tickOffset + index * (w + wPadding), 0, w * 4, this._canvas.height);
 
-      var r = Math.min((1000 / 60) / weightedTime, 1);
+      let r = Math.min((1000 / 60) / weightedTime, 1);
       context.fillStyle = "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
       context.globalAlpha = idle ? 0.5 : 1;
-      var v = canvasHeight / 2 * r | 0;
+      let v = canvasHeight / 2 * r | 0;
       context.fillRect(tickOffset + index * (w + wPadding), canvasHeight - v, w, v);
 
       if (renderTime) {
         r = Math.min((1000 / 240) / renderTime, 1);
         context.fillStyle = "#FF6347"; // "#58FF00"; // "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
-        var v = canvasHeight / 2 * r | 0;
+        let v = canvasHeight / 2 * r | 0;
         context.fillRect(tickOffset + index * (w + wPadding), (canvasHeight / 2) - v, w, v);
       }
 
@@ -158,7 +158,7 @@ module Shumway.Tools.Mini {
         context.fillStyle = "white";
         context.font = (this._ratio * fontSize) + "px Arial";
         context.textBaseline = "middle";
-        var s = (1000 / weightedTime).toFixed(0);
+        let s = (1000 / weightedTime).toFixed(0);
         if (renderTime) {
           s += " " + renderTime.toFixed(0);
         }

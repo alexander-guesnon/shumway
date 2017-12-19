@@ -17,11 +17,11 @@
 module Shumway.AVMX.Compiler {
   import assert = Debug.assert;
 
-  var writer = Compiler.baselineDebugLevel.value > 0 ? new IndentingWriter() : null;
+  let writer = Compiler.baselineDebugLevel.value > 0 ? new IndentingWriter() : null;
 
-  declare var Relooper;
+  declare let Relooper;
 
-  var compileCount = 0, passCompileCount = 0, failCompileCount = 0, compileTime = 0;
+  let compileCount = 0, passCompileCount = 0, failCompileCount = 0, compileTime = 0;
 
   function escapeAllowedCharacter(ch, next) {
     switch (ch) {
@@ -32,7 +32,7 @@ module Shumway.AVMX.Compiler {
       case '\t':
         return '\\t';
       default:
-        var code = ch.charCodeAt(0), hex = code.toString(16), result;
+        let code = ch.charCodeAt(0), hex = code.toString(16), result;
         if (code > 0xff) {
           result = '\\u' + '0000'.slice(hex.length) + hex;
         } else if (ch === '\u0000' && '0123456789'.indexOf(next) < 0) {
@@ -63,11 +63,11 @@ module Shumway.AVMX.Compiler {
     }
   }
 
-  var escapeStringCacheCount = 0;
-  var escapeStringCache = Object.create(null);
+  let escapeStringCacheCount = 0;
+  let escapeStringCache = Object.create(null);
 
   export function escapeString(str: string) {
-    var result = escapeStringCache[str];
+    let result = escapeStringCache[str];
     if (result) {
       return result;
     }
@@ -77,8 +77,8 @@ module Shumway.AVMX.Compiler {
     }
     result = '"';
 
-    for (var i = 0, len = str.length; i < len; ++i) {
-      var ch = str[i];
+    for (let i = 0, len = str.length; i < len; ++i) {
+      let ch = str[i];
       if (ch === '"') {
         result += '\\';
       } else if ('\\\n\r\u2028\u2029'.indexOf(ch) >= 0) {
@@ -131,8 +131,8 @@ module Shumway.AVMX.Compiler {
     }
     writeLn(s: string) {
       if (!release && this._emitIndent) {
-        var prefix = "";
-        for (var i = 0; i < this._indent; i++) {
+        let prefix = "";
+        for (let i = 0; i < this._indent; i++) {
           prefix += "  ";
         }
         s = prefix + s;
@@ -144,9 +144,9 @@ module Shumway.AVMX.Compiler {
         this._buffer.push(s);
         return;
       }
-      var lines = s.split("\n");
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
+      let lines = s.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
         if (line.length > 0) {
           this.writeLn(lines[i]);
         }
@@ -207,24 +207,24 @@ module Shumway.AVMX.Compiler {
       this.bodyEmitter = new Emitter(!release);
       this.blockEmitter = new Emitter(!release);
 
-      var body = this.methodInfo.getBody();
+      let body = this.methodInfo.getBody();
 
-      var hasCatchBlocks = body.catchBlocks.length > 0;
+      let hasCatchBlocks = body.catchBlocks.length > 0;
 
       if (hasCatchBlocks) {
-        this.bodyEmitter.writeLn("var pc = 0;");
+        this.bodyEmitter.writeLn("let pc = 0;");
       }
 
-      var start = performance.now();
+      let start = performance.now();
       release || writer && writer.writeLn("Compiling: " + compileCount + " " + this.methodInfo);
 
-      var analysis = this.methodInfo.analysis || new Analysis(this.methodInfo);
+      let analysis = this.methodInfo.analysis || new Analysis(this.methodInfo);
       if (!analysis.analyzedControlFlow) {
         analysis.analyzeControlFlow();
       }
       this.methodInfo.classScope = this.scope;
 
-      var blocks = this.blocks = analysis.blocks;
+      let blocks = this.blocks = analysis.blocks;
       this.bytecodes = analysis.bytecodes;
       this.blockStates = [];
 
@@ -239,28 +239,28 @@ module Shumway.AVMX.Compiler {
         this.parameters.push('$0');
       }
       // If the hasDynamicScope is passed in, then we need to offset the argument position.
-      var parameterIndexOffset = this.hasDynamicScope ? 1 : 0;
-      var parameterCount = this.methodInfo.parameters.length;
-      for (var i = 0; i < parameterCount; i ++) {
-        var parameter = this.methodInfo.parameters[i];
-        var parameterName = this.getLocalName(i + 1);
+      let parameterIndexOffset = this.hasDynamicScope ? 1 : 0;
+      let parameterCount = this.methodInfo.parameters.length;
+      for (let i = 0; i < parameterCount; i ++) {
+        let parameter = this.methodInfo.parameters[i];
+        let parameterName = this.getLocalName(i + 1);
         this.local.push(parameterName);
         this.parameters.push(parameterName);
         if (parameter.optional && parameter.isUsed) {
-          var value = makeLiteral(parameter.value);
+          let value = makeLiteral(parameter.value);
           this.bodyEmitter.writeLn('arguments.length < ' + (parameterIndexOffset + i + 1) + ' && (' + parameterName + ' = ' +
                                    value + ');');
         }
-        var coercedParamameter = wrapInCoercer(parameterName, parameter.type);
+        let coercedParamameter = wrapInCoercer(parameterName, parameter.type);
         if (coercedParamameter !== parameterName) {
           this.bodyEmitter.writeLn(parameterName + ' = ' + coercedParamameter + ';');
         }
       }
 
-      var localsCount = body.localCount;
+      let localsCount = body.localCount;
       if (localsCount > parameterCount + 1) {
-        var localsDefinition = 'var ';
-        for (var i = parameterCount + 1; i < localsCount; i++) {
+        let localsDefinition = 'let ';
+        for (let i = parameterCount + 1; i < localsCount; i++) {
           this.local.push(this.getLocalName(i));
           localsDefinition += this.local[i] + (i < (localsCount - 1) ? ', ' : ';');
         }
@@ -268,51 +268,51 @@ module Shumway.AVMX.Compiler {
       }
 
       if (body.maxStack > 0) {
-        var stackSlotsDefinition = 'var ';
-        for (var i = 0; i < body.maxStack; i++) {
+        let stackSlotsDefinition = 'let ';
+        for (let i = 0; i < body.maxStack; i++) {
           stackSlotsDefinition +=
           this.getStack(i) + (i < (body.maxStack - 1) ? ', ' : ';');
         }
         this.bodyEmitter.writeLn(stackSlotsDefinition);
       }
 
-      var scopesCount = body.maxScopeDepth - body.initScopeDepth + 1;
-      var scopesOffset = this.hasDynamicScope ? 1 : 0;
+      let scopesCount = body.maxScopeDepth - body.initScopeDepth + 1;
+      let scopesOffset = this.hasDynamicScope ? 1 : 0;
       if (scopesCount - scopesOffset) {
-        var scopesDefinition = 'var ';
-        for (var i = scopesOffset; i < scopesCount; i++) {
+        let scopesDefinition = 'let ';
+        for (let i = scopesOffset; i < scopesCount; i++) {
           scopesDefinition += this.getScope(i) + (i < (scopesCount - 1) ? ', ' : ';');
         }
         this.bodyEmitter.writeLn(scopesDefinition);
       }
 
-      this.bodyEmitter.writeLn('var mi = ' + this.globalMiName + ';');
+      this.bodyEmitter.writeLn('let mi = ' + this.globalMiName + ';');
       if (!this.hasDynamicScope) {
         this.bodyEmitter.writeLn('$0 = mi.classScope;');
       }
-      this.bodyEmitter.writeLn('var label;');
+      this.bodyEmitter.writeLn('let label;');
 
       if (this.methodInfo.needsRest() || this.methodInfo.needsArguments()) {
-        var offset = parameterIndexOffset + (this.methodInfo.needsRest() ? parameterCount : 0);
+        let offset = parameterIndexOffset + (this.methodInfo.needsRest() ? parameterCount : 0);
         this.bodyEmitter.writeLn(this.local[parameterCount + 1] +
                                  ' = sliceArguments(arguments, ' + offset + ');');
       }
 
-      var relooperEntryBlock = this.relooperEntryBlock = Relooper.addBlock("// Entry Block");
+      let relooperEntryBlock = this.relooperEntryBlock = Relooper.addBlock("// Entry Block");
 
       // Create a relooper block for each basic block.
-      for (var i = 0; i < blocks.length; i++) {
-        var block = blocks[i];
+      for (let i = 0; i < blocks.length; i++) {
+        let block = blocks[i];
         block.relooperBlock = Relooper.addBlock("// Block: " + block.bid);
       }
 
       // If we have exception handlers, dispatch to appropriate block using the current PC, which
       // was set in the catch block.
-      var exceptionEntryBlocks = [];
+      let exceptionEntryBlocks = [];
       if (hasCatchBlocks) {
-        var catchBlocks = body.catchBlocks;
-        for (var i = 0; i < catchBlocks.length; i++) {
-          var target = catchBlocks[i].target;
+        let catchBlocks = body.catchBlocks;
+        for (let i = 0; i < catchBlocks.length; i++) {
+          let target = catchBlocks[i].target;
           this.propagateBlockState(null, target, 1, 0);
           exceptionEntryBlocks[target.bid] = target;
           Relooper.addBranch(relooperEntryBlock, target.relooperBlock, "pc === " + target.pc);
@@ -326,8 +326,8 @@ module Shumway.AVMX.Compiler {
       this.emitBlocks();
 
       if (this.hasNext2Infos > 0) {
-        var hasNext2Definition = 'var ';
-        for (var i = 0; i < this.hasNext2Infos; i++) {
+        let hasNext2Definition = 'let ';
+        for (let i = 0; i < this.hasNext2Infos; i++) {
           hasNext2Definition += 'hasNext' + i + ' = new HasNext2Info()';
           hasNext2Definition += (i < (this.hasNext2Infos - 1) ? ', ' : ';');
         }
@@ -339,10 +339,10 @@ module Shumway.AVMX.Compiler {
         this.bodyEmitter.enter("try {");
       }
 
-      var allBlocks: string = Relooper.render(this.relooperEntryBlock);
-      for (var i = 0; i < blocks.length; i++) {
-        var bid = blocks[i].bid;
-        var blockCode = this.blockBodies[bid];
+      let allBlocks: string = Relooper.render(this.relooperEntryBlock);
+      for (let i = 0; i < blocks.length; i++) {
+        let bid = blocks[i].bid;
+        let blockCode = this.blockBodies[bid];
         release || assert(blockCode);
         allBlocks = allBlocks.split('"\'"\'' + bid + '"\'"\'').join(blockCode);
       }
@@ -350,15 +350,15 @@ module Shumway.AVMX.Compiler {
 
       if (hasCatchBlocks) {
         this.bodyEmitter.leaveAndEnter("} catch (ex) {");
-        var catchBlocks = body.catchBlocks;
-        for (var i = 0; i < catchBlocks.length; i++) {
-          var handler = catchBlocks[i];
-          var check = "";
-          var type = handler.getType();
+        let catchBlocks = body.catchBlocks;
+        for (let i = 0; i < catchBlocks.length; i++) {
+          let handler = catchBlocks[i];
+          let check = "";
+          let type = handler.getType();
           if (type) {
-            this.bodyEmitter.writeLn('var mn = mi.abc.constantPool.multinames[' +
+            this.bodyEmitter.writeLn('let mn = mi.abc.constantPool.multinames[' +
                                      handler.typeNameIndex + '];');
-            this.bodyEmitter.writeLn('var type = mi.abc.applicationDomain.getType(mn);');
+            this.bodyEmitter.writeLn('let type = mi.abc.applicationDomain.getType(mn);');
             check = " && type.isType(ex)";
           }
           this.bodyEmitter.writeLn("if (pc >= " + handler.start_pc + " && pc <= " + handler.end_pc + check + ") { pc = " + handler.target_pc + "; continue; }");
@@ -367,9 +367,9 @@ module Shumway.AVMX.Compiler {
         this.bodyEmitter.leave("}");
       }
 
-      var body = this.bodyEmitter.toString();
+      let body = this.bodyEmitter.toString();
 
-      var duration = performance.now() - start;
+      let duration = performance.now() - start;
       compileTime += duration;
       passCompileCount++;
       writer && writer.writeLn("Compiled: PASS: " + passCompileCount +
@@ -384,9 +384,9 @@ module Shumway.AVMX.Compiler {
     }
 
     emitBlocks() {
-      var blocks = this.blocks;
-      for (var i = 0; i < blocks.length; i++) {
-        var block = blocks[i];
+      let blocks = this.blocks;
+      for (let i = 0; i < blocks.length; i++) {
+        let block = blocks[i];
         this.emitBlock(block);
         if (!release) {
           assert(this.stack >= 0);
@@ -396,7 +396,7 @@ module Shumway.AVMX.Compiler {
     }
 
     setCurrentBlockState(block: Bytecode) {
-      var state = this.blockStates[block.bid];
+      let state = this.blockStates[block.bid];
       assert (state, "No state exists for " + block.bid);
       this.stack = state.stack;
       this.scopeIndex = state.scopeIndex;
@@ -405,7 +405,7 @@ module Shumway.AVMX.Compiler {
     propagateBlockState(predecessorBlock: Bytecode, block: Bytecode, stack: number, scopeIndex: number) {
       // writer && writer.writeLn("Propagating from: " + (predecessorBlock ? predecessorBlock.bid :
       // -1) + ", to: " + block.bid + " " + stack + " " + scopeIndex);
-      var state = this.blockStates[block.bid];
+      let state = this.blockStates[block.bid];
       if (state) {
         assert(state.stack === stack, "Stack heights don't match, stack: " + stack + ", was: " + state.stack);
         assert(state.scopeIndex === scopeIndex, "Scope index doesn't match, scopeIndex: " + scopeIndex + ", was: " + state.scopeIndex);
@@ -422,10 +422,10 @@ module Shumway.AVMX.Compiler {
       if (!opcodeTable[bc.op].canThrow) {
         return null;
       }
-      var pc = bc.pc;
-      var catchBlocks = this.methodInfo.getBody().catchBlocks;
-      for (var i = 0; i < catchBlocks.length; i++) {
-        var exception = catchBlocks[i];
+      let pc = bc.pc;
+      let catchBlocks = this.methodInfo.getBody().catchBlocks;
+      for (let i = 0; i < catchBlocks.length; i++) {
+        let exception = catchBlocks[i];
         if (exception.start_pc >= pc && pc <= exception.end_pc) {
           return exception;
         }
@@ -463,13 +463,13 @@ module Shumway.AVMX.Compiler {
     }
 
     emitPopTemporaries(n: number) {
-      for (var i = 0; i < n; i++) {
-        this.blockEmitter.writeLn("var t" + i + " = " + this.pop() + ";");
+      for (let i = 0; i < n; i++) {
+        this.blockEmitter.writeLn("let t" + i + " = " + this.pop() + ";");
       }
     }
 
     emitPushTemporary(...indices: number []) {
-      for (var i = 0; i < indices.length; i++) {
+      for (let i = 0; i < indices.length; i++) {
         this.emitPush("t" + indices[i]);
       }
     }
@@ -488,16 +488,16 @@ module Shumway.AVMX.Compiler {
       if (!release && Compiler.baselineDebugLevel.value > 1) {
         this.emitLine("// Block: " + block.bid);
       }
-      var bytecodes = this.bytecodes;
-      var bc;
-      for (var bci = block.position, end = block.end.position; bci <= end; bci++) {
+      let bytecodes = this.bytecodes;
+      let bc;
+      for (let bci = block.position, end = block.end.position; bci <= end; bci++) {
         bc = bytecodes[bci];
         this.emitBytecode(block, bc);
       }
       this.blockBodies[block.bid] = this.blockEmitter.toString();
       Relooper.setBlockCode(block.relooperBlock, '"\'"\'' + block.bid + '"\'"\'');
 
-      var nextBlock = (end + 1 < bytecodes.length) ? bytecodes[end + 1] : null;
+      let nextBlock = (end + 1 < bytecodes.length) ? bytecodes[end + 1] : null;
       if (nextBlock && !bc.isBlockEnd()) {
         Relooper.addBranch(block.relooperBlock, nextBlock.relooperBlock);
         this.propagateBlockState(block, nextBlock, this.stack, this.scopeIndex);
@@ -519,7 +519,7 @@ module Shumway.AVMX.Compiler {
       }
 
       if (!release) {
-        var opName = Bytecode[bc];
+        let opName = Bytecode[bc];
         //Compiler.baselineDebugLevel.value > 1 && this.emitLine("// BC: " + String(bc));
       }
       switch (bc) {
@@ -920,24 +920,24 @@ module Shumway.AVMX.Compiler {
     }
 
     emitSetProperty(nameIndex: number) {
-      var value = this.pop();
-      var multiname = this.constantPool.multinames[nameIndex];
+      let value = this.pop();
+      let multiname = this.constantPool.multinames[nameIndex];
       // TODO: re-enable after XML and XMLList are able to handle this.
       if (false && multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         this.blockEmitter.writeLn(this.pop() + '.' + qualifiedName + ' = ' + value + ';');
       } else {
-        var nameElements = this.emitMultiname(nameIndex);
+        let nameElements = this.emitMultiname(nameIndex);
         this.blockEmitter.writeLn(this.pop() + ".axSetProperty(" + nameElements + ", " +
                                   value + ");");
       }
     }
 
     emitSetSuper(nameIndex: number) {
-      var value = this.pop();
-      var multiname = this.constantPool.multinames[nameIndex];
+      let value = this.pop();
+      let multiname = this.constantPool.multinames[nameIndex];
       if (multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         if ('s' + qualifiedName in this.methodInfo.classScope.object.baseClass.traitsPrototype) {
           this.emitLine('mi.classScope.object.baseClass.traitsPrototype.s' + qualifiedName +
                         '.call(' + this.pop() + ', ' + value + ');');
@@ -947,28 +947,28 @@ module Shumway.AVMX.Compiler {
           this.emitLine(this.pop() + '.' + qualifiedName + ' = ' + value + ';');
         }
       } else {
-        var nameElements = this.emitMultiname(nameIndex);
+        let nameElements = this.emitMultiname(nameIndex);
         this.emitLine(this.pop() + ".axSetSuper(mi.classScope, " + nameElements + ", " +
                          value + ");");
       }
     }
 
     emitGetProperty(nameIndex: number) {
-      var multiname = this.constantPool.multinames[nameIndex];
+      let multiname = this.constantPool.multinames[nameIndex];
       // TODO: re-enable after XML and XMLList are able to handle this.
       if (false && multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         this.emitReplace(this.peek() + '.' + qualifiedName);
       } else {
-        var nameElements = this.emitMultiname(nameIndex);
+        let nameElements = this.emitMultiname(nameIndex);
         this.emitReplace(this.peek() + ".axGetProperty(" + nameElements + ", false)");
       }
     }
 
     emitGetSuper(nameIndex: number) {
-      var multiname = this.constantPool.multinames[nameIndex];
+      let multiname = this.constantPool.multinames[nameIndex];
       if (multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         if ('g' + qualifiedName in this.methodInfo.classScope.object.baseClass.traitsPrototype) {
           this.emitReplace('mi.classScope.object.baseClass.traitsPrototype.g' + qualifiedName +
                            '.call(this)');
@@ -978,42 +978,42 @@ module Shumway.AVMX.Compiler {
           this.emitReplace(this.peek() + '.' + qualifiedName);
         }
       } else {
-        var nameElements = this.emitMultiname(nameIndex);
-        var receiver = this.peek();
+        let nameElements = this.emitMultiname(nameIndex);
+        let receiver = this.peek();
         this.emitReplace(receiver + ".axGetSuper(mi.classScope, " + nameElements + ")");
       }
     }
 
     emitDeleteProperty(nameIndex: number) {
-      var multiname = this.constantPool.multinames[nameIndex];
+      let multiname = this.constantPool.multinames[nameIndex];
       // TODO: re-enable after XML and XMLList are able to handle this.
       if (false && multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         this.emitReplace('delete ' + this.peek() + '.' + qualifiedName);
       } else {
-        var nameElements = this.emitMultiname(nameIndex);
+        let nameElements = this.emitMultiname(nameIndex);
         this.emitReplace(this.peek() + ".axDeleteProperty(" + nameElements + ", false)");
       }
     }
 
     emitFindProperty(nameIndex: number, strict: boolean) {
-      var scope = this.getScope(this.scopeIndex);
-      var nameElements = this.emitMultiname(nameIndex);
+      let scope = this.getScope(this.scopeIndex);
+      let nameElements = this.emitMultiname(nameIndex);
       this.emitPush(scope + ".findScopeProperty(" + nameElements + ", mi, " + strict + ")");
       return nameElements;
     }
 
     emitCallProperty(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
-      var isLex = bc.op === OP.callproplex;
-      var call: string;
-      var multiname = this.constantPool.multinames[bc.index];
+      let args = this.popArgs(bc.argCount);
+      let isLex = bc.op === OP.callproplex;
+      let call: string;
+      let multiname = this.constantPool.multinames[bc.index];
       // TODO: re-enable after scope lookups for primitive natives are fixed.
       if (false && multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         call = '.' + qualifiedName + '(' + args + ')';
       } else {
-        var nameElements = this.emitMultiname(bc.index);
+        let nameElements = this.emitMultiname(bc.index);
         call = ".axCallProperty(" + nameElements + ", " + isLex + ", [" + args + "])";
       }
       if (bc.op !== OP.callpropvoid) {
@@ -1024,19 +1024,19 @@ module Shumway.AVMX.Compiler {
     }
 
     emitCallSuper(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
-      var multiname = this.constantPool.multinames[bc.index];
+      let args = this.popArgs(bc.argCount);
+      let multiname = this.constantPool.multinames[bc.index];
       // Super calls with statically resolvable names are optimized to direct calls.
       // This must be valid as `axCallSuper` asserts that the method can be found. (Which in
       // itself is invalid, as an incorrect, but valid script can create this situation.)
       if (multiname.isSimpleStatic()) {
-        var qualifiedName = 'm' + Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = 'm' + Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         call = 'mi.classScope.object.baseClass.traitsPrototype.' + qualifiedName +
                '.call(' + this.peek() + (args.length ? ', ' + args : '') + ')';
       }
       if (!call) {
-        var nameElements = this.emitMultiname(bc.index);
-        var call = this.peek() + '.axCallSuper(mi.classScope, ' + nameElements + ', [' + args +
+        let nameElements = this.emitMultiname(bc.index);
+        let call = this.peek() + '.axCallSuper(mi.classScope, ' + nameElements + ', [' + args +
                                                                                               '])';
       }
       if (bc.op !== OP.callsupervoid) {
@@ -1048,31 +1048,31 @@ module Shumway.AVMX.Compiler {
     }
 
     emitCall(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
-      var argsString = args.length ? ', ' + args.join(', ') : '';
-      var receiver = this.pop();
-      var callee = this.peek();
+      let args = this.popArgs(bc.argCount);
+      let argsString = args.length ? ', ' + args.join(', ') : '';
+      let receiver = this.pop();
+      let callee = this.peek();
       this.emitReplace(callee + '.axCall(' + receiver + argsString + ')');
     }
 
     emitConstruct(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
-      var ctor = this.peek();
+      let args = this.popArgs(bc.argCount);
+      let ctor = this.peek();
       this.emitReplace('new ' + ctor + '.instanceConstructor(' + args + ')');
     }
 
     emitConstructProperty(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
+      let args = this.popArgs(bc.argCount);
       this.emitGetProperty(bc.index);
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' = new ' + val + '.instanceConstructor(' + args + ');');
     }
 
     emitGetLex(nameIndex: number) {
-      var nameElements = this.emitFindProperty(nameIndex, true);
-      var multiname = this.constantPool.multinames[nameIndex];
+      let nameElements = this.emitFindProperty(nameIndex, true);
+      let multiname = this.constantPool.multinames[nameIndex];
       if (multiname.isSimpleStatic()) {
-        var qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
+        let qualifiedName = Multiname.qualifyName(multiname.namespaces[0], multiname.name);
         this.emitReplace(this.peek() + '.' + qualifiedName);
       } else {
         this.emitReplace(this.peek() + ".axGetProperty(" + nameElements + ", false)");
@@ -1080,8 +1080,8 @@ module Shumway.AVMX.Compiler {
     }
 
     emitGetDescendants(nameIndex: number) {
-      var name;
-      var multiname = this.constantPool.multinames[nameIndex];
+      let name;
+      let multiname = this.constantPool.multinames[nameIndex];
       if (multiname.isRuntime()) {
         name = this.pop();
       } else {
@@ -1095,18 +1095,18 @@ module Shumway.AVMX.Compiler {
     }
 
     emitMultiname(index: number): string {
-      var multiname = this.constantPool.multinames[index];
-      this.blockEmitter.writeLn('var mn = mi.abc.constantPool.multinames[' + index + ']; // ' +
+      let multiname = this.constantPool.multinames[index];
+      this.blockEmitter.writeLn('let mn = mi.abc.constantPool.multinames[' + index + ']; // ' +
                                 (release ? '' : multiname));
-      var name = multiname.isRuntimeName() ? this.pop() : '"' + (multiname.name || '*') + '"';
-      var namespaces = multiname.isRuntimeNamespace() ? '[' + this.pop() + ']' : 'mn.namespaces';
+      let name = multiname.isRuntimeName() ? this.pop() : '"' + (multiname.name || '*') + '"';
+      let namespaces = multiname.isRuntimeNamespace() ? '[' + this.pop() + ']' : 'mn.namespaces';
       return namespaces + ', ' + name + ', ' + multiname.flags;
     }
 
     emitBinaryIf(block: Bytecode, bc: Bytecode, operator: string, negate: boolean) {
-      var y = this.pop();
-      var x = this.pop();
-      var condition = x + " " + operator + " " + y;
+      let y = this.pop();
+      let x = this.pop();
+      let condition = x + " " + operator + " " + y;
       if (negate) {
         condition = "!(" + condition + ")";
       }
@@ -1114,9 +1114,9 @@ module Shumway.AVMX.Compiler {
     }
 
     emitIfEq(block: Bytecode, bc: Bytecode, negate: boolean) {
-      var y = this.pop();
-      var x = this.pop();
-      var condition = "axEquals(" + x + ", " + y + ")";
+      let y = this.pop();
+      let x = this.pop();
+      let condition = "axEquals(" + x + ", " + y + ")";
       if (negate) {
         condition = "!" + condition;
       }
@@ -1124,13 +1124,13 @@ module Shumway.AVMX.Compiler {
     }
 
     emitUnaryIf(block: Bytecode, bc: Bytecode, operator: string) {
-      var x = this.pop();
+      let x = this.pop();
       this.emitIf(block, bc, operator + x);
     }
 
     emitIf(block: Bytecode, bc: Bytecode, predicate: string) {
-      var next = this.bytecodes[bc.position + 1];
-      var target = bc.target;
+      let next = this.bytecodes[bc.position + 1];
+      let target = bc.target;
       Relooper.addBranch(block.relooperBlock, next.relooperBlock);
       this.propagateBlockState(block, next, this.stack, this.scopeIndex);
       
@@ -1146,9 +1146,9 @@ module Shumway.AVMX.Compiler {
     }
 
     emitHasNext2(bc: Bytecode) {
-      var info = 'hasNext' + (this.hasNext2Infos++);
-      var object = this.local[bc.object];
-      var index = this.local[bc.index];
+      let info = 'hasNext' + (this.hasNext2Infos++);
+      let object = this.local[bc.object];
+      let index = this.local[bc.index];
       this.emitLine(info + '.object = ' + object + ';');
       this.emitLine(info + '.index = ' + index + ';');
       this.emitLine('Object(' + object + ').axHasNext2(' + info + ');');
@@ -1157,12 +1157,12 @@ module Shumway.AVMX.Compiler {
     }
 
     emitNextName() {
-      var index = this.pop();
+      let index = this.pop();
       this.emitReplace(this.peek() + '.axNextName(' + index + ')');
     }
 
     emitNextValue() {
-      var index = this.pop();
+      let index = this.pop();
       this.emitReplace(this.peek() + '.axNextValue(' + index + ')');
     }
 
@@ -1171,20 +1171,20 @@ module Shumway.AVMX.Compiler {
     }
 
     emitLookupSwitch(block: Bytecode, bc: Bytecode) {
-      var x = this.pop();
+      let x = this.pop();
       // We need some text in the body of the lookup switch block, otherwise the
       // branch condition variable is ignored.
-      var branchBlock = Relooper.addBlock("// Lookup Switch", String(x));
+      let branchBlock = Relooper.addBlock("// Lookup Switch", String(x));
       Relooper.addBranch(block.relooperBlock, branchBlock);
 
-      var defaultTargetBlock = bc.targets[bc.targets.length - 1];
-      var defaultTarget = defaultTargetBlock.relooperBlock;
+      let defaultTargetBlock = bc.targets[bc.targets.length - 1];
+      let defaultTarget = defaultTargetBlock.relooperBlock;
 
       this.propagateBlockState(block, defaultTargetBlock, this.stack, this.scopeIndex);
-      for (var i = 0; i < bc.targets.length - 1; i++) {
-        var targetBlock = bc.targets[i];
-        var target = targetBlock.relooperBlock;
-        var caseTarget = Relooper.addBlock();
+      for (let i = 0; i < bc.targets.length - 1; i++) {
+        let targetBlock = bc.targets[i];
+        let target = targetBlock.relooperBlock;
+        let caseTarget = Relooper.addBlock();
         Relooper.addBranch(branchBlock, caseTarget, "case " + i + ":");
         Relooper.addBranch(caseTarget, target);
         this.propagateBlockState(block, targetBlock, this.stack, this.scopeIndex);
@@ -1193,14 +1193,14 @@ module Shumway.AVMX.Compiler {
     }
 
     emitPush(v) {
-      var line = this.getStack(this.stack) + " = " + v + ";";
+      let line = this.getStack(this.stack) + " = " + v + ";";
       release || (line += " // push at " + this.stack);
       this.blockEmitter.writeLn(line);
       this.stack++;
     }
 
     emitReplace(v) {
-      var line = this.getStack(this.stack - 1) + " = " + v + ";";
+      let line = this.getStack(this.stack - 1) + " = " + v + ";";
       release || (line += " // replace at " + (this.stack - 1));
       this.blockEmitter.writeLn(line);
     }
@@ -1210,7 +1210,7 @@ module Shumway.AVMX.Compiler {
     }
 
     emitPushDouble(bc) {
-      var val = this.constantPool.doubles[bc.index];
+      let val = this.constantPool.doubles[bc.index];
       // `String(-0)` gives "0", so to preserve the `-0`, we have to bend over backwards.
       this.emitPush((val === 0 && 1 / val < 0) ? '-0' : val);
     }
@@ -1220,7 +1220,7 @@ module Shumway.AVMX.Compiler {
       // format, however, for emitting an object literal definition. So we also store the indices
       // of all pushed strings here and redo the lookup in `emitNewObject`.
       this.pushedStrings[this.stack] = bc.index;
-      var str = this.constantPool.strings[bc.index];
+      let str = this.constantPool.strings[bc.index];
       // For long strings or ones containing newlines or ", emit a reference instead of the literal.
       if (str.length > 40 || str.indexOf('\n') > -1 || str.indexOf('\r') > -1 ||
           str.indexOf('"') > -1) {
@@ -1233,8 +1233,8 @@ module Shumway.AVMX.Compiler {
     }
 
     emitPushScope(isWith: boolean) {
-      var parent = this.getScope(this.scopeIndex);
-      var scope = "new Scope(" + parent + ", " + this.pop() + ", " + isWith + ")";
+      let parent = this.getScope(this.scopeIndex);
+      let scope = "new Scope(" + parent + ", " + this.pop() + ", " + isWith + ")";
       this.scopeIndex++;
       this.blockEmitter.writeLn(this.getScope(this.scopeIndex) + " = " + scope + ";");
     }
@@ -1256,8 +1256,8 @@ module Shumway.AVMX.Compiler {
     }
 
     emitSetSlot(index: number) {
-      var value = this.pop();
-      var object = this.pop();
+      let value = this.pop();
+      let object = this.pop();
       this.emitLine(object + '.axSetSlot(' + index + ', '+ value + ')');
     }
 
@@ -1266,19 +1266,19 @@ module Shumway.AVMX.Compiler {
     }
 
     emitNewObject(bc: Bytecode) {
-      var properties = [];
-      for (var i = 0; i < bc.argCount; i++) {
-        var value = this.pop();
+      let properties = [];
+      for (let i = 0; i < bc.argCount; i++) {
+        let value = this.pop();
         this.pop();
-        var key = this.constantPool.strings[this.pushedStrings[this.stack]];
+        let key = this.constantPool.strings[this.pushedStrings[this.stack]];
         properties.push((isNumeric(key) ? key : escapeString('$Bg' + key)) + ': ' + value);
       }
       this.emitPush('{ ' + properties.join(', ') + ' }');
     }
 
     emitNewArray(bc: Bytecode) {
-      var values = [];
-      for (var i = 0; i < bc.argCount; i++) {
+      let values = [];
+      for (let i = 0; i < bc.argCount; i++) {
         values.push(this.pop());
       }
       this.emitPush('[' + values.reverse() + ']');
@@ -1294,8 +1294,8 @@ module Shumway.AVMX.Compiler {
     }
 
     emitConstructSuper(bc: Bytecode) {
-      var superInvoke = 'mi.classScope.object.baseClass.instanceConstructorNoInitialize.call(';
-      var args = this.popArgs(bc.argCount);
+      let superInvoke = 'mi.classScope.object.baseClass.instanceConstructorNoInitialize.call(';
+      let args = this.popArgs(bc.argCount);
       superInvoke += this.pop();
       if (args.length) {
         superInvoke += ', ' + args.join(', ');
@@ -1305,7 +1305,7 @@ module Shumway.AVMX.Compiler {
     }
 
     emitCoerce(bc: Bytecode) {
-      var multiname = this.constantPool.multinames[bc.index];
+      let multiname = this.constantPool.multinames[bc.index];
       switch (multiname) {
         case Multiname.Int:     return this.emitCoerceInt();
         case Multiname.Uint:    return this.emitCoerceUint();
@@ -1317,28 +1317,28 @@ module Shumway.AVMX.Compiler {
       if (bc.ti && bc.ti.noCoercionNeeded) {
         return;
       }
-      var coercion = 'mi.abc.app.getType(mi.abc.constantPool.multinames[' +
+      let coercion = 'mi.abc.app.getType(mi.abc.constantPool.multinames[' +
                      bc.index + '].axCoerce(' + this.pop() + ')';
       this.emitPush(coercion);
     }
 
     emitCoerceInt() {
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' |= 0;');
     }
 
     emitCoerceUint() {
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' >>>= 0;');
     }
 
     emitCoerceNumber() {
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + '= +' + val);
     }
 
     emitCoerceBoolean() {
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' = !!' + val + ';');
     }
 
@@ -1346,7 +1346,7 @@ module Shumway.AVMX.Compiler {
       if (bc.ti && bc.ti.noCoercionNeeded) {
         return;
       }
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' = axCoerceObject(' + val + ');');
     }
 
@@ -1354,39 +1354,39 @@ module Shumway.AVMX.Compiler {
       if (bc.ti && bc.ti.noCoercionNeeded) {
         return;
       }
-      var val = this.peek();
+      let val = this.peek();
       this.blockEmitter.writeLn(val + ' = axCoerceString(' + val + ');');
     }
 
     emitInstanceof() {
-      var type = this.pop();
+      let type = this.pop();
       this.emitReplace(type + '.axIsInstanceOf(' + this.peek() + ')');
     }
 
     emitIsType(index: number) {
-      this.emitLine('var mn = mi.abc.constantPool.multinames[' + index + '];' +
+      this.emitLine('let mn = mi.abc.constantPool.multinames[' + index + '];' +
                     (release ? '' : ' // ' + this.constantPool.multinames[index]));
       this.emitReplace('mi.abc.applicationDomain.getType(mn).isType(' + this.peek() + ')');
     }
 
     emitIsTypeLate() {
-      var type = this.pop();
+      let type = this.pop();
       this.emitReplace(type + '.axIsType(' + this.peek() + ')');
     }
 
     emitAsTypeLate() {
-      var type = this.pop();
+      let type = this.pop();
       this.emitReplace(type + '.axAsType(' + this.peek() + ')');
     }
 
     emitApplyType(bc: Bytecode) {
-      var args = this.popArgs(bc.argCount);
-      var type = this.peek();
+      let args = this.popArgs(bc.argCount);
+      let type = this.peek();
       this.emitReplace('sec.applyType(' + type + ', [' + args + '])');
     }
 
     emitIn() {
-      var object = this.pop();
+      let object = this.pop();
       this.emitReplace(object + '.axHasProperty(' + this.peek() + ')');
     }
 
@@ -1395,15 +1395,15 @@ module Shumway.AVMX.Compiler {
     }
 
     emitSwap() {
-      var top = this.getStack(this.stack - 1);
-      var next = this.getStack(this.stack - 2);
-      this.blockEmitter.writeLn("var $t = " + top + ";");
+      let top = this.getStack(this.stack - 1);
+      let next = this.getStack(this.stack - 2);
+      this.blockEmitter.writeLn("let $t = " + top + ";");
       this.blockEmitter.writeLn(top + " = " + next + ";");
       this.blockEmitter.writeLn(next + " = $t;");
     }
 
     emitEquals() {
-      var right = this.pop();
+      let right = this.pop();
       this.emitReplace('axEquals(' + this.peek() + ', ' + right + ')');
     }
 
@@ -1416,20 +1416,20 @@ module Shumway.AVMX.Compiler {
     }
 
     emitAddExpression() {
-      var right = this.pop();
-      var left = this.peek();
+      let right = this.pop();
+      let left = this.peek();
       this.blockEmitter.writeLn(left + ' = axAdd(' + left + ', ' + right + ', sec);');
     }
 
     emitBinaryExpression(expression: string) {
-      var right = this.pop();
-      var left = this.peek();
+      let right = this.pop();
+      let left = this.peek();
       this.blockEmitter.writeLn(left + ' = ' + left + expression + right + ';');
     }
 
     emitBinaryExpression_i(expression: string) {
-      var right = this.pop();
-      var left = this.peek();
+      let right = this.pop();
+      let left = this.peek();
       this.blockEmitter.writeLn(left + ' = ' + left + '|0' + expression + right + '|0;');
     }
 
@@ -1438,15 +1438,15 @@ module Shumway.AVMX.Compiler {
     }
 
     emitReturnValue() {
-      var value = this.pop();
+      let value = this.pop();
       this.blockEmitter.writeLn('return ' + wrapInCoercer(value, this.methodInfo.returnType) + ';');
     }
 
     popArgs(count: number): string[] {
-      var args = [];
-      var end = this.stack;
-      var start = end - count;
-      for (var i = start; i < end; i++) {
+      let args = [];
+      let end = this.stack;
+      let start = end - count;
+      for (let i = start; i < end; i++) {
         args.push(this.getStack(i));
       }
       this.stack = start;
@@ -1477,11 +1477,11 @@ module Shumway.AVMX.Compiler {
   }
   export function baselineCompileMethod(methodInfo: MethodInfo, scope: Scope,
                                         hasDynamicScope: boolean, globalMiName: string) {
-    var relooperState = Relooper.r;
+    let relooperState = Relooper.r;
     Relooper.r = 0;
-    var compiler = new BaselineCompiler(methodInfo, scope, hasDynamicScope, globalMiName);
+    let compiler = new BaselineCompiler(methodInfo, scope, hasDynamicScope, globalMiName);
     try {
-      var result = compiler.compile();
+      let result = compiler.compile();
     } catch (e) {
       Relooper.cleanup();
       failCompileCount++;
@@ -1514,24 +1514,24 @@ module Shumway.AVMX.Compiler {
   }
 
   function emitTraits(emitter: Emitter, traits: Trait []) {
-    for (var i = 0; i < traits.length; i++) {
-      var trait = traits[i];
+    for (let i = 0; i < traits.length; i++) {
+      let trait = traits[i];
       if (trait.isConst() || trait.isSlot()) {
-        var defaultValue = trait.hasDefaultValue ? makeLiteral(trait.value) : ClassInfo.getDefaultValue(trait.typeName);
+        let defaultValue = trait.hasDefaultValue ? makeLiteral(trait.value) : ClassInfo.getDefaultValue(trait.typeName);
         emitter.writeLn("this." + Multiname.getQualifiedName(trait.name) + " = " + defaultValue + ";");
       }
     }
   }
 
   function emitMethodTraits(emitter: Emitter, prefix: string, traits: Trait []) {
-    for (var i = 0; i < traits.length; i++) {
-      var trait = traits[i];
+    for (let i = 0; i < traits.length; i++) {
+      let trait = traits[i];
       if (trait.isMethodOrAccessor()) {
-        var methodInfo = trait.methodInfo;
+        let methodInfo = trait.methodInfo;
         if (!methodInfo.code) {
           return;
         }
-        var result = baselineCompileMethod(methodInfo, new Scope(null, {baseClass: { traitsPrototype: {} }}), false, '');
+        let result = baselineCompileMethod(methodInfo, new Scope(null, {baseClass: { traitsPrototype: {} }}), false, '');
         if (result) {
           emitter.enter("function " + prefix + Multiname.getQualifiedName(trait.name) + "(" + result.parameters.join(", ") + ") {");
           emitter.writeLns(result.body);
@@ -1544,9 +1544,9 @@ module Shumway.AVMX.Compiler {
   function emitClass(emitter: Emitter, classInfo: ClassInfo) {
     emitter.writeLn("// Class: " + classInfo.instanceInfo.name + " extends " + classInfo.instanceInfo.superName);
 
-    var instanceMangledName = mangleClass(classInfo);
+    let instanceMangledName = mangleClass(classInfo);
 
-    var staticMangledName = instanceMangledName + "_Static";
+    let staticMangledName = instanceMangledName + "_Static";
     emitMethodTraits(emitter, staticMangledName + "_", classInfo.traits);
 
     emitter.enter("function " + staticMangledName + " () {");
@@ -1567,22 +1567,22 @@ module Shumway.AVMX.Compiler {
     emitter.leave("}");
   }
 
-  var libraries: AbcFile [] = [];
+  let libraries: AbcFile [] = [];
 
   function findClassInfo(mn: Multiname): ClassInfo {
-    for (var i = 0; i < libraries.length; i++) {
-      var abc = libraries[i];
-      var scripts = abc.scripts;
-      for (var j = 0; j < scripts.length; j++) {
-        var script = scripts[j];
-        var traits = script.traits;
-        for (var k = 0; k < traits.length; k++) {
-          var trait = traits[k];
+    for (let i = 0; i < libraries.length; i++) {
+      let abc = libraries[i];
+      let scripts = abc.scripts;
+      for (let j = 0; j < scripts.length; j++) {
+        let script = scripts[j];
+        let traits = script.traits;
+        for (let k = 0; k < traits.length; k++) {
+          let trait = traits[k];
           if (trait.isClass()) {
-            var traitName = Multiname.getQualifiedName(trait.name);
+            let traitName = Multiname.getQualifiedName(trait.name);
             // So here mn is either a Multiname or a QName.
-            for (var m = 0, n = mn.namespaces.length; m < n; m++) {
-              var qn = mn.getQName(m);
+            for (let m = 0, n = mn.namespaces.length; m < n; m++) {
+              let qn = mn.getQName(m);
               if (traitName === Multiname.getQualifiedName(qn)) {
                 return trait.classInfo;
               }
@@ -1601,22 +1601,22 @@ module Shumway.AVMX.Compiler {
     libraries.push.apply(libraries, libs);
     libraries.push.apply(libraries, abcs);
 
-    for (var j = 0; j < abcs.length; j++) {
-      var abc = abcs[j];
+    for (let j = 0; j < abcs.length; j++) {
+      let abc = abcs[j];
 
       writer && writer.writeLn("Compiling ABC: " + abc);
 
-      var emitter = new Emitter(true);
+      let emitter = new Emitter(true);
 
-      for (var i = 0; i < abc.scripts.length; i++) {
+      for (let i = 0; i < abc.scripts.length; i++) {
         emitScript(emitter, abc.scripts[i]);
       }
 
-      for (var i = 0; i < abc.classes.length; i++) {
+      for (let i = 0; i < abc.classes.length; i++) {
         emitClass(emitter, abc.classes[i]);
       }
 
-      // var w = new IndentingWriter();
+      // let w = new IndentingWriter();
       // w.writeLns(emitter.toString());
     }
   }

@@ -75,22 +75,22 @@ module Shumway.AVMX {
       ba.writeByte(0x00);
       return;
     }
-    var bytes = Shumway.StringUtilities.utf8decode(s);
+    let bytes = Shumway.StringUtilities.utf8decode(s);
     ba.writeByte((bytes.length >> 8) & 255);
     ba.writeByte(bytes.length & 255);
-    for (var i = 0; i < bytes.length; i++) {
+    for (let i = 0; i < bytes.length; i++) {
       ba.writeByte(bytes[i]);
     }
   }
 
   function readString(ba: ByteArray): string {
-    var byteLength = (ba.readByte() << 8) | ba.readByte();
+    let byteLength = (ba.readByte() << 8) | ba.readByte();
     if (!byteLength) {
       return "";
     }
 
-    var buffer = new Uint8Array(byteLength);
-    for (var i = 0; i < byteLength; i++) {
+    let buffer = new Uint8Array(byteLength);
+    for (let i = 0; i < byteLength; i++) {
       buffer[i] = ba.readByte();
     }
 
@@ -98,18 +98,18 @@ module Shumway.AVMX {
   }
 
   function writeDouble(ba: ByteArray, value: number) {
-    var buffer = new ArrayBuffer(8);
-    var view = new DataView(buffer);
+    let buffer = new ArrayBuffer(8);
+    let view = new DataView(buffer);
     view.setFloat64(0, value, false);
-    for (var i = 0; i < buffer.byteLength; i++) {
+    for (let i = 0; i < buffer.byteLength; i++) {
       ba.writeByte(view.getUint8(i));
     }
   }
 
   function readDouble(ba: ByteArray): number {
-    var buffer = new ArrayBuffer(8);
-    var view = new DataView(buffer);
-    for (var i = 0; i < buffer.byteLength; i++) {
+    let buffer = new ArrayBuffer(8);
+    let view = new DataView(buffer);
+    for (let i = 0; i < buffer.byteLength; i++) {
       view.setUint8(i, ba.readByte());
     }
     return view.getFloat64(0, false);
@@ -134,12 +134,12 @@ module Shumway.AVMX {
           writeString(ba, value);
           break;
         case "object":
-          var object = (<AS.ASObject>value);
+          let object = (<AS.ASObject>value);
           release || assert(object === null || AXBasePrototype.isPrototypeOf(object));
           if (object === null) {
             ba.writeByte(AMF0Marker.NULL);
           } else if (ba.sec.AXArray.axIsType(object)) {
-            var array = (<AS.ASArray>object).value;
+            let array = (<AS.ASArray>object).value;
             ba.writeByte(AMF0Marker.ECMA_ARRAY);
             ba.writeByte((array.length >>> 24) & 255);
             ba.writeByte((array.length >> 16) & 255);
@@ -168,7 +168,7 @@ module Shumway.AVMX {
     }
 
     public static read(ba: ByteArray): any {
-      var marker = ba.readByte();
+      let marker = ba.readByte();
       switch (marker) {
         case AMF0Marker.NUMBER:
           return readDouble(ba);
@@ -177,9 +177,9 @@ module Shumway.AVMX {
         case AMF0Marker.STRING:
           return readString(ba);
         case AMF0Marker.OBJECT:
-          var object = ba.sec.createObject();
+          let object = ba.sec.createObject();
           while (true) {
-            var key = readString(ba);
+            let key = readString(ba);
             if (!key.length) break;
             object.axSetPublicProperty(key, this.read(ba));
           }
@@ -192,11 +192,11 @@ module Shumway.AVMX {
         case AMF0Marker.UNDEFINED:
           return undefined;
         case AMF0Marker.ECMA_ARRAY:
-          var array = ba.sec.createArray([]);
+          let array = ba.sec.createArray([]);
           array.length = (ba.readByte() << 24) | (ba.readByte() << 16) |
             (ba.readByte() << 8) | ba.readByte();
           while (true) {
-            var key = readString(ba);
+            let key = readString(ba);
             if (!key.length) break;
             array.axSetPublicProperty(key, this.read(ba));
           }
@@ -205,10 +205,10 @@ module Shumway.AVMX {
           }
           return array;
         case AMF0Marker.STRICT_ARRAY:
-          var array = ba.sec.createArray([]);
-          var length = array.length = (ba.readByte() << 24) | (ba.readByte() << 16) |
+          let array = ba.sec.createArray([]);
+          let length = array.length = (ba.readByte() << 24) | (ba.readByte() << 16) |
             (ba.readByte() << 8) | ba.readByte();
-          for (var i = 0; i < length; i++) {
+          for (let i = 0; i < length; i++) {
             array.axSetPublicProperty(i, this.read(ba));
           }
           return array;
@@ -242,19 +242,19 @@ module Shumway.AVMX {
   }
 
   function readU29(ba: ByteArray): number {
-    var b1 = ba.readByte();
+    let b1 = ba.readByte();
     if ((b1 & 0x80) === 0) {
       return b1;
     }
-    var b2 = ba.readByte();
+    let b2 = ba.readByte();
     if ((b2 & 0x80) === 0) {
       return ((b1 & 0x7F) << 7) | b2;
     }
-    var b3 = ba.readByte();
+    let b3 = ba.readByte();
     if ((b3 & 0x80) === 0) {
       return ((b1 & 0x7F) << 14) | ((b2 & 0x7F) << 7) | b3;
     }
-    var b4 = ba.readByte();
+    let b4 = ba.readByte();
     return ((b1 & 0x7F) << 22) | ((b2 & 0x7F) << 15) | ((b3 & 0x7F) << 8) | b4;
   }
 
@@ -279,21 +279,21 @@ module Shumway.AVMX {
   }
 
   function readUTF8(ba: ByteArray, references: AMF3ReferenceTables) {
-    var u29s = readU29(ba);
+    let u29s = readU29(ba);
     if (u29s === 0x01) {
       return "";
     }
-    var strings = references.strings;
+    let strings = references.strings;
     if ((u29s & 1) === 0) {
       return strings[u29s >> 1];
     }
 
-    var byteLength = u29s >> 1;
-    var buffer = new Uint8Array(byteLength);
-    for (var i = 0; i < byteLength; i++) {
+    let byteLength = u29s >> 1;
+    let buffer = new Uint8Array(byteLength);
+    for (let i = 0; i < byteLength; i++) {
       buffer[i] = ba.readByte();
     }
-    var value = Shumway.StringUtilities.utf8encode(buffer);
+    let value = Shumway.StringUtilities.utf8encode(buffer);
     strings.push(value);
     return value;
   }
@@ -304,23 +304,23 @@ module Shumway.AVMX {
       return;
     }
 
-    var strings = references.strings;
-    var index = strings.indexOf(s);
+    let strings = references.strings;
+    let index = strings.indexOf(s);
     if (index >= 0) {
       writeU29(ba, index << 1);
       return;
     }
     strings.push(s);
 
-    var bytes = Shumway.StringUtilities.utf8decode(s);
+    let bytes = Shumway.StringUtilities.utf8decode(s);
     writeU29(ba, 1 | (bytes.length << 1));
-    for (var i = 0; i < bytes.length; i++) {
+    for (let i = 0; i < bytes.length; i++) {
       ba.writeByte(bytes[i]);
     }
   }
 
   function readAMF3Value(ba: ByteArray, references: AMF3ReferenceTables) {
-    var marker = ba.readByte();
+    let marker = ba.readByte();
     switch (marker) {
       case AMF3Marker.NULL:
         return null;
@@ -337,71 +337,71 @@ module Shumway.AVMX {
       case AMF3Marker.STRING:
         return readUTF8(ba, references);
       case AMF3Marker.DATE:
-        var u29o = readU29(ba);
+        let u29o = readU29(ba);
         release || assert((u29o & 1) === 1);
         return ba.sec.AXDate.axConstruct([readDouble(ba)]);
       case AMF3Marker.OBJECT:
-        var u29o = readU29(ba);
+        let u29o = readU29(ba);
         if ((u29o & 1) === 0) {
           return references.objects[u29o >> 1];
         }
         if ((u29o & 4) !== 0) {
           throw "AMF3 Traits-Ext is not supported";
         }
-        var axClass: AXClass;
-        var traits: ITraits;
-        var isDynamic = true;
-        var traitNames;
+        let axClass: AXClass;
+        let traits: ITraits;
+        let isDynamic = true;
+        let traitNames;
         if ((u29o & 2) === 0) {
           traits = references.traits[u29o >> 2];
           traitNames = references.traitNames[u29o >> 2];
         } else {
-          var alias = readUTF8(ba, references);
+          let alias = readUTF8(ba, references);
           if (alias) {
             traits = axClass = ba.sec.classAliases.getClassByAlias(alias);
           }
           isDynamic = (u29o & 8) !== 0;
           traitNames = [];
-          for (var i = 0, j = u29o >> 4; i < j; i++) {
+          for (let i = 0, j = u29o >> 4; i < j; i++) {
             traitNames.push(readUTF8(ba, references));
           }
           references.traits.push(traits);
           references.traitNames.push(traitNames);
         }
 
-        var object = axClass ? axClass.axConstruct([]) : ba.sec.createObject();
+        let object = axClass ? axClass.axConstruct([]) : ba.sec.createObject();
         references.objects.push(object);
         // Read trait properties.
-        for (var i = 0; i < traitNames.length; i++) {
-          var value = readAMF3Value(ba, references);
+        for (let i = 0; i < traitNames.length; i++) {
+          let value = readAMF3Value(ba, references);
           object.axSetPublicProperty(traitNames[i], value);
         }
         // Read dynamic properties.
         if (isDynamic) {
           while (true) {
-            var key = readUTF8(ba, references);
+            let key = readUTF8(ba, references);
             if (key === "") break;
-            var value = readAMF3Value(ba, references);
+            let value = readAMF3Value(ba, references);
             object.axSetPublicProperty(key, value);
           }
         }
         return object;
       case AMF3Marker.ARRAY:
-        var u29o = readU29(ba);
+        let u29o = readU29(ba);
         if ((u29o & 1) === 0) {
           return references.objects[u29o >> 1];
         }
-        var array = ba.sec.createArray([]);
+        let array = ba.sec.createArray([]);
         references.objects.push(array);
-        var densePortionLength = u29o >> 1;
+        let densePortionLength = u29o >> 1;
         while (true) {
-          var key = readUTF8(ba, references);
+          let key = readUTF8(ba, references);
           if (!key.length) break;
-          var value = readAMF3Value(ba, references);
+          let value = readAMF3Value(ba, references);
           array.axSetPublicProperty(key, value);
         }
-        for (var i = 0; i < densePortionLength; i++) {
-          var value = readAMF3Value(ba, references);
+        for (let i = 0; i < densePortionLength; i++) {
+          let value = readAMF3Value(ba, references);
           array.axSetPublicProperty(i, value);
         }
         return array;
@@ -414,8 +414,8 @@ module Shumway.AVMX {
    * Tries to write a reference to a previously written object.
    */
   function tryWriteAndStartTrackingReference(ba: ByteArray, object: AS.ASObject, references: AMF3ReferenceTables) {
-    var objects = references.objects;
-    var index = objects.indexOf(object);
+    let objects = references.objects;
+    let index = objects.indexOf(object);
     if (index < 0) {
       objects.push(object);
       return false;
@@ -424,8 +424,8 @@ module Shumway.AVMX {
     return true;
   }
 
-  var MAX_INT =  268435456 - 1; // 2^28 - 1
-  var MIN_INT = -268435456; // -2^28
+  let MAX_INT =  268435456 - 1; // 2^28 - 1
+  let MIN_INT = -268435456; // -2^28
 
   function writeAMF3Value(ba: ByteArray, value: any, references: AMF3ReferenceTables) {
     switch (typeof value) {
@@ -433,7 +433,7 @@ module Shumway.AVMX {
         ba.writeByte(value ? AMF3Marker.TRUE : AMF3Marker.FALSE);
         break;
       case "number":
-        var useInteger = value === (value | 0);
+        let useInteger = value === (value | 0);
         if (useInteger) {
           if (value > MAX_INT || value < MIN_INT) {
             useInteger = false;
@@ -458,12 +458,12 @@ module Shumway.AVMX {
         if (value === null) {
           ba.writeByte(AMF3Marker.NULL);
         } else if (ba.sec.AXArray.axIsType(value)) {
-          var array = (<AS.ASArray>value);
+          let array = (<AS.ASArray>value);
           ba.writeByte(AMF3Marker.ARRAY);
           if (tryWriteAndStartTrackingReference(ba, array, references)) {
             break;
           }
-          var densePortionLength = 0;
+          let densePortionLength = 0;
           while (array.axHasPublicProperty(densePortionLength)) {
             ++densePortionLength;
           }
@@ -476,7 +476,7 @@ module Shumway.AVMX {
             writeAMF3Value(ba, value, references);
           });
           writeUTF8(ba, "", references);
-          for (var j = 0; j < densePortionLength; j++) {
+          for (let j = 0; j < densePortionLength; j++) {
             writeAMF3Value(ba, array.axGetPublicProperty(j), references);
           }
         } else if (ba.sec.AXDate.axIsType(value)) {
@@ -486,7 +486,7 @@ module Shumway.AVMX {
           writeU29(ba, 1);
           writeDouble(ba, value.valueOf());
         } else {
-          var object = <AS.ASObject>value;
+          let object = <AS.ASObject>value;
 
           // TODO Vector, Dictionary, ByteArray and XML support
           ba.writeByte(AMF3Marker.OBJECT);
@@ -494,15 +494,15 @@ module Shumway.AVMX {
             break;
           }
 
-          var isDynamic = true;
+          let isDynamic = true;
 
-          var axClass: AXClass = object.axClass;
+          let axClass: AXClass = object.axClass;
           if (axClass) {
-            var classInfo = axClass.classInfo;
+            let classInfo = axClass.classInfo;
             isDynamic = !classInfo.instanceInfo.isSealed();
-            var alias = ba.sec.classAliases.getAliasByClass(axClass) || "";
-            var traitsRef = references.traits.indexOf(axClass);
-            var traitNames: string [] = null;
+            let alias = ba.sec.classAliases.getAliasByClass(axClass) || "";
+            let traitsRef = references.traits.indexOf(axClass);
+            let traitNames: string [] = null;
             if (traitsRef < 0) {
               // Write traits since we haven't done so yet.
               traitNames = classInfo.instanceInfo.runtimeTraits.getSlotPublicTraitNames();
@@ -511,7 +511,7 @@ module Shumway.AVMX {
               writeU29(ba, (isDynamic ? 0x0B : 0x03) + (traitNames.length << 4));
               writeUTF8(ba, alias, references);
               // Write trait names.
-              for (var i = 0; i < traitNames.length; i++) {
+              for (let i = 0; i < traitNames.length; i++) {
                 writeUTF8(ba, traitNames[i], references);
               }
             } else {
@@ -520,7 +520,7 @@ module Shumway.AVMX {
               writeU29(ba, 0x01 + (traitsRef << 2));
             }
             // Write the actual trait values.
-            for (var i = 0; i < traitNames.length; i++) {
+            for (let i = 0; i < traitNames.length; i++) {
               writeAMF3Value(ba, object.axGetPublicProperty(traitNames[i]), references);
             }
           } else {

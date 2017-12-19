@@ -19,8 +19,8 @@
 /// ECMAScript APIs
 /////////////////////////////
 
-declare var NaN: number;
-declare var Infinity: number;
+declare let NaN: number;
+declare let Infinity: number;
 
 /**
  * Evaluates JavaScript code and executes it.
@@ -221,7 +221,7 @@ interface ObjectConstructor {
 /**
  * Provides functionality common to all JavaScript objects.
  */
-declare var Object: ObjectConstructor;
+declare let Object: ObjectConstructor;
 
 /**
  * Creates a new function.
@@ -268,7 +268,7 @@ interface FunctionConstructor {
   prototype: Function;
 }
 
-declare var Function: FunctionConstructor;
+declare let Function: FunctionConstructor;
 
 interface IArguments {
   [index: number]: any;
@@ -439,7 +439,7 @@ interface StringConstructor {
 /**
  * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
  */
-declare var String: StringConstructor;
+declare let String: StringConstructor;
 
 interface Boolean {
 }
@@ -450,7 +450,7 @@ interface BooleanConstructor {
   prototype: Boolean;
 }
 
-declare var Boolean: BooleanConstructor;
+declare let Boolean: BooleanConstructor;
 
 interface Number {
   /**
@@ -509,7 +509,7 @@ interface NumberConstructor {
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
-declare var Number: NumberConstructor;
+declare let Number: NumberConstructor;
 
 interface TemplateStringsArray extends Array<string> {
   raw: string[];
@@ -624,7 +624,7 @@ interface Math {
   tan(x: number): number;
 }
 /** An intrinsic object that provides basic mathematics functionality and constants. */
-declare var Math: Math;
+declare let Math: Math;
 
 /** Enables basic storage and retrieval of dates and times. */
 interface Date {
@@ -806,7 +806,7 @@ interface DateConstructor {
   now(): number;
 }
 
-declare var Date: DateConstructor;
+declare let Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
   index?: number;
@@ -869,7 +869,7 @@ interface RegExpConstructor {
   lastMatch: string;
 }
 
-declare var RegExp: RegExpConstructor;
+declare let RegExp: RegExpConstructor;
 
 interface Error {
   name: string;
@@ -882,7 +882,7 @@ interface ErrorConstructor {
   prototype: Error;
 }
 
-declare var Error: ErrorConstructor;
+declare let Error: ErrorConstructor;
 
 interface EvalError extends Error {
 }
@@ -893,7 +893,7 @@ interface EvalErrorConstructor {
   prototype: EvalError;
 }
 
-declare var EvalError: EvalErrorConstructor;
+declare let EvalError: EvalErrorConstructor;
 
 interface RangeError extends Error {
 }
@@ -904,7 +904,7 @@ interface RangeErrorConstructor {
   prototype: RangeError;
 }
 
-declare var RangeError: RangeErrorConstructor;
+declare let RangeError: RangeErrorConstructor;
 
 interface ReferenceError extends Error {
 }
@@ -915,7 +915,7 @@ interface ReferenceErrorConstructor {
   prototype: ReferenceError;
 }
 
-declare var ReferenceError: ReferenceErrorConstructor;
+declare let ReferenceError: ReferenceErrorConstructor;
 
 interface SyntaxError extends Error {
 }
@@ -926,7 +926,7 @@ interface SyntaxErrorConstructor {
   prototype: SyntaxError;
 }
 
-declare var SyntaxError: SyntaxErrorConstructor;
+declare let SyntaxError: SyntaxErrorConstructor;
 
 interface TypeError extends Error {
 }
@@ -937,7 +937,7 @@ interface TypeErrorConstructor {
   prototype: TypeError;
 }
 
-declare var TypeError: TypeErrorConstructor;
+declare let TypeError: TypeErrorConstructor;
 
 interface URIError extends Error {
 }
@@ -948,7 +948,7 @@ interface URIErrorConstructor {
   prototype: URIError;
 }
 
-declare var URIError: URIErrorConstructor;
+declare let URIError: URIErrorConstructor;
 
 interface JSON {
   /**
@@ -993,7 +993,7 @@ interface JSON {
 /**
  * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
  */
-declare var JSON: JSON;
+declare let JSON: JSON;
 
 
 /////////////////////////////
@@ -1164,7 +1164,7 @@ interface ArrayConstructor {
   prototype: Array<any>;
 }
 
-declare var Array: ArrayConstructor;
+declare let Array: ArrayConstructor;
 
 /////////////////////////////
 /// IE10 ECMAScript Extensions
@@ -1188,7 +1188,7 @@ interface ArrayBuffer {
   slice(begin:number, end?:number): ArrayBuffer;
 }
 
-declare var ArrayBuffer: {
+declare let ArrayBuffer: {
   prototype: ArrayBuffer;
   new (byteLength: number): ArrayBuffer;
 }
@@ -1249,7 +1249,7 @@ interface Int8Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Int8Array;
 }
-declare var Int8Array: {
+declare let Int8Array: {
   prototype: Int8Array;
   new (length: number): Int8Array;
   new (array: Int8Array): Int8Array;
@@ -1307,7 +1307,7 @@ interface Uint8Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Uint8Array;
 }
-declare var Uint8Array: {
+declare let Uint8Array: {
   prototype: Uint8Array;
   new (length: number): Uint8Array;
   new (array: Uint8Array): Uint8Array;
@@ -1365,7 +1365,7 @@ interface Int16Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Int16Array;
 }
-declare var Int16Array: {
+declare let Int16Array: {
   prototype: Int16Array;
   new (length: number): Int16Array;
   new (array: Int16Array): Int16Array;
@@ -1423,7 +1423,7 @@ interface Uint16Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Uint16Array;
 }
-declare var Uint16Array: {
+declare let Uint16Array: {
   prototype: Uint16Array;
   new (length: number): Uint16Array;
   new (array: Uint16Array): Uint16Array;
@@ -1481,7 +1481,7 @@ interface Int32Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Int32Array;
 }
-declare var Int32Array: {
+declare let Int32Array: {
   prototype: Int32Array;
   new (length: number): Int32Array;
   new (array: Int32Array): Int32Array;
@@ -1539,7 +1539,7 @@ interface Uint32Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Uint32Array;
 }
-declare var Uint32Array: {
+declare let Uint32Array: {
   prototype: Uint32Array;
   new (length: number): Uint32Array;
   new (array: Uint32Array): Uint32Array;
@@ -1597,7 +1597,7 @@ interface Float32Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Float32Array;
 }
-declare var Float32Array: {
+declare let Float32Array: {
   prototype: Float32Array;
   new (length: number): Float32Array;
   new (array: Float32Array): Float32Array;
@@ -1655,7 +1655,7 @@ interface Float64Array extends ArrayBufferView {
    */
   subarray(begin: number, end?: number): Float64Array;
 }
-declare var Float64Array: {
+declare let Float64Array: {
   prototype: Float64Array;
   new (length: number): Float64Array;
   new (array: Float64Array): Float64Array;
@@ -1778,7 +1778,7 @@ interface DataView extends ArrayBufferView {
    */
   setFloat64(byteOffset: number, value: number, littleEndian?: boolean): void;
 }
-declare var DataView: {
+declare let DataView: {
   prototype: DataView;
   new (buffer: ArrayBuffer, byteOffset?: number, length?: number): DataView;
 }
@@ -1796,7 +1796,7 @@ interface Map<K, V> {
   set(key: K, value: V): Map<K, V>;
   size: number;
 }
-declare var Map: {
+declare let Map: {
   new <K, V>(): Map<K, V>;
   prototype: Map<any, any>;
 }
@@ -1808,7 +1808,7 @@ interface WeakMap<K, V> {
   has(key: K): boolean;
   set(key: K, value: V): WeakMap<K, V>;
 }
-declare var WeakMap: {
+declare let WeakMap: {
   new <K, V>(): WeakMap<K, V>;
   prototype: WeakMap<any, any>;
 }
@@ -1821,7 +1821,7 @@ interface Set<T> {
   has(value: T): boolean;
   size: number;
 }
-declare var Set: {
+declare let Set: {
   new <T>(): Set<T>;
   prototype: Set<any>;
 }
@@ -1853,7 +1853,7 @@ declare module Intl {
     compare(x: string, y: string): number;
     resolvedOptions(): ResolvedCollatorOptions;
   }
-  var Collator: {
+  let Collator: {
     new (locales?: string[], options?: CollatorOptions): Collator;
     new (locale?: string, options?: CollatorOptions): Collator;
     (locales?: string[], options?: CollatorOptions): Collator;
@@ -1888,7 +1888,7 @@ declare module Intl {
     format(value: number): string;
     resolvedOptions(): ResolvedNumberFormatOptions;
   }
-  var NumberFormat: {
+  let NumberFormat: {
     new (locales?: string[], options?: NumberFormatOptions): Collator;
     new (locale?: string, options?: NumberFormatOptions): Collator;
     (locales?: string[], options?: NumberFormatOptions): Collator;
@@ -1933,7 +1933,7 @@ declare module Intl {
     format(date: number): string;
     resolvedOptions(): ResolvedDateTimeFormatOptions;
   }
-  var DateTimeFormat: {
+  let DateTimeFormat: {
     new (locales?: string[], options?: DateTimeFormatOptions): Collator;
     new (locale?: string, options?: DateTimeFormatOptions): Collator;
     (locales?: string[], options?: DateTimeFormatOptions): Collator;
@@ -2396,7 +2396,7 @@ interface HTMLElement extends Element, ElementCSSInlineStyle, MSEventAttachmentT
   addEventListener(type: "msmanipulationstatechanged", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLElement: {
+declare let HTMLElement: {
   prototype: HTMLElement;
   new(): HTMLElement;
 }
@@ -3498,7 +3498,7 @@ interface Document extends Node, NodeSelector, MSEventAttachmentTarget, Document
   addEventListener(type: "mspointerleave", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var Document: {
+declare let Document: {
   prototype: Document;
   new(): Document;
 }
@@ -3525,7 +3525,7 @@ interface Console {
   groupCollapsed(groupTitle?: string): void;
   select(element: Element): void;
 }
-declare var Console: {
+declare let Console: {
   prototype: Console;
   new(): Console;
 }
@@ -3579,7 +3579,7 @@ interface MSEventObj extends Event {
   setAttribute(strAttributeName: string, AttributeValue: any, lFlags?: number): void;
   removeAttribute(strAttributeName: string, lFlags?: number): boolean;
 }
-declare var MSEventObj: {
+declare let MSEventObj: {
   prototype: MSEventObj;
   new(): MSEventObj;
 }
@@ -3618,7 +3618,7 @@ interface HTMLCanvasElement extends HTMLElement {
    */
   msToBlob(): Blob;
 }
-declare var HTMLCanvasElement: {
+declare let HTMLCanvasElement: {
   prototype: HTMLCanvasElement;
   new(): HTMLCanvasElement;
 }
@@ -3855,7 +3855,7 @@ interface Window extends EventTarget, MSEventAttachmentTarget, WindowLocalStorag
   addEventListener(type: "mspointerleave", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var Window: {
+declare let Window: {
   prototype: Window;
   new(): Window;
 }
@@ -3876,7 +3876,7 @@ interface HTMLCollection extends MSHTMLCollectionExtensions {
   // [name: string]: Element;
   [index: number]: Element;
 }
-declare var HTMLCollection: {
+declare let HTMLCollection: {
   prototype: HTMLCollection;
   new(): HTMLCollection;
 }
@@ -3893,7 +3893,7 @@ interface Blob {
   slice(start?: number, end?: number, contentType?: string): Blob;
   msClose(): void;
 }
-declare var Blob: {
+declare let Blob: {
   prototype: Blob;
   new (blobParts?: any[], options?: BlobPropertyBag): Blob;
 }
@@ -4029,7 +4029,7 @@ interface HTMLTableElement extends HTMLElement, MSDataBindingTableExtensions, MS
    */
   createTFoot(): HTMLElement;
 }
-declare var HTMLTableElement: {
+declare let HTMLTableElement: {
   prototype: HTMLTableElement;
   new(): HTMLTableElement;
 }
@@ -4048,7 +4048,7 @@ interface TreeWalker {
   firstChild(): Node;
   previousNode(): Node;
 }
-declare var TreeWalker: {
+declare let TreeWalker: {
   prototype: TreeWalker;
   new(): TreeWalker;
 }
@@ -4063,7 +4063,7 @@ interface SVGPathSegCurvetoQuadraticRel extends SVGPathSeg {
   x: number;
   x1: number;
 }
-declare var SVGPathSegCurvetoQuadraticRel: {
+declare let SVGPathSegCurvetoQuadraticRel: {
   prototype: SVGPathSegCurvetoQuadraticRel;
   new(): SVGPathSegCurvetoQuadraticRel;
 }
@@ -4085,7 +4085,7 @@ interface Performance {
   setResourceTimingBufferSize(maxSize: number): void;
   now(): number;
 }
-declare var Performance: {
+declare let Performance: {
   prototype: Performance;
   new(): Performance;
 }
@@ -4104,7 +4104,7 @@ interface CompositionEvent extends UIEvent {
   locale: string;
   initCompositionEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, dataArg: string, locale: string): void;
 }
-declare var CompositionEvent: {
+declare let CompositionEvent: {
   prototype: CompositionEvent;
   new(): CompositionEvent;
 }
@@ -4133,7 +4133,7 @@ interface SVGMarkerElement extends SVGElement, SVGStylable, SVGLangSpace, SVGFit
   SVG_MARKER_ORIENT_AUTO: number;
   SVG_MARKERUNITS_USERSPACEONUSE: number;
 }
-declare var SVGMarkerElement: {
+declare let SVGMarkerElement: {
   prototype: SVGMarkerElement;
   new(): SVGMarkerElement;
   SVG_MARKER_ORIENT_UNKNOWN: number;
@@ -4440,14 +4440,14 @@ interface CSSStyleDeclaration {
   [index: number]: string;
   setProperty(propertyName: string, value: string, priority?: string): void;
 }
-declare var CSSStyleDeclaration: {
+declare let CSSStyleDeclaration: {
   prototype: CSSStyleDeclaration;
   new(): CSSStyleDeclaration;
 }
 
 interface SVGGElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGTests, SVGExternalResourcesRequired {
 }
-declare var SVGGElement: {
+declare let SVGGElement: {
   prototype: SVGGElement;
   new(): SVGGElement;
 }
@@ -4471,7 +4471,7 @@ interface MSStyleCSSProperties extends MSCSSProperties {
   pixelRight: number;
   textDecorationUnderline: boolean;
 }
-declare var MSStyleCSSProperties: {
+declare let MSStyleCSSProperties: {
   prototype: MSStyleCSSProperties;
   new(): MSStyleCSSProperties;
 }
@@ -4484,7 +4484,7 @@ interface Navigator extends NavigatorID, NavigatorOnLine, NavigatorContentUtils,
   maxTouchPoints: number;
   msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
 }
-declare var Navigator: {
+declare let Navigator: {
   prototype: Navigator;
   new(): Navigator;
 }
@@ -4495,7 +4495,7 @@ interface SVGPathSegCurvetoCubicSmoothAbs extends SVGPathSeg {
   x: number;
   y2: number;
 }
-declare var SVGPathSegCurvetoCubicSmoothAbs: {
+declare let SVGPathSegCurvetoCubicSmoothAbs: {
   prototype: SVGPathSegCurvetoCubicSmoothAbs;
   new(): SVGPathSegCurvetoCubicSmoothAbs;
 }
@@ -4507,7 +4507,7 @@ interface SVGZoomEvent extends UIEvent {
   previousTranslate: SVGPoint;
   newTranslate: SVGPoint;
 }
-declare var SVGZoomEvent: {
+declare let SVGZoomEvent: {
   prototype: SVGZoomEvent;
   new(): SVGZoomEvent;
 }
@@ -4519,7 +4519,7 @@ interface NodeSelector {
 
 interface HTMLTableDataCellElement extends HTMLTableCellElement {
 }
-declare var HTMLTableDataCellElement: {
+declare let HTMLTableDataCellElement: {
   prototype: HTMLTableDataCellElement;
   new(): HTMLTableDataCellElement;
 }
@@ -4534,7 +4534,7 @@ interface HTMLBaseElement extends HTMLElement {
    */
   href: string;
 }
-declare var HTMLBaseElement: {
+declare let HTMLBaseElement: {
   prototype: HTMLBaseElement;
   new(): HTMLBaseElement;
 }
@@ -4547,7 +4547,7 @@ interface ClientRect {
   bottom: number;
   height: number;
 }
-declare var ClientRect: {
+declare let ClientRect: {
   prototype: ClientRect;
   new(): ClientRect;
 }
@@ -4562,7 +4562,7 @@ interface DOMImplementation {
   hasFeature(feature: string, version?: string): boolean;
   createHTMLDocument(title: string): Document;
 }
-declare var DOMImplementation: {
+declare let DOMImplementation: {
   prototype: DOMImplementation;
   new(): DOMImplementation;
 }
@@ -4572,7 +4572,7 @@ interface SVGUnitTypes {
   SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: number;
   SVG_UNIT_TYPE_USERSPACEONUSE: number;
 }
-declare var SVGUnitTypes: SVGUnitTypes;
+declare let SVGUnitTypes: SVGUnitTypes;
 
 interface Element extends Node, NodeSelector, ElementTraversal, GlobalEventHandlers {
   scrollTop: number;
@@ -4784,7 +4784,7 @@ interface Element extends Node, NodeSelector, ElementTraversal, GlobalEventHandl
   addEventListener(type: "mspointerleave", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var Element: {
+declare let Element: {
   prototype: Element;
   new(): Element;
 }
@@ -4792,7 +4792,7 @@ declare var Element: {
 interface HTMLNextIdElement extends HTMLElement {
   n: string;
 }
-declare var HTMLNextIdElement: {
+declare let HTMLNextIdElement: {
   prototype: HTMLNextIdElement;
   new(): HTMLNextIdElement;
 }
@@ -4801,7 +4801,7 @@ interface SVGPathSegMovetoRel extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegMovetoRel: {
+declare let SVGPathSegMovetoRel: {
   prototype: SVGPathSegMovetoRel;
   new(): SVGPathSegMovetoRel;
 }
@@ -4812,7 +4812,7 @@ interface SVGLineElement extends SVGElement, SVGStylable, SVGTransformable, SVGL
   x1: SVGAnimatedLength;
   y2: SVGAnimatedLength;
 }
-declare var SVGLineElement: {
+declare let SVGLineElement: {
   prototype: SVGLineElement;
   new(): SVGLineElement;
 }
@@ -4823,7 +4823,7 @@ interface HTMLParagraphElement extends HTMLElement, DOML2DeprecatedTextFlowContr
    */
   align: string;
 }
-declare var HTMLParagraphElement: {
+declare let HTMLParagraphElement: {
   prototype: HTMLParagraphElement;
   new(): HTMLParagraphElement;
 }
@@ -4838,14 +4838,14 @@ interface HTMLAreasCollection extends HTMLCollection {
    */
   add(element: HTMLElement, before?: any): void;
 }
-declare var HTMLAreasCollection: {
+declare let HTMLAreasCollection: {
   prototype: HTMLAreasCollection;
   new(): HTMLAreasCollection;
 }
 
 interface SVGDescElement extends SVGElement, SVGStylable, SVGLangSpace {
 }
-declare var SVGDescElement: {
+declare let SVGDescElement: {
   prototype: SVGDescElement;
   new(): SVGDescElement;
 }
@@ -4900,7 +4900,7 @@ interface Node extends EventTarget {
   DOCUMENT_POSITION_FOLLOWING: number;
   DOCUMENT_POSITION_PRECEDING: number;
 }
-declare var Node: {
+declare let Node: {
   prototype: Node;
   new(): Node;
   ENTITY_REFERENCE_NODE: number;
@@ -4927,7 +4927,7 @@ interface SVGPathSegCurvetoQuadraticSmoothRel extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegCurvetoQuadraticSmoothRel: {
+declare let SVGPathSegCurvetoQuadraticSmoothRel: {
   prototype: SVGPathSegCurvetoQuadraticSmoothRel;
   new(): SVGPathSegCurvetoQuadraticSmoothRel;
 }
@@ -4938,7 +4938,7 @@ interface DOML2DeprecatedListSpaceReduction {
 
 interface MSScriptHost {
 }
-declare var MSScriptHost: {
+declare let MSScriptHost: {
   prototype: MSScriptHost;
   new(): MSScriptHost;
 }
@@ -4946,7 +4946,7 @@ declare var MSScriptHost: {
 interface SVGClipPathElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGTransformable, SVGLangSpace, SVGTests, SVGExternalResourcesRequired {
   clipPathUnits: SVGAnimatedEnumeration;
 }
-declare var SVGClipPathElement: {
+declare let SVGClipPathElement: {
   prototype: SVGClipPathElement;
   new(): SVGClipPathElement;
 }
@@ -4977,7 +4977,7 @@ interface MouseEvent extends UIEvent {
   initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
   getModifierState(keyArg: string): boolean;
 }
-declare var MouseEvent: {
+declare let MouseEvent: {
   prototype: MouseEvent;
   new(): MouseEvent;
 }
@@ -4990,7 +4990,7 @@ interface RangeException {
   INVALID_NODE_TYPE_ERR: number;
   BAD_BOUNDARYPOINTS_ERR: number;
 }
-declare var RangeException: {
+declare let RangeException: {
   prototype: RangeException;
   new(): RangeException;
   INVALID_NODE_TYPE_ERR: number;
@@ -5004,7 +5004,7 @@ interface SVGTextPositioningElement extends SVGTextContentElement {
   x: SVGAnimatedLengthList;
   dx: SVGAnimatedLengthList;
 }
-declare var SVGTextPositioningElement: {
+declare let SVGTextPositioningElement: {
   prototype: SVGTextPositioningElement;
   new(): SVGTextPositioningElement;
 }
@@ -5075,7 +5075,7 @@ interface HTMLAppletElement extends HTMLElement, DOML2DeprecatedMarginStyle, DOM
    */
   BaseHref: string;
 }
-declare var HTMLAppletElement: {
+declare let HTMLAppletElement: {
   prototype: HTMLAppletElement;
   new(): HTMLAppletElement;
 }
@@ -5083,7 +5083,7 @@ declare var HTMLAppletElement: {
 interface TextMetrics {
   width: number;
 }
-declare var TextMetrics: {
+declare let TextMetrics: {
   prototype: TextMetrics;
   new(): TextMetrics;
 }
@@ -5137,7 +5137,7 @@ interface HTMLOListElement extends HTMLElement, DOML2DeprecatedListSpaceReductio
    */
   start: number;
 }
-declare var HTMLOListElement: {
+declare let HTMLOListElement: {
   prototype: HTMLOListElement;
   new(): HTMLOListElement;
 }
@@ -5145,7 +5145,7 @@ declare var HTMLOListElement: {
 interface SVGPathSegLinetoVerticalRel extends SVGPathSeg {
   y: number;
 }
-declare var SVGPathSegLinetoVerticalRel: {
+declare let SVGPathSegLinetoVerticalRel: {
   prototype: SVGPathSegLinetoVerticalRel;
   new(): SVGPathSegLinetoVerticalRel;
 }
@@ -5154,14 +5154,14 @@ interface SVGAnimatedString {
   animVal: string;
   baseVal: string;
 }
-declare var SVGAnimatedString: {
+declare let SVGAnimatedString: {
   prototype: SVGAnimatedString;
   new(): SVGAnimatedString;
 }
 
 interface CDATASection extends Text {
 }
-declare var CDATASection: {
+declare let CDATASection: {
   prototype: CDATASection;
   new(): CDATASection;
 }
@@ -5170,7 +5170,7 @@ interface StyleMedia {
   type: string;
   matchMedium(mediaquery: string): boolean;
 }
-declare var StyleMedia: {
+declare let StyleMedia: {
   prototype: StyleMedia;
   new(): StyleMedia;
 }
@@ -5262,7 +5262,7 @@ interface HTMLSelectElement extends HTMLElement, MSHTMLCollectionExtensions, MSD
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLSelectElement: {
+declare let HTMLSelectElement: {
   prototype: HTMLSelectElement;
   new(): HTMLSelectElement;
 }
@@ -5306,7 +5306,7 @@ interface TextRange {
   setEndPoint(how: string, SourceRange: TextRange): void;
   queryCommandEnabled(cmdID: string): boolean;
 }
-declare var TextRange: {
+declare let TextRange: {
   prototype: TextRange;
   new(): TextRange;
 }
@@ -5328,7 +5328,7 @@ interface HTMLBlockElement extends HTMLElement, DOML2DeprecatedTextFlowControl {
    */
   cite: string;
 }
-declare var HTMLBlockElement: {
+declare let HTMLBlockElement: {
   prototype: HTMLBlockElement;
   new(): HTMLBlockElement;
 }
@@ -5354,7 +5354,7 @@ interface CSSStyleSheet extends StyleSheet {
   addRule(bstrSelector: string, bstrStyle?: string, lIndex?: number): number;
   removeImport(lIndex: number): void;
 }
-declare var CSSStyleSheet: {
+declare let CSSStyleSheet: {
   prototype: CSSStyleSheet;
   new(): CSSStyleSheet;
 }
@@ -5367,7 +5367,7 @@ interface MSSelection {
   createRangeCollection(): TextRangeCollection;
   empty(): void;
 }
-declare var MSSelection: {
+declare let MSSelection: {
   prototype: MSSelection;
   new(): MSSelection;
 }
@@ -5398,7 +5398,7 @@ interface HTMLMetaElement extends HTMLElement {
    */
   charset: string;
 }
-declare var HTMLMetaElement: {
+declare let HTMLMetaElement: {
   prototype: HTMLMetaElement;
   new(): HTMLMetaElement;
 }
@@ -5412,7 +5412,7 @@ interface SVGPatternElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLa
   patternTransform: SVGAnimatedTransformList;
   height: SVGAnimatedLength;
 }
-declare var SVGPatternElement: {
+declare let SVGPatternElement: {
   prototype: SVGPatternElement;
   new(): SVGPatternElement;
 }
@@ -5421,7 +5421,7 @@ interface SVGAnimatedAngle {
   animVal: SVGAngle;
   baseVal: SVGAngle;
 }
-declare var SVGAnimatedAngle: {
+declare let SVGAnimatedAngle: {
   prototype: SVGAnimatedAngle;
   new(): SVGAnimatedAngle;
 }
@@ -5444,7 +5444,7 @@ interface Selection {
   deleteFromDocument(): void;
   removeRange(range: Range): void;
 }
-declare var Selection: {
+declare let Selection: {
   prototype: Selection;
   new(): Selection;
 }
@@ -5452,7 +5452,7 @@ declare var Selection: {
 interface SVGScriptElement extends SVGElement, SVGExternalResourcesRequired, SVGURIReference {
   type: string;
 }
-declare var SVGScriptElement: {
+declare let SVGScriptElement: {
   prototype: SVGScriptElement;
   new(): SVGScriptElement;
 }
@@ -5463,7 +5463,7 @@ interface HTMLDDElement extends HTMLElement {
    */
   noWrap: boolean;
 }
-declare var HTMLDDElement: {
+declare let HTMLDDElement: {
   prototype: HTMLDDElement;
   new(): HTMLDDElement;
 }
@@ -5478,7 +5478,7 @@ interface CSSStyleRule extends CSSRule {
   style: MSStyleCSSProperties;
   readOnly: boolean;
 }
-declare var CSSStyleRule: {
+declare let CSSStyleRule: {
   prototype: CSSStyleRule;
   new(): CSSStyleRule;
 }
@@ -5492,7 +5492,7 @@ interface NodeIterator {
   detach(): void;
   previousNode(): Node;
 }
-declare var NodeIterator: {
+declare let NodeIterator: {
   prototype: NodeIterator;
   new(): NodeIterator;
 }
@@ -5500,7 +5500,7 @@ declare var NodeIterator: {
 interface SVGViewElement extends SVGElement, SVGZoomAndPan, SVGFitToViewBox, SVGExternalResourcesRequired {
   viewTarget: SVGStringList;
 }
-declare var SVGViewElement: {
+declare let SVGViewElement: {
   prototype: SVGViewElement;
   new(): SVGViewElement;
 }
@@ -5539,7 +5539,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
    */
   hreflang: string;
 }
-declare var HTMLLinkElement: {
+declare let HTMLLinkElement: {
   prototype: HTMLLinkElement;
   new(): HTMLLinkElement;
 }
@@ -5559,14 +5559,14 @@ interface HTMLFontElement extends HTMLElement, DOML2DeprecatedColorProperty, DOM
    */
   face: string;
 }
-declare var HTMLFontElement: {
+declare let HTMLFontElement: {
   prototype: HTMLFontElement;
   new(): HTMLFontElement;
 }
 
 interface SVGTitleElement extends SVGElement, SVGStylable, SVGLangSpace {
 }
-declare var SVGTitleElement: {
+declare let SVGTitleElement: {
   prototype: SVGTitleElement;
   new(): SVGTitleElement;
 }
@@ -5588,7 +5588,7 @@ interface ControlRangeCollection {
   queryCommandText(cmdID: string): string;
   select(): void;
 }
-declare var ControlRangeCollection: {
+declare let ControlRangeCollection: {
   prototype: ControlRangeCollection;
   new(): ControlRangeCollection;
 }
@@ -5602,7 +5602,7 @@ interface MSNamespaceInfo extends MSEventAttachmentTarget {
   addEventListener(type: "readystatechange", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var MSNamespaceInfo: {
+declare let MSNamespaceInfo: {
   prototype: MSNamespaceInfo;
   new(): MSNamespaceInfo;
 }
@@ -5615,7 +5615,7 @@ interface SVGAnimatedTransformList {
   animVal: SVGTransformList;
   baseVal: SVGTransformList;
 }
-declare var SVGAnimatedTransformList: {
+declare let SVGAnimatedTransformList: {
   prototype: SVGAnimatedTransformList;
   new(): SVGAnimatedTransformList;
 }
@@ -5630,7 +5630,7 @@ interface HTMLTableCaptionElement extends HTMLElement {
    */
   vAlign: string;
 }
-declare var HTMLTableCaptionElement: {
+declare let HTMLTableCaptionElement: {
   prototype: HTMLTableCaptionElement;
   new(): HTMLTableCaptionElement;
 }
@@ -5665,7 +5665,7 @@ interface HTMLOptionElement extends HTMLElement, MSDataBindingExtensions {
    */
   selected: boolean;
 }
-declare var HTMLOptionElement: {
+declare let HTMLOptionElement: {
   prototype: HTMLOptionElement;
   new(): HTMLOptionElement;
   create(): HTMLOptionElement;
@@ -5681,7 +5681,7 @@ interface HTMLMapElement extends HTMLElement {
    */
   areas: HTMLAreasCollection;
 }
-declare var HTMLMapElement: {
+declare let HTMLMapElement: {
   prototype: HTMLMapElement;
   new(): HTMLMapElement;
 }
@@ -5689,7 +5689,7 @@ declare var HTMLMapElement: {
 interface HTMLMenuElement extends HTMLElement, DOML2DeprecatedListSpaceReduction {
   type: string;
 }
-declare var HTMLMenuElement: {
+declare let HTMLMenuElement: {
   prototype: HTMLMenuElement;
   new(): HTMLMenuElement;
 }
@@ -5698,7 +5698,7 @@ interface MouseWheelEvent extends MouseEvent {
   wheelDelta: number;
   initMouseWheelEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, buttonArg: number, relatedTargetArg: EventTarget, modifiersListArg: string, wheelDeltaArg: number): void;
 }
-declare var MouseWheelEvent: {
+declare let MouseWheelEvent: {
   prototype: MouseWheelEvent;
   new(): MouseWheelEvent;
 }
@@ -5718,7 +5718,7 @@ interface SVGPointList {
   removeItem(index: number): SVGPoint;
   insertItemBefore(newItem: SVGPoint, index: number): SVGPoint;
 }
-declare var SVGPointList: {
+declare let SVGPointList: {
   prototype: SVGPointList;
   new(): SVGPointList;
 }
@@ -5727,7 +5727,7 @@ interface SVGAnimatedLengthList {
   animVal: SVGLengthList;
   baseVal: SVGLengthList;
 }
-declare var SVGAnimatedLengthList: {
+declare let SVGAnimatedLengthList: {
   prototype: SVGAnimatedLengthList;
   new(): SVGAnimatedLengthList;
 }
@@ -5736,7 +5736,7 @@ interface SVGAnimatedPreserveAspectRatio {
   animVal: SVGPreserveAspectRatio;
   baseVal: SVGPreserveAspectRatio;
 }
-declare var SVGAnimatedPreserveAspectRatio: {
+declare let SVGAnimatedPreserveAspectRatio: {
   prototype: SVGAnimatedPreserveAspectRatio;
   new(): SVGAnimatedPreserveAspectRatio;
 }
@@ -5745,7 +5745,7 @@ interface MSSiteModeEvent extends Event {
   buttonID: number;
   actionURL: string;
 }
-declare var MSSiteModeEvent: {
+declare let MSSiteModeEvent: {
   prototype: MSSiteModeEvent;
   new(): MSSiteModeEvent;
 }
@@ -5759,7 +5759,7 @@ interface StyleSheetPageList {
   item(index: number): CSSPageRule;
   [index: number]: CSSPageRule;
 }
-declare var StyleSheetPageList: {
+declare let StyleSheetPageList: {
   prototype: StyleSheetPageList;
   new(): StyleSheetPageList;
 }
@@ -5799,7 +5799,7 @@ interface MSCSSProperties extends CSSStyleDeclaration {
   setAttribute(attributeName: string, AttributeValue: any, flags?: number): void;
   removeAttribute(attributeName: string, flags?: number): boolean;
 }
-declare var MSCSSProperties: {
+declare let MSCSSProperties: {
   prototype: MSCSSProperties;
   new(): MSCSSProperties;
 }
@@ -5888,7 +5888,7 @@ interface HTMLImageElement extends HTMLElement, MSImageResourceExtensions, MSDat
   crossOrigin: string;
   msPlayToPreferredSourceUri: string;
 }
-declare var HTMLImageElement: {
+declare let HTMLImageElement: {
   prototype: HTMLImageElement;
   new(): HTMLImageElement;
   create(): HTMLImageElement;
@@ -5952,7 +5952,7 @@ interface HTMLAreaElement extends HTMLElement {
    */
   toString(): string;
 }
-declare var HTMLAreaElement: {
+declare let HTMLAreaElement: {
   prototype: HTMLAreaElement;
   new(): HTMLAreaElement;
 }
@@ -5976,7 +5976,7 @@ interface SVGAngle {
   SVG_ANGLETYPE_DEG: number;
   SVG_ANGLETYPE_GRAD: number;
 }
-declare var SVGAngle: {
+declare let SVGAngle: {
   prototype: SVGAngle;
   new(): SVGAngle;
   SVG_ANGLETYPE_RAD: number;
@@ -6054,7 +6054,7 @@ interface HTMLButtonElement extends HTMLElement, MSDataBindingExtensions {
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLButtonElement: {
+declare let HTMLButtonElement: {
   prototype: HTMLButtonElement;
   new(): HTMLButtonElement;
 }
@@ -6074,7 +6074,7 @@ interface HTMLSourceElement extends HTMLElement {
   type: string;
   msKeySystem: string;
 }
-declare var HTMLSourceElement: {
+declare let HTMLSourceElement: {
   prototype: HTMLSourceElement;
   new(): HTMLSourceElement;
 }
@@ -6082,7 +6082,7 @@ declare var HTMLSourceElement: {
 interface CanvasGradient {
   addColorStop(offset: number, color: string): void;
 }
-declare var CanvasGradient: {
+declare let CanvasGradient: {
   prototype: CanvasGradient;
   new(): CanvasGradient;
 }
@@ -6109,7 +6109,7 @@ interface KeyboardEvent extends UIEvent {
   DOM_KEY_LOCATION_JOYSTICK: number;
   DOM_KEY_LOCATION_MOBILE: number;
 }
-declare var KeyboardEvent: {
+declare let KeyboardEvent: {
   prototype: KeyboardEvent;
   new(): KeyboardEvent;
   DOM_KEY_LOCATION_RIGHT: number;
@@ -6127,7 +6127,7 @@ interface MessageEvent extends Event {
   ports: any;
   initMessageEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, dataArg: any, originArg: string, lastEventIdArg: string, sourceArg: Window): void;
 }
-declare var MessageEvent: {
+declare let MessageEvent: {
   prototype: MessageEvent;
   new(): MessageEvent;
 }
@@ -6187,7 +6187,7 @@ interface SVGElement extends Element {
   addEventListener(type: "click", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var SVGElement: {
+declare let SVGElement: {
   prototype: SVGElement;
   new(): SVGElement;
 }
@@ -6223,7 +6223,7 @@ interface HTMLScriptElement extends HTMLElement {
   event: string;
   async: boolean;
 }
-declare var HTMLScriptElement: {
+declare let HTMLScriptElement: {
   prototype: HTMLScriptElement;
   new(): HTMLScriptElement;
 }
@@ -6272,7 +6272,7 @@ interface HTMLTableRowElement extends HTMLElement, HTMLTableAlignment, DOML2Depr
    */
   insertCell(index?: number): HTMLElement;
 }
-declare var HTMLTableRowElement: {
+declare let HTMLTableRowElement: {
   prototype: HTMLTableRowElement;
   new(): HTMLTableRowElement;
 }
@@ -6333,7 +6333,7 @@ interface CanvasRenderingContext2D {
   arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
   createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
 }
-declare var CanvasRenderingContext2D: {
+declare let CanvasRenderingContext2D: {
   prototype: CanvasRenderingContext2D;
   new(): CanvasRenderingContext2D;
 }
@@ -6343,7 +6343,7 @@ interface MSCSSRuleList {
   item(index?: number): CSSStyleRule;
   [index: number]: CSSStyleRule;
 }
-declare var MSCSSRuleList: {
+declare let MSCSSRuleList: {
   prototype: MSCSSRuleList;
   new(): MSCSSRuleList;
 }
@@ -6351,7 +6351,7 @@ declare var MSCSSRuleList: {
 interface SVGPathSegLinetoHorizontalAbs extends SVGPathSeg {
   x: number;
 }
-declare var SVGPathSegLinetoHorizontalAbs: {
+declare let SVGPathSegLinetoHorizontalAbs: {
   prototype: SVGPathSegLinetoHorizontalAbs;
   new(): SVGPathSegLinetoHorizontalAbs;
 }
@@ -6365,7 +6365,7 @@ interface SVGPathSegArcAbs extends SVGPathSeg {
   r1: number;
   largeArcFlag: boolean;
 }
-declare var SVGPathSegArcAbs: {
+declare let SVGPathSegArcAbs: {
   prototype: SVGPathSegArcAbs;
   new(): SVGPathSegArcAbs;
 }
@@ -6382,7 +6382,7 @@ interface SVGTransformList {
   replaceItem(newItem: SVGTransform, index: number): SVGTransform;
   createSVGTransformFromMatrix(matrix: SVGMatrix): SVGTransform;
 }
-declare var SVGTransformList: {
+declare let SVGTransformList: {
   prototype: SVGTransformList;
   new(): SVGTransformList;
 }
@@ -6393,14 +6393,14 @@ interface HTMLHtmlElement extends HTMLElement {
    */
   version: string;
 }
-declare var HTMLHtmlElement: {
+declare let HTMLHtmlElement: {
   prototype: HTMLHtmlElement;
   new(): HTMLHtmlElement;
 }
 
 interface SVGPathSegClosePath extends SVGPathSeg {
 }
-declare var SVGPathSegClosePath: {
+declare let SVGPathSegClosePath: {
   prototype: SVGPathSegClosePath;
   new(): SVGPathSegClosePath;
 }
@@ -6597,7 +6597,7 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument, MSDataBindingExt
   addEventListener(type: "msmanipulationstatechanged", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLFrameElement: {
+declare let HTMLFrameElement: {
   prototype: HTMLFrameElement;
   new(): HTMLFrameElement;
 }
@@ -6606,7 +6606,7 @@ interface SVGAnimatedLength {
   animVal: SVGLength;
   baseVal: SVGLength;
 }
-declare var SVGAnimatedLength: {
+declare let SVGAnimatedLength: {
   prototype: SVGAnimatedLength;
   new(): SVGAnimatedLength;
 }
@@ -6618,7 +6618,7 @@ interface SVGAnimatedPoints {
 
 interface SVGDefsElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGTests, SVGExternalResourcesRequired {
 }
-declare var SVGDefsElement: {
+declare let SVGDefsElement: {
   prototype: SVGDefsElement;
   new(): SVGDefsElement;
 }
@@ -6633,7 +6633,7 @@ interface HTMLQuoteElement extends HTMLElement {
    */
   cite: string;
 }
-declare var HTMLQuoteElement: {
+declare let HTMLQuoteElement: {
   prototype: HTMLQuoteElement;
   new(): HTMLQuoteElement;
 }
@@ -6644,7 +6644,7 @@ interface CSSMediaRule extends CSSRule {
   insertRule(rule: string, index?: number): number;
   deleteRule(index?: number): void;
 }
-declare var CSSMediaRule: {
+declare let CSSMediaRule: {
   prototype: CSSMediaRule;
   new(): CSSMediaRule;
 }
@@ -6698,7 +6698,7 @@ interface XMLHttpRequest extends EventTarget {
   addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var XMLHttpRequest: {
+declare let XMLHttpRequest: {
   prototype: XMLHttpRequest;
   new(): XMLHttpRequest;
   LOADING: number;
@@ -6715,14 +6715,14 @@ interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
    */
   scope: string;
 }
-declare var HTMLTableHeaderCellElement: {
+declare let HTMLTableHeaderCellElement: {
   prototype: HTMLTableHeaderCellElement;
   new(): HTMLTableHeaderCellElement;
 }
 
 interface HTMLDListElement extends HTMLElement, DOML2DeprecatedListSpaceReduction {
 }
-declare var HTMLDListElement: {
+declare let HTMLDListElement: {
   prototype: HTMLDListElement;
   new(): HTMLDListElement;
 }
@@ -6736,7 +6736,7 @@ interface MSDataBindingExtensions {
 interface SVGPathSegLinetoHorizontalRel extends SVGPathSeg {
   x: number;
 }
-declare var SVGPathSegLinetoHorizontalRel: {
+declare let SVGPathSegLinetoHorizontalRel: {
   prototype: SVGPathSegLinetoHorizontalRel;
   new(): SVGPathSegLinetoHorizontalRel;
 }
@@ -6747,7 +6747,7 @@ interface SVGEllipseElement extends SVGElement, SVGStylable, SVGTransformable, S
   rx: SVGAnimatedLength;
   cy: SVGAnimatedLength;
 }
-declare var SVGEllipseElement: {
+declare let SVGEllipseElement: {
   prototype: SVGEllipseElement;
   new(): SVGEllipseElement;
 }
@@ -6755,7 +6755,7 @@ declare var SVGEllipseElement: {
 interface SVGAElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGTests, SVGExternalResourcesRequired, SVGURIReference {
   target: SVGAnimatedString;
 }
-declare var SVGAElement: {
+declare let SVGAElement: {
   prototype: SVGAElement;
   new(): SVGAElement;
 }
@@ -6948,7 +6948,7 @@ interface HTMLFrameSetElement extends HTMLElement {
   addEventListener(type: "pagehide", listener: (ev: PageTransitionEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLFrameSetElement: {
+declare let HTMLFrameSetElement: {
   prototype: HTMLFrameSetElement;
   new(): HTMLFrameSetElement;
 }
@@ -6977,7 +6977,7 @@ interface Screen extends EventTarget {
   addEventListener(type: "msorientationchange", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var Screen: {
+declare let Screen: {
   prototype: Screen;
   new(): Screen;
 }
@@ -6991,7 +6991,7 @@ interface Coordinates {
   altitude: number;
   accuracy: number;
 }
-declare var Coordinates: {
+declare let Coordinates: {
   prototype: Coordinates;
   new(): Coordinates;
 }
@@ -7021,7 +7021,7 @@ interface DataTransfer {
   setData(format: string, data: string): boolean;
   getData(format: string): string;
 }
-declare var DataTransfer: {
+declare let DataTransfer: {
   prototype: DataTransfer;
   new(): DataTransfer;
 }
@@ -7030,7 +7030,7 @@ interface FocusEvent extends UIEvent {
   relatedTarget: EventTarget;
   initFocusEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, relatedTargetArg: EventTarget): void;
 }
-declare var FocusEvent: {
+declare let FocusEvent: {
   prototype: FocusEvent;
   new(): FocusEvent;
 }
@@ -7068,7 +7068,7 @@ interface Range {
   START_TO_END: number;
   END_TO_START: number;
 }
-declare var Range: {
+declare let Range: {
   prototype: Range;
   new(): Range;
   END_TO_END: number;
@@ -7082,7 +7082,7 @@ interface SVGPoint {
   x: number;
   matrixTransform(matrix: SVGMatrix): SVGPoint;
 }
-declare var SVGPoint: {
+declare let SVGPoint: {
   prototype: SVGPoint;
   new(): SVGPoint;
 }
@@ -7091,7 +7091,7 @@ interface MSPluginsCollection {
   length: number;
   refresh(reload?: boolean): void;
 }
-declare var MSPluginsCollection: {
+declare let MSPluginsCollection: {
   prototype: MSPluginsCollection;
   new(): MSPluginsCollection;
 }
@@ -7100,7 +7100,7 @@ interface SVGAnimatedNumberList {
   animVal: SVGNumberList;
   baseVal: SVGNumberList;
 }
-declare var SVGAnimatedNumberList: {
+declare let SVGAnimatedNumberList: {
   prototype: SVGAnimatedNumberList;
   new(): SVGAnimatedNumberList;
 }
@@ -7194,7 +7194,7 @@ interface SVGSVGElement extends SVGElement, SVGStylable, SVGZoomAndPan, Document
   addEventListener(type: "scroll", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var SVGSVGElement: {
+declare let SVGSVGElement: {
   prototype: SVGSVGElement;
   new(): SVGSVGElement;
 }
@@ -7209,7 +7209,7 @@ interface HTMLLabelElement extends HTMLElement, MSDataBindingExtensions {
    */
   form: HTMLFormElement;
 }
-declare var HTMLLabelElement: {
+declare let HTMLLabelElement: {
   prototype: HTMLLabelElement;
   new(): HTMLLabelElement;
 }
@@ -7234,14 +7234,14 @@ interface HTMLLegendElement extends HTMLElement, MSDataBindingExtensions {
    */
   form: HTMLFormElement;
 }
-declare var HTMLLegendElement: {
+declare let HTMLLegendElement: {
   prototype: HTMLLegendElement;
   new(): HTMLLegendElement;
 }
 
 interface HTMLDirectoryElement extends HTMLElement, DOML2DeprecatedListSpaceReduction, DOML2DeprecatedListNumberingAndBulletStyle {
 }
-declare var HTMLDirectoryElement: {
+declare let HTMLDirectoryElement: {
   prototype: HTMLDirectoryElement;
   new(): HTMLDirectoryElement;
 }
@@ -7250,21 +7250,21 @@ interface SVGAnimatedInteger {
   animVal: number;
   baseVal: number;
 }
-declare var SVGAnimatedInteger: {
+declare let SVGAnimatedInteger: {
   prototype: SVGAnimatedInteger;
   new(): SVGAnimatedInteger;
 }
 
 interface SVGTextElement extends SVGTextPositioningElement, SVGTransformable {
 }
-declare var SVGTextElement: {
+declare let SVGTextElement: {
   prototype: SVGTextElement;
   new(): SVGTextElement;
 }
 
 interface SVGTSpanElement extends SVGTextPositioningElement {
 }
-declare var SVGTSpanElement: {
+declare let SVGTSpanElement: {
   prototype: SVGTSpanElement;
   new(): SVGTSpanElement;
 }
@@ -7275,7 +7275,7 @@ interface HTMLLIElement extends HTMLElement, DOML2DeprecatedListNumberingAndBull
    */
   value: number;
 }
-declare var HTMLLIElement: {
+declare let HTMLLIElement: {
   prototype: HTMLLIElement;
   new(): HTMLLIElement;
 }
@@ -7283,7 +7283,7 @@ declare var HTMLLIElement: {
 interface SVGPathSegLinetoVerticalAbs extends SVGPathSeg {
   y: number;
 }
-declare var SVGPathSegLinetoVerticalAbs: {
+declare let SVGPathSegLinetoVerticalAbs: {
   prototype: SVGPathSegLinetoVerticalAbs;
   new(): SVGPathSegLinetoVerticalAbs;
 }
@@ -7297,7 +7297,7 @@ interface SVGStyleElement extends SVGElement, SVGLangSpace {
   type: string;
   title: string;
 }
-declare var SVGStyleElement: {
+declare let SVGStyleElement: {
   prototype: SVGStyleElement;
   new(): SVGStyleElement;
 }
@@ -7310,7 +7310,7 @@ interface MSCurrentStyleCSSProperties extends MSCSSProperties {
   clipTop: string;
   hasLayout: string;
 }
-declare var MSCurrentStyleCSSProperties: {
+declare let MSCurrentStyleCSSProperties: {
   prototype: MSCurrentStyleCSSProperties;
   new(): MSCurrentStyleCSSProperties;
 }
@@ -7330,7 +7330,7 @@ interface Storage extends MSStorageExtensions {
   key(index: number): string;
   [index: number]: string;
 }
-declare var Storage: {
+declare let Storage: {
   prototype: Storage;
   new(): Storage;
 }
@@ -7536,7 +7536,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument, MSDataBindingEx
   addEventListener(type: "msmanipulationstatechanged", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLIFrameElement: {
+declare let HTMLIFrameElement: {
   prototype: HTMLIFrameElement;
   new(): HTMLIFrameElement;
 }
@@ -7546,7 +7546,7 @@ interface TextRangeCollection {
   item(index: number): TextRange;
   [index: number]: TextRange;
 }
-declare var TextRangeCollection: {
+declare let TextRangeCollection: {
   prototype: TextRangeCollection;
   new(): TextRangeCollection;
 }
@@ -7716,7 +7716,7 @@ interface HTMLBodyElement extends HTMLElement, DOML2DeprecatedBackgroundStyle, D
   addEventListener(type: "pagehide", listener: (ev: PageTransitionEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLBodyElement: {
+declare let HTMLBodyElement: {
   prototype: HTMLBodyElement;
   new(): HTMLBodyElement;
 }
@@ -7729,7 +7729,7 @@ interface DocumentType extends Node {
   entities: NamedNodeMap;
   publicId: string;
 }
-declare var DocumentType: {
+declare let DocumentType: {
   prototype: DocumentType;
   new(): DocumentType;
 }
@@ -7741,7 +7741,7 @@ interface SVGRadialGradientElement extends SVGGradientElement {
   fx: SVGAnimatedLength;
   fy: SVGAnimatedLength;
 }
-declare var SVGRadialGradientElement: {
+declare let SVGRadialGradientElement: {
   prototype: SVGRadialGradientElement;
   new(): SVGRadialGradientElement;
 }
@@ -7757,7 +7757,7 @@ interface MutationEvent extends Event {
   REMOVAL: number;
   ADDITION: number;
 }
-declare var MutationEvent: {
+declare let MutationEvent: {
   prototype: MutationEvent;
   new(): MutationEvent;
   MODIFICATION: number;
@@ -7770,7 +7770,7 @@ interface DragEvent extends MouseEvent {
   initDragEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, dataTransferArg: DataTransfer): void;
   msConvertURL(file: File, targetType: string, targetURL?: string): void;
 }
-declare var DragEvent: {
+declare let DragEvent: {
   prototype: DragEvent;
   new(): DragEvent;
 }
@@ -7801,7 +7801,7 @@ interface HTMLTableSectionElement extends HTMLElement, HTMLTableAlignment, DOML2
    */
   insertRow(index?: number): HTMLElement;
 }
-declare var HTMLTableSectionElement: {
+declare let HTMLTableSectionElement: {
   prototype: HTMLTableSectionElement;
   new(): HTMLTableSectionElement;
 }
@@ -8024,7 +8024,7 @@ interface HTMLInputElement extends HTMLElement, MSDataBindingExtensions {
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLInputElement: {
+declare let HTMLInputElement: {
   prototype: HTMLInputElement;
   new(): HTMLInputElement;
 }
@@ -8109,7 +8109,7 @@ interface HTMLAnchorElement extends HTMLElement, MSDataBindingExtensions {
    */
   toString(): string;
 }
-declare var HTMLAnchorElement: {
+declare let HTMLAnchorElement: {
   prototype: HTMLAnchorElement;
   new(): HTMLAnchorElement;
 }
@@ -8132,7 +8132,7 @@ interface HTMLParamElement extends HTMLElement {
    */
   valueType: string;
 }
-declare var HTMLParamElement: {
+declare let HTMLParamElement: {
   prototype: HTMLParamElement;
   new(): HTMLParamElement;
 }
@@ -8144,7 +8144,7 @@ interface SVGImageElement extends SVGElement, SVGStylable, SVGTransformable, SVG
   x: SVGAnimatedLength;
   height: SVGAnimatedLength;
 }
-declare var SVGImageElement: {
+declare let SVGImageElement: {
   prototype: SVGImageElement;
   new(): SVGImageElement;
 }
@@ -8153,7 +8153,7 @@ interface SVGAnimatedNumber {
   animVal: number;
   baseVal: number;
 }
-declare var SVGAnimatedNumber: {
+declare let SVGAnimatedNumber: {
   prototype: SVGAnimatedNumber;
   new(): SVGAnimatedNumber;
 }
@@ -8182,7 +8182,7 @@ interface PerformanceTiming {
   domContentLoadedEventEnd: number;
   toJSON(): any;
 }
-declare var PerformanceTiming: {
+declare let PerformanceTiming: {
   prototype: PerformanceTiming;
   new(): PerformanceTiming;
 }
@@ -8197,7 +8197,7 @@ interface HTMLPreElement extends HTMLElement, DOML2DeprecatedTextFlowControl {
    */
   cite: string;
 }
-declare var HTMLPreElement: {
+declare let HTMLPreElement: {
   prototype: HTMLPreElement;
   new(): HTMLPreElement;
 }
@@ -8210,7 +8210,7 @@ interface EventException {
   DISPATCH_REQUEST_ERR: number;
   UNSPECIFIED_EVENT_TYPE_ERR: number;
 }
-declare var EventException: {
+declare let EventException: {
   prototype: EventException;
   new(): EventException;
   DISPATCH_REQUEST_ERR: number;
@@ -8237,7 +8237,7 @@ interface WindowLocalStorage {
 
 interface SVGMetadataElement extends SVGElement {
 }
-declare var SVGMetadataElement: {
+declare let SVGMetadataElement: {
   prototype: SVGMetadataElement;
   new(): SVGMetadataElement;
 }
@@ -8251,7 +8251,7 @@ interface SVGPathSegArcRel extends SVGPathSeg {
   r1: number;
   largeArcFlag: boolean;
 }
-declare var SVGPathSegArcRel: {
+declare let SVGPathSegArcRel: {
   prototype: SVGPathSegArcRel;
   new(): SVGPathSegArcRel;
 }
@@ -8260,7 +8260,7 @@ interface SVGPathSegMovetoAbs extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegMovetoAbs: {
+declare let SVGPathSegMovetoAbs: {
   prototype: SVGPathSegMovetoAbs;
   new(): SVGPathSegMovetoAbs;
 }
@@ -8275,7 +8275,7 @@ interface SVGStringList {
   removeItem(index: number): string;
   insertItemBefore(newItem: string, index: number): string;
 }
-declare var SVGStringList: {
+declare let SVGStringList: {
   prototype: SVGStringList;
   new(): SVGStringList;
 }
@@ -8297,7 +8297,7 @@ interface XDomainRequest {
   addEventListener(type: "timeout", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var XDomainRequest: {
+declare let XDomainRequest: {
   prototype: XDomainRequest;
   new(): XDomainRequest;
   create(): XDomainRequest;
@@ -8334,7 +8334,7 @@ interface SVGLength {
   SVG_LENGTHTYPE_UNKNOWN: number;
   SVG_LENGTHTYPE_EXS: number;
 }
-declare var SVGLength: {
+declare let SVGLength: {
   prototype: SVGLength;
   new(): SVGLength;
   SVG_LENGTHTYPE_NUMBER: number;
@@ -8352,7 +8352,7 @@ declare var SVGLength: {
 
 interface SVGPolygonElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGAnimatedPoints, SVGTests, SVGExternalResourcesRequired {
 }
-declare var SVGPolygonElement: {
+declare let SVGPolygonElement: {
   prototype: SVGPolygonElement;
   new(): SVGPolygonElement;
 }
@@ -8367,7 +8367,7 @@ interface HTMLPhraseElement extends HTMLElement {
    */
   cite: string;
 }
-declare var HTMLPhraseElement: {
+declare let HTMLPhraseElement: {
   prototype: HTMLPhraseElement;
   new(): HTMLPhraseElement;
 }
@@ -8383,7 +8383,7 @@ interface SVGPathSegCurvetoCubicRel extends SVGPathSeg {
   x1: number;
   y2: number;
 }
-declare var SVGPathSegCurvetoCubicRel: {
+declare let SVGPathSegCurvetoCubicRel: {
   prototype: SVGPathSegCurvetoCubicRel;
   new(): SVGPathSegCurvetoCubicRel;
 }
@@ -8404,7 +8404,7 @@ interface SVGTextContentElement extends SVGElement, SVGStylable, SVGLangSpace, S
   LENGTHADJUST_SPACINGANDGLYPHS: number;
   LENGTHADJUST_UNKNOWN: number;
 }
-declare var SVGTextContentElement: {
+declare let SVGTextContentElement: {
   prototype: SVGTextContentElement;
   new(): SVGTextContentElement;
   LENGTHADJUST_SPACING: number;
@@ -8430,7 +8430,7 @@ interface Location {
   assign(url: string): void;
   toString(): string;
 }
-declare var Location: {
+declare let Location: {
   prototype: Location;
   new(): Location;
 }
@@ -8441,7 +8441,7 @@ interface HTMLTitleElement extends HTMLElement {
    */
   text: string;
 }
-declare var HTMLTitleElement: {
+declare let HTMLTitleElement: {
   prototype: HTMLTitleElement;
   new(): HTMLTitleElement;
 }
@@ -8456,7 +8456,7 @@ interface HTMLStyleElement extends HTMLElement, LinkStyle {
    */
   type: string;
 }
-declare var HTMLStyleElement: {
+declare let HTMLStyleElement: {
   prototype: HTMLStyleElement;
   new(): HTMLStyleElement;
 }
@@ -8467,7 +8467,7 @@ interface PerformanceEntry {
   duration: number;
   entryType: string;
 }
-declare var PerformanceEntry: {
+declare let PerformanceEntry: {
   prototype: PerformanceEntry;
   new(): PerformanceEntry;
 }
@@ -8490,7 +8490,7 @@ interface SVGTransform {
   SVG_TRANSFORM_ROTATE: number;
   SVG_TRANSFORM_SKEWY: number;
 }
-declare var SVGTransform: {
+declare let SVGTransform: {
   prototype: SVGTransform;
   new(): SVGTransform;
   SVG_TRANSFORM_SKEWX: number;
@@ -8507,7 +8507,7 @@ interface UIEvent extends Event {
   view: Window;
   initUIEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number): void;
 }
-declare var UIEvent: {
+declare let UIEvent: {
   prototype: UIEvent;
   new(): UIEvent;
 }
@@ -8540,7 +8540,7 @@ interface SVGPathSeg {
   PATHSEG_MOVETO_ABS: number;
   PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
 }
-declare var SVGPathSeg: {
+declare let SVGPathSeg: {
   prototype: SVGPathSeg;
   new(): SVGPathSeg;
   PATHSEG_MOVETO_REL: number;
@@ -8576,7 +8576,7 @@ interface WheelEvent extends MouseEvent {
   DOM_DELTA_LINE: number;
   DOM_DELTA_PAGE: number;
 }
-declare var WheelEvent: {
+declare let WheelEvent: {
   prototype: WheelEvent;
   new(): WheelEvent;
   DOM_DELTA_PIXEL: number;
@@ -8592,7 +8592,7 @@ interface MSEventAttachmentTarget {
 interface SVGNumber {
   value: number;
 }
-declare var SVGNumber: {
+declare let SVGNumber: {
   prototype: SVGNumber;
   new(): SVGNumber;
 }
@@ -8621,7 +8621,7 @@ interface SVGPathElement extends SVGElement, SVGStylable, SVGAnimatedPathData, S
   createSVGPathSegLinetoVerticalAbs(y: number): SVGPathSegLinetoVerticalAbs;
   createSVGPathSegArcAbs(x: number, y: number, r1: number, r2: number, angle: number, largeArcFlag: boolean, sweepFlag: boolean): SVGPathSegArcAbs;
 }
-declare var SVGPathElement: {
+declare let SVGPathElement: {
   prototype: SVGPathElement;
   new(): SVGPathElement;
 }
@@ -8630,7 +8630,7 @@ interface MSCompatibleInfo {
   version: string;
   userAgent: string;
 }
-declare var MSCompatibleInfo: {
+declare let MSCompatibleInfo: {
   prototype: MSCompatibleInfo;
   new(): MSCompatibleInfo;
 }
@@ -8640,7 +8640,7 @@ interface Text extends CharacterData, MSNodeExtensions {
   splitText(offset: number): Text;
   replaceWholeText(content: string): Text;
 }
-declare var Text: {
+declare let Text: {
   prototype: Text;
   new(): Text;
 }
@@ -8649,7 +8649,7 @@ interface SVGAnimatedRect {
   animVal: SVGRect;
   baseVal: SVGRect;
 }
-declare var SVGAnimatedRect: {
+declare let SVGAnimatedRect: {
   prototype: SVGAnimatedRect;
   new(): SVGAnimatedRect;
 }
@@ -8658,7 +8658,7 @@ interface CSSNamespaceRule extends CSSRule {
   namespaceURI: string;
   prefix: string;
 }
-declare var CSSNamespaceRule: {
+declare let CSSNamespaceRule: {
   prototype: CSSNamespaceRule;
   new(): CSSNamespaceRule;
 }
@@ -8673,21 +8673,21 @@ interface SVGPathSegList {
   removeItem(index: number): SVGPathSeg;
   insertItemBefore(newItem: SVGPathSeg, index: number): SVGPathSeg;
 }
-declare var SVGPathSegList: {
+declare let SVGPathSegList: {
   prototype: SVGPathSegList;
   new(): SVGPathSegList;
 }
 
 interface HTMLUnknownElement extends HTMLElement, MSDataBindingRecordSetReadonlyExtensions {
 }
-declare var HTMLUnknownElement: {
+declare let HTMLUnknownElement: {
   prototype: HTMLUnknownElement;
   new(): HTMLUnknownElement;
 }
 
 interface HTMLAudioElement extends HTMLMediaElement {
 }
-declare var HTMLAudioElement: {
+declare let HTMLAudioElement: {
   prototype: HTMLAudioElement;
   new(): HTMLAudioElement;
 }
@@ -8708,7 +8708,7 @@ interface PositionError {
   PERMISSION_DENIED: number;
   TIMEOUT: number;
 }
-declare var PositionError: {
+declare let PositionError: {
   prototype: PositionError;
   new(): PositionError;
   POSITION_UNAVAILABLE: number;
@@ -8774,7 +8774,7 @@ interface HTMLTableCellElement extends HTMLElement, HTMLTableAlignment, DOML2Dep
    */
   borderColorDark: any;
 }
-declare var HTMLTableCellElement: {
+declare let HTMLTableCellElement: {
   prototype: HTMLTableCellElement;
   new(): HTMLTableCellElement;
 }
@@ -8789,7 +8789,7 @@ interface SVGElementInstance extends EventTarget {
   correspondingElement: SVGElement;
   firstChild: SVGElementInstance;
 }
-declare var SVGElementInstance: {
+declare let SVGElementInstance: {
   prototype: SVGElementInstance;
   new(): SVGElementInstance;
 }
@@ -8800,7 +8800,7 @@ interface MSNamespaceInfoCollection {
   item(index: any): any;
   // [index: any]: any;
 }
-declare var MSNamespaceInfoCollection: {
+declare let MSNamespaceInfoCollection: {
   prototype: MSNamespaceInfoCollection;
   new(): MSNamespaceInfoCollection;
 }
@@ -8810,7 +8810,7 @@ interface SVGCircleElement extends SVGElement, SVGStylable, SVGTransformable, SV
   r: SVGAnimatedLength;
   cy: SVGAnimatedLength;
 }
-declare var SVGCircleElement: {
+declare let SVGCircleElement: {
   prototype: SVGCircleElement;
   new(): SVGCircleElement;
 }
@@ -8820,7 +8820,7 @@ interface StyleSheetList {
   item(index?: number): StyleSheet;
   [index: number]: StyleSheet;
 }
-declare var StyleSheetList: {
+declare let StyleSheetList: {
   prototype: StyleSheetList;
   new(): StyleSheetList;
 }
@@ -8830,7 +8830,7 @@ interface CSSImportRule extends CSSRule {
   href: string;
   media: MediaList;
 }
-declare var CSSImportRule: {
+declare let CSSImportRule: {
   prototype: CSSImportRule;
   new(): CSSImportRule;
 }
@@ -8839,7 +8839,7 @@ interface CustomEvent extends Event {
   detail: any;
   initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any): void;
 }
-declare var CustomEvent: {
+declare let CustomEvent: {
   prototype: CustomEvent;
   new(): CustomEvent;
 }
@@ -8854,7 +8854,7 @@ interface HTMLBaseFontElement extends HTMLElement, DOML2DeprecatedColorProperty 
    */
   size: number;
 }
-declare var HTMLBaseFontElement: {
+declare let HTMLBaseFontElement: {
   prototype: HTMLBaseFontElement;
   new(): HTMLBaseFontElement;
 }
@@ -8960,7 +8960,7 @@ interface HTMLTextAreaElement extends HTMLElement, MSDataBindingExtensions {
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLTextAreaElement: {
+declare let HTMLTextAreaElement: {
   prototype: HTMLTextAreaElement;
   new(): HTMLTextAreaElement;
 }
@@ -8970,7 +8970,7 @@ interface Geolocation {
   getCurrentPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback, options?: PositionOptions): void;
   watchPosition(successCallback: PositionCallback, errorCallback?: PositionErrorCallback, options?: PositionOptions): number;
 }
-declare var Geolocation: {
+declare let Geolocation: {
   prototype: Geolocation;
   new(): Geolocation;
 }
@@ -9134,7 +9134,7 @@ interface HTMLMarqueeElement extends HTMLElement, MSDataBindingExtensions, DOML2
   addEventListener(type: "finish", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLMarqueeElement: {
+declare let HTMLMarqueeElement: {
   prototype: HTMLMarqueeElement;
   new(): HTMLMarqueeElement;
 }
@@ -9145,7 +9145,7 @@ interface SVGRect {
   x: number;
   height: number;
 }
-declare var SVGRect: {
+declare let SVGRect: {
   prototype: SVGRect;
   new(): SVGRect;
 }
@@ -9165,7 +9165,7 @@ interface History {
   replaceState(statedata: any, title: string, url?: string): void;
   pushState(statedata: any, title: string, url?: string): void;
 }
-declare var History: {
+declare let History: {
   prototype: History;
   new(): History;
 }
@@ -9178,7 +9178,7 @@ interface SVGPathSegCurvetoCubicAbs extends SVGPathSeg {
   x1: number;
   y2: number;
 }
-declare var SVGPathSegCurvetoCubicAbs: {
+declare let SVGPathSegCurvetoCubicAbs: {
   prototype: SVGPathSegCurvetoCubicAbs;
   new(): SVGPathSegCurvetoCubicAbs;
 }
@@ -9189,7 +9189,7 @@ interface SVGPathSegCurvetoQuadraticAbs extends SVGPathSeg {
   x: number;
   x1: number;
 }
-declare var SVGPathSegCurvetoQuadraticAbs: {
+declare let SVGPathSegCurvetoQuadraticAbs: {
   prototype: SVGPathSegCurvetoQuadraticAbs;
   new(): SVGPathSegCurvetoQuadraticAbs;
 }
@@ -9199,7 +9199,7 @@ interface TimeRanges {
   start(index: number): number;
   end(index: number): number;
 }
-declare var TimeRanges: {
+declare let TimeRanges: {
   prototype: TimeRanges;
   new(): TimeRanges;
 }
@@ -9221,7 +9221,7 @@ interface CSSRule {
   KEYFRAME_RULE: number;
   VIEWPORT_RULE: number;
 }
-declare var CSSRule: {
+declare let CSSRule: {
   prototype: CSSRule;
   new(): CSSRule;
   IMPORT_RULE: number;
@@ -9241,7 +9241,7 @@ interface SVGPathSegLinetoAbs extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegLinetoAbs: {
+declare let SVGPathSegLinetoAbs: {
   prototype: SVGPathSegLinetoAbs;
   new(): SVGPathSegLinetoAbs;
 }
@@ -9256,7 +9256,7 @@ interface HTMLModElement extends HTMLElement {
    */
   cite: string;
 }
-declare var HTMLModElement: {
+declare let HTMLModElement: {
   prototype: HTMLModElement;
   new(): HTMLModElement;
 }
@@ -9280,7 +9280,7 @@ interface SVGMatrix {
   rotateFromVector(x: number, y: number): SVGMatrix;
   skewX(angle: number): SVGMatrix;
 }
-declare var SVGMatrix: {
+declare let SVGMatrix: {
   prototype: SVGMatrix;
   new(): SVGMatrix;
 }
@@ -9291,7 +9291,7 @@ interface MSPopupWindow {
   show(x: number, y: number, w: number, h: number, element?: any): void;
   hide(): void;
 }
-declare var MSPopupWindow: {
+declare let MSPopupWindow: {
   prototype: MSPopupWindow;
   new(): MSPopupWindow;
 }
@@ -9299,7 +9299,7 @@ declare var MSPopupWindow: {
 interface BeforeUnloadEvent extends Event {
   returnValue: string;
 }
-declare var BeforeUnloadEvent: {
+declare let BeforeUnloadEvent: {
   prototype: BeforeUnloadEvent;
   new(): BeforeUnloadEvent;
 }
@@ -9312,7 +9312,7 @@ interface SVGUseElement extends SVGElement, SVGStylable, SVGTransformable, SVGLa
   x: SVGAnimatedLength;
   height: SVGAnimatedLength;
 }
-declare var SVGUseElement: {
+declare let SVGUseElement: {
   prototype: SVGUseElement;
   new(): SVGUseElement;
 }
@@ -9337,7 +9337,7 @@ interface Event {
   AT_TARGET: number;
   BUBBLING_PHASE: number;
 }
-declare var Event: {
+declare let Event: {
   prototype: Event;
   new(): Event;
   CAPTURING_PHASE: number;
@@ -9350,7 +9350,7 @@ interface ImageData {
   data: Uint8Array;
   height: number;
 }
-declare var ImageData: {
+declare let ImageData: {
   prototype: ImageData;
   new(): ImageData;
 }
@@ -9369,7 +9369,7 @@ interface HTMLTableColElement extends HTMLElement, HTMLTableAlignment {
    */
   span: number;
 }
-declare var HTMLTableColElement: {
+declare let HTMLTableColElement: {
   prototype: HTMLTableColElement;
   new(): HTMLTableColElement;
 }
@@ -9383,7 +9383,7 @@ interface SVGException {
   SVG_WRONG_TYPE_ERR: number;
   SVG_INVALID_VALUE_ERR: number;
 }
-declare var SVGException: {
+declare let SVGException: {
   prototype: SVGException;
   new(): SVGException;
   SVG_MATRIX_NOT_INVERTABLE: number;
@@ -9397,7 +9397,7 @@ interface SVGLinearGradientElement extends SVGGradientElement {
   x1: SVGAnimatedLength;
   y2: SVGAnimatedLength;
 }
-declare var SVGLinearGradientElement: {
+declare let SVGLinearGradientElement: {
   prototype: SVGLinearGradientElement;
   new(): SVGLinearGradientElement;
 }
@@ -9421,7 +9421,7 @@ interface SVGAnimatedEnumeration {
   animVal: number;
   baseVal: number;
 }
-declare var SVGAnimatedEnumeration: {
+declare let SVGAnimatedEnumeration: {
   prototype: SVGAnimatedEnumeration;
   new(): SVGAnimatedEnumeration;
 }
@@ -9432,7 +9432,7 @@ interface DOML2DeprecatedSizeProperty {
 
 interface HTMLUListElement extends HTMLElement, DOML2DeprecatedListSpaceReduction, DOML2DeprecatedListNumberingAndBulletStyle {
 }
-declare var HTMLUListElement: {
+declare let HTMLUListElement: {
   prototype: HTMLUListElement;
   new(): HTMLUListElement;
 }
@@ -9445,7 +9445,7 @@ interface SVGRectElement extends SVGElement, SVGStylable, SVGTransformable, SVGL
   x: SVGAnimatedLength;
   height: SVGAnimatedLength;
 }
-declare var SVGRectElement: {
+declare let SVGRectElement: {
   prototype: SVGRectElement;
   new(): SVGRectElement;
 }
@@ -9464,7 +9464,7 @@ interface HTMLDivElement extends HTMLElement, MSDataBindingExtensions {
    */
   noWrap: boolean;
 }
-declare var HTMLDivElement: {
+declare let HTMLDivElement: {
   prototype: HTMLDivElement;
   new(): HTMLDivElement;
 }
@@ -9485,7 +9485,7 @@ interface NamedNodeMap {
   getNamedItemNS(namespaceURI: string, localName: string): Attr;
   setNamedItemNS(arg: Attr): Attr;
 }
-declare var NamedNodeMap: {
+declare let NamedNodeMap: {
   prototype: NamedNodeMap;
   new(): NamedNodeMap;
 }
@@ -9499,7 +9499,7 @@ interface MediaList {
   [index: number]: string;
   toString(): string;
 }
-declare var MediaList: {
+declare let MediaList: {
   prototype: MediaList;
   new(): MediaList;
 }
@@ -9508,7 +9508,7 @@ interface SVGPathSegCurvetoQuadraticSmoothAbs extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegCurvetoQuadraticSmoothAbs: {
+declare let SVGPathSegCurvetoQuadraticSmoothAbs: {
   prototype: SVGPathSegCurvetoQuadraticSmoothAbs;
   new(): SVGPathSegCurvetoQuadraticSmoothAbs;
 }
@@ -9519,7 +9519,7 @@ interface SVGPathSegCurvetoCubicSmoothRel extends SVGPathSeg {
   x: number;
   y2: number;
 }
-declare var SVGPathSegCurvetoCubicSmoothRel: {
+declare let SVGPathSegCurvetoCubicSmoothRel: {
   prototype: SVGPathSegCurvetoCubicSmoothRel;
   new(): SVGPathSegCurvetoCubicSmoothRel;
 }
@@ -9534,7 +9534,7 @@ interface SVGLengthList {
   removeItem(index: number): SVGLength;
   insertItemBefore(newItem: SVGLength, index: number): SVGLength;
 }
-declare var SVGLengthList: {
+declare let SVGLengthList: {
   prototype: SVGLengthList;
   new(): SVGLengthList;
 }
@@ -9543,7 +9543,7 @@ interface ProcessingInstruction extends Node {
   target: string;
   data: string;
 }
-declare var ProcessingInstruction: {
+declare let ProcessingInstruction: {
   prototype: ProcessingInstruction;
   new(): ProcessingInstruction;
 }
@@ -9591,7 +9591,7 @@ interface MSBehaviorUrnsCollection {
   length: number;
   item(index: number): string;
 }
-declare var MSBehaviorUrnsCollection: {
+declare let MSBehaviorUrnsCollection: {
   prototype: MSBehaviorUrnsCollection;
   new(): MSBehaviorUrnsCollection;
 }
@@ -9599,7 +9599,7 @@ declare var MSBehaviorUrnsCollection: {
 interface CSSFontFaceRule extends CSSRule {
   style: CSSStyleDeclaration;
 }
-declare var CSSFontFaceRule: {
+declare let CSSFontFaceRule: {
   prototype: CSSFontFaceRule;
   new(): CSSFontFaceRule;
 }
@@ -9624,7 +9624,7 @@ interface TextEvent extends UIEvent {
   DOM_INPUT_METHOD_OPTION: number;
   DOM_INPUT_METHOD_MULTIMODAL: number;
 }
-declare var TextEvent: {
+declare let TextEvent: {
   prototype: TextEvent;
   new(): TextEvent;
   DOM_INPUT_METHOD_KEYBOARD: number;
@@ -9641,14 +9641,14 @@ declare var TextEvent: {
 
 interface DocumentFragment extends Node, NodeSelector, MSEventAttachmentTarget, MSNodeExtensions {
 }
-declare var DocumentFragment: {
+declare let DocumentFragment: {
   prototype: DocumentFragment;
   new(): DocumentFragment;
 }
 
 interface SVGPolylineElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGAnimatedPoints, SVGTests, SVGExternalResourcesRequired {
 }
-declare var SVGPolylineElement: {
+declare let SVGPolylineElement: {
   prototype: SVGPolylineElement;
   new(): SVGPolylineElement;
 }
@@ -9661,7 +9661,7 @@ interface Position {
   timestamp: Date;
   coords: Coordinates;
 }
-declare var Position: {
+declare let Position: {
   prototype: Position;
   new(): Position;
 }
@@ -9671,14 +9671,14 @@ interface BookmarkCollection {
   item(index: number): any;
   [index: number]: any;
 }
-declare var BookmarkCollection: {
+declare let BookmarkCollection: {
   prototype: BookmarkCollection;
   new(): BookmarkCollection;
 }
 
 interface PerformanceMark extends PerformanceEntry {
 }
-declare var PerformanceMark: {
+declare let PerformanceMark: {
   prototype: PerformanceMark;
   new(): PerformanceMark;
 }
@@ -9689,7 +9689,7 @@ interface CSSPageRule extends CSSRule {
   selector: string;
   style: CSSStyleDeclaration;
 }
-declare var CSSPageRule: {
+declare let CSSPageRule: {
   prototype: CSSPageRule;
   new(): CSSPageRule;
 }
@@ -9700,7 +9700,7 @@ interface HTMLBRElement extends HTMLElement {
    */
   clear: string;
 }
-declare var HTMLBRElement: {
+declare let HTMLBRElement: {
   prototype: HTMLBRElement;
   new(): HTMLBRElement;
 }
@@ -9723,7 +9723,7 @@ interface MSNavigatorExtensions {
 
 interface HTMLSpanElement extends HTMLElement, MSDataBindingExtensions {
 }
-declare var HTMLSpanElement: {
+declare let HTMLSpanElement: {
   prototype: HTMLSpanElement;
   new(): HTMLSpanElement;
 }
@@ -9731,7 +9731,7 @@ declare var HTMLSpanElement: {
 interface HTMLHeadElement extends HTMLElement {
   profile: string;
 }
-declare var HTMLHeadElement: {
+declare let HTMLHeadElement: {
   prototype: HTMLHeadElement;
   new(): HTMLHeadElement;
 }
@@ -9742,7 +9742,7 @@ interface HTMLHeadingElement extends HTMLElement, DOML2DeprecatedTextFlowControl
    */
   align: string;
 }
-declare var HTMLHeadingElement: {
+declare let HTMLHeadingElement: {
   prototype: HTMLHeadingElement;
   new(): HTMLHeadingElement;
 }
@@ -9816,7 +9816,7 @@ interface HTMLFormElement extends HTMLElement, MSHTMLCollectionExtensions {
    */
   checkValidity(): boolean;
 }
-declare var HTMLFormElement: {
+declare let HTMLFormElement: {
   prototype: HTMLFormElement;
   new(): HTMLFormElement;
 }
@@ -9827,7 +9827,7 @@ interface SVGZoomAndPan {
   SVG_ZOOMANDPAN_UNKNOWN: number;
   SVG_ZOOMANDPAN_DISABLE: number;
 }
-declare var SVGZoomAndPan: SVGZoomAndPan;
+declare let SVGZoomAndPan: SVGZoomAndPan;
 
 interface HTMLMediaElement extends HTMLElement {
   /**
@@ -10121,7 +10121,7 @@ interface HTMLMediaElement extends HTMLElement {
   addEventListener(type: "msneedkey", listener: (ev: MSMediaKeyNeededEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLMediaElement: {
+declare let HTMLMediaElement: {
   prototype: HTMLMediaElement;
   new(): HTMLMediaElement;
   HAVE_METADATA: number;
@@ -10145,7 +10145,7 @@ interface ElementCSSInlineStyle {
 interface DOMParser {
   parseFromString(source: string, mimeType: string): Document;
 }
-declare var DOMParser: {
+declare let DOMParser: {
   prototype: DOMParser;
   new(): DOMParser;
 }
@@ -10153,7 +10153,7 @@ declare var DOMParser: {
 interface MSMimeTypesCollection {
   length: number;
 }
-declare var MSMimeTypesCollection: {
+declare let MSMimeTypesCollection: {
   prototype: MSMimeTypesCollection;
   new(): MSMimeTypesCollection;
 }
@@ -10167,7 +10167,7 @@ interface StyleSheet {
   type: string;
   title: string;
 }
-declare var StyleSheet: {
+declare let StyleSheet: {
   prototype: StyleSheet;
   new(): StyleSheet;
 }
@@ -10183,7 +10183,7 @@ interface SVGTextPathElement extends SVGTextContentElement, SVGURIReference {
   TEXTPATH_METHODTYPE_UNKNOWN: number;
   TEXTPATH_METHODTYPE_ALIGN: number;
 }
-declare var SVGTextPathElement: {
+declare let SVGTextPathElement: {
   prototype: SVGTextPathElement;
   new(): SVGTextPathElement;
   TEXTPATH_SPACINGTYPE_EXACT: number;
@@ -10200,7 +10200,7 @@ interface HTMLDTElement extends HTMLElement {
    */
   noWrap: boolean;
 }
-declare var HTMLDTElement: {
+declare let HTMLDTElement: {
   prototype: HTMLDTElement;
   new(): HTMLDTElement;
 }
@@ -10210,7 +10210,7 @@ interface NodeList {
   item(index: number): Node;
   [index: number]: Node;
 }
-declare var NodeList: {
+declare let NodeList: {
   prototype: NodeList;
   new(): NodeList;
 }
@@ -10218,14 +10218,14 @@ declare var NodeList: {
 interface XMLSerializer {
   serializeToString(target: Node): string;
 }
-declare var XMLSerializer: {
+declare let XMLSerializer: {
   prototype: XMLSerializer;
   new(): XMLSerializer;
 }
 
 interface PerformanceMeasure extends PerformanceEntry {
 }
-declare var PerformanceMeasure: {
+declare let PerformanceMeasure: {
   prototype: PerformanceMeasure;
   new(): PerformanceMeasure;
 }
@@ -10239,7 +10239,7 @@ interface SVGGradientElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGE
   SVG_SPREADMETHOD_UNKNOWN: number;
   SVG_SPREADMETHOD_REPEAT: number;
 }
-declare var SVGGradientElement: {
+declare let SVGGradientElement: {
   prototype: SVGGradientElement;
   new(): SVGGradientElement;
   SVG_SPREADMETHOD_REFLECT: number;
@@ -10267,7 +10267,7 @@ interface NodeFilter {
   SHOW_ATTRIBUTE: number;
   SHOW_DOCUMENT_FRAGMENT: number;
 }
-declare var NodeFilter: NodeFilter;
+declare let NodeFilter: NodeFilter;
 
 interface SVGNumberList {
   numberOfItems: number;
@@ -10279,7 +10279,7 @@ interface SVGNumberList {
   removeItem(index: number): SVGNumber;
   insertItemBefore(newItem: SVGNumber, index: number): SVGNumber;
 }
-declare var SVGNumberList: {
+declare let SVGNumberList: {
   prototype: SVGNumberList;
   new(): SVGNumberList;
 }
@@ -10293,7 +10293,7 @@ interface MediaError {
   MEDIA_ERR_DECODE: number;
   MS_MEDIA_ERR_ENCRYPTED: number;
 }
-declare var MediaError: {
+declare let MediaError: {
   prototype: MediaError;
   new(): MediaError;
   MEDIA_ERR_ABORTED: number;
@@ -10334,7 +10334,7 @@ interface HTMLFieldSetElement extends HTMLElement {
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLFieldSetElement: {
+declare let HTMLFieldSetElement: {
   prototype: HTMLFieldSetElement;
   new(): HTMLFieldSetElement;
 }
@@ -10357,7 +10357,7 @@ interface HTMLBGSoundElement extends HTMLElement {
    */
   loop: number;
 }
-declare var HTMLBGSoundElement: {
+declare let HTMLBGSoundElement: {
   prototype: HTMLBGSoundElement;
   new(): HTMLBGSoundElement;
 }
@@ -10365,7 +10365,7 @@ declare var HTMLBGSoundElement: {
 interface Comment extends CharacterData {
   text: string;
 }
-declare var Comment: {
+declare let Comment: {
   prototype: Comment;
   new(): Comment;
 }
@@ -10383,14 +10383,14 @@ interface PerformanceResourceTiming extends PerformanceEntry {
   initiatorType: string;
   responseEnd: number;
 }
-declare var PerformanceResourceTiming: {
+declare let PerformanceResourceTiming: {
   prototype: PerformanceResourceTiming;
   new(): PerformanceResourceTiming;
 }
 
 interface CanvasPattern {
 }
-declare var CanvasPattern: {
+declare let CanvasPattern: {
   prototype: CanvasPattern;
   new(): CanvasPattern;
 }
@@ -10409,7 +10409,7 @@ interface HTMLHRElement extends HTMLElement, DOML2DeprecatedColorProperty, DOML2
    */
   noShade: boolean;
 }
-declare var HTMLHRElement: {
+declare let HTMLHRElement: {
   prototype: HTMLHRElement;
   new(): HTMLHRElement;
 }
@@ -10527,7 +10527,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument, DOML2Deprecated
    */
   setCustomValidity(error: string): void;
 }
-declare var HTMLObjectElement: {
+declare let HTMLObjectElement: {
   prototype: HTMLObjectElement;
   new(): HTMLObjectElement;
 }
@@ -10580,7 +10580,7 @@ interface HTMLEmbedElement extends HTMLElement, GetSVGDocument {
    */
   msPlayToSource: any;
 }
-declare var HTMLEmbedElement: {
+declare let HTMLEmbedElement: {
   prototype: HTMLEmbedElement;
   new(): HTMLEmbedElement;
 }
@@ -10593,7 +10593,7 @@ interface StorageEvent extends Event {
   key: string;
   initStorageEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, keyArg: string, oldValueArg: any, newValueArg: any, urlArg: string, storageAreaArg: Storage): void;
 }
-declare var StorageEvent: {
+declare let StorageEvent: {
   prototype: StorageEvent;
   new(): StorageEvent;
 }
@@ -10607,7 +10607,7 @@ interface CharacterData extends Node {
   insertData(offset: number, arg: string): void;
   substringData(offset: number, count: number): string;
 }
-declare var CharacterData: {
+declare let CharacterData: {
   prototype: CharacterData;
   new(): CharacterData;
 }
@@ -10642,7 +10642,7 @@ interface HTMLOptGroupElement extends HTMLElement, MSDataBindingExtensions {
    */
   selected: boolean;
 }
-declare var HTMLOptGroupElement: {
+declare let HTMLOptGroupElement: {
   prototype: HTMLOptGroupElement;
   new(): HTMLOptGroupElement;
 }
@@ -10658,7 +10658,7 @@ interface HTMLIsIndexElement extends HTMLElement {
   action: string;
   prompt: string;
 }
-declare var HTMLIsIndexElement: {
+declare let HTMLIsIndexElement: {
   prototype: HTMLIsIndexElement;
   new(): HTMLIsIndexElement;
 }
@@ -10667,7 +10667,7 @@ interface SVGPathSegLinetoRel extends SVGPathSeg {
   y: number;
   x: number;
 }
-declare var SVGPathSegLinetoRel: {
+declare let SVGPathSegLinetoRel: {
   prototype: SVGPathSegLinetoRel;
   new(): SVGPathSegLinetoRel;
 }
@@ -10705,7 +10705,7 @@ interface DOMException {
   DATA_CLONE_ERR: number;
   TIMEOUT_ERR: number;
 }
-declare var DOMException: {
+declare let DOMException: {
   prototype: DOMException;
   new(): DOMException;
   HIERARCHY_REQUEST_ERR: number;
@@ -10741,7 +10741,7 @@ interface SVGAnimatedBoolean {
   animVal: boolean;
   baseVal: boolean;
 }
-declare var SVGAnimatedBoolean: {
+declare let SVGAnimatedBoolean: {
   prototype: SVGAnimatedBoolean;
   new(): SVGAnimatedBoolean;
 }
@@ -10750,14 +10750,14 @@ interface MSCompatibleInfoCollection {
   length: number;
   item(index: number): MSCompatibleInfo;
 }
-declare var MSCompatibleInfoCollection: {
+declare let MSCompatibleInfoCollection: {
   prototype: MSCompatibleInfoCollection;
   new(): MSCompatibleInfoCollection;
 }
 
 interface SVGSwitchElement extends SVGElement, SVGStylable, SVGTransformable, SVGLangSpace, SVGTests, SVGExternalResourcesRequired {
 }
-declare var SVGSwitchElement: {
+declare let SVGSwitchElement: {
   prototype: SVGSwitchElement;
   new(): SVGSwitchElement;
 }
@@ -10780,7 +10780,7 @@ interface SVGPreserveAspectRatio {
   SVG_MEETORSLICE_SLICE: number;
   SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
 }
-declare var SVGPreserveAspectRatio: {
+declare let SVGPreserveAspectRatio: {
   prototype: SVGPreserveAspectRatio;
   new(): SVGPreserveAspectRatio;
   SVG_PRESERVEASPECTRATIO_NONE: number;
@@ -10806,7 +10806,7 @@ interface Attr extends Node {
   value: string;
   name: string;
 }
-declare var Attr: {
+declare let Attr: {
   prototype: Attr;
   new(): Attr;
 }
@@ -10820,7 +10820,7 @@ interface PerformanceNavigation {
   TYPE_BACK_FORWARD: number;
   TYPE_NAVIGATE: number;
 }
-declare var PerformanceNavigation: {
+declare let PerformanceNavigation: {
   prototype: PerformanceNavigation;
   new(): PerformanceNavigation;
   TYPE_RELOAD: number;
@@ -10832,7 +10832,7 @@ declare var PerformanceNavigation: {
 interface SVGStopElement extends SVGElement, SVGStylable {
   offset: SVGAnimatedNumber;
 }
-declare var SVGStopElement: {
+declare let SVGStopElement: {
   prototype: SVGStopElement;
   new(): SVGStopElement;
 }
@@ -10843,7 +10843,7 @@ interface PositionCallback {
 
 interface SVGSymbolElement extends SVGElement, SVGStylable, SVGLangSpace, SVGFitToViewBox, SVGExternalResourcesRequired {
 }
-declare var SVGSymbolElement: {
+declare let SVGSymbolElement: {
   prototype: SVGSymbolElement;
   new(): SVGSymbolElement;
 }
@@ -10852,7 +10852,7 @@ interface SVGElementInstanceList {
   length: number;
   item(index: number): SVGElementInstance;
 }
-declare var SVGElementInstanceList: {
+declare let SVGElementInstanceList: {
   prototype: SVGElementInstanceList;
   new(): SVGElementInstanceList;
 }
@@ -10862,7 +10862,7 @@ interface CSSRuleList {
   item(index: number): CSSRule;
   [index: number]: CSSRule;
 }
-declare var CSSRuleList: {
+declare let CSSRuleList: {
   prototype: CSSRuleList;
   new(): CSSRuleList;
 }
@@ -11038,7 +11038,7 @@ interface HTMLVideoElement extends HTMLMediaElement {
   addEventListener(type: "MSVideoFormatChanged", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var HTMLVideoElement: {
+declare let HTMLVideoElement: {
   prototype: HTMLVideoElement;
   new(): HTMLVideoElement;
 }
@@ -11048,7 +11048,7 @@ interface ClientRectList {
   item(index: number): ClientRect;
   [index: number]: ClientRect;
 }
-declare var ClientRectList: {
+declare let ClientRectList: {
   prototype: ClientRectList;
   new(): ClientRectList;
 }
@@ -11061,14 +11061,14 @@ interface SVGMaskElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLangS
   x: SVGAnimatedLength;
   height: SVGAnimatedLength;
 }
-declare var SVGMaskElement: {
+declare let SVGMaskElement: {
   prototype: SVGMaskElement;
   new(): SVGMaskElement;
 }
 
 interface External {
 }
-declare var External: {
+declare let External: {
   prototype: External;
   new(): External;
 }
@@ -11098,7 +11098,7 @@ interface MSGestureEvent extends UIEvent {
   MSGESTURE_FLAG_INERTIA: number;
   MSGESTURE_FLAG_NONE: number;
 }
-declare var MSGestureEvent: {
+declare let MSGestureEvent: {
   prototype: MSGestureEvent;
   new(): MSGestureEvent;
   MSGESTURE_FLAG_BEGIN: number;
@@ -11116,7 +11116,7 @@ interface ErrorEvent extends Event {
   message: string;
   initErrorEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, messageArg: string, filenameArg: string, linenoArg: number): void;
 }
-declare var ErrorEvent: {
+declare let ErrorEvent: {
   prototype: ErrorEvent;
   new(): ErrorEvent;
 }
@@ -11132,7 +11132,7 @@ interface SVGFilterElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLan
   filterResY: SVGAnimatedInteger;
   setFilterRes(filterResX: number, filterResY: number): void;
 }
-declare var SVGFilterElement: {
+declare let SVGFilterElement: {
   prototype: SVGFilterElement;
   new(): SVGFilterElement;
 }
@@ -11140,7 +11140,7 @@ declare var SVGFilterElement: {
 interface TrackEvent extends Event {
   track: any;
 }
-declare var TrackEvent: {
+declare let TrackEvent: {
   prototype: TrackEvent;
   new(): TrackEvent;
 }
@@ -11148,14 +11148,14 @@ declare var TrackEvent: {
 interface SVGFEMergeNodeElement extends SVGElement {
   in1: SVGAnimatedString;
 }
-declare var SVGFEMergeNodeElement: {
+declare let SVGFEMergeNodeElement: {
   prototype: SVGFEMergeNodeElement;
   new(): SVGFEMergeNodeElement;
 }
 
 interface SVGFEFloodElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
 }
-declare var SVGFEFloodElement: {
+declare let SVGFEFloodElement: {
   prototype: SVGFEFloodElement;
   new(): SVGFEFloodElement;
 }
@@ -11165,7 +11165,7 @@ interface MSGesture {
   addPointer(pointerId: number): void;
   stop(): void;
 }
-declare var MSGesture: {
+declare let MSGesture: {
   prototype: MSGesture;
   new(): MSGesture;
 }
@@ -11184,7 +11184,7 @@ interface TextTrackCue extends EventTarget {
   addEventListener(type: "exit", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var TextTrackCue: {
+declare let TextTrackCue: {
   prototype: TextTrackCue;
   new(startTime: number, endTime: number, text: string): TextTrackCue;
 }
@@ -11196,7 +11196,7 @@ interface MSStreamReader extends MSBaseReader {
   readAsDataURL(stream: MSStream, size?: number): void;
   readAsText(stream: MSStream, encoding?: string, size?: number): void;
 }
-declare var MSStreamReader: {
+declare let MSStreamReader: {
   prototype: MSStreamReader;
   new(): MSStreamReader;
 }
@@ -11211,14 +11211,14 @@ interface DOMTokenList {
   [index: number]: string;
   toString(): string;
 }
-declare var DOMTokenList: {
+declare let DOMTokenList: {
   prototype: DOMTokenList;
   new(): DOMTokenList;
 }
 
 interface SVGFEFuncAElement extends SVGComponentTransferFunctionElement {
 }
-declare var SVGFEFuncAElement: {
+declare let SVGFEFuncAElement: {
   prototype: SVGFEFuncAElement;
   new(): SVGFEFuncAElement;
 }
@@ -11226,7 +11226,7 @@ declare var SVGFEFuncAElement: {
 interface SVGFETileElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
   in1: SVGAnimatedString;
 }
-declare var SVGFETileElement: {
+declare let SVGFETileElement: {
   prototype: SVGFETileElement;
   new(): SVGFETileElement;
 }
@@ -11242,7 +11242,7 @@ interface SVGFEBlendElement extends SVGElement, SVGFilterPrimitiveStandardAttrib
   SVG_FEBLEND_MODE_SCREEN: number;
   SVG_FEBLEND_MODE_LIGHTEN: number;
 }
-declare var SVGFEBlendElement: {
+declare let SVGFEBlendElement: {
   prototype: SVGFEBlendElement;
   new(): SVGFEBlendElement;
   SVG_FEBLEND_MODE_DARKEN: number;
@@ -11257,14 +11257,14 @@ interface MessageChannel {
   port2: MessagePort;
   port1: MessagePort;
 }
-declare var MessageChannel: {
+declare let MessageChannel: {
   prototype: MessageChannel;
   new(): MessageChannel;
 }
 
 interface SVGFEMergeElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
 }
-declare var SVGFEMergeElement: {
+declare let SVGFEMergeElement: {
   prototype: SVGFEMergeElement;
   new(): SVGFEMergeElement;
 }
@@ -11274,7 +11274,7 @@ interface TransitionEvent extends Event {
   elapsedTime: number;
   initTransitionEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, propertyNameArg: string, elapsedTimeArg: number): void;
 }
-declare var TransitionEvent: {
+declare let TransitionEvent: {
   prototype: TransitionEvent;
   new(): TransitionEvent;
 }
@@ -11285,7 +11285,7 @@ interface MediaQueryList {
   addListener(listener: MediaQueryListListener): void;
   removeListener(listener: MediaQueryListListener): void;
 }
-declare var MediaQueryList: {
+declare let MediaQueryList: {
   prototype: MediaQueryList;
   new(): MediaQueryList;
 }
@@ -11294,7 +11294,7 @@ interface DOMError {
   name: string;
   toString(): string;
 }
-declare var DOMError: {
+declare let DOMError: {
   prototype: DOMError;
   new(): DOMError;
 }
@@ -11305,7 +11305,7 @@ interface CloseEvent extends Event {
   code: number;
   initCloseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, wasCleanArg: boolean, codeArg: number, reasonArg: string): void;
 }
-declare var CloseEvent: {
+declare let CloseEvent: {
   prototype: CloseEvent;
   new(): CloseEvent;
 }
@@ -11333,7 +11333,7 @@ interface WebSocket extends EventTarget {
   addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var WebSocket: {
+declare let WebSocket: {
   prototype: WebSocket;
   new(url: string, protocols?: string): WebSocket;
   new(url: string, protocols?: string[]): WebSocket;
@@ -11348,7 +11348,7 @@ interface SVGFEPointLightElement extends SVGElement {
   x: SVGAnimatedNumber;
   z: SVGAnimatedNumber;
 }
-declare var SVGFEPointLightElement: {
+declare let SVGFEPointLightElement: {
   prototype: SVGFEPointLightElement;
   new(): SVGFEPointLightElement;
 }
@@ -11359,7 +11359,7 @@ interface ProgressEvent extends Event {
   total: number;
   initProgressEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, lengthComputableArg: boolean, loadedArg: number, totalArg: number): void;
 }
-declare var ProgressEvent: {
+declare let ProgressEvent: {
   prototype: ProgressEvent;
   new(): ProgressEvent;
 }
@@ -11380,7 +11380,7 @@ interface IDBObjectStore {
   get(key: any): IDBRequest;
   delete(key: any): IDBRequest;
 }
-declare var IDBObjectStore: {
+declare let IDBObjectStore: {
   prototype: IDBObjectStore;
   new(): IDBObjectStore;
 }
@@ -11391,7 +11391,7 @@ interface SVGFEGaussianBlurElement extends SVGElement, SVGFilterPrimitiveStandar
   stdDeviationY: SVGAnimatedNumber;
   setStdDeviation(stdDeviationX: number, stdDeviationY: number): void;
 }
-declare var SVGFEGaussianBlurElement: {
+declare let SVGFEGaussianBlurElement: {
   prototype: SVGFEGaussianBlurElement;
   new(): SVGFEGaussianBlurElement;
 }
@@ -11408,7 +11408,7 @@ interface IDBVersionChangeEvent extends Event {
   newVersion: number;
   oldVersion: number;
 }
-declare var IDBVersionChangeEvent: {
+declare let IDBVersionChangeEvent: {
   prototype: IDBVersionChangeEvent;
   new(): IDBVersionChangeEvent;
 }
@@ -11424,7 +11424,7 @@ interface IDBIndex {
   get(key: any): IDBRequest;
   openCursor(range?: IDBKeyRange, direction?: string): IDBRequest;
 }
-declare var IDBIndex: {
+declare let IDBIndex: {
   prototype: IDBIndex;
   new(): IDBIndex;
 }
@@ -11434,7 +11434,7 @@ interface FileList {
   item(index: number): File;
   [index: number]: File;
 }
-declare var FileList: {
+declare let FileList: {
   prototype: FileList;
   new(): FileList;
 }
@@ -11453,7 +11453,7 @@ interface IDBCursor {
   NEXT: string;
   NEXT_NO_DUPLICATE: string;
 }
-declare var IDBCursor: {
+declare let IDBCursor: {
   prototype: IDBCursor;
   new(): IDBCursor;
   PREV: string;
@@ -11470,7 +11470,7 @@ interface SVGFESpecularLightingElement extends SVGElement, SVGFilterPrimitiveSta
   kernelUnitLengthX: SVGAnimatedNumber;
   specularConstant: SVGAnimatedNumber;
 }
-declare var SVGFESpecularLightingElement: {
+declare let SVGFESpecularLightingElement: {
   prototype: SVGFESpecularLightingElement;
   new(): SVGFESpecularLightingElement;
 }
@@ -11479,7 +11479,7 @@ interface File extends Blob {
   lastModifiedDate: any;
   name: string;
 }
-declare var File: {
+declare let File: {
   prototype: File;
   new(): File;
 }
@@ -11488,12 +11488,12 @@ interface URL {
   revokeObjectURL(url: string): void;
   createObjectURL(object: any, options?: ObjectURLOptions): string;
 }
-declare var URL: URL;
+declare let URL: URL;
 
 interface IDBCursorWithValue extends IDBCursor {
   value: any;
 }
-declare var IDBCursorWithValue: {
+declare let IDBCursorWithValue: {
   prototype: IDBCursorWithValue;
   new(): IDBCursorWithValue;
 }
@@ -11515,7 +11515,7 @@ interface XMLHttpRequestEventTarget extends EventTarget {
   addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var XMLHttpRequestEventTarget: {
+declare let XMLHttpRequestEventTarget: {
   prototype: XMLHttpRequestEventTarget;
   new(): XMLHttpRequestEventTarget;
 }
@@ -11538,7 +11538,7 @@ interface AudioTrackList extends EventTarget {
   addEventListener(type: "removetrack", listener: (ev: any /*PluginArray*/) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var AudioTrackList: {
+declare let AudioTrackList: {
   prototype: AudioTrackList;
   new(): AudioTrackList;
 }
@@ -11574,7 +11574,7 @@ interface SVGFEMorphologyElement extends SVGElement, SVGFilterPrimitiveStandardA
   SVG_MORPHOLOGY_OPERATOR_ERODE: number;
   SVG_MORPHOLOGY_OPERATOR_DILATE: number;
 }
-declare var SVGFEMorphologyElement: {
+declare let SVGFEMorphologyElement: {
   prototype: SVGFEMorphologyElement;
   new(): SVGFEMorphologyElement;
   SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
@@ -11584,7 +11584,7 @@ declare var SVGFEMorphologyElement: {
 
 interface SVGFEFuncRElement extends SVGComponentTransferFunctionElement {
 }
-declare var SVGFEFuncRElement: {
+declare let SVGFEFuncRElement: {
   prototype: SVGFEFuncRElement;
   new(): SVGFEFuncRElement;
 }
@@ -11608,7 +11608,7 @@ interface SVGFEDisplacementMapElement extends SVGElement, SVGFilterPrimitiveStan
   SVG_CHANNEL_UNKNOWN: number;
   SVG_CHANNEL_A: number;
 }
-declare var SVGFEDisplacementMapElement: {
+declare let SVGFEDisplacementMapElement: {
   prototype: SVGFEDisplacementMapElement;
   new(): SVGFEDisplacementMapElement;
   SVG_CHANNEL_B: number;
@@ -11623,7 +11623,7 @@ interface AnimationEvent extends Event {
   elapsedTime: number;
   initAnimationEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, animationNameArg: string, elapsedTimeArg: number): void;
 }
-declare var AnimationEvent: {
+declare let AnimationEvent: {
   prototype: AnimationEvent;
   new(): AnimationEvent;
 }
@@ -11643,7 +11643,7 @@ interface SVGComponentTransferFunctionElement extends SVGElement {
   SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
   SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
 }
-declare var SVGComponentTransferFunctionElement: {
+declare let SVGComponentTransferFunctionElement: {
   prototype: SVGComponentTransferFunctionElement;
   new(): SVGComponentTransferFunctionElement;
   SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
@@ -11659,7 +11659,7 @@ interface MSRangeCollection {
   item(index: number): Range;
   [index: number]: Range;
 }
-declare var MSRangeCollection: {
+declare let MSRangeCollection: {
   prototype: MSRangeCollection;
   new(): MSRangeCollection;
 }
@@ -11668,14 +11668,14 @@ interface SVGFEDistantLightElement extends SVGElement {
   azimuth: SVGAnimatedNumber;
   elevation: SVGAnimatedNumber;
 }
-declare var SVGFEDistantLightElement: {
+declare let SVGFEDistantLightElement: {
   prototype: SVGFEDistantLightElement;
   new(): SVGFEDistantLightElement;
 }
 
 interface SVGFEFuncBElement extends SVGComponentTransferFunctionElement {
 }
-declare var SVGFEFuncBElement: {
+declare let SVGFEFuncBElement: {
   prototype: SVGFEFuncBElement;
   new(): SVGFEFuncBElement;
 }
@@ -11686,7 +11686,7 @@ interface IDBKeyRange {
   lower: any;
   lowerOpen: boolean;
 }
-declare var IDBKeyRange: {
+declare let IDBKeyRange: {
   prototype: IDBKeyRange;
   new(): IDBKeyRange;
   bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
@@ -11716,7 +11716,7 @@ interface IDBTransaction extends EventTarget {
   addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var IDBTransaction: {
+declare let IDBTransaction: {
   prototype: IDBTransaction;
   new(): IDBTransaction;
   READ_ONLY: string;
@@ -11732,7 +11732,7 @@ interface AudioTrack {
   enabled: boolean;
   sourceBuffer: SourceBuffer;
 }
-declare var AudioTrack: {
+declare let AudioTrack: {
   prototype: AudioTrack;
   new(): AudioTrack;
 }
@@ -11755,7 +11755,7 @@ interface SVGFEConvolveMatrixElement extends SVGElement, SVGFilterPrimitiveStand
   SVG_EDGEMODE_UNKNOWN: number;
   SVG_EDGEMODE_NONE: number;
 }
-declare var SVGFEConvolveMatrixElement: {
+declare let SVGFEConvolveMatrixElement: {
   prototype: SVGFEConvolveMatrixElement;
   new(): SVGFEConvolveMatrixElement;
   SVG_EDGEMODE_WRAP: number;
@@ -11770,7 +11770,7 @@ interface TextTrackCueList {
   [index: number]: TextTrackCue;
   getCueById(id: string): TextTrackCue;
 }
-declare var TextTrackCueList: {
+declare let TextTrackCueList: {
   prototype: TextTrackCueList;
   new(): TextTrackCueList;
 }
@@ -11782,7 +11782,7 @@ interface CSSKeyframesRule extends CSSRule {
   deleteRule(rule: string): void;
   appendRule(rule: string): void;
 }
-declare var CSSKeyframesRule: {
+declare let CSSKeyframesRule: {
   prototype: CSSKeyframesRule;
   new(): CSSKeyframesRule;
 }
@@ -11801,7 +11801,7 @@ interface SVGFETurbulenceElement extends SVGElement, SVGFilterPrimitiveStandardA
   SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
   SVG_STITCHTYPE_STITCH: number;
 }
-declare var SVGFETurbulenceElement: {
+declare let SVGFETurbulenceElement: {
   prototype: SVGFETurbulenceElement;
   new(): SVGFETurbulenceElement;
   SVG_STITCHTYPE_UNKNOWN: number;
@@ -11820,14 +11820,14 @@ interface TextTrackList extends EventTarget {
   addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var TextTrackList: {
+declare let TextTrackList: {
   prototype: TextTrackList;
   new(): TextTrackList;
 }
 
 interface SVGFEFuncGElement extends SVGComponentTransferFunctionElement {
 }
-declare var SVGFEFuncGElement: {
+declare let SVGFEFuncGElement: {
   prototype: SVGFEFuncGElement;
   new(): SVGFEFuncGElement;
 }
@@ -11842,7 +11842,7 @@ interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandard
   SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
   SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
 }
-declare var SVGFEColorMatrixElement: {
+declare let SVGFEColorMatrixElement: {
   prototype: SVGFEColorMatrixElement;
   new(): SVGFEColorMatrixElement;
   SVG_FECOLORMATRIX_TYPE_SATURATE: number;
@@ -11862,7 +11862,7 @@ interface SVGFESpotLightElement extends SVGElement {
   z: SVGAnimatedNumber;
   pointsAtX: SVGAnimatedNumber;
 }
-declare var SVGFESpotLightElement: {
+declare let SVGFESpotLightElement: {
   prototype: SVGFESpotLightElement;
   new(): SVGFESpotLightElement;
 }
@@ -11886,7 +11886,7 @@ interface IDBDatabase extends EventTarget {
   addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var IDBDatabase: {
+declare let IDBDatabase: {
   prototype: IDBDatabase;
   new(): IDBDatabase;
 }
@@ -11897,7 +11897,7 @@ interface DOMStringList {
   item(index: number): string;
   [index: number]: string;
 }
-declare var DOMStringList: {
+declare let DOMStringList: {
   prototype: DOMStringList;
   new(): DOMStringList;
 }
@@ -11911,7 +11911,7 @@ interface IDBOpenDBRequest extends IDBRequest {
   addEventListener(type: "blocked", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var IDBOpenDBRequest: {
+declare let IDBOpenDBRequest: {
   prototype: IDBOpenDBRequest;
   new(): IDBOpenDBRequest;
 }
@@ -11934,7 +11934,7 @@ interface HTMLProgressElement extends HTMLElement {
    */
   form: HTMLFormElement;
 }
-declare var HTMLProgressElement: {
+declare let HTMLProgressElement: {
   prototype: HTMLProgressElement;
   new(): HTMLProgressElement;
 }
@@ -11948,7 +11948,7 @@ interface SVGFEOffsetElement extends SVGElement, SVGFilterPrimitiveStandardAttri
   in1: SVGAnimatedString;
   dx: SVGAnimatedNumber;
 }
-declare var SVGFEOffsetElement: {
+declare let SVGFEOffsetElement: {
   prototype: SVGFEOffsetElement;
   new(): SVGFEOffsetElement;
 }
@@ -11982,7 +11982,7 @@ interface TextTrack extends EventTarget {
   addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var TextTrack: {
+declare let TextTrack: {
   prototype: TextTrack;
   new(): TextTrack;
   ERROR: number;
@@ -12010,7 +12010,7 @@ interface IDBRequest extends EventTarget {
   addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var IDBRequest: {
+declare let IDBRequest: {
   prototype: IDBRequest;
   new(): IDBRequest;
 }
@@ -12023,7 +12023,7 @@ interface MessagePort extends EventTarget {
   addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var MessagePort: {
+declare let MessagePort: {
   prototype: MessagePort;
   new(): MessagePort;
 }
@@ -12034,7 +12034,7 @@ interface FileReader extends MSBaseReader {
   readAsDataURL(blob: Blob): void;
   readAsText(blob: Blob, encoding?: string): void;
 }
-declare var FileReader: {
+declare let FileReader: {
   prototype: FileReader;
   new(): FileReader;
 }
@@ -12068,7 +12068,7 @@ interface ApplicationCache extends EventTarget {
   addEventListener(type: "noupdate", listener: (ev: Event) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var ApplicationCache: {
+declare let ApplicationCache: {
   prototype: ApplicationCache;
   new(): ApplicationCache;
   CHECKING: number;
@@ -12087,7 +12087,7 @@ interface PopStateEvent extends Event {
   state: any;
   initPopStateEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, stateArg: any): void;
 }
-declare var PopStateEvent: {
+declare let PopStateEvent: {
   prototype: PopStateEvent;
   new(): PopStateEvent;
 }
@@ -12096,7 +12096,7 @@ interface CSSKeyframeRule extends CSSRule {
   keyText: string;
   style: CSSStyleDeclaration;
 }
-declare var CSSKeyframeRule: {
+declare let CSSKeyframeRule: {
   prototype: CSSKeyframeRule;
   new(): CSSKeyframeRule;
 }
@@ -12111,7 +12111,7 @@ interface MSStream {
   msDetachStream(): any;
   msClose(): void;
 }
-declare var MSStream: {
+declare let MSStream: {
   prototype: MSStream;
   new(): MSStream;
 }
@@ -12120,7 +12120,7 @@ interface MSBlobBuilder {
   append(data: any, endings?: string): void;
   getBlob(contentType?: string): Blob;
 }
-declare var MSBlobBuilder: {
+declare let MSBlobBuilder: {
   prototype: MSBlobBuilder;
   new(): MSBlobBuilder;
 }
@@ -12128,7 +12128,7 @@ declare var MSBlobBuilder: {
 interface DOMSettableTokenList extends DOMTokenList {
   value: string;
 }
-declare var DOMSettableTokenList: {
+declare let DOMSettableTokenList: {
   prototype: DOMSettableTokenList;
   new(): DOMSettableTokenList;
 }
@@ -12138,7 +12138,7 @@ interface IDBFactory {
   cmp(first: any, second: any): number;
   deleteDatabase(name: string): IDBOpenDBRequest;
 }
-declare var IDBFactory: {
+declare let IDBFactory: {
   prototype: IDBFactory;
   new(): IDBFactory;
 }
@@ -12163,7 +12163,7 @@ interface MSPointerEvent extends MouseEvent {
   MSPOINTER_TYPE_MOUSE: number;
   MSPOINTER_TYPE_TOUCH: number;
 }
-declare var MSPointerEvent: {
+declare let MSPointerEvent: {
   prototype: MSPointerEvent;
   new(): MSPointerEvent;
   MSPOINTER_TYPE_PEN: number;
@@ -12184,7 +12184,7 @@ interface MSManipulationEvent extends UIEvent {
   MS_MANIPULATION_STATE_DRAGGING: number;
   MS_MANIPULATION_STATE_CANCELLED: number;
 }
-declare var MSManipulationEvent: {
+declare let MSManipulationEvent: {
   prototype: MSManipulationEvent;
   new(): MSManipulationEvent;
   MS_MANIPULATION_STATE_STOPPED: number;
@@ -12200,7 +12200,7 @@ declare var MSManipulationEvent: {
 interface FormData {
   append(name: any, value: any, blobName?: string): void;
 }
-declare var FormData: {
+declare let FormData: {
   prototype: FormData;
   new(): FormData;
 }
@@ -12208,7 +12208,7 @@ declare var FormData: {
 interface HTMLDataListElement extends HTMLElement {
   options: HTMLCollection;
 }
-declare var HTMLDataListElement: {
+declare let HTMLDataListElement: {
   prototype: HTMLDataListElement;
   new(): HTMLDataListElement;
 }
@@ -12216,7 +12216,7 @@ declare var HTMLDataListElement: {
 interface SVGFEImageElement extends SVGElement, SVGLangSpace, SVGFilterPrimitiveStandardAttributes, SVGURIReference, SVGExternalResourcesRequired {
   preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
 }
-declare var SVGFEImageElement: {
+declare let SVGFEImageElement: {
   prototype: SVGFEImageElement;
   new(): SVGFEImageElement;
 }
@@ -12243,7 +12243,7 @@ interface SVGFECompositeElement extends SVGElement, SVGFilterPrimitiveStandardAt
   SVG_FECOMPOSITE_OPERATOR_IN: number;
   SVG_FECOMPOSITE_OPERATOR_ATOP: number;
 }
-declare var SVGFECompositeElement: {
+declare let SVGFECompositeElement: {
   prototype: SVGFECompositeElement;
   new(): SVGFECompositeElement;
   SVG_FECOMPOSITE_OPERATOR_OUT: number;
@@ -12266,7 +12266,7 @@ interface ValidityState {
   tooLong: boolean;
   valid: boolean;
 }
-declare var ValidityState: {
+declare let ValidityState: {
   prototype: ValidityState;
   new(): ValidityState;
 }
@@ -12284,7 +12284,7 @@ interface HTMLTrackElement extends HTMLElement {
   LOADED: number;
   NONE: number;
 }
-declare var HTMLTrackElement: {
+declare let HTMLTrackElement: {
   prototype: HTMLTrackElement;
   new(): HTMLTrackElement;
   ERROR: number;
@@ -12315,12 +12315,12 @@ interface MSApp {
   IDLE: string;
   CURRENT: string;
 }
-declare var MSApp: MSApp;
+declare let MSApp: MSApp;
 
 interface SVGFEComponentTransferElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
   in1: SVGAnimatedString;
 }
-declare var SVGFEComponentTransferElement: {
+declare let SVGFEComponentTransferElement: {
   prototype: SVGFEComponentTransferElement;
   new(): SVGFEComponentTransferElement;
 }
@@ -12332,7 +12332,7 @@ interface SVGFEDiffuseLightingElement extends SVGElement, SVGFilterPrimitiveStan
   kernelUnitLengthX: SVGAnimatedNumber;
   diffuseConstant: SVGAnimatedNumber;
 }
-declare var SVGFEDiffuseLightingElement: {
+declare let SVGFEDiffuseLightingElement: {
   prototype: SVGFEDiffuseLightingElement;
   new(): SVGFEDiffuseLightingElement;
 }
@@ -12371,7 +12371,7 @@ interface MSCSSMatrix {
   scale(scaleX: number, scaleY?: number, scaleZ?: number): MSCSSMatrix;
   skewX(angle: number): MSCSSMatrix;
 }
-declare var MSCSSMatrix: {
+declare let MSCSSMatrix: {
   prototype: MSCSSMatrix;
   new(text?: string): MSCSSMatrix;
 }
@@ -12384,7 +12384,7 @@ interface Worker extends AbstractWorker {
   addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var Worker: {
+declare let Worker: {
   prototype: Worker;
   new(stringUrl: string): Worker;
 }
@@ -12397,7 +12397,7 @@ interface MSGraphicsTrust {
   status: string;
   constrictionActive: boolean;
 }
-declare var MSGraphicsTrust: {
+declare let MSGraphicsTrust: {
   prototype: MSGraphicsTrust;
   new(): MSGraphicsTrust;
 }
@@ -12415,7 +12415,7 @@ interface SubtleCrypto {
   sign(algorithm: any, key: Key, buffer?: ArrayBufferView): CryptoOperation;
   decrypt(algorithm: any, key: Key, buffer?: ArrayBufferView): CryptoOperation;
 }
-declare var SubtleCrypto: {
+declare let SubtleCrypto: {
   prototype: SubtleCrypto;
   new(): SubtleCrypto;
 }
@@ -12423,7 +12423,7 @@ declare var SubtleCrypto: {
 interface Crypto extends RandomSource {
   subtle: SubtleCrypto;
 }
-declare var Crypto: {
+declare let Crypto: {
   prototype: Crypto;
   new(): Crypto;
 }
@@ -12434,7 +12434,7 @@ interface VideoPlaybackQuality {
   totalVideoFrames: number;
   droppedVideoFrames: number;
 }
-declare var VideoPlaybackQuality: {
+declare let VideoPlaybackQuality: {
   prototype: VideoPlaybackQuality;
   new(): VideoPlaybackQuality;
 }
@@ -12465,7 +12465,7 @@ interface Key {
   extractable: boolean;
   keyUsage: string[];
 }
-declare var Key: {
+declare let Key: {
   prototype: Key;
   new(): Key;
 }
@@ -12475,7 +12475,7 @@ interface DeviceAcceleration {
   x: number;
   z: number;
 }
-declare var DeviceAcceleration: {
+declare let DeviceAcceleration: {
   prototype: DeviceAcceleration;
   new(): DeviceAcceleration;
 }
@@ -12484,7 +12484,7 @@ interface HTMLAllCollection extends HTMLCollection {
   namedItem(name: string): Element;
   // [name: string]: Element;
 }
-declare var HTMLAllCollection: {
+declare let HTMLAllCollection: {
   prototype: HTMLAllCollection;
   new(): HTMLAllCollection;
 }
@@ -12493,7 +12493,7 @@ interface AesGcmEncryptResult {
   ciphertext: ArrayBuffer;
   tag: ArrayBuffer;
 }
-declare var AesGcmEncryptResult: {
+declare let AesGcmEncryptResult: {
   prototype: AesGcmEncryptResult;
   new(): AesGcmEncryptResult;
 }
@@ -12502,7 +12502,7 @@ interface NavigationCompletedEvent extends NavigationEvent {
   webErrorStatus: number;
   isSuccess: boolean;
 }
-declare var NavigationCompletedEvent: {
+declare let NavigationCompletedEvent: {
   prototype: NavigationCompletedEvent;
   new(): NavigationCompletedEvent;
 }
@@ -12518,7 +12518,7 @@ interface MutationRecord {
   attributeNamespace: string;
   type: string;
 }
-declare var MutationRecord: {
+declare let MutationRecord: {
   prototype: MutationRecord;
   new(): MutationRecord;
 }
@@ -12530,7 +12530,7 @@ interface MimeTypeArray {
   namedItem(type: string): Plugin;
   // [type: string]: Plugin;
 }
-declare var MimeTypeArray: {
+declare let MimeTypeArray: {
   prototype: MimeTypeArray;
   new(): MimeTypeArray;
 }
@@ -12543,14 +12543,14 @@ interface KeyOperation extends EventTarget {
   addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var KeyOperation: {
+declare let KeyOperation: {
   prototype: KeyOperation;
   new(): KeyOperation;
 }
 
 interface DOMStringMap {
 }
-declare var DOMStringMap: {
+declare let DOMStringMap: {
   prototype: DOMStringMap;
   new(): DOMStringMap;
 }
@@ -12562,7 +12562,7 @@ interface DeviceOrientationEvent extends Event {
   beta: number;
   initDeviceOrientationEvent(type: string, bubbles: boolean, cancelable: boolean, alpha: number, beta: number, gamma: number, absolute: boolean): void;
 }
-declare var DeviceOrientationEvent: {
+declare let DeviceOrientationEvent: {
   prototype: DeviceOrientationEvent;
   new(): DeviceOrientationEvent;
 }
@@ -12571,7 +12571,7 @@ interface MSMediaKeys {
   keySystem: string;
   createSession(type: string, initData: Uint8Array, cdmData?: Uint8Array): MSMediaKeySession;
 }
-declare var MSMediaKeys: {
+declare let MSMediaKeys: {
   prototype: MSMediaKeys;
   new(keySystem: string): MSMediaKeys;
   isTypeSupported(keySystem: string, type?: string): boolean;
@@ -12581,7 +12581,7 @@ interface MSMediaKeyMessageEvent extends Event {
   destinationURL: string;
   message: Uint8Array;
 }
-declare var MSMediaKeyMessageEvent: {
+declare let MSMediaKeyMessageEvent: {
   prototype: MSMediaKeyMessageEvent;
   new(): MSMediaKeyMessageEvent;
 }
@@ -12606,7 +12606,7 @@ interface MSHTMLWebViewElement extends HTMLElement {
   invokeScriptAsync(scriptName: string, ...args: any[]): MSWebViewAsyncOperation;
   buildLocalStreamUri(contentIdentifier: string, relativePath: string): string;
 }
-declare var MSHTMLWebViewElement: {
+declare let MSHTMLWebViewElement: {
   prototype: MSHTMLWebViewElement;
   new(): MSHTMLWebViewElement;
 }
@@ -12614,7 +12614,7 @@ declare var MSHTMLWebViewElement: {
 interface NavigationEvent extends Event {
   uri: string;
 }
-declare var NavigationEvent: {
+declare let NavigationEvent: {
   prototype: NavigationEvent;
   new(): NavigationEvent;
 }
@@ -12635,7 +12635,7 @@ interface SourceBuffer extends EventTarget {
   abort(): void;
   appendStream(stream: MSStream, maxSize?: number): void;
 }
-declare var SourceBuffer: {
+declare let SourceBuffer: {
   prototype: SourceBuffer;
   new(): SourceBuffer;
 }
@@ -12656,7 +12656,7 @@ interface MSInputMethodContext extends EventTarget {
   addEventListener(type: "candidatewindowupdate", listener: (ev: any) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var MSInputMethodContext: {
+declare let MSInputMethodContext: {
   prototype: MSInputMethodContext;
   new(): MSInputMethodContext;
 }
@@ -12666,7 +12666,7 @@ interface DeviceRotationRate {
   alpha: number;
   beta: number;
 }
-declare var DeviceRotationRate: {
+declare let DeviceRotationRate: {
   prototype: DeviceRotationRate;
   new(): DeviceRotationRate;
 }
@@ -12679,7 +12679,7 @@ interface PluginArray {
   namedItem(name: string): Plugin;
   // [name: string]: Plugin;
 }
-declare var PluginArray: {
+declare let PluginArray: {
   prototype: PluginArray;
   new(): PluginArray;
 }
@@ -12694,7 +12694,7 @@ interface MSMediaKeyError {
   MS_MEDIA_KEYERR_UNKNOWN: number;
   MS_MEDIA_KEYERR_CLIENT: number;
 }
-declare var MSMediaKeyError: {
+declare let MSMediaKeyError: {
   prototype: MSMediaKeyError;
   new(): MSMediaKeyError;
   MS_MEDIA_KEYERR_SERVICE: number;
@@ -12716,7 +12716,7 @@ interface Plugin {
   namedItem(type: string): MimeType;
   // [type: string]: MimeType;
 }
-declare var Plugin: {
+declare let Plugin: {
   prototype: Plugin;
   new(): Plugin;
 }
@@ -12730,7 +12730,7 @@ interface MediaSource extends EventTarget {
   endOfStream(error?: string): void;
   removeSourceBuffer(sourceBuffer: SourceBuffer): void;
 }
-declare var MediaSource: {
+declare let MediaSource: {
   prototype: MediaSource;
   new(): MediaSource;
   isTypeSupported(type: string): boolean;
@@ -12741,14 +12741,14 @@ interface SourceBufferList extends EventTarget {
   item(index: number): SourceBuffer;
   [index: number]: SourceBuffer;
 }
-declare var SourceBufferList: {
+declare let SourceBufferList: {
   prototype: SourceBufferList;
   new(): SourceBufferList;
 }
 
 interface XMLDocument extends Document {
 }
-declare var XMLDocument: {
+declare let XMLDocument: {
   prototype: XMLDocument;
   new(): XMLDocument;
 }
@@ -12760,7 +12760,7 @@ interface DeviceMotionEvent extends Event {
   accelerationIncludingGravity: DeviceAcceleration;
   initDeviceMotionEvent(type: string, bubbles: boolean, cancelable: boolean, acceleration: DeviceAccelerationDict, accelerationIncludingGravity: DeviceAccelerationDict, rotationRate: DeviceRotationRateDict, interval: number): void;
 }
-declare var DeviceMotionEvent: {
+declare let DeviceMotionEvent: {
   prototype: DeviceMotionEvent;
   new(): DeviceMotionEvent;
 }
@@ -12771,7 +12771,7 @@ interface MimeType {
   type: string;
   description: string;
 }
-declare var MimeType: {
+declare let MimeType: {
   prototype: MimeType;
   new(): MimeType;
 }
@@ -12793,7 +12793,7 @@ interface PointerEvent extends MouseEvent {
   getCurrentPoint(element: Element): void;
   getIntermediatePoints(element: Element): void;
 }
-declare var PointerEvent: {
+declare let PointerEvent: {
   prototype: PointerEvent;
   new(): PointerEvent;
 }
@@ -12808,7 +12808,7 @@ interface MutationObserver {
   takeRecords(): MutationRecord[];
   disconnect(): void;
 }
-declare var MutationObserver: {
+declare let MutationObserver: {
   prototype: MutationObserver;
   new (callback: (arr: MutationRecord[], observer: MutationObserver)=>any): MutationObserver;
 }
@@ -12832,7 +12832,7 @@ interface MSWebViewAsyncOperation extends EventTarget {
   addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var MSWebViewAsyncOperation: {
+declare let MSWebViewAsyncOperation: {
   prototype: MSWebViewAsyncOperation;
   new(): MSWebViewAsyncOperation;
   ERROR: number;
@@ -12847,7 +12847,7 @@ interface ScriptNotifyEvent extends Event {
   value: string;
   callingUri: string;
 }
-declare var ScriptNotifyEvent: {
+declare let ScriptNotifyEvent: {
   prototype: ScriptNotifyEvent;
   new(): ScriptNotifyEvent;
 }
@@ -12876,7 +12876,7 @@ interface PerformanceNavigationTiming extends PerformanceEntry {
   domContentLoadedEventEnd: number;
   type: string;
 }
-declare var PerformanceNavigationTiming: {
+declare let PerformanceNavigationTiming: {
   prototype: PerformanceNavigationTiming;
   new(): PerformanceNavigationTiming;
 }
@@ -12884,7 +12884,7 @@ declare var PerformanceNavigationTiming: {
 interface MSMediaKeyNeededEvent extends Event {
   initData: Uint8Array;
 }
-declare var MSMediaKeyNeededEvent: {
+declare let MSMediaKeyNeededEvent: {
   prototype: MSMediaKeyNeededEvent;
   new(): MSMediaKeyNeededEvent;
 }
@@ -12893,7 +12893,7 @@ interface LongRunningScriptDetectedEvent extends Event {
   stopPageScriptExecution: boolean;
   executionTime: number;
 }
-declare var LongRunningScriptDetectedEvent: {
+declare let LongRunningScriptDetectedEvent: {
   prototype: LongRunningScriptDetectedEvent;
   new(): LongRunningScriptDetectedEvent;
 }
@@ -12903,7 +12903,7 @@ interface MSAppView {
   close(): void;
   postMessage(message: any, targetOrigin: string, ports?: any): void;
 }
-declare var MSAppView: {
+declare let MSAppView: {
   prototype: MSAppView;
   new(): MSAppView;
 }
@@ -12931,7 +12931,7 @@ interface PerfWidgetExternal {
   getRecentFrames(last: number): any;
   getRecentPaintRequests(last: number): any;
 }
-declare var PerfWidgetExternal: {
+declare let PerfWidgetExternal: {
   prototype: PerfWidgetExternal;
   new(): PerfWidgetExternal;
 }
@@ -12939,7 +12939,7 @@ declare var PerfWidgetExternal: {
 interface PageTransitionEvent extends Event {
   persisted: boolean;
 }
-declare var PageTransitionEvent: {
+declare let PageTransitionEvent: {
   prototype: PageTransitionEvent;
   new(): PageTransitionEvent;
 }
@@ -12950,7 +12950,7 @@ interface MutationCallback {
 
 interface HTMLDocument extends Document {
 }
-declare var HTMLDocument: {
+declare let HTMLDocument: {
   prototype: HTMLDocument;
   new(): HTMLDocument;
 }
@@ -12959,7 +12959,7 @@ interface KeyPair {
   privateKey: Key;
   publicKey: Key;
 }
-declare var KeyPair: {
+declare let KeyPair: {
   prototype: KeyPair;
   new(): KeyPair;
 }
@@ -12971,7 +12971,7 @@ interface MSMediaKeySession extends EventTarget {
   close(): void;
   update(key: Uint8Array): void;
 }
-declare var MSMediaKeySession: {
+declare let MSMediaKeySession: {
   prototype: MSMediaKeySession;
   new(): MSMediaKeySession;
 }
@@ -12979,7 +12979,7 @@ declare var MSMediaKeySession: {
 interface UnviewableContentIdentifiedEvent extends NavigationEvent {
   referrer: string;
 }
-declare var UnviewableContentIdentifiedEvent: {
+declare let UnviewableContentIdentifiedEvent: {
   prototype: UnviewableContentIdentifiedEvent;
   new(): UnviewableContentIdentifiedEvent;
 }
@@ -13001,21 +13001,21 @@ interface CryptoOperation extends EventTarget {
   addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
   addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
 }
-declare var CryptoOperation: {
+declare let CryptoOperation: {
   prototype: CryptoOperation;
   new(): CryptoOperation;
 }
 
 interface WebGLTexture extends WebGLObject {
 }
-declare var WebGLTexture: {
+declare let WebGLTexture: {
   prototype: WebGLTexture;
   new(): WebGLTexture;
 }
 
 interface OES_texture_float {
 }
-declare var OES_texture_float: {
+declare let OES_texture_float: {
   prototype: OES_texture_float;
   new(): OES_texture_float;
 }
@@ -13023,21 +13023,21 @@ declare var OES_texture_float: {
 interface WebGLContextEvent extends Event {
   statusMessage: string;
 }
-declare var WebGLContextEvent: {
+declare let WebGLContextEvent: {
   prototype: WebGLContextEvent;
   new(): WebGLContextEvent;
 }
 
 interface WebGLRenderbuffer extends WebGLObject {
 }
-declare var WebGLRenderbuffer: {
+declare let WebGLRenderbuffer: {
   prototype: WebGLRenderbuffer;
   new(): WebGLRenderbuffer;
 }
 
 interface WebGLUniformLocation {
 }
-declare var WebGLUniformLocation: {
+declare let WebGLUniformLocation: {
   prototype: WebGLUniformLocation;
   new(): WebGLUniformLocation;
 }
@@ -13047,7 +13047,7 @@ interface WebGLActiveInfo {
   type: number;
   size: number;
 }
-declare var WebGLActiveInfo: {
+declare let WebGLActiveInfo: {
   prototype: WebGLActiveInfo;
   new(): WebGLActiveInfo;
 }
@@ -13058,7 +13058,7 @@ interface WEBGL_compressed_texture_s3tc {
   COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
   COMPRESSED_RGB_S3TC_DXT1_EXT: number;
 }
-declare var WEBGL_compressed_texture_s3tc: {
+declare let WEBGL_compressed_texture_s3tc: {
   prototype: WEBGL_compressed_texture_s3tc;
   new(): WEBGL_compressed_texture_s3tc;
   COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
@@ -13529,7 +13529,7 @@ interface WebGLRenderingContext {
   LOW_FLOAT: number;
   VERSION: number;
 }
-declare var WebGLRenderingContext: {
+declare let WebGLRenderingContext: {
   prototype: WebGLRenderingContext;
   new(): WebGLRenderingContext;
   DEPTH_FUNC: number;
@@ -13831,7 +13831,7 @@ declare var WebGLRenderingContext: {
 
 interface WebGLProgram extends WebGLObject {
 }
-declare var WebGLProgram: {
+declare let WebGLProgram: {
   prototype: WebGLProgram;
   new(): WebGLProgram;
 }
@@ -13839,7 +13839,7 @@ declare var WebGLProgram: {
 interface OES_standard_derivatives {
   FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
 }
-declare var OES_standard_derivatives: {
+declare let OES_standard_derivatives: {
   prototype: OES_standard_derivatives;
   new(): OES_standard_derivatives;
   FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
@@ -13847,35 +13847,35 @@ declare var OES_standard_derivatives: {
 
 interface WebGLFramebuffer extends WebGLObject {
 }
-declare var WebGLFramebuffer: {
+declare let WebGLFramebuffer: {
   prototype: WebGLFramebuffer;
   new(): WebGLFramebuffer;
 }
 
 interface WebGLShader extends WebGLObject {
 }
-declare var WebGLShader: {
+declare let WebGLShader: {
   prototype: WebGLShader;
   new(): WebGLShader;
 }
 
 interface OES_texture_float_linear {
 }
-declare var OES_texture_float_linear: {
+declare let OES_texture_float_linear: {
   prototype: OES_texture_float_linear;
   new(): OES_texture_float_linear;
 }
 
 interface WebGLObject {
 }
-declare var WebGLObject: {
+declare let WebGLObject: {
   prototype: WebGLObject;
   new(): WebGLObject;
 }
 
 interface WebGLBuffer extends WebGLObject {
 }
-declare var WebGLBuffer: {
+declare let WebGLBuffer: {
   prototype: WebGLBuffer;
   new(): WebGLBuffer;
 }
@@ -13885,7 +13885,7 @@ interface WebGLShaderPrecisionFormat {
   rangeMax: number;
   precision: number;
 }
-declare var WebGLShaderPrecisionFormat: {
+declare let WebGLShaderPrecisionFormat: {
   prototype: WebGLShaderPrecisionFormat;
   new(): WebGLShaderPrecisionFormat;
 }
@@ -13894,129 +13894,129 @@ interface EXT_texture_filter_anisotropic {
   TEXTURE_MAX_ANISOTROPY_EXT: number;
   MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
-declare var EXT_texture_filter_anisotropic: {
+declare let EXT_texture_filter_anisotropic: {
   prototype: EXT_texture_filter_anisotropic;
   new(): EXT_texture_filter_anisotropic;
   TEXTURE_MAX_ANISOTROPY_EXT: number;
   MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
-declare var Option: { new(text?: string, value?: string, defaultSelected?: boolean, selected?:boolean): HTMLOptionElement; };
-declare var Image: { new(width?: number, height?: number): HTMLImageElement; };
-declare var Audio: { new(src?: string): HTMLAudioElement; };
+declare let Option: { new(text?: string, value?: string, defaultSelected?: boolean, selected?:boolean): HTMLOptionElement; };
+declare let Image: { new(width?: number, height?: number): HTMLImageElement; };
+declare let Audio: { new(src?: string): HTMLAudioElement; };
 
-declare var ondragend: (ev: DragEvent) => any;
-declare var onkeydown: (ev: KeyboardEvent) => any;
-declare var ondragover: (ev: DragEvent) => any;
-declare var onkeyup: (ev: KeyboardEvent) => any;
-declare var onreset: (ev: Event) => any;
-declare var onmouseup: (ev: MouseEvent) => any;
-declare var ondragstart: (ev: DragEvent) => any;
-declare var ondrag: (ev: DragEvent) => any;
-declare var screenX: number;
-declare var onmouseover: (ev: MouseEvent) => any;
-declare var ondragleave: (ev: DragEvent) => any;
-declare var history: History;
-declare var pageXOffset: number;
-declare var name: string;
-declare var onafterprint: (ev: Event) => any;
-declare var onpause: (ev: Event) => any;
-declare var onbeforeprint: (ev: Event) => any;
-declare var top: Window;
-declare var onmousedown: (ev: MouseEvent) => any;
-declare var onseeked: (ev: Event) => any;
-declare var opener: Window;
-declare var onclick: (ev: MouseEvent) => any;
-declare var innerHeight: number;
-declare var onwaiting: (ev: Event) => any;
-declare var ononline: (ev: Event) => any;
-declare var ondurationchange: (ev: Event) => any;
-declare var frames: Window;
-declare var onblur: (ev: FocusEvent) => any;
-declare var onemptied: (ev: Event) => any;
-declare var onseeking: (ev: Event) => any;
-declare var oncanplay: (ev: Event) => any;
-declare var outerWidth: number;
-declare var onstalled: (ev: Event) => any;
-declare var onmousemove: (ev: MouseEvent) => any;
-declare var innerWidth: number;
-declare var onoffline: (ev: Event) => any;
-declare var length: number;
-declare var screen: Screen;
-declare var onbeforeunload: (ev: BeforeUnloadEvent) => any;
-declare var onratechange: (ev: Event) => any;
-declare var onstorage: (ev: StorageEvent) => any;
-declare var onloadstart: (ev: Event) => any;
-declare var ondragenter: (ev: DragEvent) => any;
-declare var onsubmit: (ev: Event) => any;
-declare var self: Window;
-declare var document: Document;
-declare var onprogress: (ev: ProgressEvent) => any;
-declare var ondblclick: (ev: MouseEvent) => any;
-declare var pageYOffset: number;
-declare var oncontextmenu: (ev: MouseEvent) => any;
-declare var onchange: (ev: Event) => any;
-declare var onloadedmetadata: (ev: Event) => any;
-declare var onplay: (ev: Event) => any;
-declare var onerror: ErrorEventHandler;
-declare var onplaying: (ev: Event) => any;
-declare var parent: Window;
-declare var location: Location;
-declare var oncanplaythrough: (ev: Event) => any;
-declare var onabort: (ev: UIEvent) => any;
-declare var onreadystatechange: (ev: Event) => any;
-declare var outerHeight: number;
-declare var onkeypress: (ev: KeyboardEvent) => any;
-declare var frameElement: Element;
-declare var onloadeddata: (ev: Event) => any;
-declare var onsuspend: (ev: Event) => any;
-declare var window: Window;
-declare var onfocus: (ev: FocusEvent) => any;
-declare var onmessage: (ev: MessageEvent) => any;
-declare var ontimeupdate: (ev: Event) => any;
-declare var onresize: (ev: UIEvent) => any;
-declare var onselect: (ev: UIEvent) => any;
-declare var navigator: Navigator;
-declare var styleMedia: StyleMedia;
-declare var ondrop: (ev: DragEvent) => any;
-declare var onmouseout: (ev: MouseEvent) => any;
-declare var onended: (ev: Event) => any;
-declare var onhashchange: (ev: Event) => any;
-declare var onunload: (ev: Event) => any;
-declare var onscroll: (ev: UIEvent) => any;
-declare var screenY: number;
-declare var onmousewheel: (ev: MouseWheelEvent) => any;
-declare var onload: (ev: Event) => any;
-declare var onvolumechange: (ev: Event) => any;
-declare var oninput: (ev: Event) => any;
-declare var performance: Performance;
-declare var onmspointerdown: (ev: any) => any;
-declare var animationStartTime: number;
-declare var onmsgesturedoubletap: (ev: any) => any;
-declare var onmspointerhover: (ev: any) => any;
-declare var onmsgesturehold: (ev: any) => any;
-declare var onmspointermove: (ev: any) => any;
-declare var onmsgesturechange: (ev: any) => any;
-declare var onmsgesturestart: (ev: any) => any;
-declare var onmspointercancel: (ev: any) => any;
-declare var onmsgestureend: (ev: any) => any;
-declare var onmsgesturetap: (ev: any) => any;
-declare var onmspointerout: (ev: any) => any;
-declare var msAnimationStartTime: number;
-declare var applicationCache: ApplicationCache;
-declare var onmsinertiastart: (ev: any) => any;
-declare var onmspointerover: (ev: any) => any;
-declare var onpopstate: (ev: PopStateEvent) => any;
-declare var onmspointerup: (ev: any) => any;
-declare var onpageshow: (ev: PageTransitionEvent) => any;
-declare var ondevicemotion: (ev: DeviceMotionEvent) => any;
-declare var devicePixelRatio: number;
-declare var msCrypto: Crypto;
-declare var ondeviceorientation: (ev: DeviceOrientationEvent) => any;
-declare var doNotTrack: string;
-declare var onmspointerenter: (ev: any) => any;
-declare var onpagehide: (ev: PageTransitionEvent) => any;
-declare var onmspointerleave: (ev: any) => any;
+declare let ondragend: (ev: DragEvent) => any;
+declare let onkeydown: (ev: KeyboardEvent) => any;
+declare let ondragover: (ev: DragEvent) => any;
+declare let onkeyup: (ev: KeyboardEvent) => any;
+declare let onreset: (ev: Event) => any;
+declare let onmouseup: (ev: MouseEvent) => any;
+declare let ondragstart: (ev: DragEvent) => any;
+declare let ondrag: (ev: DragEvent) => any;
+declare let screenX: number;
+declare let onmouseover: (ev: MouseEvent) => any;
+declare let ondragleave: (ev: DragEvent) => any;
+declare let history: History;
+declare let pageXOffset: number;
+declare let name: string;
+declare let onafterprint: (ev: Event) => any;
+declare let onpause: (ev: Event) => any;
+declare let onbeforeprint: (ev: Event) => any;
+declare let top: Window;
+declare let onmousedown: (ev: MouseEvent) => any;
+declare let onseeked: (ev: Event) => any;
+declare let opener: Window;
+declare let onclick: (ev: MouseEvent) => any;
+declare let innerHeight: number;
+declare let onwaiting: (ev: Event) => any;
+declare let ononline: (ev: Event) => any;
+declare let ondurationchange: (ev: Event) => any;
+declare let frames: Window;
+declare let onblur: (ev: FocusEvent) => any;
+declare let onemptied: (ev: Event) => any;
+declare let onseeking: (ev: Event) => any;
+declare let oncanplay: (ev: Event) => any;
+declare let outerWidth: number;
+declare let onstalled: (ev: Event) => any;
+declare let onmousemove: (ev: MouseEvent) => any;
+declare let innerWidth: number;
+declare let onoffline: (ev: Event) => any;
+declare let length: number;
+declare let screen: Screen;
+declare let onbeforeunload: (ev: BeforeUnloadEvent) => any;
+declare let onratechange: (ev: Event) => any;
+declare let onstorage: (ev: StorageEvent) => any;
+declare let onloadstart: (ev: Event) => any;
+declare let ondragenter: (ev: DragEvent) => any;
+declare let onsubmit: (ev: Event) => any;
+declare let self: Window;
+declare let document: Document;
+declare let onprogress: (ev: ProgressEvent) => any;
+declare let ondblclick: (ev: MouseEvent) => any;
+declare let pageYOffset: number;
+declare let oncontextmenu: (ev: MouseEvent) => any;
+declare let onchange: (ev: Event) => any;
+declare let onloadedmetadata: (ev: Event) => any;
+declare let onplay: (ev: Event) => any;
+declare let onerror: ErrorEventHandler;
+declare let onplaying: (ev: Event) => any;
+declare let parent: Window;
+declare let location: Location;
+declare let oncanplaythrough: (ev: Event) => any;
+declare let onabort: (ev: UIEvent) => any;
+declare let onreadystatechange: (ev: Event) => any;
+declare let outerHeight: number;
+declare let onkeypress: (ev: KeyboardEvent) => any;
+declare let frameElement: Element;
+declare let onloadeddata: (ev: Event) => any;
+declare let onsuspend: (ev: Event) => any;
+declare let window: Window;
+declare let onfocus: (ev: FocusEvent) => any;
+declare let onmessage: (ev: MessageEvent) => any;
+declare let ontimeupdate: (ev: Event) => any;
+declare let onresize: (ev: UIEvent) => any;
+declare let onselect: (ev: UIEvent) => any;
+declare let navigator: Navigator;
+declare let styleMedia: StyleMedia;
+declare let ondrop: (ev: DragEvent) => any;
+declare let onmouseout: (ev: MouseEvent) => any;
+declare let onended: (ev: Event) => any;
+declare let onhashchange: (ev: Event) => any;
+declare let onunload: (ev: Event) => any;
+declare let onscroll: (ev: UIEvent) => any;
+declare let screenY: number;
+declare let onmousewheel: (ev: MouseWheelEvent) => any;
+declare let onload: (ev: Event) => any;
+declare let onvolumechange: (ev: Event) => any;
+declare let oninput: (ev: Event) => any;
+declare let performance: Performance;
+declare let onmspointerdown: (ev: any) => any;
+declare let animationStartTime: number;
+declare let onmsgesturedoubletap: (ev: any) => any;
+declare let onmspointerhover: (ev: any) => any;
+declare let onmsgesturehold: (ev: any) => any;
+declare let onmspointermove: (ev: any) => any;
+declare let onmsgesturechange: (ev: any) => any;
+declare let onmsgesturestart: (ev: any) => any;
+declare let onmspointercancel: (ev: any) => any;
+declare let onmsgestureend: (ev: any) => any;
+declare let onmsgesturetap: (ev: any) => any;
+declare let onmspointerout: (ev: any) => any;
+declare let msAnimationStartTime: number;
+declare let applicationCache: ApplicationCache;
+declare let onmsinertiastart: (ev: any) => any;
+declare let onmspointerover: (ev: any) => any;
+declare let onpopstate: (ev: PopStateEvent) => any;
+declare let onmspointerup: (ev: any) => any;
+declare let onpageshow: (ev: PageTransitionEvent) => any;
+declare let ondevicemotion: (ev: DeviceMotionEvent) => any;
+declare let devicePixelRatio: number;
+declare let msCrypto: Crypto;
+declare let ondeviceorientation: (ev: DeviceOrientationEvent) => any;
+declare let doNotTrack: string;
+declare let onmspointerenter: (ev: any) => any;
+declare let onpagehide: (ev: PageTransitionEvent) => any;
+declare let onmspointerleave: (ev: any) => any;
 declare function alert(message?: any): void;
 declare function scroll(x?: number, y?: number): void;
 declare function focus(): void;
@@ -14044,23 +14044,23 @@ declare function removeEventListener(type: string, listener: EventListener, useC
 declare function dispatchEvent(evt: Event): boolean;
 declare function attachEvent(event: string, listener: EventListener): boolean;
 declare function detachEvent(event: string, listener: EventListener): void;
-declare var localStorage: Storage;
-declare var status: string;
-declare var onmouseleave: (ev: MouseEvent) => any;
-declare var screenLeft: number;
-declare var offscreenBuffering: any;
-declare var maxConnectionsPerServer: number;
-declare var onmouseenter: (ev: MouseEvent) => any;
-declare var clipboardData: DataTransfer;
-declare var defaultStatus: string;
-declare var clientInformation: Navigator;
-declare var closed: boolean;
-declare var onhelp: (ev: Event) => any;
-declare var external: External;
-declare var event: MSEventObj;
-declare var onfocusout: (ev: FocusEvent) => any;
-declare var screenTop: number;
-declare var onfocusin: (ev: FocusEvent) => any;
+declare let localStorage: Storage;
+declare let status: string;
+declare let onmouseleave: (ev: MouseEvent) => any;
+declare let screenLeft: number;
+declare let offscreenBuffering: any;
+declare let maxConnectionsPerServer: number;
+declare let onmouseenter: (ev: MouseEvent) => any;
+declare let clipboardData: DataTransfer;
+declare let defaultStatus: string;
+declare let clientInformation: Navigator;
+declare let closed: boolean;
+declare let onhelp: (ev: Event) => any;
+declare let external: External;
+declare let event: MSEventObj;
+declare let onfocusout: (ev: FocusEvent) => any;
+declare let screenTop: number;
+declare let onfocusin: (ev: FocusEvent) => any;
 declare function showModelessDialog(url?: string, argument?: any, options?: any): Window;
 declare function navigate(url: string): void;
 declare function resizeBy(x?: number, y?: number): void;
@@ -14075,7 +14075,7 @@ declare function moveBy(x?: number, y?: number): void;
 declare function showHelp(url: string, helpArg?: any, features?: string): void;
 declare function captureEvents(): void;
 declare function releaseEvents(): void;
-declare var sessionStorage: Storage;
+declare let sessionStorage: Storage;
 declare function clearTimeout(handle: number): void;
 declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 declare function clearInterval(handle: number): void;
@@ -14086,17 +14086,17 @@ declare function msClearImmediate(handle: number): void;
 declare function setImmediate(expression: any, ...args: any[]): number;
 declare function btoa(rawString: string): string;
 declare function atob(encodedString: string): string;
-declare var msIndexedDB: IDBFactory;
-declare var indexedDB: IDBFactory;
-declare var console: Console;
-declare var onpointerenter: (ev: PointerEvent) => any;
-declare var onpointerout: (ev: PointerEvent) => any;
-declare var onpointerdown: (ev: PointerEvent) => any;
-declare var onpointerup: (ev: PointerEvent) => any;
-declare var onpointercancel: (ev: PointerEvent) => any;
-declare var onpointerover: (ev: PointerEvent) => any;
-declare var onpointermove: (ev: PointerEvent) => any;
-declare var onpointerleave: (ev: PointerEvent) => any;
+declare let msIndexedDB: IDBFactory;
+declare let indexedDB: IDBFactory;
+declare let console: Console;
+declare let onpointerenter: (ev: PointerEvent) => any;
+declare let onpointerout: (ev: PointerEvent) => any;
+declare let onpointerdown: (ev: PointerEvent) => any;
+declare let onpointerup: (ev: PointerEvent) => any;
+declare let onpointercancel: (ev: PointerEvent) => any;
+declare let onpointerover: (ev: PointerEvent) => any;
+declare let onpointermove: (ev: PointerEvent) => any;
+declare let onpointerleave: (ev: PointerEvent) => any;
 declare function addEventListener(type: "mouseleave", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "mouseenter", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "help", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -14204,7 +14204,7 @@ declare function importScripts(...urls: string[]): void;
 /// Windows Script Host APIS
 /////////////////////////////
 
-declare var ActiveXObject: { new (s: string): any; };
+declare let ActiveXObject: { new (s: string): any; };
 
 interface ITextWriter {
   Write(s: string): void;
@@ -14212,7 +14212,7 @@ interface ITextWriter {
   Close(): void;
 }
 
-declare var WScript: {
+declare let WScript: {
   Echo(s: any): void;
   StdErr: ITextWriter;
   StdOut: ITextWriter;

@@ -39,7 +39,7 @@ module Shumway.SWF.Parser {
     FORMAT_24BPP        = 5
   }
 
-  /** @const */ var FACTOR_5BBP = 255 / 31;
+  /** @const */ let FACTOR_5BBP = 255 / 31;
 
   /*
    * Returns a Uint8Array of ARGB values. The source image is color mapped meaning
@@ -58,45 +58,45 @@ module Shumway.SWF.Parser {
    * is aligned.
    */
   function parseColorMapped(tag: BitmapTag): Uint8Array {
-    var width = tag.width, height = tag.height;
-    var hasAlpha = tag.hasAlpha;
+    let width = tag.width, height = tag.height;
+    let hasAlpha = tag.hasAlpha;
 
-    var padding = roundToMultipleOfFour(width) - width;
-    var colorTableLength = tag.colorTableSize + 1;
-    var colorTableEntrySize = hasAlpha ? 4 : 3;
-    var colorTableSize = roundToMultipleOfFour(colorTableLength * colorTableEntrySize);
+    let padding = roundToMultipleOfFour(width) - width;
+    let colorTableLength = tag.colorTableSize + 1;
+    let colorTableEntrySize = hasAlpha ? 4 : 3;
+    let colorTableSize = roundToMultipleOfFour(colorTableLength * colorTableEntrySize);
 
-    var dataSize = colorTableSize + ((width + padding) * height);
+    let dataSize = colorTableSize + ((width + padding) * height);
 
-    var bytes: Uint8Array = Inflate.inflate(tag.bmpData, dataSize, true);
+    let bytes: Uint8Array = Inflate.inflate(tag.bmpData, dataSize, true);
 
-    var view = new Uint32Array(width * height);
+    let view = new Uint32Array(width * height);
 
     // TODO: Figure out why this fails.
     // Make sure we've deflated enough bytes.
     // stream.ensure(dataSize);
 
-    var p = colorTableSize, i = 0, offset = 0;
+    let p = colorTableSize, i = 0, offset = 0;
     if (hasAlpha) {
-      for (var y = 0; y < height; y++) {
-        for (var x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
           offset = bytes[p++] << 2;
-          var a = bytes[offset + 3]; // A
-          var r = bytes[offset + 0]; // R
-          var g = bytes[offset + 1]; // G
-          var b = bytes[offset + 2]; // B
+          let a = bytes[offset + 3]; // A
+          let r = bytes[offset + 0]; // R
+          let g = bytes[offset + 1]; // G
+          let b = bytes[offset + 2]; // B
           view[i++] = b << 24 | g << 16 | r << 8 | a;
         }
         p += padding;
       }
     } else {
-      for (var y = 0; y < height; y++) {
-        for (var x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
           offset = bytes[p++] * colorTableEntrySize;
-          var a = 0xff; // A
-          var r = bytes[offset + 0]; // R
-          var g = bytes[offset + 1]; // G
-          var b = bytes[offset + 2]; // B
+          let a = 0xff; // A
+          let r = bytes[offset + 0]; // R
+          let g = bytes[offset + 1]; // G
+          let b = bytes[offset + 2]; // B
           view[i++] = b << 24 | g << 16 | r << 8 | a;
         }
         p += padding;
@@ -112,25 +112,25 @@ module Shumway.SWF.Parser {
    * so there's not much to do unless there's no alpha in which case we expand it here.
    */
   function parse24BPP(tag: BitmapTag): Uint8Array {
-    var width = tag.width, height = tag.height;
-    var hasAlpha = tag.hasAlpha;
+    let width = tag.width, height = tag.height;
+    let hasAlpha = tag.hasAlpha;
 
     // Even without alpha, 24BPP is stored as 4 bytes, probably for alignment reasons.
-    var dataSize = height * width * 4;
+    let dataSize = height * width * 4;
 
-    var bytes: Uint8Array = Inflate.inflate(tag.bmpData, dataSize, true);
+    let bytes: Uint8Array = Inflate.inflate(tag.bmpData, dataSize, true);
     if (hasAlpha) {
       return bytes;
     }
-    var view = new Uint32Array(width * height);
-    var length = width * height, p = 0;
+    let view = new Uint32Array(width * height);
+    let length = width * height, p = 0;
     // TODO: Looks like we can probably get away with just setting alpha to 0xff instead of
     // reading the entire buffer.
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       p ++; // Reserved, always zero.
-      var r = bytes[p ++];
-      var g = bytes[p ++];
-      var b = bytes[p ++];
+      let r = bytes[p ++];
+      let g = bytes[p ++];
+      let b = bytes[p ++];
       view[i] = b << 24 | g << 16 | r << 8 | 0xff;
     }
     release || assert (p === dataSize, "We should be at the end of the data buffer now.");
@@ -141,14 +141,14 @@ module Shumway.SWF.Parser {
     release || notImplemented("parse15BPP");
     /*
       case FORMAT_15BPP:
-        var colorType = 0x02;
-        var bytesPerLine = ((width * 2) + 3) & ~3;
-        var stream = createInflatedStream(bmpData, bytesPerLine * height);
+        let colorType = 0x02;
+        let bytesPerLine = ((width * 2) + 3) & ~3;
+        let stream = createInflatedStream(bmpData, bytesPerLine * height);
 
-        for (var y = 0, i = 0; y < height; ++y) {
+        for (let y = 0, i = 0; y < height; ++y) {
           stream.ensure(bytesPerLine);
-          for (var x = 0; x < width; ++x, i += 4) {
-            var word = stream.readUi16();
+          for (let x = 0; x < width; ++x, i += 4) {
+            let word = stream.readUi16();
             // Extracting RGB color components and changing values range
             // from 0..31 to 0..255.
             data[i] = 0 | (FACTOR_5BBP * ((word >> 10) & 0x1f));
@@ -165,8 +165,8 @@ module Shumway.SWF.Parser {
 
   export function defineBitmap(tag: BitmapTag): {definition: ImageDefinition; type: string} {
     enterTimeline("defineBitmap");
-    var data: Uint32Array;
-    var type = ImageType.None;
+    let data: Uint32Array;
+    let type = ImageType.None;
     switch (tag.format) {
       case BitmapFormat.FORMAT_COLORMAPPED:
         data = parseColorMapped(tag);

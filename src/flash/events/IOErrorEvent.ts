@@ -33,7 +33,7 @@ module Shumway.AVMX.AS.flash.events {
     static VERIFY_ERROR: string = "verifyError";
 
     clone(): Event {
-      var event = new this.sec.flash.events.IOErrorEvent(this.type, this.bubbles,
+      let event = new this.sec.flash.events.IOErrorEvent(this.type, this.bubbles,
                                                                     this.cancelable, this.text,
                                                                     this.errorID);
       //this.copyNativeData(event);

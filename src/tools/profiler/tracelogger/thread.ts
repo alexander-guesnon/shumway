@@ -54,17 +54,17 @@ module Shumway.Tools.Profiler.TraceLogger {
     }
 
     private _walkTree(id: number) {
-      var data = this._data;
-      var buffer = this._buffer;
+      let data = this._data;
+      let buffer = this._buffer;
       do {
-        var index = id * Thread.ITEM_SIZE;
-        var start = data.getUint32(index + Offsets.START_HI, false) * 4294967295 + data.getUint32(index + Offsets.START_LO, false);
-        var stop = data.getUint32(index + Offsets.STOP_HI, false) * 4294967295 + data.getUint32(index + Offsets.STOP_LO, false);
-        var textId = data.getUint32(index + Offsets.TEXTID, false);
-        var nextId = data.getUint32(index + Offsets.NEXTID, false);
-        var hasChildren = ((textId & 1) === 1);
+        let index = id * Thread.ITEM_SIZE;
+        let start = data.getUint32(index + Offsets.START_HI, false) * 4294967295 + data.getUint32(index + Offsets.START_LO, false);
+        let stop = data.getUint32(index + Offsets.STOP_HI, false) * 4294967295 + data.getUint32(index + Offsets.STOP_LO, false);
+        let textId = data.getUint32(index + Offsets.TEXTID, false);
+        let nextId = data.getUint32(index + Offsets.NEXTID, false);
+        let hasChildren = ((textId & 1) === 1);
         textId >>>= 1;
-        var text = this._text[textId];
+        let text = this._text[textId];
         buffer.enter(text, null, start / 1000000);
         if (hasChildren) {
           this._walkTree(id + 1);

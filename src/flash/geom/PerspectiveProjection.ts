@@ -42,7 +42,7 @@ module Shumway.AVMX.AS.flash.geom {
 
     static FromDisplayObject(displayObject: flash.display.DisplayObject) {
       release || Debug.assert(displayObject);
-      var projection: PerspectiveProjection = this.axConstruct();
+      let projection: PerspectiveProjection = this.axConstruct();
       projection._displayObject = displayObject;
       return projection;
     }
@@ -69,8 +69,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     get projectionCenter(): flash.geom.Point {
       release || somewhatImplemented("public flash.geom.PerspectiveProjection::get projectionCenter");
-      var centerX: number;
-      var centerY: number;
+      let centerX: number;
+      let centerY: number;
       if (this._displayObject) {
         centerX = this._displayObject._perspectiveProjectionCenterX;
         centerY = this._displayObject._perspectiveProjectionCenterY;
@@ -92,8 +92,8 @@ module Shumway.AVMX.AS.flash.geom {
     }
     get focalLength(): number {
       release || somewhatImplemented("public flash.geom.PerspectiveProjection::get focalLength");
-      var fov: number;
-      var centerX: number;
+      let fov: number;
+      let centerX: number;
 
       if (this._displayObject) {
         fov = this._displayObject._perspectiveProjectionFOV;
@@ -107,10 +107,10 @@ module Shumway.AVMX.AS.flash.geom {
     set focalLength(value: number) {
       value = +value;
       release || somewhatImplemented("public flash.geom.PerspectiveProjection::set focalLength");
-      var centerX = this._displayObject ?
+      let centerX = this._displayObject ?
                     this._displayObject._perspectiveProjectionCenterX :
                     this._centerX;
-      var fov = 2 * Math.atan(centerX / value);
+      let fov = 2 * Math.atan(centerX / value);
       if (this._displayObject) {
         this._displayObject._perspectiveProjectionFOV = fov;
       } else {
@@ -123,7 +123,7 @@ module Shumway.AVMX.AS.flash.geom {
     }
     
     clone(): PerspectiveProjection {
-      var clone: PerspectiveProjection = Object.create(this.axClass.tPrototype);
+      let clone: PerspectiveProjection = Object.create(this.axClass.tPrototype);
       clone._fieldOfView = this._fieldOfView;
       clone._centerX = this._centerX;
       clone._centerY = this._centerY;

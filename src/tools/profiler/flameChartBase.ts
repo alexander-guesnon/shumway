@@ -58,9 +58,9 @@ module Shumway.Tools.Profiler {
       this._canvas = document.createElement("canvas");
       this._context = this._canvas.getContext("2d");
       this._mouseController = new MouseController(this, this._canvas);
-      var container = controller.container;
+      let container = controller.container;
       container.appendChild(this._canvas);
-      var rect = container.getBoundingClientRect();
+      let rect = container.getBoundingClientRect();
       this.setSize(rect.width);
     }
 
@@ -102,8 +102,8 @@ module Shumway.Tools.Profiler {
     }
 
     _resetCanvas() {
-      var ratio = window.devicePixelRatio;
-      var canvas = this._canvas;
+      let ratio = window.devicePixelRatio;
+      let canvas = this._canvas;
       canvas.width = this._width * ratio;
       canvas.height = this._height * ratio;
       canvas.style.width = this._width + "px";
@@ -113,7 +113,7 @@ module Shumway.Tools.Profiler {
     draw() {}
 
     _almostEq(a: number, b: number, precision: number = 10): boolean {
-      var pow10 = Math.pow(10, precision);
+      let pow10 = Math.pow(10, precision);
       return Math.abs(a - b) < (1 / pow10);
     }
 
@@ -131,10 +131,10 @@ module Shumway.Tools.Profiler {
     _toTime(px: number): number { return 0; }
 
     onMouseWheel(x: number, y: number, delta: number) {
-      var time = this._toTime(x);
-      var windowStart = this._windowStart;
-      var windowEnd = this._windowEnd;
-      var windowLen = windowEnd - windowStart;
+      let time = this._toTime(x);
+      let windowStart = this._windowStart;
+      let windowEnd = this._windowEnd;
+      let windowLen = windowEnd - windowStart;
       /*
        * Find maximum allowed delta
        * (windowEnd + (windowEnd - time) * delta) - (windowStart + (windowStart - time) * delta) = LEN
@@ -144,9 +144,9 @@ module Shumway.Tools.Profiler {
        * (windowEnd - windowStart) * delta = LEN - (windowEnd - windowStart)
        * delta = (LEN - (windowEnd - windowStart)) / (windowEnd - windowStart)
        */
-      var maxDelta = Math.max((FlameChartBase.MIN_WINDOW_LEN - windowLen) / windowLen, delta);
-      var start = windowStart + (windowStart - time) * maxDelta;
-      var end = windowEnd + (windowEnd - time) * maxDelta;
+      let maxDelta = Math.max((FlameChartBase.MIN_WINDOW_LEN - windowLen) / windowLen, delta);
+      let start = windowStart + (windowStart - time) * maxDelta;
+      let end = windowEnd + (windowEnd - time) * maxDelta;
       this._controller.setWindow(start, end);
       this.onHoverEnd();
     }

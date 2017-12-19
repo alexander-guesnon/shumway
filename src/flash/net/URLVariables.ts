@@ -17,8 +17,8 @@
 module Shumway.AVMX.AS.flash.net {
   import axCoerceString = Shumway.AVMX.axCoerceString;
 
-  declare var escape;
-  declare var unescape;
+  declare let escape;
+  declare let unescape;
 
   export class URLVariables extends ASObject {
     
@@ -36,10 +36,10 @@ module Shumway.AVMX.AS.flash.net {
 
     decode(source: string): void {
       source = axCoerceString(source);
-      var variables = source.split('&');
-      for (var i = 0; i < variables.length; i++) {
-        var p = variables[i];
-        var j = p.indexOf('=');
+      let variables = source.split('&');
+      for (let i = 0; i < variables.length; i++) {
+        let p = variables[i];
+        let j = p.indexOf('=');
         if (j < 0) {
           if (this._ignoreDecodingErrors) {
             j = p.length;
@@ -47,9 +47,9 @@ module Shumway.AVMX.AS.flash.net {
             this.sec.throwError('Error', Errors.DecodeParamError);
           }
         }
-        var name = unescape(p.substring(0, j).split('+').join(' '));
-        var value = unescape(p.substring(j + 1).split('+').join(' '));
-        var currentValue = this.axGetPublicProperty(name);
+        let name = unescape(p.substring(0, j).split('+').join(' '));
+        let value = unescape(p.substring(j + 1).split('+').join(' '));
+        let currentValue = this.axGetPublicProperty(name);
         if (typeof currentValue === 'undefined') {
           this.axSetPublicProperty(name, value);
         } else if (Array.isArray(currentValue)) {
@@ -61,14 +61,14 @@ module Shumway.AVMX.AS.flash.net {
     }
 
     toString(): string {
-      var pairs = [];
-      var keys = this.axGetEnumerableKeys();
-      for (var i = 0; i < keys.length; i++) {
-        var name = keys[i].split(' ').join('+');
-        var value = this.axGetPublicProperty(name);
+      let pairs = [];
+      let keys = this.axGetEnumerableKeys();
+      for (let i = 0; i < keys.length; i++) {
+        let name = keys[i].split(' ').join('+');
+        let value = this.axGetPublicProperty(name);
         name = escape(name).split(' ').join('+');
         if (Array.isArray(value)) {
-          for (var j = 0; j < value.length; j++) {
+          for (let j = 0; j < value.length; j++) {
             pairs.push(name + '=' + escape(value[j]));
           }
         } else {

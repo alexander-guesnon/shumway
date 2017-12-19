@@ -282,7 +282,7 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     clone(): TextFormat {
-      var tf = new this.sec.flash.text.TextFormat(
+      let tf = new this.sec.flash.text.TextFormat(
         this._font,
         this._size,
         this._color,
@@ -449,7 +449,7 @@ module Shumway.AVMX.AS.flash.text {
     }
 
     public transform(formatObject: Style) {
-      var v = formatObject.textAlign;
+      let v = formatObject.textAlign;
       if (v) {
         this.align = v;
       }
@@ -464,13 +464,13 @@ module Shumway.AVMX.AS.flash.text {
         // When parsing colors, whitespace is trimmed away, and all numbers are accepted, as long
         // as they make up the full string after the "#", without any non-numeric pre- or suffix.
         // This implementation is somewhat atrocious, but it should be reasonably fast and works.
-        var colorStr = axCoerceString(v).trim().toLowerCase();
+        let colorStr = axCoerceString(v).trim().toLowerCase();
         if (colorStr[0] === '#') {
-          var numericPart = colorStr.substr(1);
+          let numericPart = colorStr.substr(1);
           while (numericPart[0] === '0') {
             numericPart = numericPart.substr(1);
           }
-          var colorVal = parseInt(numericPart, 16);
+          let colorVal = parseInt(numericPart, 16);
           if (colorVal.toString(16) === numericPart) {
             this.color = colorVal;
           }
@@ -521,7 +521,7 @@ module Shumway.AVMX.AS.flash.text {
       }
       v = formatObject.fontSize;
       if (v) {
-        var size = parseInt(v);
+        let size = parseInt(v);
         if (size > 0) {
           this.size = size;
         }

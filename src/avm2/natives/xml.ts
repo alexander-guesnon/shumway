@@ -83,9 +83,9 @@ module Shumway.AVMX.AS {
         return node._value;
       default:
         if (node.hasSimpleContent()) {
-          var s = '';
-          for (var i = 0; i < node._children.length; i++) {
-            var child = node._children[i];
+          let s = '';
+          for (let i = 0; i < node._children.length; i++) {
+            let child = node._children[i];
             if (child._kind === ASXMLKind.Comment ||
                 child._kind === ASXMLKind.ProcessingInstruction)
             {
@@ -105,14 +105,14 @@ module Shumway.AVMX.AS {
       return s.toXMLString();
     }
     s = axCoerceString(s);
-    var i = 0, ch;
+    let i = 0, ch;
     while (i < s.length && (ch = s[i]) !== '&' && ch !== '<' && ch !== '>') {
       i++;
     }
     if (i >= s.length) {
       return s;
     }
-    var buf = s.substring(0, i);
+    let buf = s.substring(0, i);
     while (i < s.length) {
       ch = s[i++];
       switch (ch) {
@@ -136,7 +136,7 @@ module Shumway.AVMX.AS {
   // 10.2.1.2 EscapeAttributeValue ( s )
   export function escapeAttributeValue(s: string): string {
     s = String(s);
-    var i = 0, ch;
+    let i = 0, ch;
     while (i < s.length && (ch = s[i]) !== '&' && ch !== '<' &&
            ch !== '\"' && ch !== '\n' && ch !== '\r' && ch !== '\t') {
       i++;
@@ -144,7 +144,7 @@ module Shumway.AVMX.AS {
     if (i >= s.length) {
       return s;
     }
-    var buf = s.substring(0, i);
+    let buf = s.substring(0, i);
     while (i < s.length) {
       ch = s[i++];
       switch (ch) {
@@ -175,14 +175,14 @@ module Shumway.AVMX.AS {
   }
 
   function isWhitespace(s: string, index: number): boolean {
-    var ch = s[index];
+    let ch = s[index];
     return ch === ' ' || ch === '\n' || ch === '\r' || ch === '\t';
   }
 
   function isWhitespaceString(s: string): boolean {
     release || assert(typeof s === 'string');
-    for (var i = 0; i < s.length; i++) {
-      var ch = s[i];
+    for (let i = 0; i < s.length; i++) {
+      let ch = s[i];
       if (!(ch === ' ' || ch === '\n' || ch === '\r' || ch === '\t')) {
         return false;
       }
@@ -191,28 +191,28 @@ module Shumway.AVMX.AS {
   }
 
   function trimWhitespaces(s: string): string {
-    var i = 0;
+    let i = 0;
     while (i < s.length && isWhitespace(s, i)) {
       i++;
     }
     if (i >= s.length) {
       return '';
     }
-    var j = s.length - 1;
+    let j = s.length - 1;
     while (isWhitespace(s, j)) {
       j--;
     }
     return i === 0 && j === s.length - 1 ? s : s.substring(i, j + 1);
   }
 
-  var indentStringCache: string[] = [];
+  let indentStringCache: string[] = [];
   function getIndentString(indent: number): string {
     if (indent > 0) {
       if (indentStringCache[indent] !== undefined) {
         return indentStringCache[indent];
       }
-      var s = '';
-      for (var i = 0; i < indent; i++) {
+      let s = '';
+      for (let i = 0; i < indent; i++) {
         s += ' ';
       }
       indentStringCache[indent] = s;
@@ -222,7 +222,7 @@ module Shumway.AVMX.AS {
   }
 
   function generateUniquePrefix(namespaces: Namespace[]) {
-    var i = 1, newPrefix;
+    let i = 1, newPrefix;
     while (true) {
       newPrefix = '_ns' + i;
       if (!namespaces.some(function (ns) { return ns.prefix === newPrefix; })) {
@@ -260,8 +260,8 @@ module Shumway.AVMX.AS {
     }
     // The E4X spec says we must throw a TypeError for non-Boolean, Number, or String objects.
     // Flash thinks otherwise.
-    var x = sec.xmlParser.parseFromString(axCoerceString(v));
-    var length = x._children.length;
+    let x = sec.xmlParser.parseFromString(axCoerceString(v));
+    let length = x._children.length;
     if (length === 0) {
       return createXML(sec, ASXMLKind.Text);
     }
@@ -289,16 +289,16 @@ module Shumway.AVMX.AS {
     }
     // The E4X spec says we must throw a TypeError for non-Boolean, Number, or String objects.
     // Flash thinks otherwise.
-    var defaultNamespace = getDefaultNamespace(targetList.sec);
-    var parentString = '<parent xmlns="' + escapeAttributeValue(defaultNamespace.uri) + '">' +
+    let defaultNamespace = getDefaultNamespace(targetList.sec);
+    let parentString = '<parent xmlns="' + escapeAttributeValue(defaultNamespace.uri) + '">' +
                        value + '</parent>';
-    var x = toXML(parentString, targetList.sec);
-    var children = x._children;
+    let x = toXML(parentString, targetList.sec);
+    let children = x._children;
     if (!children) {
       return;
     }
-    for (var i = 0; i < children.length; i++) {
-      var v = children[i];
+    for (let i = 0; i < children.length; i++) {
+      let v = children[i];
       v._parent = null;
       targetList.append(v);
     }
@@ -309,7 +309,7 @@ module Shumway.AVMX.AS {
     if (mn === undefined) {
       return anyMultiname;
     }
-    var name: string;
+    let name: string;
     // convert argument to a value of type AttributeName or a QName object
     // according to the following:
     if (typeof mn === 'object' && mn !== null) {
@@ -351,7 +351,7 @@ module Shumway.AVMX.AS {
   }
 
   function coerceE4XMultiname(mn: Multiname, sec: AXSecurityDomain) {
-    var out = tmpMultiname;
+    let out = tmpMultiname;
     out.kind = mn.kind;
 
     // Queries of the foo[new QName('bar')] sort create this situation.
@@ -365,11 +365,11 @@ module Shumway.AVMX.AS {
       if (mn.isAnyNamespace()) {
         out.namespaces = mn.namespaces;
       } else {
-        var defaultNS = getDefaultNamespace(sec);
-        var namespaces = mn.namespaces;
-        var containsDefaultNS = false;
-        for (var i = 0; i < namespaces.length; i++) {
-          var ns = namespaces[i];
+        let defaultNS = getDefaultNamespace(sec);
+        let namespaces = mn.namespaces;
+        let containsDefaultNS = false;
+        for (let i = 0; i < namespaces.length; i++) {
+          let ns = namespaces[i];
           if (ns.uri === defaultNS.uri && ns.prefix === defaultNS.prefix &&
               ns.type === defaultNS.type)
           {
@@ -385,7 +385,7 @@ module Shumway.AVMX.AS {
       }
     }
 
-    var name = mn.name;
+    let name = mn.name;
     if (mn.isAnyName() || name === '*' || name === null) {
       out.name = null;
     } else if (name.length > 1 && name[0] === '@') {
@@ -408,7 +408,7 @@ module Shumway.AVMX.AS {
 
   // 12.1 GetDefaultNamespace
   function getDefaultNamespace(sec: AXSecurityDomain): Namespace {
-    var scope = getCurrentScope();
+    let scope = getCurrentScope();
     while (scope) {
       if (scope.defaultNamespace) {
         return scope.defaultNamespace;
@@ -434,8 +434,8 @@ module Shumway.AVMX.AS {
    */
   function GetNamespace(mn: Multiname, inScopeNamespaces: Namespace[]) {
     release || assert(mn.isQName());
-    var uri = mn.uri;
-    for (var i = 0; inScopeNamespaces && i < inScopeNamespaces.length; i++) {
+    let uri = mn.uri;
+    for (let i = 0; inScopeNamespaces && i < inScopeNamespaces.length; i++) {
       if (uri === inScopeNamespaces[i].uri) {
         return inScopeNamespaces[i];
       }
@@ -446,7 +446,7 @@ module Shumway.AVMX.AS {
   // 13.1.2.1 isXMLName ( value )
   export function isXMLName(v, sec: AXSecurityDomain) {
     try {
-      var qn = sec.AXQName.Create(v);
+      let qn = sec.AXQName.Create(v);
     } catch (e) {
       return false;
     }
@@ -454,8 +454,8 @@ module Shumway.AVMX.AS {
     return true;
   }
 
-  var tmpMultiname = new Multiname(null, 0, CONSTANT.QName, [], null);
-  var anyMultiname = new Multiname(null, 0, CONSTANT.QName, [], null);
+  let tmpMultiname = new Multiname(null, 0, CONSTANT.QName, [], null);
+  let anyMultiname = new Multiname(null, 0, CONSTANT.QName, [], null);
   release || Object.seal(anyMultiname);
 
   export const enum XMLParserErrorCode {
@@ -500,7 +500,7 @@ module Shumway.AVMX.AS {
 
     private parseContent(s: string, start: number):
         {name: string; attributes: {name: string; value: string}[]; parsed: number} {
-      var pos = start, name, attributes = [];
+      let pos = start, name, attributes = [];
 
       function skipWs() {
         while (pos < s.length && isWhitespace(s, pos)) {
@@ -516,7 +516,7 @@ module Shumway.AVMX.AS {
       while (pos < s.length && s[pos] !== ">" &&
       s[pos] !== "/" && s[pos] !== "?") {
         skipWs();
-        var attrName = "", attrValue = "";
+        let attrName = "", attrValue = "";
         while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
           attrName += s[pos];
           ++pos;
@@ -527,11 +527,11 @@ module Shumway.AVMX.AS {
         }
         ++pos;
         skipWs();
-        var attrEndChar = s[pos];
+        let attrEndChar = s[pos];
         if (attrEndChar !== "\"" && attrEndChar !== "\'") {
           return null;
         }
-        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
+        let attrEndIndex = s.indexOf(attrEndChar, ++pos);
         if (attrEndIndex < 0) {
           return null;
         }
@@ -545,7 +545,7 @@ module Shumway.AVMX.AS {
 
     private parseProcessingInstruction(s: string, start: number):
         {name: string; value: string; parsed: number} {
-      var pos = start, name, value;
+      let pos = start, name, value;
 
       function skipWs() {
         while (pos < s.length && isWhitespace(s, pos)) {
@@ -558,7 +558,7 @@ module Shumway.AVMX.AS {
       }
       name = s.substring(start, pos);
       skipWs();
-      var attrStart = pos;
+      let attrStart = pos;
       while (pos < s.length && (s[pos] !== "?" || s[pos + 1] != '>')) {
         ++pos;
       }
@@ -567,13 +567,13 @@ module Shumway.AVMX.AS {
     }
 
     parseXml(s: string): void {
-      var i = 0;
+      let i = 0;
       while (i < s.length) {
-        var ch = s[i];
-        var j = i;
+        let ch = s[i];
+        let j = i;
         if (ch === "<") {
           ++j;
-          var ch2 = s[j], q;
+          let ch2 = s[j], q;
           switch (ch2) {
             case "/":
               ++j;
@@ -587,7 +587,7 @@ module Shumway.AVMX.AS {
               break;
             case "?":
               ++j;
-              var pi = this.parseProcessingInstruction(s, j);
+              let pi = this.parseProcessingInstruction(s, j);
               if (s.substring(j + pi.parsed, j + pi.parsed + 2) != "?>") {
                 this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
                 return;
@@ -613,7 +613,7 @@ module Shumway.AVMX.AS {
                 this.onCdata(s.substring(j + 8, q));
                 j = q + 3;
               } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
-                var q2 = s.indexOf("[", j + 8), complexDoctype = false;
+                let q2 = s.indexOf("[", j + 8), complexDoctype = false;
                 q = s.indexOf(">", j + 8);
                 if (q < 0) {
                   this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
@@ -627,7 +627,7 @@ module Shumway.AVMX.AS {
                   }
                   complexDoctype = true;
                 }
-                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
+                let doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
                 this.onDoctype(doctypeContent);
                 // XXX pull entities ?
                 j = q + (complexDoctype ? 2 : 1);
@@ -637,12 +637,12 @@ module Shumway.AVMX.AS {
               }
               break;
             default:
-              var content = this.parseContent(s, j);
+              let content = this.parseContent(s, j);
               if (content === null) {
                 this.onError(XMLParserErrorCode.MalformedElement);
                 return;
               }
-              var isClosed = false;
+              let isClosed = false;
               if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
                 isClosed = true;
               } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
@@ -656,7 +656,7 @@ module Shumway.AVMX.AS {
         } else {
           do {
           } while (j++ < s.length && s[j] !== "<");
-          var text = s.substring(i, j);
+          let text = s.substring(i, j);
           this.onText(this.resolveEntities(text));
         }
         i = j;
@@ -698,8 +698,8 @@ module Shumway.AVMX.AS {
     }
 
     private isWhitespacePreserved(): boolean {
-      var scopes = this.scopes;
-      for (var j = scopes.length - 1; j >= 0; --j) {
+      let scopes = this.scopes;
+      for (let j = scopes.length - 1; j >= 0; --j) {
         if (scopes[j].space === "preserve") {
           return true;
         }
@@ -708,8 +708,8 @@ module Shumway.AVMX.AS {
     }
 
     private lookupDefaultNs(): string {
-      var scopes = this.scopes;
-      for (var j = scopes.length - 1; j >= 0; --j) {
+      let scopes = this.scopes;
+      for (let j = scopes.length - 1; j >= 0; --j) {
         if ('xmlns' in scopes[j]) {
           return scopes[j].xmlns;
         }
@@ -718,8 +718,8 @@ module Shumway.AVMX.AS {
     }
 
     private lookupNs(prefix: string): string {
-      var scopes = this.scopes;
-      for (var j = scopes.length - 1; j >= 0; --j) {
+      let scopes = this.scopes;
+      for (let j = scopes.length - 1; j >= 0; --j) {
         if (prefix in scopes[j].lookup) {
           return scopes[j].lookup[prefix];
         }
@@ -729,11 +729,11 @@ module Shumway.AVMX.AS {
 
     private getName(name: string, resolveDefaultNs: boolean):
         {name: string; localName: string; prefix: string; namespace: string} {
-      var j = name.indexOf(':');
+      let j = name.indexOf(':');
       if (j >= 0) {
-        var prefix = name.substring(0, j);
-        var localName = name.substring(j + 1);
-        var namespace = this.lookupNs(prefix);
+        let prefix = name.substring(0, j);
+        let localName = name.substring(j + 1);
+        let namespace = this.lookupNs(prefix);
         if (namespace === undefined) {
           this.sec.throwError('TypeError', Errors.XMLPrefixNotBound, prefix, localName);
         }
@@ -804,41 +804,41 @@ module Shumway.AVMX.AS {
     }
 
     onBeginElement(name: string, contentAttributes: {name: string; value: string}[], isEmpty: boolean): void {
-      var scopes = this.scopes;
-      var scope = {
+      let scopes = this.scopes;
+      let scope = {
         namespaces: [],
         lookup: Object.create(null),
         inScopes: null
       };
-      for (var q = 0; q < contentAttributes.length; ++q) {
-        var attribute = contentAttributes[q];
-        var attributeName = attribute.name;
+      for (let q = 0; q < contentAttributes.length; ++q) {
+        let attribute = contentAttributes[q];
+        let attributeName = attribute.name;
         if (attributeName.substring(0, 6) === "xmlns:") {
-          var prefix = attributeName.substring(6);
-          var uri = attribute.value;
+          let prefix = attributeName.substring(6);
+          let uri = attribute.value;
           if (this.lookupNs(prefix) !== uri) {
             scope.lookup[prefix] = trimWhitespaces(uri);
-            var ns = internPrefixedNamespace(NamespaceType.Public, uri, prefix);
+            let ns = internPrefixedNamespace(NamespaceType.Public, uri, prefix);
             scope.namespaces.push(ns);
           }
           contentAttributes[q] = null;
         } else if (attributeName === "xmlns") {
-          var uri = attribute.value;
+          let uri = attribute.value;
           if (this.lookupDefaultNs() !== uri) {
             scope["xmlns"] = trimWhitespaces(uri);
-            var ns = internNamespace(NamespaceType.Public, uri);
+            let ns = internNamespace(NamespaceType.Public, uri);
             scope.namespaces.push(ns);
           }
           contentAttributes[q] = null;
         } else if (attributeName.substring(0, 4) === "xml:") {
-          var xmlAttrName = attributeName.substring(4);
+          let xmlAttrName = attributeName.substring(4);
           scope[xmlAttrName] = trimWhitespaces(attribute.value);
         } else {
           // skip ordinary attributes until all xmlns have been handled
         }
       }
       // build list of all namespaces including ancestors'
-      var inScopeNamespaces: Namespace[] = [];
+      let inScopeNamespaces: Namespace[] = [];
       scope.namespaces.forEach(function (ns) {
         if (!ns.prefix || scope.lookup[ns.prefix] === ns.uri) {
           inScopeNamespaces.push(ns);
@@ -853,7 +853,7 @@ module Shumway.AVMX.AS {
       scope.inScopes = inScopeNamespaces;
 
       scopes.push(scope);
-      var attributes = [];
+      let attributes = [];
       for (q = 0; q < contentAttributes.length; ++q) {
         attribute = contentAttributes[q];
         if (attribute) {
@@ -875,19 +875,19 @@ module Shumway.AVMX.AS {
     }
 
     beginElement(name, attrs, namespaces: Namespace[], isEmpty: boolean) {
-      var parent = this.currentElement;
+      let parent = this.currentElement;
       this.elementsStack.push(parent);
       this.currentElement = createXML(this.sec, ASXMLKind.Element, name.namespace,
                                       name.localName, name.prefix);
-      for (var i = 0; i < attrs.length; ++i) {
-        var rawAttr = attrs[i];
-        var attr = createXML(this.sec, ASXMLKind.Attribute, rawAttr.name.namespace,
+      for (let i = 0; i < attrs.length; ++i) {
+        let rawAttr = attrs[i];
+        let attr = createXML(this.sec, ASXMLKind.Attribute, rawAttr.name.namespace,
                              rawAttr.name.localName, rawAttr.name.prefix);
         attr._value = rawAttr.value;
         attr._parent = this.currentElement;
         this.currentElement._attributes.push(attr);
       }
-      for (var i = 0; i < namespaces.length; ++i) {
+      for (let i = 0; i < namespaces.length; ++i) {
         this.currentElement._inScopeNamespaces.push(namespaces[i]);
       }
       parent.insert(parent._children.length, this.currentElement);
@@ -908,13 +908,13 @@ module Shumway.AVMX.AS {
       if (text.length === 0 || isWhitespacePreserve && this.sec.AXXML.ignoreWhitespace) {
         return;
       }
-      var node = createXML(this.sec);
+      let node = createXML(this.sec);
       node._value = text;
       this.currentElement.insert(this.currentElement._children.length, node);
     }
 
     cdata(text) {
-      var node = createXML(this.sec);
+      let node = createXML(this.sec);
       node._value = text;
       this.currentElement.insert(this.currentElement._children.length, node);
     }
@@ -923,7 +923,7 @@ module Shumway.AVMX.AS {
       if (this.sec.AXXML.ignoreComments) {
         return;
       }
-      var node = createXML(this.sec, ASXMLKind.Comment, "", "");
+      let node = createXML(this.sec, ASXMLKind.Comment, "", "");
       node._value = text;
       this.currentElement.insert(this.currentElement._children.length, node);
     }
@@ -932,7 +932,7 @@ module Shumway.AVMX.AS {
       if (this.sec.AXXML.ignoreProcessingInstructions) {
         return;
       }
-      var node = createXML(this.sec, ASXMLKind.ProcessingInstruction, "", name);
+      let node = createXML(this.sec, ASXMLKind.ProcessingInstruction, "", name);
       node._value = value;
       this.currentElement.insert(this.currentElement._children.length, node);
     }
@@ -941,12 +941,12 @@ module Shumway.AVMX.AS {
 
     parseFromString(s, mimeType?) {
       // placeholder
-      var currentElement = this.currentElement = createXML(this.sec, ASXMLKind.Element,
+      let currentElement = this.currentElement = createXML(this.sec, ASXMLKind.Element,
                                                            '', '', '');
       this.elementsStack = [];
 
-      var defaultNs = getDefaultNamespace(this.sec);
-      var scopes: any[] = [{
+      let defaultNs = getDefaultNamespace(this.sec);
+      let scopes: any[] = [{
         namespaces: [],
         lookup: {
           "xmlns": 'http://www.w3.org/2000/xmlns/',
@@ -961,7 +961,7 @@ module Shumway.AVMX.AS {
       this.parseXml(s);
       this.currentElement = null;
       if (this.elementsStack.length > 0) {
-        var nm = this.elementsStack.pop()._name.name;
+        let nm = this.elementsStack.pop()._name.name;
         this.sec.throwError('TypeError', Errors.XMLUnterminatedElementTag, nm, nm);
       }
       this.elementsStack = null;
@@ -973,8 +973,8 @@ module Shumway.AVMX.AS {
     public static instanceConstructor: any = ASNamespace;
     static classInitializer() {
       defineNonEnumerableProperty(this, '$Bglength', 2);
-      var proto: any = this.dPrototype;
-      var asProto: any = ASNamespace.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASNamespace.prototype;
       defineNonEnumerableProperty(proto, '$BgtoString', asProto.toString);
     }
 
@@ -988,8 +988,8 @@ module Shumway.AVMX.AS {
      * Namespace (prefixValue, uriValue)
      */
     public static axApply(self: ASNamespace, args: any[]): ASNamespace {
-      var a = args[0];
-      var b = args[1];
+      let a = args[0];
+      let b = args[1];
       // 1. If (prefixValue is not specified and Type(uriValue) is Object and
       // uriValue.[[Class]] == "Namespace")
       if (args.length === 1 && isObject(a) && a.axClass === this.sec.AXNamespace)
@@ -1010,14 +1010,14 @@ module Shumway.AVMX.AS {
     }
 
     static Create(uriOrPrefix_: any, uri_: any): ASNamespace {
-      var ns: ASNamespace = Object.create(this.sec.AXNamespace.tPrototype);
+      let ns: ASNamespace = Object.create(this.sec.AXNamespace.tPrototype);
       // The initializer relies on arguments.length being correct.
       ns.axInitializer.apply(ns, arguments);
       return ns;
     }
 
     static FromNamespace(ns: Namespace) {
-      var result: ASNamespace = Object.create(this.sec.AXNamespace.tPrototype);
+      let result: ASNamespace = Object.create(this.sec.AXNamespace.tPrototype);
       result._ns = ns;
       return result;
     }
@@ -1036,8 +1036,8 @@ module Shumway.AVMX.AS {
     constructor(uriOrPrefix_?: any, uri_?: any) {
       super();
       // 1. Create a new Namespace object n
-      var uri: string = "";
-      var prefix: string = "";
+      let uri: string = "";
+      let prefix: string = "";
       // 2. If prefixValue is not specified and uriValue is not specified
       if (arguments.length === 0) {
         // a. Let n.prefix be the empty string
@@ -1045,7 +1045,7 @@ module Shumway.AVMX.AS {
       }
       // 3. Else if prefixValue is not specified
       else if (arguments.length === 1) {
-        var uriValue = uriOrPrefix_;
+        let uriValue = uriOrPrefix_;
         if (uriValue instanceof Namespace) {
           this._ns = uriValue;
           return;
@@ -1055,7 +1055,7 @@ module Shumway.AVMX.AS {
           // Non-spec'ed, but very useful:
           // a. If Type(uriValue) is Object and uriValue.[[Class]] == "Namespace"
           if (uriValue.axClass === this.sec.AXNamespace) {
-            var uriValueAsNamespace: ASNamespace = uriValue;
+            let uriValueAsNamespace: ASNamespace = uriValue;
             // i. Let n.prefix = uriValue.prefix
             prefix = uriValueAsNamespace.prefix;
             // ii. Let n.uri = uriValue.uri
@@ -1088,8 +1088,8 @@ module Shumway.AVMX.AS {
       }
       // 4. Else
       else {
-        var prefixValue = uriOrPrefix_;
-        var uriValue = uri_;
+        let prefixValue = uriOrPrefix_;
+        let uriValue = uri_;
         // a. If Type(uriValue) is Object and uriValue.[[Class]] == "QName" and uriValue.uri is not
         // null
         if (isObject(uriValue) && uriValue.axClass === this.sec.AXQName &&
@@ -1167,20 +1167,20 @@ module Shumway.AVMX.AS {
   export class ASQName extends ASObject implements XMLType {
     static classInitializer() {
       defineNonEnumerableProperty(this, '$Bglength', 2);
-      var proto: any = this.dPrototype;
-      var asProto: any = ASQName.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASQName.prototype;
       defineNonEnumerableProperty(proto, '$BgtoString', asProto.ecmaToString);
     }
 
     static Create(nameOrNS_: any, name_?: any, isAttribute?: boolean): ASQName {
-      var name: ASQName = Object.create(this.sec.AXQName.tPrototype);
+      let name: ASQName = Object.create(this.sec.AXQName.tPrototype);
       // The initializer relies on arguments.length being correct.
       name.axInitializer.apply(name, arguments);
       return name;
     }
 
     static FromMultiname(mn: Multiname) {
-      var name: ASQName = Object.create(this.sec.AXQName.tPrototype);
+      let name: ASQName = Object.create(this.sec.AXQName.tPrototype);
       name.name = mn;
       return name;
 
@@ -1196,8 +1196,8 @@ module Shumway.AVMX.AS {
      * QName ( Namespace , Name )
      */
     public static axApply(self: ASNamespace, args: any[]): ASQName {
-      var nameOrNS_ = args[0];
-      var name_ = args[1];
+      let nameOrNS_ = args[0];
+      let name_ = args[1];
       // 1. If Namespace is not specified and Type(Name) is Object and Name.[[Class]] == “QName”
       if (args.length === 1 && nameOrNS_ && nameOrNS_.axClass === this.sec.AXQName) {
         // a. Return Name
@@ -1228,8 +1228,8 @@ module Shumway.AVMX.AS {
     constructor(nameOrNS_?: any, name_?: any) {
       super();
 
-      var name;
-      var namespace;
+      let name;
+      let namespace;
 
       if (arguments.length === 0) {
         name = "";
@@ -1276,8 +1276,8 @@ module Shumway.AVMX.AS {
         }
       }
       // 5. Let q be a new QName with q.localName = Name
-      var localName = name;
-      var ns: Namespace = null;
+      let localName = name;
+      let ns: Namespace = null;
       // 6. If Namespace == null
       if (namespace !== null) {
         // a. Let Namespace be a new Namespace created as if by calling the constructor new
@@ -1312,7 +1312,7 @@ module Shumway.AVMX.AS {
     }
 
     get uri(): string {
-      var namespaces = this.name.namespaces;
+      let namespaces = this.name.namespaces;
       return namespaces.length > 1 ? '' : namespaces[0] ? namespaces[0].uri : null;
     }
 
@@ -1328,7 +1328,7 @@ module Shumway.AVMX.AS {
     }
 
     toString() {
-      var uri = this.uri;
+      let uri = this.uri;
       if (uri === "") {
         return this.name.name;
       }
@@ -1336,9 +1336,9 @@ module Shumway.AVMX.AS {
         return "*::" + this.name.name;
       }
       uri = uri + '';
-      var cc = uri.charCodeAt(uri.length - 1);
+      let cc = uri.charCodeAt(uri.length - 1);
       // strip the version mark, if there is one
-      var base_uri = uri;
+      let base_uri = uri;
       if(cc >= 0xE000 && cc <= 0xF8FF) {
         base_uri = uri.substr(0, uri.length - 1);
       }
@@ -1382,7 +1382,7 @@ module Shumway.AVMX.AS {
     ProcessingInstruction = 5
   }
 
-  var ASXMLKindNames = [null, 'element', 'attribute', 'text', 'comment', 'processing-instruction'];
+  let ASXMLKindNames = [null, 'element', 'attribute', 'text', 'comment', 'processing-instruction'];
 
   export interface XMLType {
     equals(other: any): boolean;
@@ -1393,8 +1393,8 @@ module Shumway.AVMX.AS {
     public static instanceConstructor: any = ASXML;
     static classInitializer() {
       defineNonEnumerableProperty(this, '$Bglength', 1);
-      var proto: any = this.dPrototype;
-      var asProto: any = ASXML.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASXML.prototype;
       addPrototypeFunctionAlias(proto, '$BgvalueOf', asProto.valueOf);
       defineNonEnumerableProperty(proto, '$BghasOwnProperty', asProto.native_hasOwnProperty);
       defineNonEnumerableProperty(proto, '$BgpropertyIsEnumerable',
@@ -1444,7 +1444,7 @@ module Shumway.AVMX.AS {
     }
 
     static Create(value?: any): ASXML {
-      var xml: ASXML = Object.create(this.sec.AXXML.tPrototype);
+      let xml: ASXML = Object.create(this.sec.AXXML.tPrototype);
       xml.axInitializer(value);
       return xml;
     }
@@ -1457,7 +1457,7 @@ module Shumway.AVMX.AS {
 
 
     static native_settings():Object {
-      var settings = Object.create(this.sec.AXObject.tPrototype);
+      let settings = Object.create(this.sec.AXObject.tPrototype);
       settings.$BgignoreComments = this.ignoreComments;
       settings.$BgignoreProcessingInstructions = this.ignoreProcessingInstructions;
       settings.$BgignoreWhitespace = this.ignoreWhitespace;
@@ -1517,7 +1517,7 @@ module Shumway.AVMX.AS {
     _children: ASXML[];
 
     public static axApply(self: ASXML, args: any[]): ASXML {
-      var value = args[0];
+      let value = args[0];
       // 13.5.1 The XMLList Constructor Called as a Function
       if (isNullOrUndefined(value)) {
         value = '';
@@ -1537,7 +1537,7 @@ module Shumway.AVMX.AS {
         this._value = '';
         return;
       }
-      var x = toXML(value, this.sec);
+      let x = toXML(value, this.sec);
       if (isXMLType(value, this.sec)) {
         x = x._deepCopy();
       }
@@ -1546,11 +1546,11 @@ module Shumway.AVMX.AS {
       this._value = x._value;
       this._attributes = x._attributes;
       this._inScopeNamespaces = x._inScopeNamespaces;
-      var children = x._children;
+      let children = x._children;
       this._children = children;
       if (children) {
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
           child._parent = this;
         }
       }
@@ -1569,7 +1569,7 @@ module Shumway.AVMX.AS {
       // Step 3.
       if (other && other.axClass === this.sec.AXXML) {
         // Step 3.a.i.
-        var otherXML = <ASXML>other;
+        let otherXML = <ASXML>other;
         if ((this._kind === ASXMLKind.Text || this._kind === ASXMLKind.Attribute) &&
             otherXML.hasSimpleContent() ||
             (otherXML._kind === ASXMLKind.Text || otherXML._kind === ASXMLKind.Attribute) &&
@@ -1614,7 +1614,7 @@ module Shumway.AVMX.AS {
       if (!V || V.axClass !== this.sec.AXXML) {
         return false;
       }
-      var other = <ASXML>V;
+      let other = <ASXML>V;
       // Step 2.
       if (this._kind !== other._kind) {
         return false;
@@ -1633,22 +1633,22 @@ module Shumway.AVMX.AS {
         return true;
       }
       // Step 5.
-      var attributes = this._attributes;
-      var otherAttributes = other._attributes;
+      let attributes = this._attributes;
+      let otherAttributes = other._attributes;
       if (attributes.length !== otherAttributes.length) {
         return false;
       }
       // Step 6.
-      var children = this._children;
-      var otherChildren = other._children;
+      let children = this._children;
+      let otherChildren = other._children;
       if (children.length !== otherChildren.length) {
         return false;
       }
       // Step 8.
-      attribOuter: for (var i = 0; i < attributes.length; i++) {
-        var attribute = attributes[i];
-        for (var j = 0; j < otherAttributes.length; j++) {
-          var otherAttribute = otherAttributes[j];
+      attribOuter: for (let i = 0; i < attributes.length; i++) {
+        let attribute = attributes[i];
+        for (let j = 0; j < otherAttributes.length; j++) {
+          let otherAttribute = otherAttributes[j];
           if (otherAttribute._name.equalsQName(attribute._name) &&
               otherAttribute._value === attribute._value) {
             continue attribOuter;
@@ -1657,7 +1657,7 @@ module Shumway.AVMX.AS {
         return false;
       }
       // Step 9.
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         if (!children[i].equals(otherChildren[i])) {
           return false;
         }
@@ -1668,8 +1668,8 @@ module Shumway.AVMX.AS {
 
     // 9.1.1.7 [[DeepCopy]] ( )
     _deepCopy(): ASXML {
-      var kind: ASXMLKind = this._kind;
-      var clone = this.sec.AXXML.Create();
+      let kind: ASXMLKind = this._kind;
+      let clone = this.sec.AXXML.Create();
       clone._kind = kind;
       clone._name = this._name;
       switch (kind) {
@@ -1775,7 +1775,7 @@ module Shumway.AVMX.AS {
       if (this === this.axClass.dPrototype) {
         return ASObject.prototype.native_hasOwnProperty.call(this, P);
       }
-      var mn = toXMLName(P, this.sec);
+      let mn = toXMLName(P, this.sec);
       if (this.hasProperty(mn)) {
         return true;
       }
@@ -1823,7 +1823,7 @@ module Shumway.AVMX.AS {
       if (!this || this.axClass !== this.sec.AXXML) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
-      var list = this.sec.AXXMLList.CreateList(this, this._name);
+      let list = this.sec.AXXMLList.CreateList(this, this._name);
       Array.prototype.push.apply(list._children, this._attributes);
       return list;
     }
@@ -1835,14 +1835,14 @@ module Shumway.AVMX.AS {
       }
       // Step 1.
       if (isIndex(propertyName)) {
-        var list = this.sec.AXXMLList.CreateList(null, null);
+        let list = this.sec.AXXMLList.CreateList(null, null);
         if (this._children && propertyName < this._children.length) {
           list.append(this._children[propertyName | 0]);
         }
         return list;
       }
       // Steps 2-3.
-      var mn: Multiname;
+      let mn: Multiname;
       if (propertyName && propertyName.axClass === this.sec.AXQName) {
         mn = (<any>propertyName).name;
       } else {
@@ -1866,7 +1866,7 @@ module Shumway.AVMX.AS {
       if (!this || this.axClass !== this.sec.AXXML) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
-      var xl = this.sec.AXXMLList.CreateList(this, this._name);
+      let xl = this.sec.AXXMLList.CreateList(this, this._name);
       xl._children = this._children.concat();
       return xl;
     }
@@ -1875,7 +1875,7 @@ module Shumway.AVMX.AS {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
       // 13.4.4.9 XML.prototype.comments ( )
-      var xl = this.sec.AXXMLList.CreateList(this, this._name);
+      let xl = this.sec.AXXMLList.CreateList(this, this._name);
       this._children && this._children.forEach(function (v, i) {
         if (v._kind === ASXMLKind.Comment) {
           xl.append(v);
@@ -1901,7 +1901,7 @@ module Shumway.AVMX.AS {
       if (!this || this.axClass !== this.sec.AXXML) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
-      var xl = this.sec.AXXMLList.CreateList(this, this._name);
+      let xl = this.sec.AXXMLList.CreateList(this, this._name);
       return this.descendantsInto(toXMLName(name, this.sec), xl);
     }
     elements(name: any): ASXMLList {
@@ -1951,10 +1951,10 @@ module Shumway.AVMX.AS {
       if (!this || this.axClass !== this.sec.AXXML) {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
-      var namespaces = this._inScopeNamespacesImpl();
-      var result = [];
-      for (var i = 0; i < namespaces.length; i++) {
-        var AXNamespace = this.sec.AXNamespace;
+      let namespaces = this._inScopeNamespacesImpl();
+      let result = [];
+      for (let i = 0; i < namespaces.length; i++) {
+        let AXNamespace = this.sec.AXNamespace;
         result[i] = AXNamespace.FromNamespace(namespaces[i]);
       }
       return this.sec.AXArray.axBox(result);
@@ -1962,16 +1962,16 @@ module Shumway.AVMX.AS {
 
     private _inScopeNamespacesImpl() {
       // Step 1.
-      var y = this;
+      let y = this;
       // Step 2.
-      var inScopeNS: Namespace[] = [];
-      var inScopeNSMap = inScopeNS;
+      let inScopeNS: Namespace[] = [];
+      let inScopeNSMap = inScopeNS;
       // Step 3.
       while (y !== null) {
         // Step 3.a.
-        var namespaces = y._inScopeNamespaces;
-        for (var i = 0; namespaces && i < namespaces.length; i++) {
-          var ns = namespaces[i];
+        let namespaces = y._inScopeNamespaces;
+        for (let i = 0; namespaces && i < namespaces.length; i++) {
+          let ns = namespaces[i];
           if (!inScopeNSMap[ns.prefix]) {
             inScopeNSMap[ns.prefix] = ns;
             inScopeNS.push(ns);
@@ -2006,8 +2006,8 @@ module Shumway.AVMX.AS {
         child1 = child1._children[0];
       }
       if (child1.axClass === this.sec.AXXML) {
-        for (var i = 0; i < this._children.length; i++) {
-          var child = this._children[i];
+        for (let i = 0; i < this._children.length; i++) {
+          let child = this._children[i];
           if (child === child1) {
             this.insert(i + 1, child2);
             return this;
@@ -2041,8 +2041,8 @@ module Shumway.AVMX.AS {
         child1 = child1._children[0];
       }
       if (child1.axClass === this.sec.AXXML) {
-        for (var i = 0; i < this._children.length; i++) {
-          var child = this._children[i];
+        for (let i = 0; i < this._children.length; i++) {
+          let child = this._children[i];
           if (child === child1) {
             this.insert(i, child2);
             return this;
@@ -2086,7 +2086,7 @@ module Shumway.AVMX.AS {
         return null;
       }
       // Steps 1-3.
-      var inScopeNS = this._inScopeNamespacesImpl();
+      let inScopeNS = this._inScopeNamespacesImpl();
       // Step 4.
       if (arguments.length === 0) {
         // Step 4.b.
@@ -2095,8 +2095,8 @@ module Shumway.AVMX.AS {
       // Step 5.a.
       prefix = axCoerceString(prefix);
       // Step 5.b-c.
-      for (var i = 0; i < inScopeNS.length; i++) {
-        var ns = inScopeNS[i];
+      for (let i = 0; i < inScopeNS.length; i++) {
+        let ns = inScopeNS[i];
         if (ns.prefix === prefix) {
           return this.sec.AXNamespace.FromNamespace(ns);
         }
@@ -2120,8 +2120,8 @@ module Shumway.AVMX.AS {
         this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
       }
       // Steps 1-2.
-      for (var i = 0; i < this._children.length;) {
-        var child = this._children[i];
+      for (let i = 0; i < this._children.length;) {
+        let child = this._children[i];
         // Step 2.a.
         if (child._kind === ASXMLKind.Element) {
           child.normalize();
@@ -2131,7 +2131,7 @@ module Shumway.AVMX.AS {
         else if (child._kind === ASXMLKind.Text) {
           // Step 2.b.i.
           while (i + 1 < this._children.length) {
-            var nextChild = this._children[i + 1];
+            let nextChild = this._children[i + 1];
             if (nextChild._kind !== ASXMLKind.Text) {
               break;
             }
@@ -2158,7 +2158,7 @@ module Shumway.AVMX.AS {
     }
 
     private removeByIndex(index: number) {
-      var child = this._children[index];
+      let child = this._children[index];
       child._parent = null;
       this._children.splice(index, 1);
     }
@@ -2171,21 +2171,21 @@ module Shumway.AVMX.AS {
     processingInstructions(name: any): ASXMLList {
       // Step 1 (implicit).
       // Step 3.
-      var list = this.sec.AXXMLList.CreateList(this, this._name);
+      let list = this.sec.AXXMLList.CreateList(this, this._name);
       list._targetObject = this;
       list._targetProperty = null;
       // Steps 2,4-5.
       return this.processingInstructionsInto(toXMLName(name, this.sec), list);
     }
     processingInstructionsInto(name: Multiname, list: ASXMLList) {
-      var localName = name || '*';
+      let localName = name || '*';
       // Step 4.
-      var children = this._children;
+      let children = this._children;
       if (!children) {
         return list;
       }
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (child._kind === ASXMLKind.ProcessingInstruction &&
             (localName === '*' || child._name.name === localName)) {
           list._children.push(child);
@@ -2212,7 +2212,7 @@ module Shumway.AVMX.AS {
       if (this._kind !== ASXMLKind.Element) {
         return;
       }
-      var c;
+      let c;
       // Step 2.
       if (!value || value.axClass !== this.axClass && value.axClass !== this.sec.AXXMLList) {
         c = axCoerceString(value);
@@ -2222,21 +2222,21 @@ module Shumway.AVMX.AS {
         c = value._deepCopy();
       }
       // Step 4.
-      var mn = toXMLName(propertyName, this.sec);
+      let mn = toXMLName(propertyName, this.sec);
       if (isIndex(mn.name)) {
         this._replaceByIndex(mn.name|0, c);
         // Step 10.
         return this;
       }
-      var isAnyName = mn.isAnyName();
+      let isAnyName = mn.isAnyName();
       // Step 5 (Implicit).
       // Step 6.
-      var i = -1;
+      let i = -1;
       // Step 7.
-      var children = this._children;
-      for (var k = children.length; k--;) {
+      let children = this._children;
+      for (let k = children.length; k--;) {
         // Step 7.a.
-        var child = children[k];
+        let child = children[k];
         if (isAnyName || child._kind === ASXMLKind.Element && child._name.matches(mn)) {
           // Step 7.a.i.
           if (i !== -1) {
@@ -2266,7 +2266,7 @@ module Shumway.AVMX.AS {
       // Steps 2-3. (Implicit, guaranteed by assert).
       release || assert(typeof p === 'number' && p >>> 0 === p);
       // Step 4.
-      var children = this._children;
+      let children = this._children;
       if (p > children.length) {
         p = children.length;
       }
@@ -2274,7 +2274,7 @@ module Shumway.AVMX.AS {
       if (v && v.axClass === this.axClass && v._kind !== ASXMLKind.Attribute) {
         // Step 5.a.
         if (v._kind === ASXMLKind.Element) {
-          var a = this;
+          let a = this;
           while (a) {
             if (a === v) {
               this.sec.throwError("Error", Errors.XMLIllegalCyclicalLoop);
@@ -2297,15 +2297,15 @@ module Shumway.AVMX.AS {
         if (v._children.length === 0) {
           this.deleteByIndex(p);
         } else {
-          var n = v._children.length;
+          let n = v._children.length;
           if (p < children.length) {
             children[p]._parent = null;
-            for (var i = children.length - 1; i > p; i--) {
+            for (let i = children.length - 1; i > p; i--) {
               children[i + n] = children[i];
             }
           }
-          for (var i = 0; i < n; i++) {
-            var child = v._children[i];
+          for (let i = 0; i < n; i++) {
+            let child = v._children[i];
             child._parent = this;
             children[i + p] = child;
           }
@@ -2314,9 +2314,9 @@ module Shumway.AVMX.AS {
       // Step 7.
       else {
         // Step 7.a.
-        var s = axCoerceString(v);
+        let s = axCoerceString(v);
         // Step 7.b.
-        var t = this.axClass.Create();
+        let t = this.axClass.Create();
         t._kind = ASXMLKind.Text;
         t._value = s;
         t._parent = this;
@@ -2339,7 +2339,7 @@ module Shumway.AVMX.AS {
       if (this._kind === ASXMLKind.Text || this._kind === ASXMLKind.Comment) {
         return;
       }
-      var name;
+      let name;
       // Step 2.
       if (name_ && name_.axClass === this.sec.AXQName) {
         name = name_.localName;
@@ -2361,7 +2361,7 @@ module Shumway.AVMX.AS {
         name_ = name_.localName;
       }
       // Step 3.
-      var name: Multiname = this.sec.AXQName.Create(name_).name;
+      let name: Multiname = this.sec.AXQName.Create(name_).name;
       // Step 4.
       if (this._kind === ASXMLKind.ProcessingInstruction) {
         release || assert(name.namespaces[0].type === NamespaceType.Public);
@@ -2370,7 +2370,7 @@ module Shumway.AVMX.AS {
       // Step 5.
       this._name = name;
       // Steps 6-8.
-      var node = this;
+      let node = this;
       if (this._kind === ASXMLKind.Attribute) {
         if (this._parent === null) {
           return;
@@ -2387,7 +2387,7 @@ module Shumway.AVMX.AS {
         return;
       }
       // Step 2.
-      var ns2 = this.sec.AXNamespace.Create(ns)._ns;
+      let ns2 = this.sec.AXNamespace.Create(ns)._ns;
       // Step 3.
       this._name.namespaces = [ns2];
       // Step 4.
@@ -2402,7 +2402,7 @@ module Shumway.AVMX.AS {
     }
     text() {
       // 13.4.4.37 XML.prototype.text ( );
-      var xl = this.sec.AXXMLList.CreateList(this, this._name);
+      let xl = this.sec.AXXMLList.CreateList(this, this._name);
       this._children && this._children.forEach(function (v, i) {
         if (v._kind === ASXMLKind.Text) {
           xl.append(v);
@@ -2416,14 +2416,14 @@ module Shumway.AVMX.AS {
     }
 
     private toXMLStringImpl(ancestorNamespaces?: Namespace[], indentLevel?: number) {
-      var node = this;
-      var sec = this.sec;
+      let node = this;
+      let sec = this.sec;
       // 10.2.1 ToXMLString Applied to the XML Type
-      var prettyPrinting = sec.AXXML.prettyPrinting;
+      let prettyPrinting = sec.AXXML.prettyPrinting;
       indentLevel |= 0;
-      var s = prettyPrinting ? getIndentString(indentLevel) : '';
+      let s = prettyPrinting ? getIndentString(indentLevel) : '';
 
-      var kind: ASXMLKind = node._kind;
+      let kind: ASXMLKind = node._kind;
       switch (kind) {
         // 4. If x.[[Class]] == "text",
         case ASXMLKind.Text:
@@ -2449,25 +2449,25 @@ module Shumway.AVMX.AS {
       }
 
       ancestorNamespaces = ancestorNamespaces || [];
-      var namespaceDeclarations: Namespace[] = [];
+      let namespaceDeclarations: Namespace[] = [];
 
       // 10. For each ns in x.[[InScopeNamespaces]]
-      for (var i = 0; node._inScopeNamespaces && i < node._inScopeNamespaces.length; i++) {
-        var ns = node._inScopeNamespaces[i];
+      for (let i = 0; node._inScopeNamespaces && i < node._inScopeNamespaces.length; i++) {
+        let ns = node._inScopeNamespaces[i];
         if (ancestorNamespaces.every(function (ans) { return ans.uri !== ns.uri || ans.prefix !== ns.prefix; })) {
           namespaceDeclarations.push(ns);
         }
       }
       // 11. For each name in the set of names consisting of x.[[Name]] and the name of each
       // attribute in x.[[Attributes]]
-      var currentNamespaces = ancestorNamespaces.concat(namespaceDeclarations);
-      var namespace = GetNamespace(node._name, currentNamespaces);
+      let currentNamespaces = ancestorNamespaces.concat(namespaceDeclarations);
+      let namespace = GetNamespace(node._name, currentNamespaces);
       if (namespace.prefix === undefined) {
         // Let namespace.prefix be an arbitrary implementation defined namespace prefix, such that
         // there is no ns2 ∈ (AncestorNamespaces ∪ namespaceDeclarations) with namespace.prefix ==
         // ns2.prefix
-        var newPrefix = generateUniquePrefix(currentNamespaces);
-        var ns2 = internPrefixedNamespace(NamespaceType.Public, namespace.uri, newPrefix);
+        let newPrefix = generateUniquePrefix(currentNamespaces);
+        let ns2 = internPrefixedNamespace(NamespaceType.Public, namespace.uri, newPrefix);
         // Let namespaceDeclarations = namespaceDeclarations ∪ { namespace }
         namespaceDeclarations.push(ns2);
         currentNamespaces.push(ns2);
@@ -2477,36 +2477,36 @@ module Shumway.AVMX.AS {
       // 13. If namespace.prefix is not the empty string,
       //   a. Let s be the result of concatenating s, namespace.prefix and the string ":"
       // 14. Let s be the result of concatenating s and x.[[Name]].localName
-      var elementName = (namespace.prefix ? namespace.prefix + ':' : '') + node._name.name;
+      let elementName = (namespace.prefix ? namespace.prefix + ':' : '') + node._name.name;
       s += '<' + elementName;
 
       node._attributes && node._attributes.forEach(function (attr: ASXML) {
-        var name = attr._name;
-        var namespace = GetNamespace(name, currentNamespaces);
+        let name = attr._name;
+        let namespace = GetNamespace(name, currentNamespaces);
         if (namespace.prefix === undefined) {
           // Let namespace.prefix be an arbitrary implementation defined namespace prefix, such that
           // there is no ns2 ∈ (AncestorNamespaces ∪ namespaceDeclarations) with namespace.prefix ==
           // ns2.prefix
-          var newPrefix = generateUniquePrefix(currentNamespaces);
-          var ns2 = internPrefixedNamespace(NamespaceType.Public, namespace.uri, newPrefix);
+          let newPrefix = generateUniquePrefix(currentNamespaces);
+          let ns2 = internPrefixedNamespace(NamespaceType.Public, namespace.uri, newPrefix);
           // Let namespaceDeclarations = namespaceDeclarations ∪ { namespace }
           namespaceDeclarations.push(ns2);
           currentNamespaces.push(ns2);
         }
       });
 
-      for (var i = 0; i < namespaceDeclarations.length; i++) {
-        var namespace = namespaceDeclarations[i];
+      for (let i = 0; i < namespaceDeclarations.length; i++) {
+        let namespace = namespaceDeclarations[i];
         if (namespace.uri === '') {
           continue;
         }
-        var attributeName = namespace.prefix ? 'xmlns:' + namespace.prefix : 'xmlns';
+        let attributeName = namespace.prefix ? 'xmlns:' + namespace.prefix : 'xmlns';
         s += ' ' +  attributeName + '="' + escapeAttributeValue(namespace.uri) + '"';
       }
       node._attributes && node._attributes.forEach(function (attr) {
-        var name: Multiname = attr._name;
-        var namespace = GetNamespace(name, ancestorNamespaces);
-        var attributeName = namespace.prefix ? namespace.prefix + ':' + name.name : name.name;
+        let name: Multiname = attr._name;
+        let namespace = GetNamespace(name, ancestorNamespaces);
+        let attributeName = namespace.prefix ? namespace.prefix + ':' + name.name : name.name;
         s += ' ' +  attributeName + '="' + escapeAttributeValue(attr._value) + '"';
       });
 
@@ -2522,9 +2522,9 @@ module Shumway.AVMX.AS {
       s += '>';
       // 19. Let indentChildren = ((x.[[Length]] > 1) or (x.[[Length]] == 1 and x[0].[[Class]] is
       // not equal to "text"))
-      var indentChildren = node._children.length > 1 ||
+      let indentChildren = node._children.length > 1 ||
                            (node._children.length === 1 && node._children[0]._kind !== ASXMLKind.Text);
-      var nextIndentLevel = (prettyPrinting && indentChildren) ?
+      let nextIndentLevel = (prettyPrinting && indentChildren) ?
                             indentLevel + sec.AXXML._prettyIndent : 0;
 
       node._children.forEach(function (childNode, i) {
@@ -2548,8 +2548,8 @@ module Shumway.AVMX.AS {
       if (this === this.axClass.dPrototype) {
         return super.axGetEnumerableKeys();
       }
-      var keys = [];
-      for (var i = 0; i < this._children.length; i++) {
+      let keys = [];
+      for (let i = 0; i < this._children.length; i++) {
         keys.push(this._children[i]._name.name);
       }
       return keys;
@@ -2559,7 +2559,7 @@ module Shumway.AVMX.AS {
     setProperty(mn: Multiname, v) {
       release || assert(mn instanceof Multiname);
       // Step 1. (Step 3 in Tamarin source.)
-      var sec = this.sec;
+      let sec = this.sec;
       if (!mn.isAnyName() && !mn.isAttribute() && mn.name === mn.name >>> 0) {
         sec.throwError('TypeError', Errors.XMLAssignmentToIndexedXMLNotAllowed);
       }
@@ -2569,7 +2569,7 @@ module Shumway.AVMX.AS {
         return;
       }
       // Step 3.
-      var c;
+      let c;
       if (!isXMLType(v, sec) || v._kind === ASXMLKind.Text ||
           v._kind === ASXMLKind.Attribute)
       {
@@ -2590,9 +2590,9 @@ module Shumway.AVMX.AS {
             // Step 6.b.ii.
           } else {
             // Step 6.b.ii.1.
-            var s = toString(c._children[0], sec);
+            let s = toString(c._children[0], sec);
             // Step 6.b.ii.2.
-            for (var j = 1; j < c._children.length; j++) {
+            for (let j = 1; j < c._children.length; j++) {
               s += ' ' + toString(c._children[j], sec);
             }
             // Step 6.b.ii.3.
@@ -2603,12 +2603,12 @@ module Shumway.AVMX.AS {
           c = axCoerceString(c);
         }
         // Step 6.d.
-        var a: ASXML = null;
+        let a: ASXML = null;
         // Step 6.e.
-        var attributes = this._attributes;
-        var newAttributes = this._attributes = [];
-        for (var j = 0; attributes && j < attributes.length; j++) {
-          var attribute = attributes[j];
+        let attributes = this._attributes;
+        let newAttributes = this._attributes = [];
+        for (let j = 0; attributes && j < attributes.length; j++) {
+          let attribute = attributes[j];
           if (attribute._name.matches(mn)) {
             // Step 6.e.1.
             if (!a) {
@@ -2629,7 +2629,7 @@ module Shumway.AVMX.AS {
           if (mn.isAnyName()) {
             return;
           }
-          var uri = '';
+          let uri = '';
           if (mn.namespaces.length === 1) {
             uri = mn.namespaces[0].uri;
           }
@@ -2644,11 +2644,11 @@ module Shumway.AVMX.AS {
         return;
       }
 
-      var i;
-      var isAny = mn.isAnyName();
-      var primitiveAssign = !isXMLType(c, sec) && !isAny && mn.name !== '*';
-      var isAnyNamespace = mn.isAnyNamespace();
-      for (var k = this._children.length - 1; k >= 0; k--) {
+      let i;
+      let isAny = mn.isAnyName();
+      let primitiveAssign = !isXMLType(c, sec) && !isAny && mn.name !== '*';
+      let isAnyNamespace = mn.isAnyNamespace();
+      for (let k = this._children.length - 1; k >= 0; k--) {
         if ((isAny || this._children[k]._kind === ASXMLKind.Element &&
           this._children[k]._name.name === mn.name) &&
           (isAnyNamespace ||
@@ -2663,33 +2663,33 @@ module Shumway.AVMX.AS {
       if (i === undefined) {
         i = this._children.length;
         if (primitiveAssign) {
-          var ns = mn.namespaces[0];
-          var uri: string = null;
-          var prefix;
+          let ns = mn.namespaces[0];
+          let uri: string = null;
+          let prefix;
           if (ns.uri !== null) {
             uri = ns.uri;
             prefix = ns.prefix;
           }
           if (uri === null) {
-            var defaultNamespace = getDefaultNamespace(sec);
+            let defaultNamespace = getDefaultNamespace(sec);
             uri = defaultNamespace.uri;
             prefix = defaultNamespace.prefix;
           }
-          var y = createXML(sec, ASXMLKind.Element, uri, mn.name, prefix);
+          let y = createXML(sec, ASXMLKind.Element, uri, mn.name, prefix);
           y._parent = this;
           this._replaceByIndex(i, y);
-          var ns = y._name.namespace;
+          let ns = y._name.namespace;
           y.addInScopeNamespace(ns);
         }
       }
       if (primitiveAssign) {
         // Blow away kids of x[i].
-        var subChildren = this._children[i]._children;
-        for (var j = subChildren.length; j--;) {
+        let subChildren = this._children[i]._children;
+        for (let j = subChildren.length; j--;) {
           subChildren[j]._parent = null;
         }
         subChildren.length = 0;
-        var s = toString(c, sec);
+        let s = toString(c, sec);
         if (s !== "") {
           this._children[i]._replaceByIndex(0, s);
         }
@@ -2711,7 +2711,7 @@ module Shumway.AVMX.AS {
     getProperty(mn: Multiname): any {
       release || assert(mn instanceof Multiname);
       // Step 1.
-      var nm = mn.name;
+      let nm = mn.name;
       if (isIndex(nm)) {
         // this is a shortcut to the E4X logic that wants us to create a new
         // XMLList with of size 1 and access it with the given index.
@@ -2722,15 +2722,15 @@ module Shumway.AVMX.AS {
       }
       // Step 2 (implicit).
       // Step 3.
-      var list = this.sec.AXXMLList.CreateList(this, mn);
-      var length = 0;
-      var anyName = mn.isAnyName();
-      var anyNamespace = mn.isAnyNamespace();
+      let list = this.sec.AXXMLList.CreateList(this, mn);
+      let length = 0;
+      let anyName = mn.isAnyName();
+      let anyNamespace = mn.isAnyNamespace();
 
       // Step 4.
       if (mn.isAttribute()) {
-        for (var i = 0; this._attributes && i < this._attributes.length; i++) {
-          var v = this._attributes[i];
+        for (let i = 0; this._attributes && i < this._attributes.length; i++) {
+          let v = this._attributes[i];
           if ((anyName || v._name.name === nm) &&
               (anyNamespace || v._name.matches(mn))) {
             list._children[length++] = v;
@@ -2740,8 +2740,8 @@ module Shumway.AVMX.AS {
         return list;
       }
       // Step 5.
-      for (var i = 0; this._children && i < this._children.length; i++) {
-        var v = this._children[i];
+      for (let i = 0; this._children && i < this._children.length; i++) {
+        let v = this._children[i];
         if ((anyName || v._kind === ASXMLKind.Element && v._name.name === nm) &&
             ((anyNamespace || v._name.matches(mn)))) {
           list._children[length++] = v;
@@ -2754,7 +2754,7 @@ module Shumway.AVMX.AS {
 
     axGetProperty(mn: Multiname): any {
       if (this === this.axClass.dPrototype) {
-        var value = this[this.axResolveMultiname(mn)];
+        let value = this[this.axResolveMultiname(mn)];
         release || checkValue(value);
         return value;
       }
@@ -2768,20 +2768,20 @@ module Shumway.AVMX.AS {
         // XMLList of size 1 and access it with the given index.
         return (<any>mn.name|0) === 0;
       }
-      var name = toXMLName(mn, this.sec);
-      var anyName = name.isAnyName();
-      var anyNamespace = name.isAnyNamespace();
+      let name = toXMLName(mn, this.sec);
+      let anyName = name.isAnyName();
+      let anyNamespace = name.isAnyNamespace();
       if (mn.isAttribute()) {
-        for (var i = 0; this._attributes && i < this._attributes.length; i++) {
-          var v = this._attributes[i];
+        for (let i = 0; this._attributes && i < this._attributes.length; i++) {
+          let v = this._attributes[i];
           if (anyName || v._name.matches(name)) {
             return true;
           }
         }
         return false;
       }
-      for (var i = 0; i < this._children.length; i++) {
-        var v = this._children[i];
+      for (let i = 0; i < this._children.length; i++) {
+        let v = this._children[i];
         if ((anyName || v._kind === ASXMLKind.Element && v._name.name === name.name) &&
             (anyNamespace || v._kind === ASXMLKind.Element && v._name.matches(name))) {
           return true;
@@ -2794,17 +2794,17 @@ module Shumway.AVMX.AS {
         // This hasn't ever been implemented and silently does nothing in Tamarin (and Rhino).
         return true;
       }
-      var name = toXMLName(mn, this.sec);
-      var localName = name.name;
-      var anyName = mn.isAnyName();
-      var anyNamespace = mn.isAnyNamespace();
+      let name = toXMLName(mn, this.sec);
+      let localName = name.name;
+      let anyName = mn.isAnyName();
+      let anyNamespace = mn.isAnyNamespace();
       if (mn.isAttribute()) {
-        var attributes = this._attributes;
+        let attributes = this._attributes;
         if (attributes) {
-          var newAttributes = this._attributes = [];
-          for (var i = 0; i < attributes.length; i++) {
-            var node = attributes[i];
-            var attrName = node._name;
+          let newAttributes = this._attributes = [];
+          for (let i = 0; i < attributes.length; i++) {
+            let node = attributes[i];
+            let attrName = node._name;
             if ((anyName || attrName.name === localName) &&
                 (anyNamespace || attrName.matches(name))) {
               node._parent = null;
@@ -2851,7 +2851,7 @@ module Shumway.AVMX.AS {
     }
 
     axCallProperty(mn: Multiname, args: any []): any {
-      var method = this[this.axResolveMultiname(mn)];
+      let method = this[this.axResolveMultiname(mn)];
       // The method might be dynamically defined on XML.prototype.
       if (!method) {
         method = this['$Bg' + mn.name];
@@ -2880,11 +2880,11 @@ module Shumway.AVMX.AS {
     }
 
     deleteByIndex (p: number) {
-      var i = p >>> 0;
+      let i = p >>> 0;
       if (String(i) !== String(p)) {
         throw "TypeError in XML.prototype.deleteByIndex(): invalid index " + p;
       }
-      var children = this._children;
+      let children = this._children;
       if (p < children.length && children[p]) {
         children[p]._parent = null;
         children.splice(p, 1);
@@ -2900,11 +2900,11 @@ module Shumway.AVMX.AS {
 
       // Steps 2-3 (Guaranteed by assert).
       release || assert(typeof p === 'number' && isIndex(p));
-      var i = p;
+      let i = p;
 
       // Step 4.
       if (v && v.axClass === this.axClass) {
-        var a = this;
+        let a = this;
         while (a) {
           if (a === v) {
             this.sec.throwError('TypeError', Errors.XMLIllegalCyclicalLoop);
@@ -2914,7 +2914,7 @@ module Shumway.AVMX.AS {
       }
 
       // Step 5.
-      var n = 1;
+      let n = 1;
 
       // Step 6.
       if (v && v.axClass === this.sec.AXXMLList) {
@@ -2926,8 +2926,8 @@ module Shumway.AVMX.AS {
       }
 
       // Step 8.
-      var ownChildren = this._children;
-      for (var j = ownChildren.length - 1; j >= i; j--) {
+      let ownChildren = this._children;
+      for (let j = ownChildren.length - 1; j >= i; j--) {
         ownChildren[j + n] = ownChildren[j];
         assert(ownChildren[0]);
       }
@@ -2937,7 +2937,7 @@ module Shumway.AVMX.AS {
       // Step 10.
       if (v && v.axClass === this.sec.AXXMLList) {
         n = v._children.length;
-        for (var j = 0; j < n; j++) {
+        for (let j = 0; j < n; j++) {
           v._children[j]._parent = this;
           ownChildren[i + j] = v._children[j];
         }
@@ -2964,12 +2964,12 @@ module Shumway.AVMX.AS {
           this._kind === ASXMLKind.Attribute) {
         return;
       }
-      var prefix = ns.prefix;
+      let prefix = ns.prefix;
       if (prefix !== undefined) {
         if (prefix === "" && this._name.uri === "") {
           return;
         }
-        var match = null;
+        let match = null;
         this._inScopeNamespaces.forEach(function (v, i) {
           if (v.prefix === prefix) {
             match = v;
@@ -2997,8 +2997,8 @@ module Shumway.AVMX.AS {
       if (this._kind !== ASXMLKind.Element) {
         return xl;
       }
-      var length = xl._children.length;
-      var isAny = name.isAnyName();
+      let length = xl._children.length;
+      let isAny = name.isAnyName();
       if (name.isAttribute()) {
         // Get attributes
         this._attributes.forEach(function (v, i) {
@@ -3026,9 +3026,9 @@ module Shumway.AVMX.AS {
 
   function createXML(sec: AXSecurityDomain, kind: ASXMLKind = ASXMLKind.Text,
                      uri: string = '', name: string = '', prefix?: string): ASXML {
-    var xml = sec.AXXML.Create();
-    var ns = internPrefixedNamespace(NamespaceType.Public, uri, prefix || '');
-    var mn = new Multiname(null, 0,
+    let xml = sec.AXXML.Create();
+    let ns = internPrefixedNamespace(NamespaceType.Public, uri, prefix || '');
+    let mn = new Multiname(null, 0,
                            kind === ASXMLKind.Attribute ? CONSTANT.QNameA : CONSTANT.QName,
                            [ns], name, null);
     xml.init(kind, mn);
@@ -3040,8 +3040,8 @@ module Shumway.AVMX.AS {
     static classInitializer() {
       defineNonEnumerableProperty(this, '$Bglength', 1);
 
-      var proto: any = this.dPrototype;
-      var asProto: any = ASXMLList.prototype;
+      let proto: any = this.dPrototype;
+      let asProto: any = ASXMLList.prototype;
       defineNonEnumerableProperty(proto, '$BgvalueOf', Object.prototype['$BgvalueOf']);
       defineNonEnumerableProperty(proto, '$BghasOwnProperty', asProto.native_hasOwnProperty);
       defineNonEnumerableProperty(proto, '$BgpropertyIsEnumerable',
@@ -3087,7 +3087,7 @@ module Shumway.AVMX.AS {
     }
 
     public static axApply(self: ASXMLList, args: any[]): ASXMLList {
-      var value = args[0];
+      let value = args[0];
       // 13.5.1 The XMLList Constructor Called as a Function
       if (isNullOrUndefined(value)) {
         value = '';
@@ -3095,14 +3095,14 @@ module Shumway.AVMX.AS {
       if (value && value.axClass === this.sec.AXXMLList) {
         return value;
       }
-      var list = this.sec.AXXMLList.Create();
+      let list = this.sec.AXXMLList.Create();
       toXMLList(value, list);
       return list;
     }
 
     // 11.4.1 The Addition Operator ( + )
     public static addXML(left: ASXMLList, right: ASXMLList) {
-      var result: ASXMLList;
+      let result: ASXMLList;
       if (left.axClass === left.sec.AXXML) {
         result = left.sec.AXXMLList.Create();
         result.append(left);
@@ -3118,7 +3118,7 @@ module Shumway.AVMX.AS {
     _targetProperty: Multiname;
 
     static Create(value?: any): ASXMLList {
-      var list: ASXMLList = Object.create(this.sec.AXXMLList.tPrototype);
+      let list: ASXMLList = Object.create(this.sec.AXXMLList.tPrototype);
       list.axInitializer(value);
       return list;
     }
@@ -3137,9 +3137,9 @@ module Shumway.AVMX.AS {
       }
 
       if (value && value.axClass === this.sec.AXXMLList) {
-        var children = (<ASXMLList>value)._children;
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        let children = (<ASXMLList>value)._children;
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
           this._children[i] = child;
           assert(this._children[0]);
         }
@@ -3149,7 +3149,7 @@ module Shumway.AVMX.AS {
     }
 
     static CreateList(targetObject: AS.ASXML, targetProperty: Multiname) {
-      var list = this.Create();
+      let list = this.Create();
       list._targetObject = targetObject;
       list._targetProperty = targetProperty;
       return list;
@@ -3162,20 +3162,20 @@ module Shumway.AVMX.AS {
     // E4X 11.5.1 The Abstract Equality Comparison Algorithm, steps 1-2.
     // (but really 9.2.1.9 [[Equals]] (V))
     equals(other: any): boolean {
-      var children = this._children;
+      let children = this._children;
       // Step 1.
       if (other === undefined && children.length === 0) {
         return true;
       }
       // Step 2.
       if (other && other.axClass === this.sec.AXXMLList) {
-        var otherChildren = other._children;
+        let otherChildren = other._children;
         // Step 2.a.
         if (otherChildren.length !== children.length) {
           return false;
         }
         // Step 2.b.
-        for (var i = 0; i < children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
           if (!children[i].equals(otherChildren[i])) {
             return false;
           }
@@ -3191,8 +3191,8 @@ module Shumway.AVMX.AS {
       if (this.hasComplexContent()) {
         return this.toXMLString();
       }
-      var s = '';
-      for (var i = 0; i < this._children.length; i++) {
+      let s = '';
+      for (let i = 0; i < this._children.length; i++) {
         s += toString(this._children[i], this.sec);
       }
       return s;
@@ -3200,9 +3200,9 @@ module Shumway.AVMX.AS {
 
     // 9.2.1.7 [[DeepCopy]] ( )
     _deepCopy() {
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
-      var length = this._children.length;
-      for (var i = 0; i < length; i++) {
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      let length = this._children.length;
+      for (let i = 0; i < length; i++) {
         xl._children[i] = this._children[i]._deepCopy();
         assert(xl._children[0]);
       }
@@ -3210,9 +3210,9 @@ module Shumway.AVMX.AS {
     }
 
     _shallowCopy() {
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
-      var length = this._children.length;
-      for (var i = 0; i < length; i++) {
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      let length = this._children.length;
+      for (let i = 0; i < length; i++) {
         xl._children[i] = this._children[i];
         assert(xl._children[0]);
       }
@@ -3229,10 +3229,10 @@ module Shumway.AVMX.AS {
         return (<any>P|0) < this._children.length;
       }
 
-      var mn = toXMLName(P, this.sec);
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var node = children[i];
+      let mn = toXMLName(P, this.sec);
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
+        let node = children[i];
         if (node._kind === ASXMLKind.Element) {
           if (node.hasProperty(mn)) {
             return true;
@@ -3270,7 +3270,7 @@ module Shumway.AVMX.AS {
     }
     child(propertyName: any): ASXMLList {
       if (isIndex(propertyName)) {
-        var list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+        let list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
         if ((propertyName | 0) < this._children.length) {
           list._children[0] = this._children[propertyName | 0]._deepCopy();
           assert(list._children[0]);
@@ -3285,10 +3285,10 @@ module Shumway.AVMX.AS {
     }
     // 9.2.1.8 [[Descendants]] (P)
     descendants(name_: any): ASXMLList {
-      var name = toXMLName(name_, this.sec);
-      var list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
+      let name = toXMLName(name_, this.sec);
+      let list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      for (let i = 0; i < this._children.length; i++) {
+        let child = this._children[i];
         if (child._kind === ASXMLKind.Element) {
           child.descendantsInto(name, list);
         }
@@ -3297,10 +3297,10 @@ module Shumway.AVMX.AS {
     }
     comments(): ASXMLList {
       // 13.5.4.6 XMLList.prototype.comments ( )
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
       this._children.forEach(function (child) {
         if ((<any> child)._kind === ASXMLKind.Element) {
-          var r = child.comments();
+          let r = child.comments();
           Array.prototype.push.apply(xl._children, r._children);
         }
       });
@@ -3309,9 +3309,9 @@ module Shumway.AVMX.AS {
 
     // 13.5.4.8 XMLList.prototype.contains ( value )
     contains(value: any): boolean {
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
+        let child = children[i];
         if (child.equals(value)) {
           return true;
         }
@@ -3324,11 +3324,11 @@ module Shumway.AVMX.AS {
     }
     elements(name: any): ASXMLList {
       // 13.5.4.11 XMLList.prototype.elements ( [ name ] )
-      var mn = toXMLName(name, this.sec);
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, mn);
+      let mn = toXMLName(name, this.sec);
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, mn);
       this._children.forEach(function (child) {
         if ((<any> child)._kind === ASXMLKind.Element) {
-          var r = child.elements(mn);
+          let r = child.elements(mn);
           Array.prototype.push.apply(xl._children, r._children);
         }
       });
@@ -3373,8 +3373,8 @@ module Shumway.AVMX.AS {
     // 13.5.4.16 XMLList.prototype.normalize ( )
     normalize(): ASXMLList {
       // Steps 1-2.
-      for (var i = 0; i < this._children.length;) {
-        var child = this._children[i];
+      for (let i = 0; i < this._children.length;) {
+        let child = this._children[i];
         // Step 2.a.
         if (child._kind === ASXMLKind.Element) {
           child.normalize();
@@ -3384,7 +3384,7 @@ module Shumway.AVMX.AS {
         else if (child._kind === ASXMLKind.Text) {
           // Step 2.b.i.
           for (i++; i < this._children.length;) {
-            var nextChild = this._children[i];
+            let nextChild = this._children[i];
             if (nextChild._kind !== ASXMLKind.Text) {
               break;
             }
@@ -3410,12 +3410,12 @@ module Shumway.AVMX.AS {
 
     parent(): any {
       // 13.5.4.17 XMLList.prototype.parent ( )
-      var children = this._children;
+      let children = this._children;
       if (children.length === 0) {
         return undefined;
       }
-      var parent = children[0]._parent;
-      for (var i = 1; i < children.length; i++) {
+      let parent = children[0]._parent;
+      for (let i = 1; i < children.length; i++) {
         if (children[i]._parent !== parent) {
           return undefined;
         }
@@ -3427,14 +3427,14 @@ module Shumway.AVMX.AS {
       // (Numbering in the spec starts at 6.)
       // Step 6 (implicit).
       // Step 7.
-      var name = toXMLName(name_, this.sec);
+      let name = toXMLName(name_, this.sec);
       // Step 8.
-      var list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      let list = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
       list._targetObject = this;
       list._targetProperty = null;
       // Step 9.
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
         children[i].processingInstructionsInto(name, list);
       }
       // Step 10.
@@ -3442,10 +3442,10 @@ module Shumway.AVMX.AS {
     }
     text(): ASXMLList {
       // 13.5.4.20 XMLList.prototype.text ( )
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, this._targetProperty);
       this._children.forEach(function (v:any, i) {
         if (v._kind === ASXMLKind.Element) {
-          var gq = v.text();
+          let gq = v.text();
           if (gq._children.length > 0) {
             xl._children.push(gq);
           }
@@ -3455,7 +3455,7 @@ module Shumway.AVMX.AS {
     }
     toXMLString(): string {
       // 10.2.2 ToXMLString Applied to the XMLList Type
-      var sec = this.sec;
+      let sec = this.sec;
       return this._children.map(function (childNode) {
         return toXMLString(sec, childNode);
       }).join(sec.AXXML.prettyPrinting ? '\n' : '');
@@ -3467,7 +3467,7 @@ module Shumway.AVMX.AS {
       if (this._children.length !== 1) {
         this.sec.throwError('TypeError', Errors.XMLOnlyWorksWithOneItemLists, 'addNamespace');
       }
-      var xml = this._children[0];
+      let xml = this._children[0];
       xml.addNamespace(ns);
       return xml;
     }
@@ -3475,7 +3475,7 @@ module Shumway.AVMX.AS {
       if (this._children.length !== 1) {
         this.sec.throwError('TypeError', Errors.XMLOnlyWorksWithOneItemLists, 'appendChild');
       }
-      var xml = this._children[0];
+      let xml = this._children[0];
       xml.appendChild(child);
       return xml;
     }
@@ -3483,20 +3483,20 @@ module Shumway.AVMX.AS {
     // 9.2.1.6 [[append]] (V)
     append(V: any) {
       // Step 1.
-      var children = this._children;
-      var i = children.length;
+      let children = this._children;
+      let i = children.length;
       // Step 2.
-      var n = 1;
+      let n = 1;
       // Step 3.
       if (V && V.axClass === this.sec.AXXMLList) {
         this._targetObject = V._targetObject;
         this._targetProperty = V._targetProperty;
-        var valueChildren: ASXML[] = V._children;
+        let valueChildren: ASXML[] = V._children;
         n = valueChildren.length;
         if (n === 0) {
           return;
         }
-        for (var j = 0; j < valueChildren.length; j++) {
+        for (let j = 0; j < valueChildren.length; j++) {
           children[i + j] = valueChildren[j];
         }
         return;
@@ -3541,7 +3541,7 @@ module Shumway.AVMX.AS {
       if (this._children.length !== 1) {
         this.sec.throwError('TypeError', Errors.XMLOnlyWorksWithOneItemLists, 'namespace');
       }
-      var firstChild = this._children[0];
+      let firstChild = this._children[0];
       return arguments.length ? firstChild.namespace(prefix) : firstChild.namespace();
     }
     localName(): Object {
@@ -3609,33 +3609,33 @@ module Shumway.AVMX.AS {
 
     // 9.2.1.1 [[Get]] (P)
     getProperty(mn: Multiname): any {
-      var nm = mn.name;
+      let nm = mn.name;
       if (isIndex(nm)) {
         return this._children[nm|0];
       }
-      var isAnyName = nm === null || nm === '*';
-      var isAnyNamespace = mn.isAnyNamespace();
-      var isAttribute = mn.isAttribute();
-      var xl = this.sec.AXXMLList.CreateList(this._targetObject, mn);
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var v = children[i];
+      let isAnyName = nm === null || nm === '*';
+      let isAnyNamespace = mn.isAnyNamespace();
+      let isAttribute = mn.isAttribute();
+      let xl = this.sec.AXXMLList.CreateList(this._targetObject, mn);
+      let children = this._children;
+      for (let i = 0; i < children.length; i++) {
+        let v = children[i];
         if (v._kind === ASXMLKind.Element) {
           // i. Let gq be the result of calling the [[Get]] method of x[i] with argument P
           // We do this inline instead to reduce the amount of temporarily created XMLLists.
           if (isAttribute) {
-            var attributes = v._attributes;
-            for (var j = 0; attributes && j < attributes.length; j++) {
-              var v = attributes[j];
+            let attributes = v._attributes;
+            for (let j = 0; attributes && j < attributes.length; j++) {
+              let v = attributes[j];
               if ((isAnyName || v._name.name === nm) &&
                   (isAnyNamespace || v._name.matches(mn))) {
                 xl._children.push(v);
               }
             }
           } else {
-            var descendants = v._children;
-            for (var j = 0; descendants && j < descendants.length; j++) {
-              var v = descendants[j];
+            let descendants = v._children;
+            for (let j = 0; descendants && j < descendants.length; j++) {
+              let v = descendants[j];
               if ((isAnyName || v._kind === ASXMLKind.Element && v._name.name === nm) &&
                   (isAnyNamespace || v._name.matches(mn)))
               {
@@ -3650,7 +3650,7 @@ module Shumway.AVMX.AS {
 
     axGetProperty(mn: Multiname): any {
       if (this === this.axClass.dPrototype) {
-        var value = this[this.axResolveMultiname(mn)];
+        let value = this[this.axResolveMultiname(mn)];
         release || checkValue(value);
         return value;
       }
@@ -3659,7 +3659,7 @@ module Shumway.AVMX.AS {
 
     axGetPublicProperty(nm): any {
       if (this === this.axClass.dPrototype) {
-        var value = this[Multiname.getPublicMangledName(nm)];
+        let value = this[Multiname.getPublicMangledName(nm)];
         release || checkValue(value);
         return value;
       }
@@ -3697,9 +3697,9 @@ module Shumway.AVMX.AS {
     setProperty(mn: Multiname, value: any) {
       // Steps 1-2.
       if (isIndex(mn.name)) {
-        var i = mn.name|0;
+        let i = mn.name|0;
         // Step 2.b.
-        var r: any = null;
+        let r: any = null;
         // Step 2.a.
         if (this._targetObject) {
           r = this._targetObject.resolveValue();
@@ -3708,7 +3708,7 @@ module Shumway.AVMX.AS {
           }
         }
         // Step 2.c.
-        var length = this._children.length;
+        let length = this._children.length;
         if (i >= length) {
           // Step 2.c.i.
           if (r && r.axClass === this.sec.AXXMLList) {
@@ -3725,10 +3725,10 @@ module Shumway.AVMX.AS {
             return;
           }
           // Step 2.c.iii.
-          var y = this.sec.AXXML.Create();
+          let y = this.sec.AXXML.Create();
           y._parent = r;
-          var yName = this._targetProperty;
-          var yKind = ASXMLKind.Text;
+          let yName = this._targetProperty;
+          let yKind = ASXMLKind.Text;
           // Step 2.c.iv.
           if (this._targetProperty && this._targetProperty.isAttribute()) {
             if (r.hasProperty(this._targetProperty)) {
@@ -3752,11 +3752,11 @@ module Shumway.AVMX.AS {
           if (y._kind !== ASXMLKind.Attribute) {
             // Step 2.c.viii.1.
             if (r !== null) {
-              var j: number;
+              let j: number;
               // Step 2.c.viii.1.a.
               if (i > 0) {
-                var lastChild = this._children[i - 1];
-                var rLength = r._children.length - 1;
+                let lastChild = this._children[i - 1];
+                let rLength = r._children.length - 1;
                 for (j = 0; j < rLength; j++) {
                   if (r._children[j] === lastChild) {
                     release || assert(r._children[0]);
@@ -3790,12 +3790,12 @@ module Shumway.AVMX.AS {
             value._kind === ASXMLKind.Text || value._kind === ASXMLKind.Attribute) {
           value = value + '';
         }
-        var currentChild = this._children[i];
-        var childKind = currentChild._kind;
-        var parent = currentChild._parent;
+        let currentChild = this._children[i];
+        let childKind = currentChild._kind;
+        let parent = currentChild._parent;
         // Step 2.e.
         if (childKind === ASXMLKind.Attribute) {
-          var indexInParent = parent._children.indexOf(currentChild);
+          let indexInParent = parent._children.indexOf(currentChild);
           parent.setProperty(currentChild._name, false);
           this._children[i] = parent._children[indexInParent];
           assert(this._children[0]);
@@ -3804,23 +3804,23 @@ module Shumway.AVMX.AS {
         // Step 2.f.
         if (value && value.axClass === this.sec.AXXMLList) {
           // Step 2.f.i.
-          var c = value._shallowCopy();
-          var cLength = c._children.length;
+          let c = value._shallowCopy();
+          let cLength = c._children.length;
           // Step 2.f.ii. (implemented above.)
           // Step 2.f.iii.
           if (parent !== null) {
             // Step 2.f.iii.1.
-            var q = parent._children.indexOf(currentChild);
+            let q = parent._children.indexOf(currentChild);
             // Step 2.f.iii.2.
             parent._replaceByIndex(q, c);
             // Step 2.f.iii.3.
-            for (var j = 0; j < cLength; j++) {
+            for (let j = 0; j < cLength; j++) {
               c._children[j] = parent._children[q + j];
             }
           }
           // Step 2.f.iv.
           if (cLength === 0) {
-            for (var j = i + 1; j < length; j++) {
+            for (let j = i + 1; j < length; j++) {
               this._children[j - 1] = this._children[j];
               assert(this._children[0]);
             }
@@ -3829,13 +3829,13 @@ module Shumway.AVMX.AS {
           }
           // Step 2.f.v.
         else {
-            for (var j = length - 1; j > i; j--) {
+            for (let j = length - 1; j > i; j--) {
               this._children[j + cLength - 1] = this._children[j];
               assert(this._children[0]);
             }
           }
           // Step 2.f.vi.
-          for (var j = 0; j < cLength; j++) {
+          for (let j = 0; j < cLength; j++) {
             this._children[i + j] = c._children[j];
             assert(this._children[0]);
           }
@@ -3847,7 +3847,7 @@ module Shumway.AVMX.AS {
           // Step 2.g.ii.
           if (parent !== null) {
             // Step 2.g.ii.1.
-            var q = parent._children.indexOf(currentChild);
+            let q = parent._children.indexOf(currentChild);
             // Step 2.g.ii.2.
             parent._replaceByIndex(q, value);
             // Step 2.g.ii.3.
@@ -3855,7 +3855,7 @@ module Shumway.AVMX.AS {
           }
           // Step 2.g.iii.
           if (typeof value === 'string') {
-            var t = this.sec.AXXML.Create(value);
+            let t = this.sec.AXXML.Create(value);
             this._children[i] = t;
             assert(this._children[0]);
           }
@@ -3903,10 +3903,10 @@ module Shumway.AVMX.AS {
 
     // 9.2.1.3 [[Delete]] (P)
     axDeleteProperty(mn: Multiname) {
-      var name = mn.name;
+      let name = mn.name;
       // Steps 1-2.
       if (isIndex(name)) {
-        var i = name|0;
+        let i = name|0;
         // Step 2.a.
         if (i >= this._children.length) {
           return true;
@@ -3916,8 +3916,8 @@ module Shumway.AVMX.AS {
         return true;
       }
       // Step 3.
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
+      for (let i = 0; i < this._children.length; i++) {
+        let child = this._children[i];
         if (child._kind === ASXMLKind.Element) {
           child.deleteProperty(mn);
         }
@@ -3927,8 +3927,8 @@ module Shumway.AVMX.AS {
     }
 
     private removeByIndex(index: number) {
-      var child = this._children[index];
-      var parent = child._parent;
+      let child = this._children[index];
+      let parent = child._parent;
       if (parent) {
         child._parent = null;
         parent._children.splice(parent._children.indexOf(child), 1);
@@ -3937,7 +3937,7 @@ module Shumway.AVMX.AS {
     }
 
     axCallProperty(mn: Multiname, args: any []): any {
-      var method = this[this.axResolveMultiname(mn)];
+      let method = this[this.axResolveMultiname(mn)];
       // Check if the method exists before calling it.
       if (method) {
         validateCall(this.sec, method, args.length);

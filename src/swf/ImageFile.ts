@@ -21,7 +21,7 @@ module Shumway {
     GIF = 0x474946
   }
 
-  var mimetypesForHeaders = {};
+  let mimetypesForHeaders = {};
   mimetypesForHeaders[ImageTypeMagicHeaderBytes.JPG] = 'image/jpeg';
   mimetypesForHeaders[ImageTypeMagicHeaderBytes.PNG] = 'image/png';
   mimetypesForHeaders[ImageTypeMagicHeaderBytes.GIF] = 'image/gif';
@@ -58,7 +58,7 @@ module Shumway {
     }
 
     private setMimetype() {
-      var magic = (this.data[0] << 16) | (this.data[1] << 8) | this.data[2];
+      let magic = (this.data[0] << 16) | (this.data[1] << 8) | this.data[2];
       this.mimeType = mimetypesForHeaders[magic];
     }
   }

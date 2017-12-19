@@ -16,10 +16,10 @@
 
 module Shumway.Unit {
 
-  export var everFailed = false;
-  export var testNumber = 0;
+  export let everFailed = false;
+  export let testNumber = 0;
   
-  export var writer: IndentingWriter;
+  export let writer: IndentingWriter;
 
   export function fail(message) {
     everFailed = true;
@@ -29,7 +29,7 @@ module Shumway.Unit {
   export function eqFloat(a, b, test, tolerance) {
     tolerance = typeof tolerance === "undefined" ? 0.1 : tolerance;
     test = description(test);
-    var d = Math.abs(a - b);
+    let d = Math.abs(a - b);
     if (isNaN(d) || d >= tolerance) {
       return fail("FAIL" + test + ". Got " + a + ", expected " + b + failedLocation());
     }
@@ -65,7 +65,7 @@ module Shumway.Unit {
       return fail("FAIL" + test + " Array Length Mismatch, got " + a.length + ", expected " +
         b.length + failedLocation());
     }
-    for (var i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
       if (a[i] !== b[i]) {
         if (!(typeof a[i] == "number" && typeof b[i] == "number" && isNaN(a[i]) && isNaN(b[i]))) {
           return fail("FAIL" + test + " Array Element " + i + ": got " + a[i] + ", expected " +
@@ -86,10 +86,10 @@ module Shumway.Unit {
       return fail("FAIL" + test + " Expected neither or both objects to be null/undefined, " +
         "but only `b` was" + failedLocation());
     }
-    var aKeys = Object.keys(a);
-    var bKeys = Object.keys(b);
-    for (var i = 0; i < aKeys.length; i++) {
-      var key = aKeys[i];
+    let aKeys = Object.keys(a);
+    let bKeys = Object.keys(b);
+    for (let i = 0; i < aKeys.length; i++) {
+      let key = aKeys[i];
       if (a[key] !== b[key]) {
         return fail("FAIL" + test + " properties differ. a." + key + " = " + a[key] +
           ", b." + key + " = " + b[key] + failedLocation());
@@ -134,7 +134,7 @@ module Shumway.Unit {
 
   export function assertThrowsInstanceOf(f, ctor, test) {
     test = description(test);
-    var msg;
+    let msg;
     try {
       f();
     } catch (exc) {
@@ -170,9 +170,9 @@ module Shumway.Unit {
     writer.errorLn("ERROR: " + s);
   }
 
-  var maxVarianceTime = 1;
-  var minElapsedTime = 100;
-  var maxElapsedTime = 1000;
+  let maxVarianceTime = 1;
+  let minElapsedTime = 100;
+  let maxElapsedTime = 1000;
 
   /**
    * Measures several runs of a test case and tries to ensure that the test case is reasonably fast, yet still accurate.
@@ -184,15 +184,15 @@ module Shumway.Unit {
     } else if (help && iterations > 1024) {
       writer.warnLn("Test has too many iterations, increase the complexity of the test case: " + test);
     }
-    var start = new Date();
-    var s = 0;
-    var elapsedTimes = [];
-    for (var i = 0; i < iterations; i++) {
-      var iterationStart = Date.now();
+    let start = new Date();
+    let s = 0;
+    let elapsedTimes = [];
+    for (let i = 0; i < iterations; i++) {
+      let iterationStart = Date.now();
       s += fn();
       elapsedTimes.push(Date.now() - iterationStart);
     }
-    var elapsed: number = (<any>new Date() - <any>start);
+    let elapsed: number = (<any>new Date() - <any>start);
     // Let's not make the test too short, or too long.
     if (help && elapsed < minElapsedTime) {
       writer.warnLn("Test doesn't run long enough (" + elapsed.toFixed(2) + " ms) to have meaningful timing results: " + test + ", must be at least " + minElapsedTime + " ms long.");
@@ -200,7 +200,7 @@ module Shumway.Unit {
       writer.warnLn("Test runs too long (" + elapsed.toFixed(2) + " ms), reduce the number of iterations: " + test + ", keep it below " + maxElapsedTime.toFixed(2) + " ms.");
     }
 
-    var result =  Math.min.apply(null, elapsedTimes);
+    let result =  Math.min.apply(null, elapsedTimes);
     // Can we make the test smaller yet get the same result?
     if (help && elapsed > 500 && result === Math.min.apply(null, elapsedTimes.slice(0, elapsedTimes.length / 2 | 0))) {
       writer.warnLn("Test would have had the same result with half as many iterations.");
@@ -209,15 +209,15 @@ module Shumway.Unit {
       return fail("FAIL " + test + ". Got " + result.toFixed(2) + " ms, expected less than " + threshold.toFixed(2) + " ms" +
         failedLocation());
     }
-    var details = "Iterations: " + iterations + ", Elapsed: " + elapsed.toFixed(2) + " ms (" + result.toFixed(2) + " ms / Iteration)"
+    let details = "Iterations: " + iterations + ", Elapsed: " + elapsed.toFixed(2) + " ms (" + result.toFixed(2) + " ms / Iteration)"
     writer.debugLn("PASS " + test + " " + details);
-    var min =  Math.min.apply(null, elapsedTimes);
-    var max =  Math.max.apply(null, elapsedTimes);
-    var maxBarWidth = 32;
-    for (var i = 0; i < Math.min(elapsedTimes.length, 8); i++) {
-      var j = elapsedTimes.length - i - 1;
-      var time = (elapsedTimes[j] - min) / (max - min);
-      var ticks = Math.round(time * maxBarWidth);
+    let min =  Math.min.apply(null, elapsedTimes);
+    let max =  Math.max.apply(null, elapsedTimes);
+    let maxBarWidth = 32;
+    for (let i = 0; i < Math.min(elapsedTimes.length, 8); i++) {
+      let j = elapsedTimes.length - i - 1;
+      let time = (elapsedTimes[j] - min) / (max - min);
+      let ticks = Math.round(time * maxBarWidth);
       writer.debugLn(String(j).padLeft(" ", 4) + ": =" + StringUtilities.repeatString("=", ticks) + " " + elapsedTimes[j].toFixed(2) + " ms");
     }
   }

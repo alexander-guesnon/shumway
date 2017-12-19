@@ -30,7 +30,7 @@ module Shumway.AVMX.AS.flash.system {
         this.axDomain = parentDomainOrAXDomain;
         return;
       }
-      var parentRuntimeDomain: AXApplicationDomain = null;
+      let parentRuntimeDomain: AXApplicationDomain = null;
       if (this.sec.flash.system.ApplicationDomain.axIsType(parentDomainOrAXDomain)) {
         parentRuntimeDomain = (<ApplicationDomain>parentDomainOrAXDomain).axDomain;
       } else {
@@ -41,8 +41,8 @@ module Shumway.AVMX.AS.flash.system {
 
     // This must return a new object each time.
     static get currentDomain(): flash.system.ApplicationDomain {
-      var currentABC = getCurrentABC();
-      var app = currentABC ? currentABC.env.app : this.sec.application;
+      let currentABC = getCurrentABC();
+      let app = currentABC ? currentABC.env.app : this.sec.application;
       return new this.sec.flash.system.ApplicationDomain(app);
     }
 
@@ -52,8 +52,8 @@ module Shumway.AVMX.AS.flash.system {
     }
 
     get parentDomain(): flash.system.ApplicationDomain {
-      var currentABC = getCurrentABC();
-      var app = currentABC ? currentABC.env.app : this.sec.application;
+      let currentABC = getCurrentABC();
+      let app = currentABC ? currentABC.env.app : this.sec.application;
       release || Debug.assert(app.parent !== undefined);
       return new this.sec.flash.system.ApplicationDomain(app.parent);
     }
@@ -70,7 +70,7 @@ module Shumway.AVMX.AS.flash.system {
     }
 
     getDefinition(name: string): Object {
-      var definition = this.getDefinitionImpl(name);
+      let definition = this.getDefinitionImpl(name);
       if (!definition) {
         this.sec.throwError('ReferenceError', Errors.UndefinedVarError, name);
       }
@@ -86,8 +86,8 @@ module Shumway.AVMX.AS.flash.system {
       if (!name) {
         this.sec.throwError('TypeError', Errors.NullPointerError, 'definitionName');
       }
-      var simpleName = name.replace("::", ".");
-      var mn = Multiname.FromFQNString(simpleName, NamespaceType.Public);
+      let simpleName = name.replace("::", ".");
+      let mn = Multiname.FromFQNString(simpleName, NamespaceType.Public);
       return this.axDomain.getProperty(mn, false, false);
     }
 

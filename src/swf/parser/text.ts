@@ -17,8 +17,8 @@
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
   export function defineText(tag: TextTag) {
-    var bold = false;
-    var italic = false;
+    let bold = false;
+    let italic = false;
 
     return {
       type: 'text',

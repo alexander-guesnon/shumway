@@ -31,8 +31,8 @@ module Shumway.Shell {
     readAll(progress, complete) {
       setTimeout(function () {
         try {
-          var url = this.url + '';
-          var strippedUrl = url.indexOf('file://') === 0 ? url.substr(7) : url;
+          let url = this.url + '';
+          let strippedUrl = url.indexOf('file://') === 0 ? url.substr(7) : url;
           complete(read(strippedUrl, 'binary'));
         } catch (e) {
           complete(null, 'Can\'t read ' + this.url);
@@ -53,18 +53,18 @@ module Shumway.Shell {
     }
   }
 
-  var shellTelemetry = {
+  let shellTelemetry = {
     reportTelemetry: function (data) {
     }
   };
 
-  var shellFileLoadingService = {
+  let shellFileLoadingService = {
     baseUrl: null,
     createSession: function () {
       return {
         open: function (request) {
-          var self = this;
-          var path = Shumway.FileLoadingService.instance.resolveUrl(request.url);
+          let self = this;
+          let path = Shumway.FileLoadingService.instance.resolveUrl(request.url);
           new BinaryFileReader(path, request.method, request.mimeType, request.data).readAsync(
             function (data, progress) {
               self.onprogress(data, {bytesLoaded: progress.loaded, bytesTotal: progress.total});

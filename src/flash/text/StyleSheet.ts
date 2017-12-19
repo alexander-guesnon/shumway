@@ -50,9 +50,9 @@ module Shumway.AVMX.AS.flash.text {
     private _rules: { [key: string]: Style; };
 
     get styleNames(): ASArray {
-      var styles = this._rules;
-      var names = [];
-      for (var name in styles) {
+      let styles = this._rules;
+      let names = [];
+      for (let name in styles) {
         if (styles[name]) {
           names.push(name);
         }
@@ -62,7 +62,7 @@ module Shumway.AVMX.AS.flash.text {
 
     getStyle(styleName: string): Style {
       styleName = axCoerceString(styleName);
-      var style = this._rules[styleName.toLowerCase()];
+      let style = this._rules[styleName.toLowerCase()];
       if (!style) {
         return this.sec.createObject(); // note that documentation is lying about `null`;
       }
@@ -71,7 +71,7 @@ module Shumway.AVMX.AS.flash.text {
 
     applyStyle(textFormat: TextFormat, styleName: string): TextFormat {
       styleName = axCoerceString(styleName);
-      var style = this._rules[styleName.toLowerCase()];
+      let style = this._rules[styleName.toLowerCase()];
       if (style) {
         return textFormat.transform(style);
       }
@@ -99,22 +99,22 @@ module Shumway.AVMX.AS.flash.text {
         return null;
       }
       formatObject = transformASValueToJS(this.sec, formatObject, false);
-      var textFormat = new this.sec.flash.text.TextFormat();
+      let textFormat = new this.sec.flash.text.TextFormat();
       textFormat.transform(formatObject);
       return textFormat;
     }
 
     parseCSS(css: string) {
       css = axCoerceString(css) + '';
-      var length = css.length;
-      var index = skipWhitespace(css, 0, length);
+      let length = css.length;
+      let index = skipWhitespace(css, 0, length);
       // Styles are only added once parsing completed successfully. Invalid syntax anywhere discards all new styles.
-      var newStyles = {};
-      var currentNames = [];
-      var sawWhitespace = false;
-      var name = '';
+      let newStyles = {};
+      let currentNames = [];
+      let sawWhitespace = false;
+      let name = '';
       while (index < length) {
-        var char = css[index++];
+        let char = css[index++];
         // Everything except whitespace, command, and '{' is valid in names.
         // Note: if no name is given, the empty string is used.
         switch (char) {
@@ -153,7 +153,7 @@ module Shumway.AVMX.AS.flash.text {
             name += char;
         }
       }
-      var styles = this._rules;
+      let styles = this._rules;
       for (name in newStyles) {
         styles[name.toLowerCase()] = newStyles[name];
       }
@@ -164,14 +164,14 @@ module Shumway.AVMX.AS.flash.text {
   function parseStyle(css: string, index: number, length: number, names: string[], newStyles: any) {
     release || assert(index > 0);
     release || assert(css[index - 1] === '{');
-    var style = {};
-    var name = '';
-    var sawWhitespace = false;
-    var upperCase = false;
+    let style = {};
+    let name = '';
+    let sawWhitespace = false;
+    let upperCase = false;
     index = skipWhitespace(css, index, length);
     // Outer loop parsing property names.
     nameLoop: while (index < length) {
-      var char = css[index++];
+      let char = css[index++];
       switch (char) {
         case '}':
           if (name.length > 0) {
@@ -179,8 +179,8 @@ module Shumway.AVMX.AS.flash.text {
           }
           break nameLoop;
         case ':':
-          var value = '';
-          var propertyName = name;
+          let value = '';
+          let propertyName = name;
           // Reset outer-loop state.
           name = '';
           sawWhitespace = false;
@@ -236,7 +236,7 @@ module Shumway.AVMX.AS.flash.text {
     if (css[index - 1] !== '}') {
       return -1;
     }
-    for (var i = 0; i < names.length; i++) {
+    for (let i = 0; i < names.length; i++) {
       newStyles[names[i]] = style;
     }
     return index;
@@ -244,7 +244,7 @@ module Shumway.AVMX.AS.flash.text {
 
   function skipWhitespace(css: string, index: number, length: number) {
     while (index < length) {
-      var char = css[index];
+      let char = css[index];
       switch (char) {
         case ' ':
         case '\n':

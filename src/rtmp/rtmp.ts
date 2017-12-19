@@ -15,21 +15,21 @@
  */
 
 module RtmpJs {
-  var MAX_CHUNKED_CHANNEL_BUFFER = 0x80000;
-  var RANDOM_DATA_SIZE = 1536;
-  var PROTOCOL_VERSION = 3;
+  let MAX_CHUNKED_CHANNEL_BUFFER = 0x80000;
+  let RANDOM_DATA_SIZE = 1536;
+  let PROTOCOL_VERSION = 3;
 
-  var SET_CHUNK_SIZE_CONTROL_MESSAGE_ID = 1;
-  var ABORT_MESSAGE_CONTROL_MESSAGE_ID = 2;
-  var ACK_MESSAGE_ID = 3;
-  var USER_CONTROL_MESSAGE_ID = 4;
-  var ACK_WINDOW_SIZE_MESSAGE_ID = 5;
-  var SET_PEER_BANDWIDTH_MESSAGE_ID = 6;
+  let SET_CHUNK_SIZE_CONTROL_MESSAGE_ID = 1;
+  let ABORT_MESSAGE_CONTROL_MESSAGE_ID = 2;
+  let ACK_MESSAGE_ID = 3;
+  let USER_CONTROL_MESSAGE_ID = 4;
+  let ACK_WINDOW_SIZE_MESSAGE_ID = 5;
+  let SET_PEER_BANDWIDTH_MESSAGE_ID = 6;
 
-  var CONTROL_CHUNK_STREAM_ID = 2;
-  var MIN_CHUNK_STREAM_ID = 3;
-  var MAX_CHUNK_STREAM_ID = 65599;
-  var MAX_CHUNK_HEADER_SIZE = 18;
+  let CONTROL_CHUNK_STREAM_ID = 2;
+  let MIN_CHUNK_STREAM_ID = 3;
+  let MAX_CHUNK_STREAM_ID = 65599;
+  let MAX_CHUNK_HEADER_SIZE = 18;
 
   export interface IChunkedStreamMessage {
     timestamp: number;
@@ -197,21 +197,21 @@ module RtmpJs {
     }
 
     public push(data: Uint8Array) {
-      var newDataLength = data.length + this.bufferLength;
+      let newDataLength = data.length + this.bufferLength;
       if (newDataLength > this.buffer.length) {
-        var newBufferLength = this.buffer.length * 2;
+        let newBufferLength = this.buffer.length * 2;
         while (newDataLength > newBufferLength) {
           newBufferLength *= 2;
         }
         if (newBufferLength > MAX_CHUNKED_CHANNEL_BUFFER) {
           this._fail('Buffer overflow');
         }
-        var newBuffer = new Uint8Array(newBufferLength);
+        let newBuffer = new Uint8Array(newBufferLength);
         newBuffer.set(this.buffer);
         this.buffer = newBuffer;
       }
 
-      for (var i = 0, j = this.bufferLength; i < data.length; i++, j++) {
+      for (let i = 0, j = this.bufferLength; i < data.length; i++, j++) {
         this.buffer[j] = data[i];
       }
       this.bufferLength = newDataLength;
@@ -224,7 +224,7 @@ module RtmpJs {
 
       while (this.bufferLength > 0) {
         // release || console.log('current bufferLength: ' + this.bufferLength + ' state:' + this.state);
-        var shiftBy = 0;
+        let shiftBy = 0;
         switch (this.state) {
           case 'uninitialized':
             if (this.bufferLength < 1) {
@@ -243,7 +243,7 @@ module RtmpJs {
             }
             shiftBy = RANDOM_DATA_SIZE;
 
-            var timestamp = (Date.now() - this.epochStart) | 0;
+            let timestamp = (Date.now() - this.epochStart) | 0;
             this.buffer[4] = (timestamp >>> 24) & 0xFF;
             this.buffer[5] = (timestamp >>> 16) & 0xFF;
             this.buffer[6] = (timestamp >>> 8) & 0xFF;
@@ -257,7 +257,7 @@ module RtmpJs {
             }
             shiftBy = RANDOM_DATA_SIZE;
 
-            for (var i = 8; i < RANDOM_DATA_SIZE; i++) {
+            for (let i = 8; i < RANDOM_DATA_SIZE; i++) {
               if (this.buffer[i] !== this.randomData[i]) {
                 this._fail('Random data do not match @' + i);
               }
@@ -281,7 +281,7 @@ module RtmpJs {
     }
 
     private _initialize() {
-      var controlStream = this._getChunkStream(CONTROL_CHUNK_STREAM_ID);
+      let controlStream = this._getChunkStream(CONTROL_CHUNK_STREAM_ID);
       controlStream.setBuffer(true);
       controlStream.onmessage = function (e) {
         if (e.streamId !== 0) {
@@ -290,18 +290,18 @@ module RtmpJs {
         release || console.log('Control message: ' + e.typeId);
         switch (e.typeId) {
           case SET_CHUNK_SIZE_CONTROL_MESSAGE_ID:
-            var newChunkSize = (e.data[0] << 24) | (e.data[1] << 16) |
+            let newChunkSize = (e.data[0] << 24) | (e.data[1] << 16) |
               (e.data[2] << 8) | e.data[3];
             if (newChunkSize >= 1 && newChunkSize <= 0x7FFFFFFF) {
               this.peerChunkSize = newChunkSize;
             }
             break;
           case ABORT_MESSAGE_CONTROL_MESSAGE_ID:
-            var chunkStreamId = (e.data[0] << 24) | (e.data[1] << 16) |
+            let chunkStreamId = (e.data[0] << 24) | (e.data[1] << 16) |
               (e.data[2] << 8) | e.data[3];
             if (MIN_CHUNK_STREAM_ID <= chunkStreamId &&
               chunkStreamId <= MAX_CHUNK_STREAM_ID) {
-              var chunkStream = this._getChunkStream(chunkStreamId);
+              let chunkStream = this._getChunkStream(chunkStreamId);
               chunkStream.abort();
             }
             break;
@@ -319,7 +319,7 @@ module RtmpJs {
             }
             break;
           case ACK_WINDOW_SIZE_MESSAGE_ID:
-            var ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
+            let ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
               (e.data[2] << 8) | e.data[3];
             if (ackWindowSize < 0) {
               break;
@@ -327,9 +327,9 @@ module RtmpJs {
             this.peerAckWindowSize = ackWindowSize;
             break;
           case SET_PEER_BANDWIDTH_MESSAGE_ID:
-            var ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
+            let ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
               (e.data[2] << 8) | e.data[3];
-            var limitType = e.data[4];
+            let limitType = e.data[4];
             if (ackWindowSize < 0 || limitType > 2) {
               break;
             }
@@ -340,7 +340,7 @@ module RtmpJs {
 
             if (ackWindowSize !== this.ackWindowSize) {
               this.ackWindowSize = ackWindowSize;
-              var ackData = new Uint8Array([(ackWindowSize >>> 24) & 0xFF,
+              let ackData = new Uint8Array([(ackWindowSize >>> 24) & 0xFF,
                   (ackWindowSize >>> 16) & 0xFF,
                   (ackWindowSize >>> 8) & 0xFF,
                   ackWindowSize & 0xFF]);
@@ -386,7 +386,7 @@ module RtmpJs {
     }
 
     public sendUserControlMessage(type: number, data: Uint8Array) {
-      var eventData = new Uint8Array(2 + data.length);
+      let eventData = new Uint8Array(2 + data.length);
       eventData[0] = (type >> 8) & 0xFF;
       eventData[1] = type & 0xFF;
       eventData.set(data, 2);
@@ -399,7 +399,7 @@ module RtmpJs {
     }
 
     private _sendAck() {
-      var ackData = new Uint8Array([(this.bytesReceived >>> 24) & 0xFF,
+      let ackData = new Uint8Array([(this.bytesReceived >>> 24) & 0xFF,
           (this.bytesReceived >>> 16) & 0xFF,
           (this.bytesReceived >>> 8) & 0xFF,
           this.bytesReceived & 0xFF]);
@@ -411,15 +411,15 @@ module RtmpJs {
     }
 
     private _sendMessage(chunkStreamId: number, message: ISendMessage) {
-      var data = message.data;
-      var messageLength = data.length;
-      var chunkStream = this._getChunkStream(chunkStreamId);
+      let data = message.data;
+      let messageLength = data.length;
+      let chunkStream = this._getChunkStream(chunkStreamId);
 
-      var timestamp = ('timestamp' in message ? message.timestamp : (Date.now() - this.epochStart)) | 0;
-      var timestampDelta = (timestamp - chunkStream.sentTimestamp) | 0;
+      let timestamp = ('timestamp' in message ? message.timestamp : (Date.now() - this.epochStart)) | 0;
+      let timestampDelta = (timestamp - chunkStream.sentTimestamp) | 0;
 
-      var buffer = new Uint8Array(this.chunkSize + MAX_CHUNK_HEADER_SIZE);
-      var chunkStreamIdSize;
+      let buffer = new Uint8Array(this.chunkSize + MAX_CHUNK_HEADER_SIZE);
+      let chunkStreamIdSize;
       if (chunkStreamId < 64) {
         chunkStreamIdSize = 1;
         buffer[0] = chunkStreamId;
@@ -434,8 +434,8 @@ module RtmpJs {
         buffer[2] = (chunkStreamId - 64) & 0xFF;
       }
 
-      var position = chunkStreamIdSize;
-      var extendTimestamp = 0;
+      let position = chunkStreamIdSize;
+      let extendTimestamp = 0;
       if (message.streamId !== chunkStream.sentStreamId || timestampDelta < 0) {
         // chunk type 0
         if ((timestamp & 0xFF000000) !== 0) {
@@ -500,9 +500,9 @@ module RtmpJs {
       chunkStream.sentTypeId = message.typeId;
       chunkStream.sentLength = messageLength;
 
-      var sent = 0;
+      let sent = 0;
       while (sent < messageLength) {
-        var currentChunkLength = Math.min(messageLength - sent, this.chunkSize);
+        let currentChunkLength = Math.min(messageLength - sent, this.chunkSize);
         buffer.set(data.subarray(sent, sent + currentChunkLength), position);
         sent += currentChunkLength;
 
@@ -517,7 +517,7 @@ module RtmpJs {
     }
 
     private  _getChunkStream(id: number) {
-      var chunkStream = this.chunkStreams[id];
+      let chunkStream = this.chunkStreams[id];
       if (!chunkStream) {
         this.chunkStreams[id] = chunkStream = new ChunkedStream(id);
         chunkStream.setBuffer(true);
@@ -534,9 +534,9 @@ module RtmpJs {
       if (this.bufferLength < 1) {
         return;
       }
-      var chunkType = (this.buffer[0] >> 6) & 3;
-      var chunkHeaderPosition = 1;
-      var chunkStreamId = this.buffer[0] & 0x3F;
+      let chunkType = (this.buffer[0] >> 6) & 3;
+      let chunkHeaderPosition = 1;
+      let chunkStreamId = this.buffer[0] & 0x3F;
       if (chunkStreamId === 0) {
         if (this.bufferLength < 2) {
           return; }
@@ -549,23 +549,23 @@ module RtmpJs {
         chunkStreamId = (this.buffer[1] << 8) + this.buffer[2] + 64;
         chunkHeaderPosition = 3;
       }
-      var chunkHeaderSize = chunkType === 0 ? 11 : chunkType === 1 ? 7 :
+      let chunkHeaderSize = chunkType === 0 ? 11 : chunkType === 1 ? 7 :
           chunkType === 2 ? 3 : 0;
       if (this.bufferLength < chunkHeaderPosition + chunkHeaderSize) {
         return;
       }
-      var extendTimestampSize = chunkType !== 3 &&
+      let extendTimestampSize = chunkType !== 3 &&
         this.buffer[chunkHeaderPosition] === 0xFF &&
         this.buffer[chunkHeaderPosition + 1] === 0xFF &&
         this.buffer[chunkHeaderPosition + 2] === 0xFF ? 4 : 0;
-      var totalChunkHeaderSize = chunkHeaderPosition + chunkHeaderSize +
+      let totalChunkHeaderSize = chunkHeaderPosition + chunkHeaderSize +
         extendTimestampSize;
       if (this.bufferLength < totalChunkHeaderSize) {
         return;
       }
-      var chunkStream = this._getChunkStream(chunkStreamId);
+      let chunkStream = this._getChunkStream(chunkStreamId);
 
-      var chunkTimestamp: number;
+      let chunkTimestamp: number;
       if (chunkType === 3) {
         chunkTimestamp = chunkStream.lastTimestamp;
       } else {
@@ -574,7 +574,7 @@ module RtmpJs {
           this.buffer[chunkHeaderPosition + 2];
       }
       if (extendTimestampSize) {
-        var chunkTimestampPosition = chunkHeaderPosition + chunkHeaderSize;
+        let chunkTimestampPosition = chunkHeaderPosition + chunkHeaderSize;
         chunkTimestamp = (this.buffer[chunkTimestampPosition] << 24) |
           (this.buffer[chunkTimestampPosition + 1] << 16) |
           (this.buffer[chunkTimestampPosition + 2] << 8) |
@@ -583,9 +583,9 @@ module RtmpJs {
       if (chunkType === 1 || chunkType === 2) {
         chunkTimestamp = (chunkStream.lastTimestamp + chunkTimestamp) | 0;
       }
-      var messageLength: number = chunkStream.lastLength;
-      var messageTypeId = chunkStream.lastTypeId;
-      var messageStreamId = chunkStream.lastStreamId;
+      let messageLength: number = chunkStream.lastLength;
+      let messageTypeId = chunkStream.lastTypeId;
+      let messageStreamId = chunkStream.lastStreamId;
       if (chunkType === 0 || chunkType === 1) {
         messageLength = (this.buffer[chunkHeaderPosition + 3] << 16) |
           (this.buffer[chunkHeaderPosition + 4] << 8) |
@@ -600,7 +600,7 @@ module RtmpJs {
           this.buffer[chunkHeaderPosition + 7];
       }
 
-      var read, tailLength, firstChunk;
+      let read, tailLength, firstChunk;
       if (chunkType === 3 && chunkStream.waitingForBytes) {
         firstChunk = false;
         read = Math.min(chunkStream.waitingForBytes, this.peerChunkSize);
@@ -638,7 +638,7 @@ module RtmpJs {
       this.randomData[1] = 0;
       this.randomData[2] = 0;
       this.randomData[3] = 0;
-      for (var i = 8; i < RANDOM_DATA_SIZE; i++) {
+      for (let i = 8; i < RANDOM_DATA_SIZE; i++) {
         this.randomData[i] = (Math.random() * 256) | 0;
       }
       this.ondata(this.randomData); // c1

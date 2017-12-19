@@ -31,7 +31,7 @@ module Shumway.AVM1.Lib {
   export function loadAVM1DataObject(context: AVM1Context, url: string,
                                      method: string, contentType: string,
                                      data: any, target: IAVM1DataObject): void {
-    var request = new context.sec.flash.net.URLRequest(url);
+    let request = new context.sec.flash.net.URLRequest(url);
     if (method) {
       request.method = method;
     }
@@ -42,9 +42,9 @@ module Shumway.AVM1.Lib {
       release || Debug.assert(typeof data === 'string');
       request.data = data;
     }
-    var loader = new context.sec.flash.net.URLLoader(request);
+    let loader = new context.sec.flash.net.URLLoader(request);
     loader.dataFormat = 'text'; // flash.net.URLLoaderDataFormat.TEXT;
-    var completeHandler = context.sec.boxFunction(function (event: flash.events.Event): void {
+    let completeHandler = context.sec.boxFunction(function (event: flash.events.Event): void {
       loader.removeEventListener(flash.events.Event.COMPLETE, completeHandler);
       release || Debug.assert(typeof loader.data === 'string');
       avm1BroadcastEvent(context, target, 'onData', [loader.data]);
@@ -60,7 +60,7 @@ module Shumway.AVM1.Lib {
     }
 
     alConstruct(args?: any[]): AVM1Object  {
-      var obj = new AVM1Object(this.context);
+      let obj = new AVM1Object(this.context);
       obj.alPrototype = this.alGetPrototypeProperty();
       (<IAVM1DataObject><any>obj).isAVM1DataObject = true;
       return obj;
@@ -139,7 +139,7 @@ module Shumway.AVM1.Lib {
 
     decode(queryString: string): void {
       queryString = alCoerceString(this.context, queryString);
-      var as3Variables = new this.context.sec.flash.net.URLVariables();
+      let as3Variables = new this.context.sec.flash.net.URLVariables();
       as3Variables._ignoreDecodingErrors = true;
       as3Variables.decode(queryString);
       AVMX.forEachPublicProperty(as3Variables, function (name, value) {
@@ -151,8 +151,8 @@ module Shumway.AVM1.Lib {
     }
 
     _toString(): string {
-      var context = this.context;
-      var as3Variables = new context.sec.flash.net.URLVariables();
+      let context = this.context;
+      let as3Variables = new context.sec.flash.net.URLVariables();
       alForEachProperty(this, function (name) {
         if (this.alHasOwnProperty(name)) {
           as3Variables.axSetPublicProperty(name, alToString(context, this.alGet(name)));
@@ -177,11 +177,11 @@ module Shumway.AVM1.Lib {
       if (!(<IAVM1DataObject><any>target).isAVM1DataObject) {
         return false;
       }
-      var contentType = this.alGet('contentType');
+      let contentType = this.alGet('contentType');
       contentType = isNullOrUndefined(contentType) ?
         'application/x-www-form-urlencoded' :
         alCoerceString(this.context, contentType);
-      var data = alToString(this.context, this);
+      let data = alToString(this.context, this);
       loadAVM1DataObject(this.context, url, method, contentType, data, <IAVM1DataObject><any>target);
       return true;
     }

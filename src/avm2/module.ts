@@ -16,8 +16,8 @@
 "use strict";
 
 module Shumway.AVMX {
-  export var timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("AVX") : null;
-  export var counter = new Shumway.Metrics.Counter(!release);
+  export let timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("AVX") : null;
+  export let counter = new Shumway.Metrics.Counter(!release);
 
   export function countTimeline(name: string, value: number = 1) {
     timelineBuffer && timelineBuffer.count(name, value);

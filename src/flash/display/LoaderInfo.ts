@@ -71,7 +71,7 @@ module Shumway.AVMX.AS.flash.display {
       this._bytesTotal = file.bytesTotal;
       if (file instanceof SWFFile) {
         // TODO: remove these duplicated fields from LoaderInfo.
-        var bbox = file.bounds;
+        let bbox = file.bounds;
         this._width = bbox.xMax - bbox.xMin;
         this._height = bbox.yMax - bbox.yMin;
       } else {
@@ -120,7 +120,7 @@ module Shumway.AVMX.AS.flash.display {
         // same as the SWF file's own URL.
 
         // The loaderURL value can be changed by player settings.
-        var service: IRootElementService = this.sec.player;
+        let service: IRootElementService = this.sec.player;
         return (this._url === service.swfUrl && service.loaderUrl) || this._url;
       }
       return this._loaderUrl;
@@ -297,7 +297,7 @@ module Shumway.AVMX.AS.flash.display {
     }
 
     getSymbolById(id: number): Shumway.Timeline.Symbol {
-      var symbol = this._dictionary[id];
+      let symbol = this._dictionary[id];
       if (symbol) {
         if (symbol.ready === false) {
           // We cannot assert this, as content might invalidly access symbols that aren't available
@@ -308,7 +308,7 @@ module Shumway.AVMX.AS.flash.display {
         return symbol;
       }
       release || assert(this._file instanceof SWFFile);
-      var data = this._file.getSymbol(id);
+      let data = this._file.getSymbol(id);
       if (!data) {
         if (id !== 65535) {
           // Id 65535 is somehow used invalidly in lots of embedded shapes created by the authoring
@@ -357,7 +357,7 @@ module Shumway.AVMX.AS.flash.display {
             data = data.definition;
           }
           symbol = flash.text.FontSymbol.FromData(data, this);
-          var font = constructClassFromSymbol(symbol, symbol.symbolClass);
+          let font = constructClassFromSymbol(symbol, symbol.symbolClass);
           if (symbol.ready === false) {
             this.sec.player.registerFont(<Timeline.EagerlyResolvedSymbol><any>symbol, data.data);
           }
@@ -380,9 +380,9 @@ module Shumway.AVMX.AS.flash.display {
     getRootSymbol(): flash.display.SpriteSymbol {
       release || assert(this._file instanceof SWFFile);
       release || assert(this._file.framesLoaded > 0);
-      var symbol = <flash.display.SpriteSymbol>this._dictionary[0];
+      let symbol = <flash.display.SpriteSymbol>this._dictionary[0];
       if (!symbol) {
-        var data = {
+        let data = {
           id: 0,
           className: this._file.symbolClassesMap[0],
           env: this
@@ -406,7 +406,7 @@ module Shumway.AVMX.AS.flash.display {
     // TODO: Frames should be parsed lazily when they're first needed, and this removed.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1114656
     getFrame(sprite: {frames: SWFFrame[]}, index: number): SWFFrame {
-      var file = this._file;
+      let file = this._file;
       release || assert(file instanceof SWFFile);
       if (!sprite) {
         sprite = file;
@@ -417,7 +417,7 @@ module Shumway.AVMX.AS.flash.display {
     // TODO: To prevent leaking LoaderInfo instances, those instances should be stored weakly,
     // with support for retrieving the instances based on a numeric id, which would be passed here.
     private resolveClassSymbol(classDefinition: ASClass, symbolId: number) {
-      var symbol = this.getSymbolById(symbolId);
+      let symbol = this.getSymbolById(symbolId);
       if (!symbol) {
         Debug.warning("Attempt to resolve symbol for AVM2 class failed: Symbol " +
                       symbolId + " not found.");

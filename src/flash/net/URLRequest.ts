@@ -101,20 +101,20 @@ module Shumway.AVMX.AS.flash.net {
     }
 
     _toFileRequest(): any {
-      var obj: any = {};
+      let obj: any = {};
       obj.url = this._url;
       obj.method = this._method;
       obj.checkPolicyFile = this._checkPolicyFile;
-      var data = this._data;
+      let data = this._data;
       if (data) {
         obj.mimeType = this._contentType;
         if (this.sec.flash.utils.ByteArray.axClass.axIsType(data)) {
           obj.data = <ASObject><any>
             new Uint8Array((<any> data)._buffer, 0, (<any> data).length);
         } else {
-          var dataStr = data.toString();
+          let dataStr = data.toString();
           if (this._method === 'GET') {
-            var i = obj.url.lastIndexOf('?');
+            let i = obj.url.lastIndexOf('?');
             obj.url = (i < 0 ? obj.url : obj.url.substring(0, i)) + '?' + dataStr;
           } else {
             obj.data = dataStr;

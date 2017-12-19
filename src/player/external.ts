@@ -31,27 +31,27 @@ module Shumway.Player {
     }
 
     registerCallback(functionName: string) {
-      var cmd: any = {action: 'register', functionName: functionName, remove: false};
+      let cmd: any = {action: 'register', functionName: functionName, remove: false};
       ShumwayCom.externalCom(cmd);
     }
 
     unregisterCallback(functionName: string) {
-      var cmd: any = {action: 'register', functionName: functionName, remove: true};
+      let cmd: any = {action: 'register', functionName: functionName, remove: true};
       ShumwayCom.externalCom(cmd);
     }
 
     eval(expression: string): any {
-      var cmd: any = {action: 'eval', expression: expression};
+      let cmd: any = {action: 'eval', expression: expression};
       return ShumwayCom.externalCom(cmd);
     }
 
     call(request: string): any {
-      var cmd: any = {action: 'call', request: request};
+      let cmd: any = {action: 'call', request: request};
       return ShumwayCom.externalCom(cmd);
     }
 
     getId(): string {
-      var cmd: any = {action: 'getId'};
+      let cmd: any = {action: 'getId'};
       return ShumwayCom.externalCom(cmd);
     }
   }
@@ -63,9 +63,9 @@ module Shumway.Player {
 
     public init(baseUrl: string): void {
       this._baseUrl = baseUrl;
-      var service = this;
+      let service = this;
       ShumwayCom.setLoadFileCallback(function (args) {
-        var session = service._sessions[args.sessionId];
+        let session = service._sessions[args.sessionId];
         if (session) {
           service._notifySession(session, args);
         }
@@ -73,7 +73,7 @@ module Shumway.Player {
     }
 
     private _notifySession(session: FileLoadingSession, args): void {
-      var sessionId = args.sessionId;
+      let sessionId = args.sessionId;
       switch (args.topic) {
         case "open":
           session.onopen();
@@ -88,7 +88,7 @@ module Shumway.Player {
           break;
         case "progress":
           console.log('Session #' + sessionId + ': loaded ' + args.loaded + '/' + args.total);
-          var data = args.array;
+          let data = args.array;
           if (!(data instanceof Uint8Array)) {
             data = new Uint8Array(data);
           }
@@ -98,11 +98,11 @@ module Shumway.Player {
     }
 
     public createSession(): FileLoadingSession {
-      var sessionId = this._nextSessionId++;
-      var service = this;
-      var session = {
+      let sessionId = this._nextSessionId++;
+      let service = this;
+      let session = {
         open: function (request) {
-          var path = service.resolveUrl(request.url);
+          let path = service.resolveUrl(request.url);
           console.log('Session #' + sessionId + ': loading ' + path);
           ShumwayCom.loadFile({url: path, method: request.method,
             mimeType: request.mimeType, postData: request.data,
@@ -147,12 +147,12 @@ module Shumway.Player {
 
 
     createSession() {
-      var service = this;
-      var reader: Shumway.BinaryFileReader;
+      let service = this;
+      let reader: Shumway.BinaryFileReader;
       return {
         open: function (request) {
-          var self: any = this;
-          var path = service.resolveUrl(request.url);
+          let self: any = this;
+          let path = service.resolveUrl(request.url);
           console.log('FileLoadingService: loading ' + path + ", data: " + request.data);
           reader = new Shumway.BinaryFileReader(path, request.method, request.mimeType,
                                                 request.data);
@@ -207,7 +207,7 @@ module Shumway.Player {
     }
 
     public load(id: SystemResourceId): Promise<any> {
-      var result = this._pendingPromises[id];
+      let result = this._pendingPromises[id];
       if (!result) {
         result = new PromiseWrapper<any>();
         this._pendingPromises[id] = result;
@@ -242,12 +242,12 @@ module Shumway.Player {
     private _promiseFile(path, responseType) {
       return new Promise(function (resolve, reject) {
         SWF.enterTimeline('Load file', path);
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('GET', path);
         xhr.responseType = responseType;
         xhr.onload = function () {
           SWF.leaveTimeline();
-          var response = xhr.response;
+          let response = xhr.response;
           if (response) {
             if (responseType === 'json' && xhr.responseType !== 'json') {
               // some browsers (e.g. Safari) have no idea what json is
@@ -278,7 +278,7 @@ module Shumway.Player {
     }
     if (connectionName[0] !== '_') {
       if (connectionName.indexOf(':') === -1) {
-        var currentURL = new jsGlobal.URL(Shumway.AVMX.getCurrentABC().env.url);
+        let currentURL = new jsGlobal.URL(Shumway.AVMX.getCurrentABC().env.url);
         connectionName = currentURL.hostname + ':' + connectionName;
       }
       // Note: for LocalConnection#send, the name can contain an arbitrary number of ":" chars,
@@ -303,19 +303,19 @@ module Shumway.Player {
     if (!obj || typeof obj !== 'object') {
       return sec.createError(defaultErrorClassName, defaultErrorInfo, obj);
     }
-    var mn = obj.axClass ?
+    let mn = obj.axClass ?
              obj.axClass.name :
              AVMX.Multiname.FromFQNString('Error', AVMX.NamespaceType.Public);
-    var axClass: AVMX.AXClass = <AVMX.AXClass>sec.system.getProperty(mn, true, true);
+    let axClass: AVMX.AXClass = <AVMX.AXClass>sec.system.getProperty(mn, true, true);
     if (!sec.AXClass.axIsType(axClass)) {
       mn = AVMX.Multiname.FromFQNString('Error', AVMX.NamespaceType.Public);
       axClass = <AVMX.AXClass>sec.system.getProperty(mn, true, true);
       release || Debug.assert(sec.AXClass.axIsType(axClass));
     }
-    var messagePropDesc = ObjectUtilities.getPropertyDescriptor(obj, '$Bgmessage');
-    var message = messagePropDesc && messagePropDesc.value || '';
-    var idPropDesc = ObjectUtilities.getPropertyDescriptor(obj, '_errorID');
-    var id = idPropDesc && idPropDesc.value || 0;
+    let messagePropDesc = ObjectUtilities.getPropertyDescriptor(obj, '$Bgmessage');
+    let message = messagePropDesc && messagePropDesc.value || '';
+    let idPropDesc = ObjectUtilities.getPropertyDescriptor(obj, '_errorID');
+    let id = idPropDesc && idPropDesc.value || 0;
     return axClass.axConstruct([message, id]);
   }
 
@@ -345,10 +345,10 @@ module Shumway.Player {
       connectionName = qualifyLocalConnectionName(connectionName, false);
       release || Debug.assert(typeof methodName === 'string');
       release || Debug.assert(argsBuffer instanceof ArrayBuffer);
-      var self = this;
+      let self = this;
       function invokeMessageHandler() {
-        var status = self.hasConnection(connectionName) ? 'status' : 'error';
-        var statusEvent = new sender.sec.flash.events.StatusEvent('status', false, false, null,
+        let status = self.hasConnection(connectionName) ? 'status' : 'error';
+        let statusEvent = new sender.sec.flash.events.StatusEvent('status', false, false, null,
                                                                   status);
         try {
           sender.dispatchEvent(statusEvent);
@@ -394,7 +394,7 @@ module Shumway.Player {
           return e;
         }
       }
-      var result = ShumwayCom.getLocalConnectionService().createLocalConnection(connectionName,
+      let result = ShumwayCom.getLocalConnectionService().createLocalConnection(connectionName,
                                                                                 callback);
       if (result !== LocalConnectionConnectResult.Success) {
         return result;
@@ -419,7 +419,7 @@ module Shumway.Player {
 
     _sendMessage(connectionName: string, methodName: string, argsBuffer: ArrayBuffer,
                  sender: ILocalConnectionSender, senderDomain: string, senderIsSecure: boolean) {
-      var service = ShumwayCom.getLocalConnectionService();
+      let service = ShumwayCom.getLocalConnectionService();
       service.sendLocalConnectionMessage(connectionName, methodName, argsBuffer, sender,
                                          senderDomain, senderIsSecure);
     }
@@ -464,7 +464,7 @@ module Shumway.Player {
 
     _sendMessage(connectionName: string, methodName: string, argsBuffer: ArrayBuffer,
                  sender: ILocalConnectionSender, senderURL: string) {
-      var receiver: ILocalConnectionReceiver = this._localConnections[connectionName];
+      let receiver: ILocalConnectionReceiver = this._localConnections[connectionName];
       release || Debug.assert(receiver);
       try {
         receiver.handleMessage(methodName, argsBuffer);

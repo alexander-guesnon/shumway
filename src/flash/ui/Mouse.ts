@@ -37,9 +37,9 @@ module Shumway.AVMX.AS.flash.ui {
      */
     private _findTarget(point: flash.geom.Point,
                         testingType: flash.display.HitTestingType): flash.display.DisplayObject {
-      var globalX = point.x * 20 | 0;
-      var globalY = point.y * 20 | 0;
-      var objects = [];
+      let globalX = point.x * 20 | 0;
+      let globalY = point.y * 20 | 0;
+      let objects = [];
       this.stage._containsGlobalPoint(globalX, globalY, testingType, objects);
       release || assert(objects.length < 2);
       if (objects.length) {
@@ -54,8 +54,8 @@ module Shumway.AVMX.AS.flash.ui {
     private _dispatchMouseEvent(target: flash.display.InteractiveObject, type: string,
                                 data: MouseEventAndPointData,
                                 relatedObject: flash.display.InteractiveObject = null) {
-      var localPoint = target.globalToLocal(data.point);
-      var event = new this.stage.sec.flash.events.MouseEvent (
+      let localPoint = target.globalToLocal(data.point);
+      let event = new this.stage.sec.flash.events.MouseEvent (
         type,
         type !== events.MouseEvent.ROLL_OVER &&
         type !== events.MouseEvent.ROLL_OUT &&
@@ -76,19 +76,19 @@ module Shumway.AVMX.AS.flash.ui {
      * Handles the mouse event and returns the target on which the event was dispatched.
      */
     public handleMouseEvent(data: MouseEventAndPointData): InteractiveObject {
-      var stage = this.stage;
+      let stage = this.stage;
       if (!stage) {
         return stage;
       }
 
-      var globalPoint = data.point;
-      var mouseClass = this.stage.sec.flash.ui.Mouse.axClass;
+      let globalPoint = data.point;
+      let mouseClass = this.stage.sec.flash.ui.Mouse.axClass;
       mouseClass.updateCurrentPosition(globalPoint);
 
-      var currentTarget = this.currentTarget;
-      var target: InteractiveObject = null;
+      let currentTarget = this.currentTarget;
+      let target: InteractiveObject = null;
 
-      var type = flash.events.MouseEvent.typeFromDOMType(data.type);
+      let type = flash.events.MouseEvent.typeFromDOMType(data.type);
 
       if (globalPoint.x >= 0 && globalPoint.x < stage.stageWidth &&
           globalPoint.y >= 0 && globalPoint.y < stage.stageHeight) {
@@ -104,7 +104,7 @@ module Shumway.AVMX.AS.flash.ui {
       }
 
       if (mouseClass.draggableObject) {
-        var dropTarget = this._findTarget(globalPoint, flash.display.HitTestingType.Drop);
+        let dropTarget = this._findTarget(globalPoint, flash.display.HitTestingType.Drop);
         mouseClass.draggableObject._updateDragState(dropTarget);
       }
 
@@ -155,13 +155,13 @@ module Shumway.AVMX.AS.flash.ui {
           if (target === currentTarget) {
             break;
           }
-          var commonAncestor = target ? target.findNearestCommonAncestor(currentTarget) : stage;
+          let commonAncestor = target ? target.findNearestCommonAncestor(currentTarget) : stage;
           if (currentTarget && currentTarget !== stage) {
             currentTarget._mouseOver = false;
             // TODO: Support track as menu.
             currentTarget._mouseDown = false;
             this._dispatchMouseEvent(currentTarget, events.MouseEvent.MOUSE_OUT, data, target);
-            var nodeLeft = currentTarget;
+            let nodeLeft = currentTarget;
             while (nodeLeft && nodeLeft !== commonAncestor) {
               this._dispatchMouseEvent(nodeLeft, events.MouseEvent.ROLL_OUT, data, target);
               nodeLeft = nodeLeft.parent;
@@ -173,7 +173,7 @@ module Shumway.AVMX.AS.flash.ui {
           if (target === stage) {
             break;
           }
-          var nodeEntered = target;
+          let nodeEntered = target;
           while (nodeEntered && nodeEntered !== commonAncestor) {
             this._dispatchMouseEvent(nodeEntered, events.MouseEvent.ROLL_OVER, data, currentTarget);
             nodeEntered = nodeEntered.parent;

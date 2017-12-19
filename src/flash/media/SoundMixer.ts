@@ -98,8 +98,8 @@ module Shumway.AVMX.AS.flash.media {
     static computeSpectrum(outputArray: flash.utils.ByteArray, FFTMode: boolean = false, stretchFactor: number /*int*/ = 0): void {
       FFTMode = !!FFTMode; stretchFactor = stretchFactor | 0;
       release || somewhatImplemented("public flash.media.SoundMixer::static computeSpectrum");
-      var data = new Float32Array(1024);
-      for (var i = 0; i < 1024; i++) {
+      let data = new Float32Array(1024);
+      for (let i = 0; i < 1024; i++) {
         data[i] = Math.random();
       }
       outputArray.writeRawBytes(data);
@@ -120,13 +120,13 @@ module Shumway.AVMX.AS.flash.media {
       SoundMixer._registeredSoundSources.push(source);
     }
     static _unregisterSoundSource(source: ISoundSource) {
-      var index =  SoundMixer._registeredSoundSources.indexOf(source);
+      let index =  SoundMixer._registeredSoundSources.indexOf(source);
       if (index >= 0) {
         SoundMixer._registeredSoundSources.splice(index, 1);
       }
     }
     static _updateSoundSource(source: ISoundSource) {
-      var volume = source.soundTransform.volume;
+      let volume = source.soundTransform.volume;
       if (SoundMixer._soundTransform) {
         volume *= SoundMixer._soundTransform.volume;
       }
