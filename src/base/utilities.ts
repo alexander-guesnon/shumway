@@ -528,7 +528,7 @@ module Shumway {
 			ArrayUtilities.pushMany(dst, src);
 		}
 
-		export interface TypedArray {
+		export interface TypedArray extends ArrayLike<number> {
 			buffer: ArrayBuffer;
 			length: number;
 			set: (array: ArrayLike<number>, offset?: number) => void;
@@ -838,7 +838,8 @@ module Shumway {
 					}
 					let code = (b1 & ((1 << validBits) - 1));
 					let invalid = false;
-					for (let i = 5; i >= validBits; --i) {
+					let i;
+					for (i = 5; i >= validBits; --i) {
 						let bi = bytes[j++];
 						if ((bi & 0xC0) != 0x80) {
 							// Invalid UTF8 character sequence
@@ -1617,7 +1618,7 @@ module Shumway {
 		}
 
 		export function toHEX(i: number) {
-			let i = (i < 0 ? 0xFFFFFFFF + i + 1 : i);
+			i = (i < 0 ? 0xFFFFFFFF + i + 1 : i);
 			return "0x" + ("00000000" + i.toString(16)).substr(-8);
 		}
 
