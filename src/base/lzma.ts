@@ -674,7 +674,7 @@ module Shumway.ArrayUtilities {
 
 	export class LzmaDecoder implements IDataDecoder {
 		public onData: (data: Uint8Array) => void;
-		public onError: (e) => void;
+		public onError: (e: any) => void;
 		private _state: LzmaDecoderState;
 		buffer: Uint8Array;
 		private _inStream: InputStream;
@@ -713,7 +713,7 @@ module Shumway.ArrayUtilities {
 				this._inStream = new InputStream();
 				this._inStream.append(header.subarray(headerBytesExpected - EXTRA_LZMA_BYTES_NEEDED));
 
-				this._outStream = new OutputStream(function (data) {
+				this._outStream = new OutputStream(function (data: any) {
 					this.onData.call(null, data);
 				}.bind(this));
 
@@ -776,7 +776,7 @@ module Shumway.ArrayUtilities {
 			this._decoder = null;
 		}
 
-		private _error(error) {
+		private _error(error: any) {
 			// Stopping processing any data if an error occurs.
 			this._state = LzmaDecoderState.ERROR;
 			if (this.onError) {
@@ -784,7 +784,7 @@ module Shumway.ArrayUtilities {
 			}
 		}
 
-		private _checkError(res) {
+		private _checkError(res: any) {
 			let error;
 			if (res === LZMA_RES_ERROR) {
 				error = "LZMA decoding error";

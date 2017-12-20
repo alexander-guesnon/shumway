@@ -15,7 +15,7 @@
  */
 
 module Shumway {
-	declare let XMLHttpRequest;
+	declare let XMLHttpRequest: any;
 	import unexpected = Shumway.Debug.unexpected;
 
 	export interface BinaryFileReaderProgressInfo {
@@ -30,7 +30,7 @@ module Shumway {
 		data: any;
 		xhr: XMLHttpRequest;
 
-		constructor(url: string, method?: string, mimeType?: string, data?) {
+		constructor(url: string, method?: string, mimeType?: string, data?: any) {
 			this.url = url;
 			this.method = method;
 			this.mimeType = mimeType;
@@ -45,11 +45,11 @@ module Shumway {
 			xhr.open(this.method || "GET", this.url, async);
 			xhr.responseType = "arraybuffer";
 			if (progress) {
-				xhr.onprogress = function (event) {
+				xhr.onprogress = function (event: any) {
 					progress(xhr.response, event.loaded, event.total);
 				};
 			}
-			xhr.onreadystatechange = function (event) {
+			xhr.onreadystatechange = function (event: any) {
 				if (xhr.readyState === 4) {
 					if (xhr.status !== 200 && xhr.status !== 0 || xhr.response === null) {
 						unexpected("Path: " + url + " not found.");
@@ -78,7 +78,7 @@ module Shumway {
 
 			let position = 0;
 			let buffer = new Uint8Array(chunkSize);
-			let read = 0, total;
+			let read = 0, total: number;
 			this.readAsync(
 				function (data: Uint8Array, progress: BinaryFileReaderProgressInfo) {
 					total = progress.total;
@@ -123,7 +123,7 @@ module Shumway {
 			if (isNotProgressive) {
 				xhr.responseType = 'arraybuffer';
 			}
-			xhr.onprogress = function (e) {
+			xhr.onprogress = function (e: any) {
 				if (isNotProgressive) {
 					return;
 				}
@@ -136,7 +136,7 @@ module Shumway {
 				total = Math.max(total, bytes.byteLength);
 				ondata(bytes, {loaded: loaded, total: total});
 			};
-			xhr.onreadystatechange = function (event) {
+			xhr.onreadystatechange = function (event: any) {
 				if (xhr.readyState === 2 && onhttpstatus) {
 					onhttpstatus(url, xhr.status, xhr.getAllResponseHeaders());
 				}

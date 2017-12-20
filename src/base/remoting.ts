@@ -231,21 +231,21 @@ module Shumway.Remoting {
 	}
 
 	export interface IGFXServiceObserver {
-		displayParameters(displayParameters: DisplayParameters);
+		displayParameters(displayParameters: DisplayParameters): void;
 
-		focusEvent(data: any);
+		focusEvent(data: any): void;
 
-		keyboardEvent(data: any);
+		keyboardEvent(data: any): void;
 
-		mouseEvent(data: any);
+		mouseEvent(data: any): void;
 
-		videoEvent(id: number, eventType: VideoPlaybackEvent, data: any);
+		videoEvent(id: number, eventType: VideoPlaybackEvent, data: any): void;
 	}
 
 	export interface IGFXService {
-		addObserver(observer: IGFXServiceObserver);
+		addObserver(observer: IGFXServiceObserver): void;
 
-		removeObserver(observer: IGFXServiceObserver);
+		removeObserver(observer: IGFXServiceObserver): void;
 
 		update(updates: DataBuffer, assets: Array<DataBuffer>): void;
 
@@ -308,7 +308,7 @@ module Shumway.Remoting {
 			let event = this.target.document.createEvent('CustomEvent');
 			let wrappedMessage = {
 				msg: msg,
-				result: undefined
+				result: undefined as any
 			};
 			event.initCustomEvent('syncmessage', false, false, wrappedMessage);
 			this.target.dispatchEvent(event);

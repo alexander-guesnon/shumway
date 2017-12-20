@@ -53,7 +53,7 @@ module Shumway.Options {
 		parseFn: any;
 		value: any;
 
-		constructor(shortName, longName, type, options) {
+		constructor(shortName: string, longName: string, type: any, options: any) {
 			this.shortName = shortName;
 			this.longName = longName;
 			this.type = type;
@@ -63,7 +63,7 @@ module Shumway.Options {
 			this.value = options.defaultValue;
 		}
 
-		public parse(value) {
+		public parse(value: any) {
 			if (this.type === "boolean") {
 				release || assert(typeof value === "boolean");
 				this.value = value;
@@ -86,24 +86,24 @@ module Shumway.Options {
 			this.args = [];
 		}
 
-		public addArgument(shortName, longName, type, options) {
+		public addArgument(shortName: string, longName: string, type: any, options: any) {
 			let argument = new Argument(shortName, longName, type, options);
 			this.args.push(argument);
 			return argument;
 		}
 
-		public addBoundOption(option) {
+		public addBoundOption(option: any) {
 			let options = {
-				parse: function (x) {
+				parse: function (x: any) {
 					option.value = x;
 				}
 			};
 			this.args.push(new Argument(option.shortName, option.longName, option.type, options));
 		}
 
-		public addBoundOptionSet(optionSet) {
+		public addBoundOptionSet(optionSet: any) {
 			let self = this;
-			optionSet.options.forEach(function (x) {
+			optionSet.options.forEach(function (x: any) {
 				if (OptionSet.isOptionSet(x)) {
 					self.addBoundOptionSet(x);
 				} else {
@@ -126,10 +126,10 @@ module Shumway.Options {
 			return str;
 		}
 
-		public parse(args) {
-			let nonPositionalArgumentMap = {};
-			let positionalArgumentList = [];
-			this.args.forEach(function (x) {
+		public parse(args: any) {
+			let nonPositionalArgumentMap: MapObject<any> = {};
+			let positionalArgumentList: Array<any> = [];
+			this.args.forEach(function (x: any) {
 				if (x.positional) {
 					positionalArgumentList.push(x);
 				} else {
@@ -201,7 +201,7 @@ module Shumway.Options {
 			this.options = [];
 		}
 
-		public register(option) {
+		public register(option: any) {
 			if (OptionSet.isOptionSet(option)) {
 				// check for duplicate option sets (bail if found)
 				for (let i = 0; i < this.options.length; i++) {
@@ -240,17 +240,17 @@ module Shumway.Options {
 			return option;
 		}
 
-		public trace(writer) {
+		public trace(writer: any) {
 			writer.enter(this.name + " {");
-			this.options.forEach(function (option) {
+			this.options.forEach(function (option: any) {
 				option.trace(writer);
 			});
 			writer.leave("}");
 		}
 
 		public getSettings() {
-			let settings = {};
-			this.options.forEach(function (option) {
+			let settings: MapObject<any> = {};
+			this.options.forEach(function (option: any) {
 				if (OptionSet.isOptionSet(option)) {
 					settings[option.name] = {
 						settings: option.getSettings(),
@@ -267,7 +267,7 @@ module Shumway.Options {
 			if (!settings) {
 				return;
 			}
-			this.options.forEach(function (option) {
+			this.options.forEach(function (option: any) {
 				if (OptionSet.isOptionSet(option)) {
 					if (option.name in settings) {
 						option.setSettings(settings[option.name].settings);
@@ -298,7 +298,8 @@ module Shumway.Options {
 		//  { range: { min: 1, max: 5, step: 1 } }
 		//  { list: [ "item 1", "item 2", "item 3" ] }
 		//  { choices: { "choice 1": 1, "choice 2": 2, "choice 3": 3 } }
-		constructor(shortName, longName, type, defaultValue, description, config = null) {
+		constructor(shortName: string, longName: string, type: string, defaultValue: any,
+		            description: string, config: any = null) {
 			this.longName = longName;
 			this.shortName = shortName;
 			this.type = type;
@@ -308,11 +309,11 @@ module Shumway.Options {
 			this.config = config;
 		}
 
-		public parse(value) {
+		public parse(value: any) {
 			this.value = value;
 		}
 
-		public trace(writer) {
+		public trace(writer: any) {
 			writer.writeLn(("-" + this.shortName + "|--" + this.longName).padRight(" ", 30) +
 				" = " + this.type + " " + this.value + " [" + this.defaultValue + "]" +
 				" (" + this.description + ")");

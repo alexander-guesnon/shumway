@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-///<reference path='references.ts' />
 let jsGlobal = (function () {
 	return this || (1, eval)('this//# sourceURL=jsGlobal-getter');
 })();
@@ -22,7 +21,7 @@ let jsGlobal = (function () {
 let inBrowser = typeof window !== 'undefined' && 'document' in window && 'plugins' in window.document;
 let inFirefox = typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') >= 0;
 
-declare let putstr;
+declare let putstr: any;
 // declare let print;
 // declare let console;
 // declare let performance;
@@ -84,8 +83,6 @@ declare module Shumway {
 	let build: string;
 }
 
-new Error().stack;
-
 module Shumway {
 
 	export const enum CharacterCodes {
@@ -109,35 +106,35 @@ module Shumway {
 	/** @const */ export let UINT32_MAX_DIV_10 = 0x19999999; // UINT32_MAX / 10;
 	/** @const */ export let UINT32_MAX_MOD_10 = 0x5; // UINT32_MAX % 10
 
-	export function isString(value): boolean {
+	export function isString(value: any): boolean {
 		return typeof value === "string";
 	}
 
-	export function isFunction(value): boolean {
+	export function isFunction(value: any): boolean {
 		return typeof value === "function";
 	}
 
-	export function isNumber(value): boolean {
+	export function isNumber(value: any): boolean {
 		return typeof value === "number";
 	}
 
-	export function isInteger(value): boolean {
+	export function isInteger(value: any): boolean {
 		return (value | 0) === value;
 	}
 
-	export function isArray(value): boolean {
+	export function isArray(value: any): boolean {
 		return value instanceof Array;
 	}
 
-	export function isNumberOrString(value): boolean {
+	export function isNumberOrString(value: any): boolean {
 		return typeof value === "number" || typeof value === "string";
 	}
 
-	export function isObject(value): boolean {
+	export function isObject(value: any): boolean {
 		return typeof value === "object" || typeof value === 'function';
 	}
 
-	export function toNumber(x): number {
+	export function toNumber(x: any): number {
 		return +x;
 	}
 
@@ -225,7 +222,7 @@ module Shumway {
 		return false;
 	}
 
-	export function isNullOrUndefined(value) {
+	export function isNullOrUndefined(value: any) {
 		return value == undefined;
 	}
 
@@ -319,7 +316,7 @@ module Shumway {
 			release || Debug.assert(false, "Abstract Method " + message);
 		}
 
-		let somewhatImplementedCache = {};
+		let somewhatImplementedCache: { [key: string]: boolean } = {};
 
 		export function somewhatImplemented(message: string) {
 			if (somewhatImplementedCache[message]) {
@@ -431,7 +428,7 @@ module Shumway {
 		}
 
 		export function unique<T>(array: T []): T [] {
-			let result = [];
+			let result: Array<T> = [];
 			for (let i = 0; i < array.length; i++) {
 				pushUnique(result, array[i]);
 			}
@@ -477,23 +474,23 @@ module Shumway {
 
 		export interface IDataDecoder {
 			onData: (data: Uint8Array) => void;
-			onError: (e) => void;
+			onError: (e: any) => void;
 
-			push(data: Uint8Array);
+			push(data: Uint8Array): void;
 
-			close();
+			close(): void;
 		}
 	}
 
 	export module ObjectUtilities {
-		export function boxValue(value) {
+		export function boxValue(value: any) {
 			if (isNullOrUndefined(value) || isObject(value)) {
 				return value;
 			}
 			return Object(value);
 		}
 
-		export function toKeyValueArray(object: Object) {
+		export function toKeyValueArray(object: any) {
 			let hasOwnProperty = Object.prototype.hasOwnProperty;
 			let array = [];
 			for (let k in object) {
@@ -563,13 +560,13 @@ module Shumway {
 			});
 		}
 
-		export function copyProperties(object: Object, template: Object) {
+		export function copyProperties(object: any, template: any) {
 			for (let property in template) {
 				object[property] = template[property];
 			}
 		}
 
-		export function copyOwnProperties(object: Object, template: Object) {
+		export function copyOwnProperties(object: any, template: any) {
 			for (let property in template) {
 				if (hasOwnProperty(template, property)) {
 					object[property] = template[property];
@@ -601,8 +598,8 @@ module Shumway {
 			}
 		}
 
-		export function copyPropertiesByList(object: Object,
-		                                     template: Object,
+		export function copyPropertiesByList(object: any,
+		                                     template: any,
 		                                     propertyList: string []) {
 			for (let i = 0; i < propertyList.length; i++) {
 				let property = propertyList[i];
@@ -610,7 +607,7 @@ module Shumway {
 			}
 		}
 
-		export function defineNonEnumerableGetter(obj, name, getter) {
+		export function defineNonEnumerableGetter(obj: any, name: any, getter: any) {
 			Object.defineProperty(obj, name, {
 				get: getter,
 				configurable: true,
@@ -618,7 +615,7 @@ module Shumway {
 			});
 		}
 
-		export function defineNonEnumerableProperty(obj, name, value) {
+		export function defineNonEnumerableProperty(obj: any, name: any, value: any) {
 			Object.defineProperty(obj, name, {
 				value: value,
 				writable: true,
@@ -634,8 +631,8 @@ module Shumway {
 				target + ".as");
 		}
 
-		export function makeForwardingSetter(target: string): (any) => void {
-			return <(any) => void> new Function("value", "this[\"" + target + "\"] = value;" +
+		export function makeForwardingSetter(target: string): (a: any) => void {
+			return <(a: any) => void> new Function("value", "this[\"" + target + "\"] = value;" +
 				"//# sourceURL=fwd-set-" + target + ".as");
 		}
 	}
@@ -667,7 +664,7 @@ module Shumway {
 		/**
 		 * Returns a reasonably sized description of the |value|, to be used for debugging purposes.
 		 */
-		export function toSafeString(value) {
+		export function toSafeString(value: any) {
 			if (typeof value === "string") {
 				return "\"" + value + "\"";
 			}
@@ -680,7 +677,7 @@ module Shumway {
 			return typeof value;
 		}
 
-		export function toSafeArrayString(array) {
+		export function toSafeArrayString(array: any) {
 			let str = [];
 			for (let i = 0; i < array.length; i++) {
 				str.push(toSafeString(array[i]));
@@ -906,7 +903,7 @@ module Shumway {
 
 		let _encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$_';
 
-		export function variableLengthEncodeInt32(n) {
+		export function variableLengthEncodeInt32(n: number) {
 			let e = _encoding;
 			let bitCount = (32 - Math.clz32(n));
 			release || assert(bitCount <= 32, bitCount);
@@ -921,11 +918,11 @@ module Shumway {
 			return s;
 		}
 
-		export function toEncoding(n) {
+		export function toEncoding(n: number) {
 			return _encoding[n];
 		}
 
-		export function fromEncoding(c) {
+		export function fromEncoding(c: number) {
 			if (c >= 65 && c <= 90) {
 				return c - 65;
 			} else if (c >= 97 && c <= 122) {
@@ -938,9 +935,10 @@ module Shumway {
 				return 63;
 			}
 			release || assert(false, "Invalid Encoding");
+			return 0;
 		}
 
-		export function variableLengthDecodeInt32(s) {
+		export function variableLengthDecodeInt32(s: string) {
 			let l = StringUtilities.fromEncoding(s.charCodeAt(0));
 			let n = 0;
 			for (let i = 0; i < l; i++) {
@@ -1112,7 +1110,7 @@ module Shumway {
 	 * TODO: LRU
 	 */
 	export class Cache {
-		private _data;
+		private _data: any;
 		private _size: number;
 		private _maxSize: number;
 
@@ -1122,11 +1120,11 @@ module Shumway {
 			this._maxSize = maxSize;
 		}
 
-		get(key) {
+		get(key: any) {
 			return this._data[key];
 		}
 
-		set(key, value) {
+		set(key: any, value: any) {
 			release || Debug.assert(!(key in this._data)); // Cannot mutate cache entries.
 			if (this._size >= this._maxSize) {
 				return false;
@@ -1179,7 +1177,8 @@ module Shumway {
 		let fakeTime = 1428107694580; // 3-Apr-2015
 
 		// Overload
-		jsGlobal.Date = function (yearOrTimevalue, month, date, hour, minute, second, millisecond) {
+		jsGlobal.Date = function (yearOrTimevalue?: number, month?: number, date?: number, hour?: number,
+		                          minute?: number, second?: number, millisecond?: number) {
 			switch (arguments.length) {
 				case  0:
 					return new RealDate(fakeTime);
@@ -1210,6 +1209,7 @@ module Shumway {
 		};
 	}
 
+
 	function polyfillWeakMap() {
 		if (typeof jsGlobal.WeakMap === 'function') {
 			return; // weak map is supported
@@ -1218,22 +1218,22 @@ module Shumway {
 
 		function WeakMap() {
 			this.id = '$weakmap' + (id++);
-		};
+		}
 		WeakMap.prototype = {
-			has: function (obj) {
+			has: function (obj: any) {
 				return obj.hasOwnProperty(this.id);
 			},
-			get: function (obj, defaultValue) {
+			get: function (obj: any, defaultValue: any) {
 				return obj.hasOwnProperty(this.id) ? obj[this.id] : defaultValue;
 			},
-			set: function (obj, value) {
+			set: function (obj: any, value: any) {
 				Object.defineProperty(obj, this.id, {
 					value: value,
 					enumerable: false,
 					configurable: true
 				});
 			},
-			delete: function (obj) {
+			delete: function (obj: any) {
 				delete obj[this.id];
 			}
 		};
@@ -1245,9 +1245,9 @@ module Shumway {
 	export interface IReferenceCountable {
 		_referenceCount: number;
 
-		_addReference();
+		_addReference(): void;
 
-		_removeReference();
+		_removeReference(): void;
 	}
 
 	let useReferenceCounting = true;
@@ -1498,7 +1498,7 @@ module Shumway {
 		export function getFlags(i: number, flags: string[]): string {
 			let str = "";
 			for (let i = 0; i < flags.length; i++) {
-				if (i & (1 << i)) {
+				if ((i & (1 << i)) !== 0) {
 					str += flags[i] + " ";
 				}
 			}
@@ -1541,7 +1541,7 @@ module Shumway {
 		 * Polyfill imul.
 		 */
 		if (!Math.imul) {
-			Math.imul = function imul(a, b) {
+			Math.imul = function imul(a: number, b: number) {
 				let ah = (a >>> 16) & 0xffff;
 				let al = a & 0xffff;
 				let bh = (b >>> 16) & 0xffff;
@@ -1577,12 +1577,19 @@ module Shumway {
 	}
 
 	export class IndentingWriter {
-		public static PURPLE = '\033[94m';
-		public static YELLOW = '\033[93m';
-		public static GREEN = '\033[92m';
-		public static RED = '\033[91m';
-		public static BOLD_RED = '\033[1;91m';
-		public static ENDC = '\033[0m';
+		// public static PURPLE = '\033[94m';
+		// public static YELLOW = '\033[93m';
+		// public static GREEN = '\033[92m';
+		// public static RED = '\033[91m';
+		// public static BOLD_RED = '\033[1;91m';
+		// public static ENDC = '\033[0m';
+
+		public static PURPLE = '\x1B[94m';
+		public static YELLOW = '\x1B[93m';
+		public static GREEN = '\x1B[92m';
+		public static RED = '\x1B[91m';
+		public static BOLD_RED = '\x1B[1;91m';
+		public static ENDC = '\x1B[0m';
 
 		public static logLevel: LogLevel = LogLevel.All;
 
@@ -1603,7 +1610,7 @@ module Shumway {
 			this._suppressOutput = val;
 		}
 
-		constructor(suppressOutput: boolean = false, out?) {
+		constructor(suppressOutput: boolean = false, out?: any) {
 			this._tab = "  ";
 			this._padding = "";
 			this._suppressOutput = suppressOutput;
@@ -1778,11 +1785,11 @@ module Shumway {
 	export class CircularBuffer {
 		index: number;
 		start: number;
-		array: ArrayBufferView;
+		array: Array<number>;
 		_size: number;
 		_mask: number;
 
-		constructor(Type, sizeInBits: number = 12) {
+		constructor(Type: any, sizeInBits: number = 12) {
 			this.index = 0;
 			this.start = 0;
 			this._size = 1 << sizeInBits;
@@ -1790,11 +1797,11 @@ module Shumway {
 			this.array = new Type(this._size);
 		}
 
-		public get(i) {
-			return this.array[i];
+		public get(i: number) {
+			return (this.array as any)[i];
 		}
 
-		public forEachInReverse(visitor) {
+		public forEachInReverse(visitor: any) {
 			if (this.isEmpty()) {
 				return;
 			}
@@ -1808,7 +1815,7 @@ module Shumway {
 			}
 		}
 
-		public write(value) {
+		public write(value: any) {
 			this.array[this.index] = value;
 			this.index = (this.index + 1) & this._mask;
 			if (this.index === this.start) {
@@ -1851,7 +1858,7 @@ module Shumway {
 		static Green = "#70bf53";
 		static BlueGrey = "#5e88b0";
 
-		private static _randomStyleCache;
+		private static _randomStyleCache: Array<string>;
 		private static _nextStyle = 0;
 
 		static randomStyle() {
@@ -1931,7 +1938,7 @@ module Shumway {
 			"#00FF00"   // Green
 		];
 
-		static gradientColor(value) {
+		static gradientColor(value: number) {
 			return ColorStyle._gradient[ColorStyle._gradient.length * NumberUtilities.clamp(value, 0, 1) | 0];
 		}
 
@@ -2487,7 +2494,7 @@ module Shumway {
 			return unpremultiplyTable;
 		}
 
-		export function tableLookupUnpremultiplyARGB(pARGB): number {
+		export function tableLookupUnpremultiplyARGB(pARGB: number): number {
 			pARGB = pARGB | 0;
 			let a = (pARGB >> 24) & 0xff;
 			if (a === 0) {
@@ -2704,7 +2711,7 @@ module Shumway {
 	}
 
 	export interface ITelemetryService {
-		reportTelemetry(data: any);
+		reportTelemetry(data: any): void;
 	}
 
 	export interface FileLoadingRequest {
@@ -2722,9 +2729,9 @@ module Shumway {
 		onclose?: () => void;
 		onprogress?: (data: any, progressStatus: FileLoadingProgress) => void;
 		onhttpstatus?: (location: string, httpStatus: number, httpHeaders: any) => void;
-		onerror?: (e) => void;
+		onerror?: (e: any) => void;
 
-		open(request: FileLoadingRequest);
+		open(request: FileLoadingRequest): void;
 
 		close: () => void;
 	}
@@ -2734,7 +2741,7 @@ module Shumway {
 
 		resolveUrl(url: string): string;
 
-		navigateTo(url: string, target: string);
+		navigateTo(url: string, target: string): void;
 	}
 
 	export module FileLoadingService {
@@ -2787,15 +2794,15 @@ module Shumway {
 	export interface IExternalInterfaceService {
 		enabled: boolean;
 
-		initJS(callback: (functionName: string, args: any[]) => any);
+		initJS(callback: (functionName: string, args: any[]) => any): void;
 
-		registerCallback(functionName: string);
+		registerCallback(functionName: string): void;
 
-		unregisterCallback(functionName: string);
+		unregisterCallback(functionName: string): void;
 
-		eval(expression): any;
+		eval(expression: any): any;
 
-		call(request): any;
+		call(request: any): any;
 
 		getId(): string;
 	}
@@ -2841,7 +2848,7 @@ module Shumway {
 	}
 
 	export interface ILocalConnectionSender {
-		dispatchEvent(event): void;
+		dispatchEvent(event: any): void;
 
 		hasEventListener(type: string): boolean;
 
@@ -2859,7 +2866,7 @@ module Shumway {
 		     sender: ILocalConnectionSender, senderDomain: string, senderIsSecure: boolean): void;
 
 		allowDomains(connectionName: string, receiver: ILocalConnectionReceiver, domains: string[],
-		             secure: boolean);
+		             secure: boolean): void;
 	}
 
 	export module LocalConnectionService {
@@ -2885,7 +2892,7 @@ module Shumway {
 			this._queues = {};
 		}
 
-		public register(type, callback) {
+		public register(type: any, callback: any) {
 			Debug.assert(type);
 			Debug.assert(callback);
 			let queue = this._queues[type];
@@ -2899,7 +2906,7 @@ module Shumway {
 			queue.push(callback);
 		}
 
-		public unregister(type: string, callback) {
+		public unregister(type: string, callback: any) {
 			Debug.assert(type);
 			Debug.assert(callback);
 			let queue = this._queues[type];
@@ -2915,20 +2922,20 @@ module Shumway {
 			}
 		}
 
-		public notify(type: string, ...args: Array<any>) {
+		public notify(type: string, args_: any) {
 			let queue = this._queues[type];
 			if (!queue) {
 				return;
 			}
 			queue = queue.slice();
-			let args2 = Array.prototype.slice.call(arguments, 0);
+			let args = Array.prototype.slice.call(arguments, 0);
 			for (let i = 0; i < queue.length; i++) {
 				let callback = queue[i];
 				callback.apply(null, args);
 			}
 		}
 
-		public notify1(type: string, value) {
+		public notify1(type: string, value: any) {
 			let queue = this._queues[type];
 			if (!queue) {
 				return;
@@ -3003,14 +3010,14 @@ module Shumway {
 	export class PromiseWrapper<T> {
 		public promise: Promise<T>;
 		public resolve: (result: T) => void;
-		public reject: (reason) => void;
+		public reject: (reason: any) => void;
 
-		then(onFulfilled, onRejected) {
+		then(onFulfilled: any, onRejected: any) {
 			return this.promise.then(onFulfilled, onRejected);
 		}
 
 		constructor() {
-			this.promise = new Promise<T>(function (resolve, reject) {
+			this.promise = new Promise<T>(function (resolve: any, reject: any) {
 				this.resolve = resolve;
 				this.reject = reject;
 			}.bind(this));
@@ -3019,7 +3026,7 @@ module Shumway {
 }
 
 
-declare let exports;
+declare let exports: any;
 if (typeof exports !== "undefined") {
 	exports["Shumway"] = Shumway;
 }
@@ -3031,7 +3038,7 @@ if (typeof exports !== "undefined") {
  * TODO: Go through the code and remove all references to these.
  */
 (function () {
-	function extendBuiltin(prototype, property, value) {
+	function extendBuiltin(prototype: any, property: any, value: any) {
 		if (!prototype[property]) {
 			Object.defineProperty(prototype, property,
 				{
@@ -3043,11 +3050,11 @@ if (typeof exports !== "undefined") {
 		}
 	}
 
-	function removeColors(s) {
+	function removeColors(s: string) {
 		return s.replace(/\033\[[0-9]*m/g, "");
 	}
 
-	extendBuiltin(String.prototype, "padRight", function (c, n) {
+	extendBuiltin(String.prototype, "padRight", function (c: string, n: number) {
 		let str = this;
 		let length = removeColors(str).length;
 		if (!c || length >= n) {
@@ -3060,7 +3067,7 @@ if (typeof exports !== "undefined") {
 		return str;
 	});
 
-	extendBuiltin(String.prototype, "padLeft", function (c, n) {
+	extendBuiltin(String.prototype, "padLeft", function (c: string, n: number) {
 		let str = this;
 		let length = str.length;
 		if (!c || length >= n) {
@@ -3077,11 +3084,11 @@ if (typeof exports !== "undefined") {
 		return this.replace(/^\s+|\s+$/g, "");
 	});
 
-	extendBuiltin(String.prototype, "endsWith", function (str) {
+	extendBuiltin(String.prototype, "endsWith", function (str: string) {
 		return this.indexOf(str, this.length - str.length) !== -1;
 	});
 
-	extendBuiltin(Array.prototype, "replace", function (x, y) {
+	extendBuiltin(Array.prototype, "replace", function (x: any, y: any) {
 		if (x === y) {
 			return 0;
 		}

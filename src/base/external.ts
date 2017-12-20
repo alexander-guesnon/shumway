@@ -29,10 +29,10 @@ declare let ShumwayCom: {
 	createRtmpXHR?: () => RtmpXHR;
 
 	createSpecialStorage: () => SpecialStorage;
-	getWeakMapKeys: (weakMap) => Array<any>;
+	getWeakMapKeys: (weakMap: any) => Array<any>;
 	fallback: () => void;
 	reportIssue: (details?: string) => void;
-	reportTelemetry: (data) => void;
+	reportTelemetry: (data: any) => void;
 	enableDebug: () => void;
 	getPluginParams: () => any;
 	getSettings: () => any;
@@ -47,8 +47,8 @@ declare let ShumwayCom: {
 	sendSyncMessage: (data: any) => any;
 	postAsyncMessage: (data: any) => void;
 
-	setLoadFileCallback: (callback: (data) => void) => void;
-	setExternalCallback: (callback: (call) => any) => void;
+	setLoadFileCallback: (callback: (data: any) => void) => void;
+	setExternalCallback: (callback: (call: any) => any) => void;
 	setSystemResourceCallback: (callback: (id: number, data: any) => void) => void;
 	setSyncMessageCallback: (callback: (data: any) => any) => void;
 	setAsyncMessageCallback: (callback: (data: any) => void) => void;
@@ -71,9 +71,9 @@ interface SpecialStorage {
 interface SpecialInflate {
 	setDataCallback(callback: (data: Uint8Array) => void): void;
 
-	push(data: Uint8Array);
+	push(data: Uint8Array): void;
 
-	close();
+	close(): void;
 }
 
 interface LocalConnectionService {
