@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-///<reference path='es6-promises.d.ts' />
 ///<reference path='utilities.ts' />
 ///<reference path='options.ts' />
 ///<reference path='settings.ts'/>

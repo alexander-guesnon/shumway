@@ -79,97 +79,12 @@ interface Math {
 	clz32(x: number): number;
 }
 
-interface Error {
-	stack: string;
-}
-
-interface Map<K, V> {
-	clear(): void;
-
-	delete(key: K): boolean;
-
-	forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
-
-	get(key: K): V;
-
-	has(key: K): boolean;
-
-	set(key: K, value: V): Map<K, V>;
-
-	size: number;
-}
-
-declare let Map: {
-	new <K, V>(): Map<K, V>;
-	prototype: Map<any, any>;
-};
-
-interface WeakMap<K, V> {
-	clear(): void;
-
-	delete(key: K): boolean;
-
-	get(key: K): V;
-
-	has(key: K): boolean;
-
-	set(key: K, value: V): WeakMap<K, V>;
-}
-
-declare let WeakMap: {
-	new <K, V>(): WeakMap<K, V>;
-	prototype: WeakMap<any, any>;
-};
-
-interface Set<T> {
-	add(value: T): Set<T>;
-
-	clear(): void;
-
-	delete(value: T): boolean;
-
-	forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
-
-	has(value: T): boolean;
-
-	size: number;
-}
-
-declare let Set: {
-	new <T>(): Set<T>;
-	prototype: Set<any>;
-};
-
-interface Uint8ClampedArray extends ArrayBufferView {
-	BYTES_PER_ELEMENT: number;
-	length: number;
-
-	[index: number]: number;
-
-	get(index: number): number;
-
-	set(index: number, value: number): void;
-
-	set(array: Uint8Array, offset?: number): void;
-
-	set(array: number[], offset?: number): void;
-
-	subarray(begin: number, end?: number): Uint8ClampedArray;
-}
-
-declare let Uint8ClampedArray: {
-	prototype: Uint8ClampedArray;
-	new (length: number): Uint8ClampedArray;
-	new (array: Uint8Array): Uint8ClampedArray;
-	new (array: number[]): Uint8ClampedArray;
-	new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
-	BYTES_PER_ELEMENT: number;
-};
-
 declare module Shumway {
 	let version: string;
 	let build: string;
 }
+
+new Error().stack;
 
 module Shumway {
 
@@ -1355,7 +1270,7 @@ module Shumway {
 
 		clear() {
 			if (this._map) {
-				this._map.clear();
+				this._map = new WeakMap<T, number>();
 			} else {
 				this._list.length = 0;
 			}
@@ -3000,13 +2915,13 @@ module Shumway {
 			}
 		}
 
-		public notify(type: string, args) {
+		public notify(type: string, ...args: Array<any>) {
 			let queue = this._queues[type];
 			if (!queue) {
 				return;
 			}
 			queue = queue.slice();
-			let args = Array.prototype.slice.call(arguments, 0);
+			let args2 = Array.prototype.slice.call(arguments, 0);
 			for (let i = 0; i < queue.length; i++) {
 				let callback = queue[i];
 				callback.apply(null, args);
