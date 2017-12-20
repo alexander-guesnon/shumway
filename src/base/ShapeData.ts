@@ -137,346 +137,341 @@
 
 ///<reference path='references.ts' />
 module Shumway {
-  import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
-  import ensureTypedArrayCapacity = Shumway.ArrayUtilities.ensureTypedArrayCapacity;
+	import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
+	import ensureTypedArrayCapacity = Shumway.ArrayUtilities.ensureTypedArrayCapacity;
 
-  import assert = Shumway.Debug.assert;
-  /**
-   * Used for (de-)serializing Graphics path data in defineShape, flash.display.Graphics
-   * and the renderer.
-   */
-  export const enum PathCommand {
-    BeginSolidFill = 1,
-    BeginGradientFill = 2,
-    BeginBitmapFill = 3,
-    EndFill = 4,
-    LineStyleSolid = 5,
-    LineStyleGradient = 6,
-    LineStyleBitmap = 7,
-    LineEnd = 8,
-    MoveTo = 9,
-    LineTo = 10,
-    CurveTo = 11,
-    CubicCurveTo = 12,
-  }
+	import assert = Shumway.Debug.assert;
 
-  export const enum GradientType {
-    Linear = 0x10,
-    Radial = 0x12
-  }
+	/**
+	 * Used for (de-)serializing Graphics path data in defineShape, flash.display.Graphics
+	 * and the renderer.
+	 */
+	export const enum PathCommand {
+		BeginSolidFill = 1,
+		BeginGradientFill = 2,
+		BeginBitmapFill = 3,
+		EndFill = 4,
+		LineStyleSolid = 5,
+		LineStyleGradient = 6,
+		LineStyleBitmap = 7,
+		LineEnd = 8,
+		MoveTo = 9,
+		LineTo = 10,
+		CurveTo = 11,
+		CubicCurveTo = 12,
+	}
 
-  export const enum GradientSpreadMethod {
-    Pad = 0,
-    Reflect = 1,
-    Repeat = 2
-  }
+	export const enum GradientType {
+		Linear = 0x10,
+		Radial = 0x12
+	}
 
-  export const enum GradientInterpolationMethod {
-    RGB = 0,
-    LinearRGB = 1
-  }
+	export const enum GradientSpreadMethod {
+		Pad = 0,
+		Reflect = 1,
+		Repeat = 2
+	}
 
-  export const enum LineScaleMode {
-    None = 0,
-    Normal = 1,
-    Vertical = 2,
-    Horizontal = 3
-  }
+	export const enum GradientInterpolationMethod {
+		RGB = 0,
+		LinearRGB = 1
+	}
 
-  export interface ShapeMatrix {
-    a: number;
-    b: number;
-    c: number;
-    d: number;
-    tx: number;
-    ty: number;
-  }
+	export const enum LineScaleMode {
+		None = 0,
+		Normal = 1,
+		Vertical = 2,
+		Horizontal = 3
+	}
 
-  export class PlainObjectShapeData {
-    constructor(public commands: Uint8Array, public commandsPosition: number,
-                public coordinates: Int32Array, public morphCoordinates: Int32Array,
-                public coordinatesPosition: number,
-                public styles: ArrayBuffer, public stylesLength: number,
-                public morphStyles: ArrayBuffer, public morphStylesLength: number,
-                public hasFills: boolean, public hasLines: boolean)
-    {}
-  }
+	export interface ShapeMatrix {
+		a: number;
+		b: number;
+		c: number;
+		d: number;
+		tx: number;
+		ty: number;
+	}
 
-  enum DefaultSize {
-    Commands = 32,
-    Coordinates = 128,
-    Styles = 16
-  }
+	export class PlainObjectShapeData {
+		constructor(public commands: Uint8Array, public commandsPosition: number,
+		            public coordinates: Int32Array, public morphCoordinates: Int32Array,
+		            public coordinatesPosition: number,
+		            public styles: ArrayBuffer, public stylesLength: number,
+		            public morphStyles: ArrayBuffer, public morphStylesLength: number,
+		            public hasFills: boolean, public hasLines: boolean) {
+		}
+	}
 
-  export class ShapeData {
+	enum DefaultSize {
+		Commands = 32,
+		Coordinates = 128,
+		Styles = 16
+	}
 
-    commands: Uint8Array;
-    commandsPosition: number;
-    coordinates: Int32Array;
-    // Note: creation and capacity-ensurance have to happen from the outside for this field.
-    morphCoordinates: Int32Array;
-    coordinatesPosition: number;
-    styles: DataBuffer;
-    morphStyles: DataBuffer;
-    hasFills: boolean;
-    hasLines: boolean;
+	export class ShapeData {
 
-    constructor(initialize: boolean = true) {
-      if (initialize) {
-        this.clear();
-      }
-    }
+		commands: Uint8Array;
+		commandsPosition: number;
+		coordinates: Int32Array;
+		// Note: creation and capacity-ensurance have to happen from the outside for this field.
+		morphCoordinates: Int32Array;
+		coordinatesPosition: number;
+		styles: DataBuffer;
+		morphStyles: DataBuffer;
+		hasFills: boolean;
+		hasLines: boolean;
 
-    static FromPlainObject(source: PlainObjectShapeData): ShapeData {
-      let data = new ShapeData(false);
-      data.commands = source.commands;
-      data.coordinates = source.coordinates;
-      data.morphCoordinates = source.morphCoordinates;
-      data.commandsPosition = source.commandsPosition;
-      data.coordinatesPosition = source.coordinatesPosition;
-      data.styles = DataBuffer.FromArrayBuffer(source.styles, source.stylesLength);
-      data.styles.endian = 'auto';
-      if (source.morphStyles) {
-        data.morphStyles = DataBuffer.FromArrayBuffer(
-          source.morphStyles, source.morphStylesLength);
-        data.morphStyles.endian = 'auto';
-      }
-      data.hasFills = source.hasFills;
-      data.hasLines = source.hasLines;
-      return data;
-    }
+		constructor(initialize: boolean = true) {
+			if (initialize) {
+				this.clear();
+			}
+		}
 
-    moveTo(x: number, y: number): void {
-      this.ensurePathCapacities(1, 2);
-      this.commands[this.commandsPosition++] = PathCommand.MoveTo;
-      this.coordinates[this.coordinatesPosition++] = x;
-      this.coordinates[this.coordinatesPosition++] = y;
-    }
+		static FromPlainObject(source: PlainObjectShapeData): ShapeData {
+			let data = new ShapeData(false);
+			data.commands = source.commands;
+			data.coordinates = source.coordinates;
+			data.morphCoordinates = source.morphCoordinates;
+			data.commandsPosition = source.commandsPosition;
+			data.coordinatesPosition = source.coordinatesPosition;
+			data.styles = DataBuffer.FromArrayBuffer(source.styles, source.stylesLength);
+			data.styles.endian = 'auto';
+			if (source.morphStyles) {
+				data.morphStyles = DataBuffer.FromArrayBuffer(
+					source.morphStyles, source.morphStylesLength);
+				data.morphStyles.endian = 'auto';
+			}
+			data.hasFills = source.hasFills;
+			data.hasLines = source.hasLines;
+			return data;
+		}
 
-    lineTo(x: number, y: number): void {
-      this.ensurePathCapacities(1, 2);
-      this.commands[this.commandsPosition++] = PathCommand.LineTo;
-      this.coordinates[this.coordinatesPosition++] = x;
-      this.coordinates[this.coordinatesPosition++] = y;
-    }
+		moveTo(x: number, y: number): void {
+			this.ensurePathCapacities(1, 2);
+			this.commands[this.commandsPosition++] = PathCommand.MoveTo;
+			this.coordinates[this.coordinatesPosition++] = x;
+			this.coordinates[this.coordinatesPosition++] = y;
+		}
 
-    curveTo(controlX: number, controlY: number, anchorX: number, anchorY: number): void {
-      this.ensurePathCapacities(1, 4);
-      this.commands[this.commandsPosition++] = PathCommand.CurveTo;
-      this.coordinates[this.coordinatesPosition++] = controlX;
-      this.coordinates[this.coordinatesPosition++] = controlY;
-      this.coordinates[this.coordinatesPosition++] = anchorX;
-      this.coordinates[this.coordinatesPosition++] = anchorY;
-    }
+		lineTo(x: number, y: number): void {
+			this.ensurePathCapacities(1, 2);
+			this.commands[this.commandsPosition++] = PathCommand.LineTo;
+			this.coordinates[this.coordinatesPosition++] = x;
+			this.coordinates[this.coordinatesPosition++] = y;
+		}
 
-    cubicCurveTo(controlX1: number, controlY1: number, controlX2: number, controlY2: number,
-                 anchorX: number, anchorY: number): void
-    {
-      this.ensurePathCapacities(1, 6);
-      this.commands[this.commandsPosition++] = PathCommand.CubicCurveTo;
-      this.coordinates[this.coordinatesPosition++] = controlX1;
-      this.coordinates[this.coordinatesPosition++] = controlY1;
-      this.coordinates[this.coordinatesPosition++] = controlX2;
-      this.coordinates[this.coordinatesPosition++] = controlY2;
-      this.coordinates[this.coordinatesPosition++] = anchorX;
-      this.coordinates[this.coordinatesPosition++] = anchorY;
-    }
+		curveTo(controlX: number, controlY: number, anchorX: number, anchorY: number): void {
+			this.ensurePathCapacities(1, 4);
+			this.commands[this.commandsPosition++] = PathCommand.CurveTo;
+			this.coordinates[this.coordinatesPosition++] = controlX;
+			this.coordinates[this.coordinatesPosition++] = controlY;
+			this.coordinates[this.coordinatesPosition++] = anchorX;
+			this.coordinates[this.coordinatesPosition++] = anchorY;
+		}
 
-    beginFill(color: number): void {
-      this.ensurePathCapacities(1, 0);
-      this.commands[this.commandsPosition++] = PathCommand.BeginSolidFill;
-      this.styles.writeUnsignedInt(color);
-      this.hasFills = true;
-    }
+		cubicCurveTo(controlX1: number, controlY1: number, controlX2: number, controlY2: number,
+		             anchorX: number, anchorY: number): void {
+			this.ensurePathCapacities(1, 6);
+			this.commands[this.commandsPosition++] = PathCommand.CubicCurveTo;
+			this.coordinates[this.coordinatesPosition++] = controlX1;
+			this.coordinates[this.coordinatesPosition++] = controlY1;
+			this.coordinates[this.coordinatesPosition++] = controlX2;
+			this.coordinates[this.coordinatesPosition++] = controlY2;
+			this.coordinates[this.coordinatesPosition++] = anchorX;
+			this.coordinates[this.coordinatesPosition++] = anchorY;
+		}
 
-    writeMorphFill(color: number) {
-      this.morphStyles.writeUnsignedInt(color);
-    }
+		beginFill(color: number): void {
+			this.ensurePathCapacities(1, 0);
+			this.commands[this.commandsPosition++] = PathCommand.BeginSolidFill;
+			this.styles.writeUnsignedInt(color);
+			this.hasFills = true;
+		}
 
-    endFill() {
-      this.ensurePathCapacities(1, 0);
-      this.commands[this.commandsPosition++] = PathCommand.EndFill;
-    }
+		writeMorphFill(color: number) {
+			this.morphStyles.writeUnsignedInt(color);
+		}
 
-    endLine() {
-      this.ensurePathCapacities(1, 0);
-      this.commands[this.commandsPosition++] = PathCommand.LineEnd;
-    }
+		endFill() {
+			this.ensurePathCapacities(1, 0);
+			this.commands[this.commandsPosition++] = PathCommand.EndFill;
+		}
 
-    lineStyle(thickness: number, color: number, pixelHinting: boolean,
-              scaleMode: LineScaleMode, caps: number, joints: number, miterLimit: number): void
-    {
-      release || assert(thickness === (thickness|0), thickness >= 0 && thickness <= 0xff * 20);
-      this.ensurePathCapacities(2, 0);
-      this.commands[this.commandsPosition++] = PathCommand.LineStyleSolid;
-      this.coordinates[this.coordinatesPosition++] = thickness;
-      let styles: DataBuffer = this.styles;
-      styles.writeUnsignedInt(color);
-      styles.writeBoolean(pixelHinting);
-      styles.writeUnsignedByte(scaleMode);
-      styles.writeUnsignedByte(caps);
-      styles.writeUnsignedByte(joints);
-      styles.writeUnsignedByte(miterLimit);
-      this.hasLines = true;
-    }
+		endLine() {
+			this.ensurePathCapacities(1, 0);
+			this.commands[this.commandsPosition++] = PathCommand.LineEnd;
+		}
 
-    writeMorphLineStyle(thickness: number, color: number) {
-      this.morphCoordinates[this.coordinatesPosition - 1] = thickness;
-      this.morphStyles.writeUnsignedInt(color);
-    }
+		lineStyle(thickness: number, color: number, pixelHinting: boolean,
+		          scaleMode: LineScaleMode, caps: number, joints: number, miterLimit: number): void {
+			release || assert(thickness === (thickness | 0), thickness >= 0 && thickness <= 0xff * 20);
+			this.ensurePathCapacities(2, 0);
+			this.commands[this.commandsPosition++] = PathCommand.LineStyleSolid;
+			this.coordinates[this.coordinatesPosition++] = thickness;
+			let styles: DataBuffer = this.styles;
+			styles.writeUnsignedInt(color);
+			styles.writeBoolean(pixelHinting);
+			styles.writeUnsignedByte(scaleMode);
+			styles.writeUnsignedByte(caps);
+			styles.writeUnsignedByte(joints);
+			styles.writeUnsignedByte(miterLimit);
+			this.hasLines = true;
+		}
 
-    /**
-     * Bitmaps are specified the same for fills and strokes, so we only need to serialize them
-     * once. The Parameter `pathCommand` is treated as the actual command to serialize, and must
-     * be one of BeginBitmapFill and LineStyleBitmap.
-     */
-    beginBitmap(pathCommand: PathCommand, bitmapId: number, matrix: ShapeMatrix,
-                repeat: boolean, smooth: boolean): void
-    {
-      release || assert(pathCommand === PathCommand.BeginBitmapFill ||
-             pathCommand === PathCommand.LineStyleBitmap);
-      this.ensurePathCapacities(1, 0);
-      this.commands[this.commandsPosition++] = pathCommand;
-      let styles: DataBuffer = this.styles;
-      styles.writeUnsignedInt(bitmapId);
-      this._writeStyleMatrix(matrix, false);
-      styles.writeBoolean(repeat);
-      styles.writeBoolean(smooth);
-      this.hasFills = true;
-    }
+		writeMorphLineStyle(thickness: number, color: number) {
+			this.morphCoordinates[this.coordinatesPosition - 1] = thickness;
+			this.morphStyles.writeUnsignedInt(color);
+		}
 
-    writeMorphBitmap(matrix: ShapeMatrix) {
-      this._writeStyleMatrix(matrix, true);
-    }
+		/**
+		 * Bitmaps are specified the same for fills and strokes, so we only need to serialize them
+		 * once. The Parameter `pathCommand` is treated as the actual command to serialize, and must
+		 * be one of BeginBitmapFill and LineStyleBitmap.
+		 */
+		beginBitmap(pathCommand: PathCommand, bitmapId: number, matrix: ShapeMatrix,
+		            repeat: boolean, smooth: boolean): void {
+			release || assert(pathCommand === PathCommand.BeginBitmapFill ||
+				pathCommand === PathCommand.LineStyleBitmap);
+			this.ensurePathCapacities(1, 0);
+			this.commands[this.commandsPosition++] = pathCommand;
+			let styles: DataBuffer = this.styles;
+			styles.writeUnsignedInt(bitmapId);
+			this._writeStyleMatrix(matrix, false);
+			styles.writeBoolean(repeat);
+			styles.writeBoolean(smooth);
+			this.hasFills = true;
+		}
 
-    /**
-     * Gradients are specified the same for fills and strokes, so we only need to serialize them
-     * once. The Parameter `pathCommand` is treated as the actual command to serialize, and must
-     * be one of BeginGradientFill and LineStyleGradient.
-     */
-    beginGradient(pathCommand: PathCommand, colors: number[], ratios: number[],
-                  gradientType: number, matrix: ShapeMatrix,
-                  spread: number, interpolation: number, focalPointRatio: number)
-    {
-      release || assert(pathCommand === PathCommand.BeginGradientFill ||
-             pathCommand === PathCommand.LineStyleGradient);
+		writeMorphBitmap(matrix: ShapeMatrix) {
+			this._writeStyleMatrix(matrix, true);
+		}
 
-      this.ensurePathCapacities(1, 0);
-      this.commands[this.commandsPosition++] = pathCommand;
-      let styles: DataBuffer = this.styles;
-      styles.writeUnsignedByte(gradientType);
-      release || assert(focalPointRatio === (focalPointRatio|0));
-      styles.writeShort(focalPointRatio);
-      this._writeStyleMatrix(matrix, false);
-      let colorStops = colors.length;
-      styles.writeByte(colorStops);
-      for (let i = 0; i < colorStops; i++) {
-        // Ratio must be valid, otherwise we'd have bailed above.
-        styles.writeUnsignedByte(ratios[i]);
-        // Colors are coerced to uint32, with the highest byte stripped.
-        styles.writeUnsignedInt(colors[i]);
-      }
-      styles.writeUnsignedByte(spread);
-      styles.writeUnsignedByte(interpolation);
-      this.hasFills = true;
-    }
+		/**
+		 * Gradients are specified the same for fills and strokes, so we only need to serialize them
+		 * once. The Parameter `pathCommand` is treated as the actual command to serialize, and must
+		 * be one of BeginGradientFill and LineStyleGradient.
+		 */
+		beginGradient(pathCommand: PathCommand, colors: number[], ratios: number[],
+		              gradientType: number, matrix: ShapeMatrix,
+		              spread: number, interpolation: number, focalPointRatio: number) {
+			release || assert(pathCommand === PathCommand.BeginGradientFill ||
+				pathCommand === PathCommand.LineStyleGradient);
 
-    writeMorphGradient(colors: number[], ratios: number[], matrix: ShapeMatrix) {
-      this._writeStyleMatrix(matrix, true);
-      let styles: DataBuffer = this.morphStyles;
-      for (let i = 0; i < colors.length; i++) {
-        // Ratio must be valid, otherwise we'd have bailed above.
-        styles.writeUnsignedByte(ratios[i]);
-        // Colors are coerced to uint32, with the highest byte stripped.
-        styles.writeUnsignedInt(colors[i]);
-      }
-    }
+			this.ensurePathCapacities(1, 0);
+			this.commands[this.commandsPosition++] = pathCommand;
+			let styles: DataBuffer = this.styles;
+			styles.writeUnsignedByte(gradientType);
+			release || assert(focalPointRatio === (focalPointRatio | 0));
+			styles.writeShort(focalPointRatio);
+			this._writeStyleMatrix(matrix, false);
+			let colorStops = colors.length;
+			styles.writeByte(colorStops);
+			for (let i = 0; i < colorStops; i++) {
+				// Ratio must be valid, otherwise we'd have bailed above.
+				styles.writeUnsignedByte(ratios[i]);
+				// Colors are coerced to uint32, with the highest byte stripped.
+				styles.writeUnsignedInt(colors[i]);
+			}
+			styles.writeUnsignedByte(spread);
+			styles.writeUnsignedByte(interpolation);
+			this.hasFills = true;
+		}
 
-    writeCommandAndCoordinates(command: PathCommand, x: number, y: number) {
-      this.ensurePathCapacities(1, 2);
-      this.commands[this.commandsPosition++] = command;
-      this.coordinates[this.coordinatesPosition++] = x;
-      this.coordinates[this.coordinatesPosition++] = y;
-    }
+		writeMorphGradient(colors: number[], ratios: number[], matrix: ShapeMatrix) {
+			this._writeStyleMatrix(matrix, true);
+			let styles: DataBuffer = this.morphStyles;
+			for (let i = 0; i < colors.length; i++) {
+				// Ratio must be valid, otherwise we'd have bailed above.
+				styles.writeUnsignedByte(ratios[i]);
+				// Colors are coerced to uint32, with the highest byte stripped.
+				styles.writeUnsignedInt(colors[i]);
+			}
+		}
 
-    writeCoordinates(x: number, y: number) {
-      this.ensurePathCapacities(0, 2);
-      this.coordinates[this.coordinatesPosition++] = x;
-      this.coordinates[this.coordinatesPosition++] = y;
-    }
+		writeCommandAndCoordinates(command: PathCommand, x: number, y: number) {
+			this.ensurePathCapacities(1, 2);
+			this.commands[this.commandsPosition++] = command;
+			this.coordinates[this.coordinatesPosition++] = x;
+			this.coordinates[this.coordinatesPosition++] = y;
+		}
 
-    writeMorphCoordinates(x: number, y: number) {
-      this.morphCoordinates = ensureTypedArrayCapacity(this.morphCoordinates,
-                                                       this.coordinatesPosition);
-      this.morphCoordinates[this.coordinatesPosition - 2] = x;
-      this.morphCoordinates[this.coordinatesPosition - 1] = y;
-    }
+		writeCoordinates(x: number, y: number) {
+			this.ensurePathCapacities(0, 2);
+			this.coordinates[this.coordinatesPosition++] = x;
+			this.coordinates[this.coordinatesPosition++] = y;
+		}
 
-    clear() {
-      this.commandsPosition = this.coordinatesPosition = 0;
-      this.commands = new Uint8Array(DefaultSize.Commands);
-      this.coordinates = new Int32Array(DefaultSize.Coordinates);
-      this.styles = new DataBuffer(DefaultSize.Styles);
-      this.styles.endian = 'auto';
-      this.hasFills = this.hasLines = false;
-    }
+		writeMorphCoordinates(x: number, y: number) {
+			this.morphCoordinates = ensureTypedArrayCapacity(this.morphCoordinates,
+				this.coordinatesPosition);
+			this.morphCoordinates[this.coordinatesPosition - 2] = x;
+			this.morphCoordinates[this.coordinatesPosition - 1] = y;
+		}
 
-    isEmpty() {
-      return this.commandsPosition === 0;
-    }
+		clear() {
+			this.commandsPosition = this.coordinatesPosition = 0;
+			this.commands = new Uint8Array(DefaultSize.Commands);
+			this.coordinates = new Int32Array(DefaultSize.Coordinates);
+			this.styles = new DataBuffer(DefaultSize.Styles);
+			this.styles.endian = 'auto';
+			this.hasFills = this.hasLines = false;
+		}
 
-    clone(): ShapeData {
-      let copy = new ShapeData(false);
-      copy.commands = new Uint8Array(this.commands);
-      copy.commandsPosition = this.commandsPosition;
-      copy.coordinates = new Int32Array(this.coordinates);
-      copy.coordinatesPosition = this.coordinatesPosition;
-      copy.styles = new DataBuffer(this.styles.length);
-      copy.styles.writeRawBytes(this.styles.bytes.subarray(0, this.styles.length));
-      if (this.morphStyles) {
-        copy.morphStyles = new DataBuffer(this.morphStyles.length);
-        copy.morphStyles.writeRawBytes(
-          this.morphStyles.bytes.subarray(0, this.morphStyles.length));
-      }
-      copy.hasFills = this.hasFills;
-      copy.hasLines = this.hasLines;
-      return copy;
-    }
+		isEmpty() {
+			return this.commandsPosition === 0;
+		}
 
-    toPlainObject(): PlainObjectShapeData {
-      return new PlainObjectShapeData(this.commands, this.commandsPosition,
-                                      this.coordinates, this.morphCoordinates,
-                                      this.coordinatesPosition,
-                                      this.styles.buffer, this.styles.length,
-                                      this.morphStyles && this.morphStyles.buffer,
-                                      this.morphStyles ? this.morphStyles.length : 0,
-                                      this.hasFills, this.hasLines);
-    }
+		clone(): ShapeData {
+			let copy = new ShapeData(false);
+			copy.commands = new Uint8Array(this.commands);
+			copy.commandsPosition = this.commandsPosition;
+			copy.coordinates = new Int32Array(this.coordinates);
+			copy.coordinatesPosition = this.coordinatesPosition;
+			copy.styles = new DataBuffer(this.styles.length);
+			copy.styles.writeRawBytes(this.styles.bytes.subarray(0, this.styles.length));
+			if (this.morphStyles) {
+				copy.morphStyles = new DataBuffer(this.morphStyles.length);
+				copy.morphStyles.writeRawBytes(
+					this.morphStyles.bytes.subarray(0, this.morphStyles.length));
+			}
+			copy.hasFills = this.hasFills;
+			copy.hasLines = this.hasLines;
+			return copy;
+		}
 
-    public get buffers(): ArrayBuffer[] {
-      let buffers = [this.commands.buffer, this.coordinates.buffer, this.styles.buffer];
-      if (this.morphCoordinates) {
-        buffers.push(this.morphCoordinates.buffer);
-      }
-      if (this.morphStyles) {
-        buffers.push(this.morphStyles.buffer);
-      }
-      return buffers;
-    }
+		toPlainObject(): PlainObjectShapeData {
+			return new PlainObjectShapeData(this.commands, this.commandsPosition,
+				this.coordinates, this.morphCoordinates,
+				this.coordinatesPosition,
+				this.styles.buffer, this.styles.length,
+				this.morphStyles && this.morphStyles.buffer,
+				this.morphStyles ? this.morphStyles.length : 0,
+				this.hasFills, this.hasLines);
+		}
 
-    private _writeStyleMatrix(matrix: ShapeMatrix, isMorph: boolean)
-    {
-      let styles: DataBuffer = isMorph ? this.morphStyles : this.styles;
-      styles.write6Floats(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-    }
+		public get buffers(): ArrayBuffer[] {
+			let buffers = [this.commands.buffer, this.coordinates.buffer, this.styles.buffer];
+			if (this.morphCoordinates) {
+				buffers.push(this.morphCoordinates.buffer);
+			}
+			if (this.morphStyles) {
+				buffers.push(this.morphStyles.buffer);
+			}
+			return buffers;
+		}
 
-    private ensurePathCapacities(numCommands: number, numCoordinates: number)
-    {
-      // ensureTypedArrayCapacity will hopefully be inlined, in which case the field writes
-      // will be optimized out.
-      this.commands = ensureTypedArrayCapacity(this.commands, this.commandsPosition + numCommands);
-      this.coordinates = ensureTypedArrayCapacity(this.coordinates,
-                                                  this.coordinatesPosition + numCoordinates);
-    }
-  }
+		private _writeStyleMatrix(matrix: ShapeMatrix, isMorph: boolean) {
+			let styles: DataBuffer = isMorph ? this.morphStyles : this.styles;
+			styles.write6Floats(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+		}
+
+		private ensurePathCapacities(numCommands: number, numCoordinates: number) {
+			// ensureTypedArrayCapacity will hopefully be inlined, in which case the field writes
+			// will be optimized out.
+			this.commands = ensureTypedArrayCapacity(this.commands, this.commandsPosition + numCommands);
+			this.coordinates = ensureTypedArrayCapacity(this.coordinates,
+				this.coordinatesPosition + numCoordinates);
+		}
+	}
 }
