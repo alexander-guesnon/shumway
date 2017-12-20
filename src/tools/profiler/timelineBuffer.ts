@@ -152,7 +152,7 @@ module Shumway.Tools.Profiler {
 				this._initialize();
 			}
 
-			this._marks.forEachInReverse(function (mark, i) {
+			this._marks.forEachInReverse(function (mark: number, i: number) {
 				let dataId = (mark >>> 16) & TimelineBuffer.MAX_DATAID;
 				let data = datastore[dataId];
 				let kindId = mark & TimelineBuffer.MAX_KINDID;
@@ -195,6 +195,7 @@ module Shumway.Tools.Profiler {
 						}
 					}
 				}
+				return false;
 			});
 			if (snapshot.children && snapshot.children.length) {
 				snapshot.startTime = snapshot.children[0].startTime;
@@ -215,14 +216,15 @@ module Shumway.Tools.Profiler {
 			this._times.reset();
 		}
 
-		static FromFirefoxProfile(profile, name?: string) {
+		static FromFirefoxProfile(profile: any, name?: string) {
 			let samples = profile.profile.threads[0].samples;
 			let buffer = new TimelineBuffer(name, samples[0].time);
-			let currentStack = [];
+			let currentStack : any = [];
 			let sample;
+			let time;
 			for (let i = 0; i < samples.length; i++) {
 				sample = samples[i];
-				let time = sample.time;
+				time = sample.time;
 				let stack = sample.frames;
 				let j = 0;
 				let minStackLen = Math.min(stack.length, currentStack.length);
@@ -246,17 +248,18 @@ module Shumway.Tools.Profiler {
 			return buffer;
 		}
 
-		static FromChromeProfile(profile, name?: string) {
+		static FromChromeProfile(profile: any, name?: string) {
 			let timestamps = profile.timestamps;
 			let samples = profile.samples;
 			let buffer = new TimelineBuffer(name, timestamps[0] / 1000);
-			let currentStack = [];
-			let idMap = {};
+			let currentStack: any = [];
+			let idMap: MapObject<any> = {};
 			let sample;
+			let time;
 			TimelineBuffer._resolveIds(profile.head, idMap);
 			for (let i = 0; i < timestamps.length; i++) {
-				let time = timestamps[i] / 1000;
-				let stack = [];
+				time = timestamps[i] / 1000;
+				let stack: any = [];
 				sample = idMap[samples[i]];
 				while (sample) {
 					stack.unshift(sample);
@@ -284,7 +287,7 @@ module Shumway.Tools.Profiler {
 			return buffer;
 		}
 
-		private static _resolveIds(parent, idMap) {
+		private static _resolveIds(parent: any, idMap: any) {
 			idMap[parent.id] = parent;
 			if (parent.children) {
 				for (let i = 0; i < parent.children.length; i++) {

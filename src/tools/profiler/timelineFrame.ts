@@ -195,7 +195,7 @@ module Shumway.Tools.Profiler {
 		 * More often than not we don't have to start at the very top.
 		 */
 		public queryNext(time: number): TimelineFrame {
-			let frame = this;
+			let frame = this as TimelineFrame;
 			while (time > frame.endTime) {
 				if (frame.parent) {
 					frame = frame.parent;
@@ -211,7 +211,7 @@ module Shumway.Tools.Profiler {
 		 */
 		public getDepth(): number {
 			let depth = 0;
-			let self = this;
+			let self = this as TimelineFrame;
 			while (self) {
 				depth++;
 				self = self.parent;
@@ -220,7 +220,7 @@ module Shumway.Tools.Profiler {
 		}
 
 		public calculateStatistics() {
-			let statistics = this.statistics = [];
+			let statistics: Array<TimelineFrameStatistics> = this.statistics = [];
 
 			function visit(frame: TimelineFrame) {
 				if (frame.kind) {
