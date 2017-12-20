@@ -14,162 +14,162 @@
  * limitations under the License.
  */
 module Shumway.Tools.Mini {
-  export class FPS {
-    private _container: HTMLDivElement;
-    private _canvas: HTMLCanvasElement;
-    private _context: CanvasRenderingContext2D;
-    private _ratio: number;
+	export class FPS {
+		private _container: HTMLDivElement;
+		private _canvas: HTMLCanvasElement;
+		private _context: CanvasRenderingContext2D;
+		private _ratio: number;
 
-    private _index = 0;
-    private _lastTime: number = 0;
-    private _lastWeightedTime = 0;
+		private _index = 0;
+		private _lastTime: number = 0;
+		private _lastWeightedTime = 0;
 
-    private _gradient = [
-      "#FF0000",  // Red
-      "#FF1100",
-      "#FF2300",
-      "#FF3400",
-      "#FF4600",
-      "#FF5700",
-      "#FF6900",
-      "#FF7B00",
-      "#FF8C00",
-      "#FF9E00",
-      "#FFAF00",
-      "#FFC100",
-      "#FFD300",
-      "#FFE400",
-      "#FFF600",
-      "#F7FF00",
-      "#E5FF00",
-      "#D4FF00",
-      "#C2FF00",
-      "#B0FF00",
-      "#9FFF00",
-      "#8DFF00",
-      "#7CFF00",
-      "#6AFF00",
-      "#58FF00",
-      "#47FF00",
-      "#35FF00",
-      "#24FF00",
-      "#12FF00",
-      "#00FF00"   // Green
-    ];
+		private _gradient = [
+			"#FF0000",  // Red
+			"#FF1100",
+			"#FF2300",
+			"#FF3400",
+			"#FF4600",
+			"#FF5700",
+			"#FF6900",
+			"#FF7B00",
+			"#FF8C00",
+			"#FF9E00",
+			"#FFAF00",
+			"#FFC100",
+			"#FFD300",
+			"#FFE400",
+			"#FFF600",
+			"#F7FF00",
+			"#E5FF00",
+			"#D4FF00",
+			"#C2FF00",
+			"#B0FF00",
+			"#9FFF00",
+			"#8DFF00",
+			"#7CFF00",
+			"#6AFF00",
+			"#58FF00",
+			"#47FF00",
+			"#35FF00",
+			"#24FF00",
+			"#12FF00",
+			"#00FF00"   // Green
+		];
 
-    constructor(container: HTMLDivElement) {
-      this._container = container;
-      this._canvas = document.createElement("canvas");
-      this._container.appendChild(this._canvas);
-      this._context = this._canvas.getContext("2d");
-      this._listenForContainerSizeChanges();
-    }
+		constructor(container: HTMLDivElement) {
+			this._container = container;
+			this._canvas = document.createElement("canvas");
+			this._container.appendChild(this._canvas);
+			this._context = this._canvas.getContext("2d");
+			this._listenForContainerSizeChanges();
+		}
 
-    private _listenForContainerSizeChanges() {
-      let pollInterval = 10;
-      let w = this._containerWidth;
-      let h = this._containerHeight;
-      this._onContainerSizeChanged();
-      let self = this;
-      setInterval(function () {
-        if (w !== self._containerWidth || h !== self._containerHeight) {
-          self._onContainerSizeChanged();
-          w = self._containerWidth;
-          h = self._containerHeight;
-        }
-      }, pollInterval);
-    }
+		private _listenForContainerSizeChanges() {
+			let pollInterval = 10;
+			let w = this._containerWidth;
+			let h = this._containerHeight;
+			this._onContainerSizeChanged();
+			let self = this;
+			setInterval(function () {
+				if (w !== self._containerWidth || h !== self._containerHeight) {
+					self._onContainerSizeChanged();
+					w = self._containerWidth;
+					h = self._containerHeight;
+				}
+			}, pollInterval);
+		}
 
-    private _onContainerSizeChanged() {
-      let cw = this._containerWidth;
-      let ch = this._containerHeight;
-      let devicePixelRatio = window.devicePixelRatio || 1;
-      let backingStoreRatio = 1;
-      if (devicePixelRatio !== backingStoreRatio) {
-        this._ratio = devicePixelRatio / backingStoreRatio;
-        this._canvas.width = cw * this._ratio;
-        this._canvas.height = ch * this._ratio;
-        this._canvas.style.width = cw + 'px';
-        this._canvas.style.height = ch + 'px';
-      } else {
-        this._ratio = 1;
-        this._canvas.width = cw;
-        this._canvas.height = ch;
-      }
-    }
+		private _onContainerSizeChanged() {
+			let cw = this._containerWidth;
+			let ch = this._containerHeight;
+			let devicePixelRatio = window.devicePixelRatio || 1;
+			let backingStoreRatio = 1;
+			if (devicePixelRatio !== backingStoreRatio) {
+				this._ratio = devicePixelRatio / backingStoreRatio;
+				this._canvas.width = cw * this._ratio;
+				this._canvas.height = ch * this._ratio;
+				this._canvas.style.width = cw + 'px';
+				this._canvas.style.height = ch + 'px';
+			} else {
+				this._ratio = 1;
+				this._canvas.width = cw;
+				this._canvas.height = ch;
+			}
+		}
 
-    private get _containerWidth(): number {
-      return this._container.clientWidth;
-    }
+		private get _containerWidth(): number {
+			return this._container.clientWidth;
+		}
 
-    private get _containerHeight(): number {
-      return this._container.clientHeight;
-    }
+		private get _containerHeight(): number {
+			return this._container.clientHeight;
+		}
 
-    public tickAndRender(idle: boolean = false, renderTime: number = 0) {
-      if (this._lastTime === 0) {
-        this._lastTime = performance.now();
-        return;
-      }
+		public tickAndRender(idle: boolean = false, renderTime: number = 0) {
+			if (this._lastTime === 0) {
+				this._lastTime = performance.now();
+				return;
+			}
 
-      let elapsedTime = performance.now() - this._lastTime;
-      let weightRatio = 0; // Use ratio here if you want smoothing.
-      let weightedTime = elapsedTime * (1 - weightRatio) + this._lastWeightedTime * weightRatio;
+			let elapsedTime = performance.now() - this._lastTime;
+			let weightRatio = 0; // Use ratio here if you want smoothing.
+			let weightedTime = elapsedTime * (1 - weightRatio) + this._lastWeightedTime * weightRatio;
 
-      let context = this._context;
-      let w = 2 * this._ratio;
-      let wPadding = 1;
-      let fontSize = 8;
-      let tickOffset = this._ratio * 30;
-      let webkitPerformance: any = performance;
-      if (webkitPerformance.memory) {
-        tickOffset += this._ratio * 30;
-      }
+			let context = this._context;
+			let w = 2 * this._ratio;
+			let wPadding = 1;
+			let fontSize = 8;
+			let tickOffset = this._ratio * 30;
+			let webkitPerformance: any = performance;
+			if (webkitPerformance.memory) {
+				tickOffset += this._ratio * 30;
+			}
 
-      let count = ((this._canvas.width - tickOffset) / (w + wPadding)) | 0;
+			let count = ((this._canvas.width - tickOffset) / (w + wPadding)) | 0;
 
-      let index = this._index ++;
-      if (this._index > count) {
-        this._index = 0;
-      }
+			let index = this._index++;
+			if (this._index > count) {
+				this._index = 0;
+			}
 
-      let canvasHeight = this._canvas.height;
-      context.globalAlpha = 1;
-      context.fillStyle = "black";
-      context.fillRect(tickOffset + index * (w + wPadding), 0, w * 4, this._canvas.height);
+			let canvasHeight = this._canvas.height;
+			context.globalAlpha = 1;
+			context.fillStyle = "black";
+			context.fillRect(tickOffset + index * (w + wPadding), 0, w * 4, this._canvas.height);
 
-      let r = Math.min((1000 / 60) / weightedTime, 1);
-      context.fillStyle = "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
-      context.globalAlpha = idle ? 0.5 : 1;
-      let v = canvasHeight / 2 * r | 0;
-      context.fillRect(tickOffset + index * (w + wPadding), canvasHeight - v, w, v);
+			let r = Math.min((1000 / 60) / weightedTime, 1);
+			context.fillStyle = "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
+			context.globalAlpha = idle ? 0.5 : 1;
+			let v = canvasHeight / 2 * r | 0;
+			context.fillRect(tickOffset + index * (w + wPadding), canvasHeight - v, w, v);
 
-      if (renderTime) {
-        r = Math.min((1000 / 240) / renderTime, 1);
-        context.fillStyle = "#FF6347"; // "#58FF00"; // "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
-        let v = canvasHeight / 2 * r | 0;
-        context.fillRect(tickOffset + index * (w + wPadding), (canvasHeight / 2) - v, w, v);
-      }
+			if (renderTime) {
+				r = Math.min((1000 / 240) / renderTime, 1);
+				context.fillStyle = "#FF6347"; // "#58FF00"; // "#00FF00"; // this._gradient[r * (this._gradient.length - 1) | 0];
+				let v = canvasHeight / 2 * r | 0;
+				context.fillRect(tickOffset + index * (w + wPadding), (canvasHeight / 2) - v, w, v);
+			}
 
-      if (index % 16 === 0) {
-        context.globalAlpha = 1;
-        context.fillStyle = "black";
-        context.fillRect(0, 0, tickOffset, this._canvas.height);
-        context.fillStyle = "white";
-        context.font = (this._ratio * fontSize) + "px Arial";
-        context.textBaseline = "middle";
-        let s = (1000 / weightedTime).toFixed(0);
-        if (renderTime) {
-          s += " " + renderTime.toFixed(0);
-        }
-        if (webkitPerformance.memory) {
-          s += " " + (webkitPerformance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
-        }
-        context.fillText(s, 2 * this._ratio, this._containerHeight / 2 * this._ratio);
-      }
+			if (index % 16 === 0) {
+				context.globalAlpha = 1;
+				context.fillStyle = "black";
+				context.fillRect(0, 0, tickOffset, this._canvas.height);
+				context.fillStyle = "white";
+				context.font = (this._ratio * fontSize) + "px Arial";
+				context.textBaseline = "middle";
+				let s = (1000 / weightedTime).toFixed(0);
+				if (renderTime) {
+					s += " " + renderTime.toFixed(0);
+				}
+				if (webkitPerformance.memory) {
+					s += " " + (webkitPerformance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+				}
+				context.fillText(s, 2 * this._ratio, this._containerHeight / 2 * this._ratio);
+			}
 
-      this._lastTime = performance.now();
-      this._lastWeightedTime = weightedTime;
-    }
-  }
+			this._lastTime = performance.now();
+			this._lastWeightedTime = weightedTime;
+		}
+	}
 }

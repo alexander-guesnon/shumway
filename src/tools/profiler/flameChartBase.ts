@@ -15,152 +15,186 @@
  */
 module Shumway.Tools.Profiler {
 
-  export const enum FlameChartDragTarget {
-    NONE,
-    WINDOW,
-    HANDLE_LEFT,
-    HANDLE_RIGHT,
-    HANDLE_BOTH
-  }
+	export const enum FlameChartDragTarget {
+		NONE,
+		WINDOW,
+		HANDLE_LEFT,
+		HANDLE_RIGHT,
+		HANDLE_BOTH
+	}
 
-  export interface FlameChartDragInfo {
-    windowStartInitial: number;
-    windowEndInitial: number;
-    target: FlameChartDragTarget;
-  }
+	export interface FlameChartDragInfo {
+		windowStartInitial: number;
+		windowEndInitial: number;
+		target: FlameChartDragTarget;
+	}
 
-  export class FlameChartBase implements MouseControllerTarget {
+	export class FlameChartBase implements MouseControllerTarget {
 
-    _controller: Controller;
-    _mouseController: MouseController;
+		_controller: Controller;
+		_mouseController: MouseController;
 
-    _canvas: HTMLCanvasElement;
-    _context: CanvasRenderingContext2D;
+		_canvas: HTMLCanvasElement;
+		_context: CanvasRenderingContext2D;
 
-    _width: number;
-    _height: number;
+		_width: number;
+		_height: number;
 
-    _windowStart: number;
-    _windowEnd: number;
-    _rangeStart: number;
-    _rangeEnd: number;
+		_windowStart: number;
+		_windowEnd: number;
+		_rangeStart: number;
+		_rangeEnd: number;
 
-    _initialized: boolean;
+		_initialized: boolean;
 
-    _dragInfo: FlameChartDragInfo;
+		_dragInfo: FlameChartDragInfo;
 
-    static DRAGHANDLE_WIDTH = 4;
-    static MIN_WINDOW_LEN = 0.1;
+		static DRAGHANDLE_WIDTH = 4;
+		static MIN_WINDOW_LEN = 0.1;
 
-    constructor(controller: Controller) {
-      this._controller = controller;
-      this._initialized = false;
-      this._canvas = document.createElement("canvas");
-      this._context = this._canvas.getContext("2d");
-      this._mouseController = new MouseController(this, this._canvas);
-      let container = controller.container;
-      container.appendChild(this._canvas);
-      let rect = container.getBoundingClientRect();
-      this.setSize(rect.width);
-    }
+		preConstructor() {
 
-    get canvas(): HTMLCanvasElement {
-      return this._canvas;
-    }
+		}
 
-    public setSize(width: number, height: number = 20) {
-      this._width = width;
-      this._height = height;
-      this._resetCanvas();
-      this.draw();
-    }
+		constructor(controller: Controller, ...preArgs: Array<any>) {
+			this.preConstructor.apply(this, preArgs);
+			this._controller = controller;
+			this._initialized = false;
+			this._canvas = document.createElement("canvas");
+			this._context = this._canvas.getContext("2d");
+			this._mouseController = new MouseController(this, this._canvas);
+			let container = controller.container;
+			container.appendChild(this._canvas);
+			let rect = container.getBoundingClientRect();
+			this.setSize(rect.width);
+		}
 
-    public initialize(rangeStart: number, rangeEnd: number) {
-      this._initialized = true;
-      this.setRange(rangeStart, rangeEnd, false);
-      this.setWindow(rangeStart, rangeEnd, false);
-      this.draw();
-    }
+		get canvas(): HTMLCanvasElement {
+			return this._canvas;
+		}
 
-    public setWindow(start: number, end: number, draw: boolean = true) {
-      this._windowStart = start;
-      this._windowEnd = end;
-      !draw || this.draw();
-    }
+		public setSize(width: number, height: number = 20) {
+			this._width = width;
+			this._height = height;
+			this._resetCanvas();
+			this.draw();
+		}
 
-    public setRange(start: number, end: number, draw: boolean = true) {
-      this._rangeStart = start;
-      this._rangeEnd = end;
-      !draw || this.draw();
-    }
+		public initialize(rangeStart: number, rangeEnd: number) {
+			this._initialized = true;
+			this.setRange(rangeStart, rangeEnd, false);
+			this.setWindow(rangeStart, rangeEnd, false);
+			this.draw();
+		}
 
-    public destroy() {
-      this._mouseController.destroy();
-      this._mouseController = null;
-      this._controller.container.removeChild(this._canvas);
-      this._controller = null;
-    }
+		public setWindow(start: number, end: number, draw: boolean = true) {
+			this._windowStart = start;
+			this._windowEnd = end;
+			!draw || this.draw();
+		}
 
-    _resetCanvas() {
-      let ratio = window.devicePixelRatio;
-      let canvas = this._canvas;
-      canvas.width = this._width * ratio;
-      canvas.height = this._height * ratio;
-      canvas.style.width = this._width + "px";
-      canvas.style.height = this._height + "px";
-    }
+		public setRange(start: number, end: number, draw: boolean = true) {
+			this._rangeStart = start;
+			this._rangeEnd = end;
+			!draw || this.draw();
+		}
 
-    draw() {}
+		public destroy() {
+			this._mouseController.destroy();
+			this._mouseController = null;
+			this._controller.container.removeChild(this._canvas);
+			this._controller = null;
+		}
 
-    _almostEq(a: number, b: number, precision: number = 10): boolean {
-      let pow10 = Math.pow(10, precision);
-      return Math.abs(a - b) < (1 / pow10);
-    }
+		_resetCanvas() {
+			let ratio = window.devicePixelRatio;
+			let canvas = this._canvas;
+			canvas.width = this._width * ratio;
+			canvas.height = this._height * ratio;
+			canvas.style.width = this._width + "px";
+			canvas.style.height = this._height + "px";
+		}
 
-    _windowEqRange(): boolean {
-      return (this._almostEq(this._windowStart, this._rangeStart) && this._almostEq(this._windowEnd, this._rangeEnd));
-    }
+		draw() {
+		}
 
-    _decimalPlaces(value: number): number {
-      return ((+value).toFixed(10)).replace(/^-?\d*\.?|0+$/g, '').length;
-    }
+		_almostEq(a: number, b: number, precision: number = 10): boolean {
+			let pow10 = Math.pow(10, precision);
+			return Math.abs(a - b) < (1 / pow10);
+		}
 
-    _toPixelsRelative(time: number): number { return 0; }
-    _toPixels(time: number): number { return 0; }
-    _toTimeRelative(px: number): number { return 0; }
-    _toTime(px: number): number { return 0; }
+		_windowEqRange(): boolean {
+			return (this._almostEq(this._windowStart, this._rangeStart) && this._almostEq(this._windowEnd, this._rangeEnd));
+		}
 
-    onMouseWheel(x: number, y: number, delta: number) {
-      let time = this._toTime(x);
-      let windowStart = this._windowStart;
-      let windowEnd = this._windowEnd;
-      let windowLen = windowEnd - windowStart;
-      /*
-       * Find maximum allowed delta
-       * (windowEnd + (windowEnd - time) * delta) - (windowStart + (windowStart - time) * delta) = LEN
-       * (windowEnd - windowStart) + ((windowEnd - time) * delta) - ((windowStart - time) * delta) = LEN
-       * (windowEnd - windowStart) + ((windowEnd - time) - (windowStart - time)) * delta = LEN
-       * (windowEnd - windowStart) + (windowEnd - windowStart) * delta = LEN
-       * (windowEnd - windowStart) * delta = LEN - (windowEnd - windowStart)
-       * delta = (LEN - (windowEnd - windowStart)) / (windowEnd - windowStart)
-       */
-      let maxDelta = Math.max((FlameChartBase.MIN_WINDOW_LEN - windowLen) / windowLen, delta);
-      let start = windowStart + (windowStart - time) * maxDelta;
-      let end = windowEnd + (windowEnd - time) * maxDelta;
-      this._controller.setWindow(start, end);
-      this.onHoverEnd();
-    }
+		_decimalPlaces(value: number): number {
+			return ((+value).toFixed(10)).replace(/^-?\d*\.?|0+$/g, '').length;
+		}
 
-    onMouseDown(x:number, y:number):void {}
-    onMouseMove(x:number, y:number):void {}
-    onMouseOver(x:number, y:number):void {}
-    onMouseOut():void {}
-    onDrag(startX:number, startY:number, currentX:number, currentY:number, deltaX:number, deltaY:number):void {}
-    onDragEnd(startX:number, startY:number, currentX:number, currentY:number, deltaX:number, deltaY:number):void {}
-    onClick(x:number, y:number):void {}
-    onHoverStart(x:number, y:number):void {}
-    onHoverEnd():void {}
+		_toPixelsRelative(time: number): number {
+			return 0;
+		}
 
-  }
+		_toPixels(time: number): number {
+			return 0;
+		}
+
+		_toTimeRelative(px: number): number {
+			return 0;
+		}
+
+		_toTime(px: number): number {
+			return 0;
+		}
+
+		onMouseWheel(x: number, y: number, delta: number) {
+			let time = this._toTime(x);
+			let windowStart = this._windowStart;
+			let windowEnd = this._windowEnd;
+			let windowLen = windowEnd - windowStart;
+			/*
+			 * Find maximum allowed delta
+			 * (windowEnd + (windowEnd - time) * delta) - (windowStart + (windowStart - time) * delta) = LEN
+			 * (windowEnd - windowStart) + ((windowEnd - time) * delta) - ((windowStart - time) * delta) = LEN
+			 * (windowEnd - windowStart) + ((windowEnd - time) - (windowStart - time)) * delta = LEN
+			 * (windowEnd - windowStart) + (windowEnd - windowStart) * delta = LEN
+			 * (windowEnd - windowStart) * delta = LEN - (windowEnd - windowStart)
+			 * delta = (LEN - (windowEnd - windowStart)) / (windowEnd - windowStart)
+			 */
+			let maxDelta = Math.max((FlameChartBase.MIN_WINDOW_LEN - windowLen) / windowLen, delta);
+			let start = windowStart + (windowStart - time) * maxDelta;
+			let end = windowEnd + (windowEnd - time) * maxDelta;
+			this._controller.setWindow(start, end);
+			this.onHoverEnd();
+		}
+
+		onMouseDown(x: number, y: number): void {
+		}
+
+		onMouseMove(x: number, y: number): void {
+		}
+
+		onMouseOver(x: number, y: number): void {
+		}
+
+		onMouseOut(): void {
+		}
+
+		onDrag(startX: number, startY: number, currentX: number, currentY: number, deltaX: number, deltaY: number): void {
+		}
+
+		onDragEnd(startX: number, startY: number, currentX: number, currentY: number, deltaX: number, deltaY: number): void {
+		}
+
+		onClick(x: number, y: number): void {
+		}
+
+		onHoverStart(x: number, y: number): void {
+		}
+
+		onHoverEnd(): void {
+		}
+
+	}
 
 }

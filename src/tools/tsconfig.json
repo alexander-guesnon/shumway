@@ -2,9 +2,8 @@
   "compilerOptions": {
     "outFile": "../../build/ts/tools.js",
     "sourceMap": true,
-    "inlineSources": true,
+    "declaration": true,
     "removeComments": false,
-    "allowJs": true,
     "target": "es5",
     "lib": [
       "DOM",
