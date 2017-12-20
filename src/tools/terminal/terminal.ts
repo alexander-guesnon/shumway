@@ -33,7 +33,7 @@ module Shumway.Tools.Terminal {
 			this.length = 0;
 		}
 
-		append(line, color) {
+		append(line: string, color: string) {
 			let lines = this.lines;
 			if (lines.length > 0 && lines[lines.length - 1] === line) {
 				this.repeat[lines.length - 1]++;
@@ -46,19 +46,19 @@ module Shumway.Tools.Terminal {
 			this.length++;
 		}
 
-		get(i) {
+		get(i: number) {
 			return this.lines[i];
 		}
 
-		getFormat(i) {
+		getFormat(i: number) {
 			return this.format[i];
 		}
 
-		getTime(i) {
+		getTime(i: number) {
 			return this.time[i];
 		}
 
-		getRepeat(i) {
+		getRepeat(i: number) {
 			return this.repeat[i];
 		}
 	}
@@ -135,15 +135,15 @@ module Shumway.Tools.Terminal {
 			let KEY_H = 72;
 			let KEY_S = 83;
 
-			function onFocusIn(event) {
+			function onFocusIn(event: any) {
 				this.hasFocus = true;
 			}
 
-			function onFocusOut(event) {
+			function onFocusOut(event: any) {
 				this.hasFocus = false;
 			}
 
-			function onKeyDown(event) {
+			function onKeyDown(event: KeyboardEvent) {
 				let delta = 0;
 				switch (event.keyCode) {
 					case KEY_H:
@@ -279,7 +279,7 @@ module Shumway.Tools.Terminal {
 			this.pageLineCount = Math.floor(this.canvas.height / this.lineHeight);
 		}
 
-		gotoLine(index) {
+		gotoLine(index: number) {
 			this.lineIndex = clamp(index, 0, this.buffer.length - 1);
 		}
 
@@ -291,7 +291,7 @@ module Shumway.Tools.Terminal {
 			}
 		}
 
-		scroll(delta) {
+		scroll(delta: number) {
 			this.gotoLine(this.lineIndex + delta);
 			this.scrollIntoView();
 		}
@@ -357,7 +357,7 @@ module Shumway.Tools.Terminal {
 			}
 		}
 
-		refreshEvery(ms) {
+		refreshEvery(ms: number) {
 			let that = this;
 			this.refreshFrequency = ms;
 

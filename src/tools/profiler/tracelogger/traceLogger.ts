@@ -115,7 +115,7 @@ module Shumway.Tools.Profiler.TraceLogger {
 			let count = 0;
 			let errors = 0;
 			let expected = urls.length;
-			let received = [];
+			let received: Array<any> = [];
 			received.length = expected;
 			for (let i = 0; i < expected; i++) {
 				let url = this._baseUrl + urls[i];

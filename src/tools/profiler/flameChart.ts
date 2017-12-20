@@ -28,7 +28,7 @@ module Shumway.Tools.Profiler {
 		private _snapshot: TimelineBufferSnapshot;
 
 		private _kindStyle: Shumway.MapObject<KindStyle>;
-		private _textWidth = {};
+		private _textWidth : MapObject<number> = {};
 
 		private _maxDepth: number;
 		private _hoveredFrame: TimelineFrame;
