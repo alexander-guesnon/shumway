@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/// <reference path='../../build/ts/base.d.ts' />
-/// <reference path='../../build/ts/tools.d.ts' />
+// /// <reference path='../../build/ts/base.d.ts' />
+// /// <reference path='../../build/ts/tools.d.ts' />
 
 ///<reference path='module.ts' />
 ///<reference path='errors.ts' />
