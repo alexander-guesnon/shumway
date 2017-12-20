@@ -20,7 +20,7 @@ module Shumway.Metrics {
 		private static _base: Timer = new Timer(null, "Total");
 		private static _top = Timer._base;
 		private static _flat = new Timer(null, "Flat");
-		private static _flatStack = [];
+		private static _flatStack: Array<any> = [];
 		private _parent: Timer;
 		private _name: string;
 		private _begin: number;
@@ -39,13 +39,13 @@ module Shumway.Metrics {
 			this._count = 0;
 		}
 
-		public static time(name, fn: Function) {
+		public static time(name: string, fn: Function) {
 			Timer.start(name);
 			fn();
 			Timer.stop();
 		}
 
-		public static start(name) {
+		public static start(name: string) {
 			Timer._top = Timer._top._timers[name] || (Timer._top._timers[name] = new Timer(Timer._top, name));
 			Timer._top.start();
 			let tmp = Timer._flat._timers[name] || (Timer._flat._timers[name] = new Timer(Timer._flat, name));
@@ -59,7 +59,7 @@ module Shumway.Metrics {
 			Timer._flatStack.pop().stop();
 		}
 
-		public static stopStart(name) {
+		public static stopStart(name: string) {
 			Timer.stop();
 			Timer.start(name);
 		}
@@ -133,7 +133,7 @@ module Shumway.Metrics {
 
 		public count(name: string, increment: number = 1, time: number = 0) {
 			if (!this._enabled) {
-				return;
+				return 0;
 			}
 			if (this._counts[name] === undefined) {
 				this._counts[name] = 0;
@@ -150,7 +150,7 @@ module Shumway.Metrics {
 			}
 		}
 
-		private _pairToString(times, pair): string {
+		private _pairToString(times: MapObject<number>, pair: Array<any>): string {
 			let name = pair[0];
 			let count = pair[1];
 			let time = times[name];
@@ -171,7 +171,7 @@ module Shumway.Metrics {
 			for (let name in this._counts) {
 				pairs.push([name, this._counts[name]]);
 			}
-			pairs.sort(function (a, b) {
+			pairs.sort(function (a: any, b: any) {
 				return b[1] - a[1];
 			});
 			return (pairs.map(function (pair) {
@@ -186,7 +186,7 @@ module Shumway.Metrics {
 			for (let name in this._counts) {
 				pairs.push([name, this._counts[name]]);
 			}
-			pairs.sort(function (a, b) {
+			pairs.sort(function (a: any, b: any) {
 				return b[1] - a[1];
 			});
 			if (inline) {
@@ -206,7 +206,7 @@ module Shumway.Metrics {
 		private _count: number;
 		private _index: number;
 
-		constructor(max) {
+		constructor(max: number) {
 			this._samples = new Float64Array(max);
 			this._count = 0;
 			this._index = 0;

@@ -27,7 +27,7 @@ module Shumway.ArrayUtilities {
 	import floatToInt32 = Shumway.IntegerUtilities.floatToInt32;
 	import int32ToFloat = Shumway.IntegerUtilities.int32ToFloat;
 
-	function axCoerceString(x): string {
+	function axCoerceString(x: any): string {
 		if (typeof x === "string") {
 			return x;
 		} else if (x == undefined) {
@@ -746,7 +746,7 @@ module Shumway.ArrayUtilities {
 			length = length >>> 0;
 			charSet = axCoerceString(charSet);
 			release || release || notImplemented("packageInternal flash.utils.ObjectInput::readMultiByte");
-			return;
+			return "";
 		}
 
 		getValue(name: number): any {
