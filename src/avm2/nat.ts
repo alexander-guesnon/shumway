@@ -192,6 +192,7 @@ module Shumway.AVMX.AS {
 					return 'Boolean';
 			}
 			release || assertUnreachable('invalid value type ' + valueType);
+			return null;
 		}
 
 		/**
@@ -790,6 +791,7 @@ module Shumway.AVMX.AS {
 				return !!descriptor && descriptor.enumerable;
 			}
 			return super.native_propertyIsEnumerable(nm);
+
 		}
 
 		$Bglength: number;
@@ -2127,6 +2129,7 @@ module Shumway.AVMX.AS {
 				}
 				return axResult;
 			}
+			return null;
 		}
 
 		test(str: string = ''): boolean {
@@ -2338,8 +2341,9 @@ module Shumway.AVMX.AS {
 				this.sec.throwError('SyntaxError', Errors.JSONInvalidParseInput);
 			}
 
+			let unfiltered: Object;
 			try {
-				let unfiltered: Object = transformJSValueToAS(this.sec, JSON.parse(text), true);
+				unfiltered = transformJSValueToAS(this.sec, JSON.parse(text), true);
 			} catch (e) {
 				this.sec.throwError('SyntaxError', Errors.JSONInvalidParseInput);
 			}
