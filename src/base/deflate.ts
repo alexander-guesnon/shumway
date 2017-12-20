@@ -56,7 +56,7 @@ module Shumway.ArrayUtilities {
 
 	export class Inflate implements IDataDecoder {
 		public onData: (buffer: Uint8Array) => void;
-		public onError: (e) => void;
+		public onError: (e: any) => void;
 
 		constructor(verifyHeader: boolean) {
 			//
@@ -325,7 +325,8 @@ module Shumway.ArrayUtilities {
 					bitBuffer >>= 14;
 					bitLength -= 14;
 					let codeLengths = new Uint8Array(19);
-					for (let i = 0; i < numLengthCodes; ++i) {
+					let i;
+					for (i = 0; i < numLengthCodes; ++i) {
 						if (bitLength < 3) {
 							bitBuffer |= buffer[position++] << bitLength;
 							bitLength += 8;
@@ -384,7 +385,7 @@ module Shumway.ArrayUtilities {
 			return incomplete && leftInWindow < leftInBuffer;
 		}
 
-		private _readBits(size) {
+		private _readBits(size: number) {
 			let bitBuffer = this._bitBuffer;
 			let bitLength = this._bitLength;
 			if (size > bitLength) {
@@ -407,7 +408,7 @@ module Shumway.ArrayUtilities {
 			return bitBuffer & ((1 << size) - 1);
 		}
 
-		private _readCode(codeTable) {
+		private _readCode(codeTable: any) {
 			let bitBuffer = this._bitBuffer;
 			let bitLength = this._bitLength;
 			let maxBits = codeTable.maxBits;
@@ -679,7 +680,7 @@ module Shumway.ArrayUtilities {
 			this._verifyHeader = verifyHeader;
 
 			this._specialInflate = createSpecialInflate();
-			this._specialInflate.setDataCallback(function (data) {
+			this._specialInflate.setDataCallback(function (data: any) {
 				this.onData(data);
 			}.bind(this));
 		}
@@ -749,7 +750,7 @@ module Shumway.ArrayUtilities {
 
 	export class Deflate implements IDataDecoder {
 		public onData: (data: Uint8Array) => void;
-		public onError: (e) => void;
+		public onError: (e: any) => void;
 
 		private _writeZlibHeader: boolean;
 		private _state: DeflateState;
