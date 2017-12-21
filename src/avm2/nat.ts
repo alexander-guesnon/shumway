@@ -2354,21 +2354,22 @@ module Shumway.AVMX.AS {
 			return walk(this.sec, {"": unfiltered}, "", reviver.value);
 		}
 
-		static stringify(value: any, replacer = null, space = null): string {
+		static stringify(value: any, replacer: any = null, space: string = null): string {
 			// We deliberately deviate from ECMA-262 and throw on
 			// invalid replacer parameter.
+			let sec: any;
 			if (replacer !== null) {
-				let sec = typeof replacer === 'object' ? replacer.sec : null;
+				sec = typeof replacer === 'object' ? replacer.sec : null;
 				if (!sec || !(sec.AXFunction.axIsType(replacer) || sec.AXArray.axIsType(replacer))) {
 					this.sec.throwError('TypeError', Errors.JSONInvalidReplacer);
 				}
 			}
 
-			let gap;
+			let gap: string;
 			if (typeof space === 'string') {
 				gap = space.length > 10 ? space.substring(0, 10) : space;
 			} else if (typeof space === 'number') {
-				gap = "          ".substring(0, Math.min(10, space | 0));
+				gap = "          ".substring(0, Math.min(10, +space | 0));
 			} else {
 				// We follow ECMA-262 and silently ignore invalid space parameter.
 				gap = "";
@@ -2418,6 +2419,7 @@ module Shumway.AVMX.AS {
 				return JSON.stringify(transformASValueToJS(this.sec, value, true), replacerFunction, gap);
 			} catch (e) {
 				this.sec.throwError('TypeError', Errors.JSONCyclicStructure);
+				return null;
 			}
 		}
 	}
@@ -2501,11 +2503,6 @@ module Shumway.AVMX.AS {
 		release || assert(!nativeFunctions[path], "Native function: " + path + " is already registered.");
 		nativeFunctions[path] = fun;
 	}
-
-	registerNativeClass("__AS3__.vec.Vector$object", GenericVector, 'ObjectVector', NamespaceType.PackageInternal);
-	registerNativeClass("__AS3__.vec.Vector$int", Int32Vector, 'Int32Vector', NamespaceType.PackageInternal);
-	registerNativeClass("__AS3__.vec.Vector$uint", Uint32Vector, 'Uint32Vector', NamespaceType.PackageInternal);
-	registerNativeClass("__AS3__.vec.Vector$double", Float64Vector, 'Float64Vector', NamespaceType.PackageInternal);
 
 	function FlashUtilScript_getDefinitionByName(sec: AXSecurityDomain, name: string): ASClass {
 		let simpleName = String(name).replace("::", ".");

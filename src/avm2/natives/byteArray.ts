@@ -135,7 +135,7 @@ module Shumway.AVMX.AS {
 				let length = 0;
 				if (source) {
 					if (source instanceof ArrayBuffer) {
-						buffer = source.slice();
+						buffer = source.slice(0);
 					} else if (Array.isArray(source)) {
 						buffer = new Uint8Array(source).buffer;
 					} else if ('buffer' in source) {

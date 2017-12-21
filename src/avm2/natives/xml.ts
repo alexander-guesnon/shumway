@@ -852,8 +852,8 @@ module Shumway.AVMX.AS {
 
 			scopes.push(scope);
 			let attributes = [];
-			for (q = 0; q < contentAttributes.length; ++q) {
-				attribute = contentAttributes[q];
+			for (let q = 0; q < contentAttributes.length; ++q) {
+				let attribute = contentAttributes[q];
 				if (attribute) {
 					attributes.push({
 						name: this.getName(attribute.name, false),
@@ -1988,7 +1988,7 @@ module Shumway.AVMX.AS {
 
 		private _inScopeNamespacesImpl() {
 			// Step 1.
-			let y = this;
+			let y: ASXML = this;
 			// Step 2.
 			let inScopeNS: Namespace[] = [];
 			let inScopeNSMap = inScopeNS;
@@ -2137,7 +2137,7 @@ module Shumway.AVMX.AS {
 				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, this, 'XML');
 			}
 			release || release || notImplemented("public.XML::namespaceDeclarations");
-			return;
+			return null;
 		}
 
 		nodeKind(): string {
@@ -2238,14 +2238,14 @@ module Shumway.AVMX.AS {
 		removeNamespace(ns: any): ASXML {
 
 			release || release || notImplemented("public.XML::removeNamespace");
-			return;
+			return null;
 		}
 
 		// 13.4.4.32 XML.prototype.replace
 		replace(propertyName: any, value: any): ASXML {
 			// Step 1.
 			if (this._kind !== ASXMLKind.Element) {
-				return;
+				return null;
 			}
 			let c;
 			// Step 2.
@@ -2309,7 +2309,7 @@ module Shumway.AVMX.AS {
 			if (v && v.axClass === this.axClass && v._kind !== ASXMLKind.Attribute) {
 				// Step 5.a.
 				if (v._kind === ASXMLKind.Element) {
-					let a = this;
+					let a: ASXML = this;
 					while (a) {
 						if (a === v) {
 							this.sec.throwError("Error", Errors.XMLIllegalCyclicalLoop);
@@ -2362,6 +2362,7 @@ module Shumway.AVMX.AS {
 				// Step 7.d.
 				children[p] = t;
 			}
+			return this;
 		}
 
 		setChildren(value: any): ASXML {
@@ -2407,7 +2408,7 @@ module Shumway.AVMX.AS {
 			// Step 5.
 			this._name = name;
 			// Steps 6-8.
-			let node = this;
+			let node: ASXML = this;
 			if (this._kind === ASXMLKind.Attribute) {
 				if (this._parent === null) {
 					return;
@@ -2719,7 +2720,7 @@ module Shumway.AVMX.AS {
 					let y = createXML(sec, ASXMLKind.Element, uri, mn.name, prefix);
 					y._parent = this;
 					this._replaceByIndex(i, y);
-					let ns = y._name.namespace;
+					ns = y._name.namespace;
 					y.addInScopeNamespace(ns);
 				}
 			}
@@ -2828,6 +2829,7 @@ module Shumway.AVMX.AS {
 					return true;
 				}
 			}
+			return false;
 		}
 
 		deleteProperty(mn: Multiname) {
@@ -2862,6 +2864,7 @@ module Shumway.AVMX.AS {
 					return true;
 				}
 			}
+			return false;
 		}
 
 		axHasProperty(mn: Multiname): boolean {
@@ -2945,7 +2948,7 @@ module Shumway.AVMX.AS {
 
 			// Step 4.
 			if (v && v.axClass === this.axClass) {
-				let a = this;
+				let a: ASXML = this;
 				while (a) {
 					if (a === v) {
 						this.sec.throwError('TypeError', Errors.XMLIllegalCyclicalLoop);
@@ -3948,7 +3951,7 @@ module Shumway.AVMX.AS {
 			// Step 3.
 			if (this._children.length === 0) {
 				// Step 3.a.i.
-				r = this.resolveValue();
+				let r = this.resolveValue();
 				// Step 3.a.ii.
 				if (r === null || r._children.length !== 1) {
 					return;

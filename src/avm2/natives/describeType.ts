@@ -328,8 +328,9 @@ module Shumway.AVMX.AS {
 
     let addBase = false;
     let isInterface = info.instanceInfo.isInterface();
+    let className: string;
     while (cls) {
-      let className = cls.classInfo.instanceInfo.getName().toFQNString(true);
+      className = cls.classInfo.instanceInfo.getName().toFQNString(true);
       if (includeBases && addBase && !describingClass) {
         basesVal.push(className);
       } else {
