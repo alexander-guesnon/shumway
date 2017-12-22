@@ -21,7 +21,7 @@ module Shumway.AVM2.ABC {
 	import isObject = Shumway.isObject;
 	import assert = Shumway.Debug.assert;
 
-	declare let TextDecoder;
+	declare let TextDecoder: any;
 
 	let textDecoder: any = null;
 	if (typeof TextDecoder !== "undefined") {
@@ -150,7 +150,7 @@ module Shumway.AVM2.ABC {
 			return result;
 		}
 
-		readUTFString(length): string {
+		readUTFString(length: number): string {
 			/**
 			 * Use the TextDecoder API whenever available.
 			 * http://encoding.spec.whatwg.org/#concept-encoding-get

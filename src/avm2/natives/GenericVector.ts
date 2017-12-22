@@ -175,11 +175,11 @@ module Shumway.AVMX.AS {
 			Shumway.Debug.unexpected();
 		}
 
-		static defaultCompareFunction(a, b) {
+		static defaultCompareFunction(a: any, b: any) {
 			return String(a).localeCompare(String(b));
 		}
 
-		static compare(a, b, options, compareFunction) {
+		static compare(a: any, b: any, options: any, compareFunction: any) {
 			release || assertNotImplemented(!(options & GenericVector.CASEINSENSITIVE), "CASEINSENSITIVE");
 			release || assertNotImplemented(!(options & GenericVector.UNIQUESORT), "UNIQUESORT");
 			release || assertNotImplemented(!(options & GenericVector.RETURNINDEXEDARRAY), "RETURNINDEXEDARRAY");
@@ -308,7 +308,7 @@ module Shumway.AVMX.AS {
 		 * is called with three arguments: element, index, the vector itself as well as passing the
 		 * |thisObject| as |this| for each of the elements in the vector.
 		 */
-		filter(callback, thisObject) {
+		filter(callback: any, thisObject: any) {
 			let v = <GenericVector><any>this.axClass.axConstruct([0, false]);
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return v;
@@ -321,7 +321,7 @@ module Shumway.AVMX.AS {
 			return v;
 		}
 
-		map(callback, thisObject) {
+		map(callback: any, thisObject: any) {
 			let v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return v;
@@ -332,7 +332,7 @@ module Shumway.AVMX.AS {
 			return v;
 		}
 
-		some(callback, thisObject) {
+		some(callback: any, thisObject: any) {
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return false;
 			}
@@ -344,7 +344,7 @@ module Shumway.AVMX.AS {
 			return false;
 		}
 
-		forEach(callback, thisObject) {
+		forEach(callback: any, thisObject: any) {
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return;
 			}
@@ -366,15 +366,15 @@ module Shumway.AVMX.AS {
 			return result;
 		}
 
-		indexOf(searchElement, fromIndex = 0) {
+		indexOf(searchElement: any, fromIndex = 0) {
 			return this._buffer.indexOf(searchElement, fromIndex);
 		}
 
-		lastIndexOf(searchElement, fromIndex = 0x7fffffff) {
+		lastIndexOf(searchElement: any, fromIndex = 0x7fffffff) {
 			return this._buffer.lastIndexOf(searchElement, fromIndex);
 		}
 
-		push(arg1?, arg2?, arg3?, arg4?, arg5?, arg6?, arg7?, arg8?/*...rest*/) {
+		push(arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any, arg6?: any, arg7?: any, arg8?: any/*...rest*/) {
 			this._checkFixed();
 			for (let i = 0; i < arguments.length; i++) {
 				this._buffer.push(this._coerce(arguments[i]));
@@ -406,7 +406,7 @@ module Shumway.AVMX.AS {
 			return this;
 		}
 
-		_coerce(v) {
+		_coerce(v: any) {
 			return (<any>this.axClass).type.axCoerce(v);
 		}
 

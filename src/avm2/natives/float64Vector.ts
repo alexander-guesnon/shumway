@@ -181,7 +181,7 @@ module Shumway.AVMX.AS {
 			return this._buffer.subarray(this._offset, this._offset + this._length);
 		}
 
-		_ensureCapacity(length) {
+		_ensureCapacity(length: number) {
 			let minCapacity = this._offset + length;
 			if (minCapacity < this._buffer.length) {
 				return;
@@ -236,7 +236,7 @@ module Shumway.AVMX.AS {
 		 * well as passing the |thisObject| as |this| for each of the elements in the vector. If any of
 		 * the callbacks return |false| the function terminates, otherwise it returns |true|.
 		 */
-		every(callback, thisObject) {
+		every(callback: any, thisObject: any) {
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return true;
 			}
@@ -253,7 +253,7 @@ module Shumway.AVMX.AS {
 		 * is called with three arguments: element, index, the vector itself as well as passing the
 		 * |thisObject| as |this| for each of the elements in the vector.
 		 */
-		filter(callback, thisObject) {
+		filter(callback: any, thisObject: any) {
 			let v = new this.sec.Float64Vector();
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return v;
@@ -266,7 +266,7 @@ module Shumway.AVMX.AS {
 			return v;
 		}
 
-		map(callback, thisObject) {
+		map(callback: any, thisObject: any) {
 			let v = <GenericVector><any>this.axClass.axConstruct([this.length, false]);
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return v;
@@ -277,7 +277,7 @@ module Shumway.AVMX.AS {
 			return v;
 		}
 
-		some(callback, thisObject) {
+		some(callback: any, thisObject: any) {
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return false;
 			}
@@ -289,7 +289,7 @@ module Shumway.AVMX.AS {
 			return false;
 		}
 
-		forEach(callback, thisObject) {
+		forEach(callback: any, thisObject: any) {
 			if (!this.checkVectorMethodArgs(callback, thisObject)) {
 				return;
 			}
@@ -312,7 +312,7 @@ module Shumway.AVMX.AS {
 			return result;
 		}
 
-		indexOf(searchElement, fromIndex = 0) {
+		indexOf(searchElement: any, fromIndex = 0) {
 			let length = this._length;
 			let start = fromIndex | 0;
 			if (start < 0) {
@@ -335,7 +335,7 @@ module Shumway.AVMX.AS {
 			return -1;
 		}
 
-		lastIndexOf(searchElement, fromIndex = 0x7fffffff) {
+		lastIndexOf(searchElement: any, fromIndex = 0x7fffffff) {
 			let length = this._length;
 			let start = fromIndex | 0;
 			if (start < 0) {
@@ -358,7 +358,7 @@ module Shumway.AVMX.AS {
 			return -1;
 		}
 
-		push(arg1?, arg2?, arg3?, arg4?, arg5?, arg6?, arg7?, arg8?/*...rest*/) {
+		push(arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any, arg6?: any, arg7?: any, arg8?: any/*...rest*/) {
 			this._checkFixed();
 			this._ensureCapacity(this._length + arguments.length);
 			for (let i = 0; i < arguments.length; i++) {
@@ -404,9 +404,9 @@ module Shumway.AVMX.AS {
 			release || assertNotImplemented(!(options & Float64Vector.RETURNINDEXEDARRAY),
 				"RETURNINDEXEDARRAY");
 			if (options & Float64Vector.DESCENDING) {
-				Array.prototype.sort.call(this._view(), (a, b) => b - a);
+				Array.prototype.sort.call(this._view(), (a: number, b: number) => b - a);
 			} else {
-				Array.prototype.sort.call(this._view(), (a, b) => a - b);
+				Array.prototype.sort.call(this._view(), (a: number, b: number) => a - b);
 			}
 			return this;
 		}
@@ -472,7 +472,7 @@ module Shumway.AVMX.AS {
 			return result;
 		}
 
-		_slide(distance) {
+		_slide(distance: number) {
 			this._buffer.set(this._view(), this._offset + distance);
 			this._offset += distance;
 		}

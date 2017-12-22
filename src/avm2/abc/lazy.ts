@@ -305,7 +305,7 @@ module Shumway.AVMX {
 			return methodTraitInfo.method;
 		}
 		let methodInfo = methodTraitInfo.getMethodInfo();
-		let method;
+		let method: any;
 		if (methodInfo.flags & METHOD.Native) {
 			let metadata = methodInfo.getNativeMetadata();
 			if (metadata || methodTraitInfo.holder instanceof ScriptInfo) {
@@ -598,9 +598,9 @@ module Shumway.AVMX {
 		}
 	}
 
-	let typeDefaultValues = {
-		__proto__: null,
-		$BgNumber: NaN,
+	let typeDefaultValues: any = {
+		__proto__: null as any,
+		$BgNumber: NaN as any,
 		$Bgint: 0,
 		$Bguint: 0,
 		$BgBoolean: false

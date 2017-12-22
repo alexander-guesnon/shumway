@@ -21,7 +21,13 @@ module Shumway.AVMX {
     // typeName: string;
   }
 
-  export let Errors = {
+  export interface Error {
+    code: number;
+    message: string;
+    typeName?: string;
+  }
+
+  export let Errors: any = {
   /**
    * AVM2 Error Codes
    */
@@ -644,7 +650,7 @@ module Shumway.AVMX {
     return Errors[index];
   }
 
-  export function formatErrorMessage(error, ...args) {
+  export function formatErrorMessage(error: Error, ...args: Array<any>) {
     let message = error.message;
     args.forEach(function (x, i) {
       message = message.replace("%" + (i + 1), x);
@@ -652,7 +658,7 @@ module Shumway.AVMX {
     return "Error #" + error.code + ": " + message;
   }
 
-  export function translateErrorMessage(error) {
+  export function translateErrorMessage(error: any) {
     if (error.type) {
       switch (error.type) {
         case "undefined_method":

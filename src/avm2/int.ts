@@ -23,7 +23,7 @@ module Shumway.AVMX {
 			this.isWith.push(!!isWith);
 		}
 
-		public get(index): any {
+		public get(index: number): any {
 			return this.stack[index];
 		}
 
@@ -243,7 +243,7 @@ module Shumway.AVMX {
 		let rn = new Multiname(abc, 0, null, null, null);
 
 		let value, object, receiver, type, a, b, offset, index, result;
-		let args = [];
+		let args: Array<any> = [];
 		let argCount = 0;
 
 		let scopeStacksHeight = scopeStacks.length;
@@ -916,7 +916,7 @@ module Shumway.AVMX {
 			}
 	}
 
-	function createValidException(sec: AXSecurityDomain, internalError, bc: Bytecode,
+	function createValidException(sec: AXSecurityDomain, internalError: any, bc: Bytecode,
 	                              value: any, receiver: any, a: any, b: any, mn: Multiname,
 	                              expectedScopeStacksHeight: number) {
 		let isProperErrorObject = internalError instanceof Error &&
@@ -1104,7 +1104,7 @@ module Shumway.AVMX {
 			message += '[Failed to stringify exception]';
 		}
 		// In the extension, we can just kill all the things.
-		let player = sec['player'];
+		let player = (sec as any)['player'];
 		console.error(message, '\n', stack);
 		if (player) {
 			//player.executeFSCommand('quit', [message]);

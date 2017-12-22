@@ -18,13 +18,13 @@ interface IMetaobjectProtocol {
 
 	axHasOwnProperty(mn: Shumway.AVMX.Multiname): boolean;
 
-	axSetProperty(mn: Shumway.AVMX.Multiname, value: any, bc: Shumway.AVMX.Bytecode);
+	axSetProperty(mn: Shumway.AVMX.Multiname, value: any, bc: Shumway.AVMX.Bytecode): void;
 
 	axGetProperty(mn: Shumway.AVMX.Multiname): any;
 
 	axGetSuper(mn: Shumway.AVMX.Multiname, scope: Shumway.AVMX.Scope): any;
 
-	axSetSuper(mn: Shumway.AVMX.Multiname, scope: Shumway.AVMX.Scope, value: any);
+	axSetSuper(mn: Shumway.AVMX.Multiname, scope: Shumway.AVMX.Scope, value: any): void;
 
 	axNextNameIndex(index: number): any;
 
@@ -38,7 +38,7 @@ interface IMetaobjectProtocol {
 
 	axHasPublicProperty(nm: any): boolean;
 
-	axSetPublicProperty(nm: any, value: any);
+	axSetPublicProperty(nm: any, value: any): void;
 
 	axGetPublicProperty(nm: any): any;
 
@@ -46,13 +46,13 @@ interface IMetaobjectProtocol {
 
 	axDeletePublicProperty(nm: any): boolean;
 
-	axSetNumericProperty(nm: number, value: any);
+	axSetNumericProperty(nm: number, value: any): void;
 
 	axGetNumericProperty(nm: number): any;
 
 	axGetSlot(i: number): any;
 
-	axSetSlot(i: number, value: any);
+	axSetSlot(i: number, value: any): void;
 
 	getPrototypeOf(): any;
 }
@@ -190,14 +190,14 @@ module Shumway.AVMX {
 		Interpreter = 4
 	}
 
-	let writer = new IndentingWriter(false, function (x) {
+	let writer = new IndentingWriter(false, function (x: any) {
 		dumpLine(x);
 	});
-	export let runtimeWriter = null;
-	export let executionWriter = null;
-	export let interpreterWriter = null;
+	export let runtimeWriter : IndentingWriter = null;
+	export let executionWriter : IndentingWriter = null;
+	export let interpreterWriter : IndentingWriter = null;
 
-	export function sliceArguments(args, offset: number) {
+	export function sliceArguments(args: ArrayLike<number>, offset: number) {
 		return Array.prototype.slice.call(args, offset);
 	}
 
@@ -221,11 +221,11 @@ module Shumway.AVMX {
 
 	import ASClass = Shumway.AVMX.AS.ASClass;
 
-	function axBoxIdentity(args) {
+	function axBoxIdentity(args: any) {
 		return args[0];
 	}
 
-	function axBoxPrimitive(value) {
+	function axBoxPrimitive(value: any) {
 		let boxed = Object.create(this.tPrototype);
 		boxed.value = value;
 		return boxed;
@@ -250,14 +250,14 @@ module Shumway.AVMX {
 		return boxedReceiver;
 	}
 
-	function axCoerceObject(x) {
+	function axCoerceObject(x: any) {
 		if (x == null) {
 			return null;
 		}
 		return x;
 	}
 
-	function axApplyObject(_, args) {
+	function axApplyObject(_: any, args: any) {
 		let x = args[0];
 		if (x == null) {
 			return Object.create(this.tPrototype);
@@ -265,7 +265,7 @@ module Shumway.AVMX {
 		return x;
 	}
 
-	function axConstructObject(args) {
+	function axConstructObject(args: any) {
 		let x = args[0];
 		if (x == null) {
 			return Object.create(this.tPrototype);
@@ -273,15 +273,15 @@ module Shumway.AVMX {
 		return x;
 	}
 
-	export function axCoerceInt(x): number {
+	export function axCoerceInt(x: any): number {
 		return x | 0;
 	}
 
-	export function axCoerceUint(x): number {
+	export function axCoerceUint(x: any): number {
 		return x >>> 0;
 	}
 
-	export function axCoerceNumber(x): number {
+	export function axCoerceNumber(x: any): number {
 		if (as3Compatibility) {
 			if (typeof x === "string") {
 				return AS.ASNumber.convertStringToDouble(x);
@@ -296,7 +296,7 @@ module Shumway.AVMX {
 		return +x;
 	}
 
-	export function axCoerceBoolean(x): boolean {
+	export function axCoerceBoolean(x: any): boolean {
 		return !!x;
 	}
 
@@ -304,7 +304,7 @@ module Shumway.AVMX {
 	 * Similar to |toString| but returns |null| for |null| or |undefined| instead
 	 * of "null" or "undefined".
 	 */
-	export function axCoerceString(x): string {
+	export function axCoerceString(x: any): string {
 		if (typeof x === "string") {
 			return x;
 		} else if (x == undefined) {
@@ -317,7 +317,7 @@ module Shumway.AVMX {
 	 * Same as |axCoerceString| except for returning "null" instead of |null| for
 	 * |null| or |undefined|, and calls |toString| instead of (implicitly) |valueOf|.
 	 */
-	export function axCoerceName(x): string {
+	export function axCoerceName(x: any): string {
 		if (typeof x === "string") {
 			return x;
 		} else if (x == undefined) {
@@ -326,46 +326,46 @@ module Shumway.AVMX {
 		return x.toString();
 	}
 
-	export function axConvertString(x): string {
+	export function axConvertString(x: any): string {
 		if (typeof x === "string") {
 			return x;
 		}
 		return x + '';
 	}
 
-	export function axIsTypeNumber(x): boolean {
+	export function axIsTypeNumber(x: any): boolean {
 		return typeof x === "number";
 	}
 
-	export function axIsTypeInt(x): boolean {
+	export function axIsTypeInt(x: any): boolean {
 		return typeof x === "number" && ((x | 0) === x);
 	}
 
-	export function axIsTypeUint(x): boolean {
+	export function axIsTypeUint(x: any): boolean {
 		return typeof x === "number" && ((x >>> 0) === x);
 	}
 
-	export function axIsTypeBoolean(x): boolean {
+	export function axIsTypeBoolean(x: any): boolean {
 		return typeof x === "boolean";
 	}
 
-	export function axIsTypeString(x): boolean {
+	export function axIsTypeString(x: any): boolean {
 		return typeof x === "string";
 	}
 
-	function axIsXMLCollection(x, sec: AXSecurityDomain): boolean {
+	function axIsXMLCollection(x: any, sec: AXSecurityDomain): boolean {
 		return sec.AXXML.dPrototype.isPrototypeOf(x) ||
 			sec.AXXMLList.dPrototype.isPrototypeOf(x);
 	}
 
-	export function axGetDescendants(object, mn: Multiname, sec: AXSecurityDomain) {
+	export function axGetDescendants(object: any, mn: Multiname, sec: AXSecurityDomain) {
 		if (!axIsXMLCollection(object, sec)) {
 			sec.throwError('TypeError', Errors.DescendentsError, object);
 		}
 		return object.descendants(mn);
 	}
 
-	export function axCheckFilter(sec: AXSecurityDomain, value) {
+	export function axCheckFilter(sec: AXSecurityDomain, value: any) {
 		if (!value || !AS.isXMLCollection(sec, value)) {
 			let className = value && value.axClass ? value.axClass.name.toFQNString(false) : '[unknown]';
 			sec.throwError('TypeError', Errors.FilterError, className);
@@ -398,12 +398,12 @@ module Shumway.AVMX {
 		return methodClosure;
 	}
 
-	export function axDefaultCompareFunction(a, b) {
+	export function axDefaultCompareFunction(a: any, b: any) {
 		return String(a).localeCompare(String(b));
 	}
 
 	export function axCompare(a: any, b: any, options: SORT, sortOrder: number,
-	                          compareFunction: (a, b) => number) {
+	                          compareFunction: (a: any, b: any) => number) {
 		release || Shumway.Debug.assertNotImplemented(!(options & SORT.UNIQUESORT), "UNIQUESORT");
 		release || Shumway.Debug.assertNotImplemented(!(options & SORT.RETURNINDEXEDARRAY),
 			"RETURNINDEXEDARRAY");
@@ -517,7 +517,7 @@ module Shumway.AVMX {
 		return typeof x;
 	}
 
-	export function axIsCallable(value): boolean {
+	export function axIsCallable(value: any): boolean {
 		return (value && typeof value.axApply === 'function');
 	}
 
@@ -693,7 +693,7 @@ module Shumway.AVMX {
 
 	// The Object that's at the root of all AXObjects' prototype chain, regardless of their
 	// SecurityDomain.
-	export let AXBasePrototype = null;
+	export let AXBasePrototype: any = null;
 
 	function AXBasePrototype_$BgtoString() {
 		// Dynamic prototypes just return [object Object], so we have to special-case them.
@@ -769,6 +769,7 @@ module Shumway.AVMX {
 		$BgvalueOf: AXCallable;
 		axInitializer: any;
 		axClass: AXClass;
+		[key: string]: any;
 	}
 
 	export interface AXGlobal extends AXObject {
@@ -803,7 +804,7 @@ module Shumway.AVMX {
 
 		axCall(thisArg: any): any;
 
-		value;
+		value: any;
 	}
 
 	export interface AXMethodClosureClass extends AXClass {
@@ -984,7 +985,7 @@ module Shumway.AVMX {
 	/**
 	 * Default axApply.
 	 */
-	function axDefaultApply(self, args: any []) {
+	function axDefaultApply(self: any, args: any []) {
 		return this.axCoerce(args ? args[0] : undefined);
 	}
 
@@ -1041,11 +1042,11 @@ module Shumway.AVMX {
 
 		private _xmlParser: AS.XMLParser;
 
-		private AXPrimitiveBox;
-		private AXGlobalPrototype;
-		private AXActivationPrototype;
-		private AXCatchPrototype;
-		private _AXFunctionUndefinedPrototype;
+		private AXPrimitiveBox: any;
+		private AXGlobalPrototype: any;
+		private AXActivationPrototype: any;
+		private AXCatchPrototype: any;
+		private _AXFunctionUndefinedPrototype: any;
 
 		public get AXFunctionUndefinedPrototype() {
 			return this._AXFunctionUndefinedPrototype ||
@@ -1164,7 +1165,7 @@ module Shumway.AVMX {
 		/**
 		 * Takes a JS Object and transforms it into an AXObject.
 		 */
-		createObjectFromJS(value: Object, deep: boolean = false) {
+		createObjectFromJS(value: any, deep: boolean = false) {
 			let keys = Object.keys(value);
 			let result = this.createObject();
 			for (let i = 0; i < keys.length; i++) {
@@ -1511,16 +1512,16 @@ module Shumway.AVMX {
 				axClass.dPrototype = Object.create(instancePrototype);
 				axClass.tPrototype = Object.create(axClass.dPrototype);
 			}
-			this[exportName] = this.nativeClasses[name] = axClass;
+			(this as any)[exportName] = this.nativeClasses[name] = axClass;
 			return axClass;
 		}
 
-		preparePrimitiveClass(exportName: string, name: string, convert, defaultValue, coerce,
-		                      isType, isInstanceOf) {
+		preparePrimitiveClass(exportName: string, name: string, convert: any, defaultValue: any, coerce: any,
+		                      isType: any, isInstanceOf: any) {
 			let axClass = this.prepareNativeClass(exportName, name, true);
 			let D = defineNonEnumerableProperty;
 			D(axClass, 'axBox', axBoxPrimitive);
-			D(axClass, "axApply", function axApply(_, args: any []) {
+			D(axClass, "axApply", function axApply(_: any, args: any []) {
 				return convert(args && args.length ? args[0] : defaultValue);
 			});
 			D(axClass, "axConstruct", function axConstruct(args: any []) {
@@ -1548,10 +1549,10 @@ module Shumway.AVMX {
 			this.initializeCoreNatives();
 
 			// Debugging Helper
-			release || (this.objectPrototype['trace'] = function trace() {
+			release || ((this.objectPrototype as any)['trace'] = function trace() {
 				let self = this;
 				let writer = new IndentingWriter();
-				this.traits.traits.forEach(t => {
+				this.traits.traits.forEach((t: any) => {
 					writer.writeLn(t + ": " + self[t.getName().getMangledName()]);
 				});
 			});

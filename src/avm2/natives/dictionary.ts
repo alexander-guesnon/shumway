@@ -32,7 +32,7 @@ module Shumway.AVMX.AS {
       private map: WeakMap<any, any>;
       private keys: any [];
       private weakKeys: boolean;
-      private primitiveMap: Object;
+      private primitiveMap: MapObject<any>;
 
       constructor(weakKeys: boolean = false) {
         super();

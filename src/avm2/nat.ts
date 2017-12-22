@@ -92,8 +92,8 @@ module Shumway.AVMX.AS {
 
 	let writer = new IndentingWriter();
 
-	function wrapJSGlobalFunction(fun) {
-		return function (sec, ...args) {
+	function wrapJSGlobalFunction(fun: any) {
+		return function (sec: any, ...args: Array<any>) {
 			return fun.apply(jsGlobal, args);
 		};
 	}
@@ -115,7 +115,7 @@ module Shumway.AVMX.AS {
 			/* tslint:enable */
 		}
 
-		export function bugzilla(_: AXSecurityDomain, n) {
+		export function bugzilla(_: AXSecurityDomain, n: number) {
 			switch (n) {
 				case 574600: // AS3 Vector::map Bug
 					return true;
@@ -282,6 +282,7 @@ module Shumway.AVMX.AS {
 	 * implement custom behaviour.
 	 */
 	export class ASObject implements IMetaobjectProtocol {
+		[prop: string]: any;
 		traits: RuntimeTraits;
 		sec: ISecurityDomain;
 
@@ -295,8 +296,8 @@ module Shumway.AVMX.AS {
 		static classNatives: Object [];
 		static instanceNatives: Object [];
 		static sec: ISecurityDomain;
-		static classSymbols = null;
-		static instanceSymbols = null;
+		static classSymbols: any = null;
+		static instanceSymbols: any = null;
 		static classInfo: ClassInfo;
 
 		static axResolveMultiname: (mn: Multiname) => any;
@@ -716,7 +717,7 @@ module Shumway.AVMX.AS {
 			return this.dPrototype;
 		}
 
-		static classInitializer = null;
+		static classInitializer: any = null;
 	}
 
 	function createArrayValueFromArgs(sec: AXSecurityDomain, args: any[]) {
@@ -731,7 +732,7 @@ module Shumway.AVMX.AS {
 		return Array.apply(Array, args);
 	}
 
-	function coerceArray(obj) {
+	function coerceArray(obj: any) {
 		if (!obj || !obj.sec) {
 			throw new TypeError('Conversion to Array failed');
 		}
@@ -952,7 +953,7 @@ module Shumway.AVMX.AS {
 			return coerceArray(this).lastIndexOf(value, arguments.length > 1 ? fromIndex : 0x7fffffff);
 		}
 
-		every(callbackfn: { value: Function }, thisArg?) {
+		every(callbackfn: { value: Function }, thisArg?: any) {
 			if (!callbackfn || !callbackfn.value || typeof callbackfn.value !== 'function') {
 				return true;
 			}
@@ -966,11 +967,11 @@ module Shumway.AVMX.AS {
 			return true;
 		}
 
-		generic_every(callbackfn: { value: Function }, thisArg?) {
+		generic_every(callbackfn: { value: Function }, thisArg?: any) {
 			return coerceArray(this).every(callbackfn, thisArg);
 		}
 
-		some(callbackfn: { value }, thisArg?) {
+		some(callbackfn: { value: Function }, thisArg?: any) {
 			if (!callbackfn || !callbackfn.value || typeof callbackfn.value !== 'function') {
 				return false;
 			}
@@ -981,11 +982,11 @@ module Shumway.AVMX.AS {
 			});
 		}
 
-		generic_some(callbackfn: { value }, thisArg?) {
+		generic_some(callbackfn: { value: Function }, thisArg?: any) {
 			return coerceArray(this).some(callbackfn, thisArg);
 		}
 
-		forEach(callbackfn: { value }, thisArg?) {
+		forEach(callbackfn: { value: Function }, thisArg?: any) {
 			if (!callbackfn || !callbackfn.value || typeof callbackfn.value !== 'function') {
 				return;
 			}
@@ -996,11 +997,11 @@ module Shumway.AVMX.AS {
 			});
 		}
 
-		generic_forEach(callbackfn: { value }, thisArg?) {
+		generic_forEach(callbackfn: { value: Function }, thisArg?: any) {
 			return coerceArray(this).forEach(callbackfn, thisArg);
 		}
 
-		map(callbackfn: { value }, thisArg?) {
+		map(callbackfn: { value: Function }, thisArg?: any) {
 			if (!callbackfn || !callbackfn.value || typeof callbackfn.value !== 'function') {
 				return this.sec.createArrayUnsafe([]);
 			}
@@ -1011,11 +1012,11 @@ module Shumway.AVMX.AS {
 			}));
 		}
 
-		generic_map(callbackfn: { value }, thisArg?) {
+		generic_map(callbackfn: { value: Function }, thisArg?: any) {
 			return coerceArray(this).map(callbackfn, thisArg);
 		}
 
-		filter(callbackfn: { value: Function }, thisArg?) {
+		filter(callbackfn: { value: Function }, thisArg?: any) {
 			if (!callbackfn || !callbackfn.value || typeof callbackfn.value !== 'function') {
 				return this.sec.createArrayUnsafe([]);
 			}
@@ -1030,7 +1031,7 @@ module Shumway.AVMX.AS {
 			return this.sec.createArrayUnsafe(result);
 		}
 
-		generic_filter(callbackfn: { value: Function }, thisArg?) {
+		generic_filter(callbackfn: { value: Function }, thisArg?: any) {
 			return coerceArray(this).filter(callbackfn, thisArg);
 		}
 
@@ -1056,7 +1057,7 @@ module Shumway.AVMX.AS {
 				o.sort();
 				return this;
 			}
-			let compareFunction;
+			let compareFunction: any;
 			let options = 0;
 			if (this.sec.AXFunction.axIsInstanceOf(arguments[0])) {
 				compareFunction = arguments[0].value;
@@ -1218,7 +1219,7 @@ module Shumway.AVMX.AS {
 		axSetPublicProperty(nm: string, value: any) {
 			release || checkValue(value);
 			if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
-				this.value[nm] = value;
+				this.value[+nm] = value;
 				return;
 			}
 			this['$Bg' + nm] = value;
@@ -1450,7 +1451,7 @@ module Shumway.AVMX.AS {
 			return value.length > other.length ? 1 : -1;
 		}
 
-		match(pattern /* : string | ASRegExp */) {
+		match(pattern: any /* : string | ASRegExp */) {
 			if (this.sec.AXRegExp.axIsType(pattern)) {
 				pattern = (<any>pattern).value;
 			} else {
@@ -1467,7 +1468,7 @@ module Shumway.AVMX.AS {
 			}
 		}
 
-		replace(pattern /* : string | ASRegExp */, repl /* : string | ASFunction */) {
+		replace(pattern: any /* : string | ASRegExp */, repl: any /* : string | ASFunction */) {
 			if (this.sec.AXRegExp.axIsType(pattern)) {
 				pattern = (<any>pattern).value;
 			} else {
@@ -1483,7 +1484,7 @@ module Shumway.AVMX.AS {
 			}
 		}
 
-		search(pattern /* : string | ASRegExp */) {
+		search(pattern: any /* : string | ASRegExp */) {
 			if (this.sec.AXRegExp.axIsType(pattern)) {
 				pattern = (<any>pattern).value;
 			} else {
@@ -1502,7 +1503,7 @@ module Shumway.AVMX.AS {
 			return this.value.slice(start, end);
 		}
 
-		split(separator /* : string | ASRegExp */, limit?: number) {
+		split(separator: any /* : string | ASRegExp */, limit?: number) {
 			if (this.sec.AXRegExp.axIsType(separator)) {
 				separator = (<any>separator).value;
 			} else {
@@ -1576,15 +1577,15 @@ module Shumway.AVMX.AS {
 			return receiver.localeCompare.apply(receiver, arguments);
 		}
 
-		generic_match(pattern) {
+		generic_match(pattern: any) {
 			return this.sec.AXString.axBox(String(this)).match(pattern);
 		}
 
-		generic_replace(pattern, repl) {
+		generic_replace(pattern: any, repl: any) {
 			return this.sec.AXString.axBox(String(this)).replace(pattern, repl);
 		}
 
-		generic_search(pattern) {
+		generic_search(pattern: any) {
 			return this.sec.AXString.axBox(String(this)).search(pattern);
 		}
 
@@ -1712,7 +1713,7 @@ module Shumway.AVMX.AS {
 			return this.value;
 		}
 
-		toExponential(p): string {
+		toExponential(p: any): string {
 			p = p | 0;
 			if (p < 0 || p > 20) {
 				this.sec.throwError('RangeError', Errors.InvalidPrecisionError);
@@ -1723,7 +1724,7 @@ module Shumway.AVMX.AS {
 			return this.value.toExponential(p);
 		}
 
-		toPrecision(p): string {
+		toPrecision(p: any): string {
 			if (!p) {
 				p = 1;
 			} else {
@@ -1738,7 +1739,7 @@ module Shumway.AVMX.AS {
 			return this.value.toPrecision(p);
 		}
 
-		toFixed(p): string {
+		toFixed(p: any): string {
 			p = p | 0;
 			if (p < 0 || p > 20) {
 				this.sec.throwError('RangeError', Errors.InvalidPrecisionError);
@@ -2123,7 +2124,7 @@ module Shumway.AVMX.AS {
 					if (name !== null) {
 						// In AS3, non-matched named capturing groups return an empty string.
 						let value = result[i + 1] || '';
-						result[name] = value;
+						(result as any)[name] = value;
 						axResult.axSetPublicProperty(name, value);
 					}
 				}
@@ -2236,7 +2237,7 @@ module Shumway.AVMX.AS {
 	/**
 	 * Transforms a JS value into an AS value.
 	 */
-	export function transformJSValueToAS(sec: AXSecurityDomain, value, deep: boolean) {
+	export function transformJSValueToAS(sec: AXSecurityDomain, value: any, deep: boolean) {
 		release || assert(typeof value !== 'function');
 		if (typeof value !== "object") {
 			return value;
@@ -2248,7 +2249,7 @@ module Shumway.AVMX.AS {
 			let list = [];
 			for (let i = 0; i < value.length; i++) {
 				let entry = value[i];
-				let axValue = deep ? transformJSValueToAS(sec, entry, true) : entry;
+				let axValue: any = deep ? transformJSValueToAS(sec, entry, true) : entry;
 				list.push(axValue);
 			}
 			return sec.createArray(list);
@@ -2259,7 +2260,7 @@ module Shumway.AVMX.AS {
 	/**
 	 * Transforms an AS value into a JS value.
 	 */
-	export function transformASValueToJS(sec: AXSecurityDomain, value, deep: boolean) {
+	export function transformASValueToJS(sec: AXSecurityDomain, value: any, deep: boolean) {
 		if (typeof value !== "object") {
 			return value;
 		}
@@ -2271,13 +2272,13 @@ module Shumway.AVMX.AS {
 			let list = value.value;
 			for (let i = 0; i < list.length; i++) {
 				let entry = list[i];
-				let jsValue = deep ? transformASValueToJS(sec, entry, true) : entry;
+				let jsValue: any = deep ? transformASValueToJS(sec, entry, true) : entry;
 				resultList.push(jsValue);
 			}
 			return resultList;
 		}
 		let keys = Object.keys(value);
-		let resultObject = {};
+		let resultObject: any = {};
 		for (let i = 0; i < keys.length; i++) {
 			let key = keys[i];
 			let jsKey = key;
@@ -2513,7 +2514,7 @@ module Shumway.AVMX.AS {
 		return Date.now() - (<any>sec).flash.display.Loader.axClass.runtimeStartTime;
 	}
 
-	export function FlashNetScript_navigateToURL(sec: AXSecurityDomain, request, window_) {
+	export function FlashNetScript_navigateToURL(sec: AXSecurityDomain, request: any, window_: any) {
 		if (request === null || request === undefined) {
 			sec.throwError('TypeError', Errors.NullPointerError, 'request');
 		}
@@ -2534,7 +2535,7 @@ module Shumway.AVMX.AS {
 		FileLoadingService.instance.navigateTo(url, window_);
 	}
 
-	function FlashNetScript_sendToURL(sec: AXSecurityDomain, request) {
+	function FlashNetScript_sendToURL(sec: AXSecurityDomain, request: any) {
 		if (isNullOrUndefined(request)) {
 			sec.throwError('TypeError', Errors.NullPointerError, 'request');
 		}
@@ -2589,7 +2590,7 @@ module Shumway.AVMX.AS {
 	registerNativeFunction('Toplevel::registerClassAlias', Toplevel_registerClassAlias);
 	registerNativeFunction('Toplevel::getClassByAlias', Toplevel_getClassByAlias);
 
-	export function getNativesForTrait(trait: TraitInfo): Object [] {
+	export function getNativesForTrait(trait: TraitInfo): any [] {
 		let className = null;
 		let natives: Object [];
 
@@ -2700,7 +2701,7 @@ module Shumway.AVMX.AS {
 		return false;
 	}
 
-	function linkSymbols(symbols: string [], traits: Traits, object) {
+	function linkSymbols(symbols: string [], traits: Traits, obj: any) {
 		for (let i = 0; i < traits.traits.length; i++) {
 			let trait = traits.traits[i];
 			if (!containsSymbol(symbols, trait.getName().name)) {
@@ -2714,15 +2715,15 @@ module Shumway.AVMX.AS {
 			let name = trait.getName().name;
 			let qn = trait.getName().getMangledName();
 			if (trait.isSlot()) {
-				Object.defineProperty(object, name, {
+				Object.defineProperty(obj, name, {
 					get: <() => any>new Function("", "return this." + qn +
 						"//# sourceURL=get-" + qn + ".as"),
-					set: <(any) => void>new Function("v", "this." + qn + " = v;" +
+					set: <(obj: any) => void>new Function("v", "this." + qn + " = v;" +
 						"//# sourceURL=set-" + qn + ".as")
 				});
 			} else if (trait.isGetter()) {
-				release || assert(hasOwnGetter(object, qn), "There should be an getter method for this symbol.");
-				Object.defineProperty(object, name, {
+				release || assert(hasOwnGetter(obj, qn), "There should be an getter method for this symbol.");
+				Object.defineProperty(obj, name, {
 					get: <() => any>new Function("", "return this." + qn +
 						"//# sourceURL=get-" + qn + ".as")
 				});
@@ -2877,7 +2878,7 @@ module Shumway.AVMX.AS {
 		});
 	}
 
-	let createContainersFromPath = function (pathTokens, container) {
+	let createContainersFromPath = function (pathTokens: Array<string>, container: any) {
 		for (let i = 0, j = pathTokens.length; i < j; i++) {
 			if (!container[pathTokens[i]]) {
 				container[pathTokens[i]] = Object.create(null);

@@ -78,7 +78,7 @@ module Shumway.AVMX.AS {
       return Date.parse.apply(null, arguments);
     }
 
-    static axCoerce(value) {
+    static axCoerce(value: any) {
       return this.axConstruct([value]);
     }
 
