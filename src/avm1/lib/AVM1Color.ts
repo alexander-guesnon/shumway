@@ -17,42 +17,42 @@
 ///<reference path='../references.ts' />
 
 module Shumway.AVM1.Lib {
-  import flash = Shumway.AVMX.AS.flash;
+    import flash = Shumway.AVMX.AS.flash;
 
-  export class AVM1Color extends AVM1Object {
-    static createAVM1Class(context: AVM1Context): AVM1Object {
-      return wrapAVM1NativeClass(context, true, AVM1Color,
-        [],
-        ['getRGB', 'getTransform', 'setRGB', 'setTransform'],
-        null, AVM1Color.prototype.avm1Constructor);
+    export class AVM1Color extends AVM1Object {
+        static createAVM1Class(context: AVM1Context): AVM1Object {
+            return wrapAVM1NativeClass(context, true, AVM1Color,
+                [],
+                ['getRGB', 'getTransform', 'setRGB', 'setTransform'],
+                null, AVM1Color.prototype.avm1Constructor);
+        }
+
+        private _target: IAVM1SymbolBase;
+        private _targetAS3Object: flash.display.InteractiveObject;
+
+        public avm1Constructor(target_mc) {
+            this._target = this.context.resolveTarget(target_mc);
+            this._targetAS3Object = <flash.display.InteractiveObject>getAS3Object(this._target);
+        }
+
+        public getRGB(): number {
+            let transform = AVM1Color.prototype.getTransform.call(this);
+            return transform.alGet('rgb');
+        }
+
+        public getTransform(): AVM1ColorTransform {
+            return AVM1ColorTransform.fromAS3ColorTransform(this.context,
+                this._targetAS3Object.transform.colorTransform);
+        }
+
+        public setRGB(offset): void {
+            let transform = AVM1Color.prototype.getTransform.call(this);
+            transform.alPut('rgb', offset);
+            AVM1Color.prototype.setTransform.call(this, transform);
+        }
+
+        public setTransform(transform: AVM1Object): void {
+            this._targetAS3Object.transform.colorTransform = toAS3ColorTransform(transform);
+        }
     }
-
-    private _target: IAVM1SymbolBase;
-    private _targetAS3Object: flash.display.InteractiveObject;
-
-    public avm1Constructor(target_mc) {
-      this._target = this.context.resolveTarget(target_mc);
-      this._targetAS3Object = <flash.display.InteractiveObject>getAS3Object(this._target);
-    }
-
-    public getRGB(): number {
-      let transform = AVM1Color.prototype.getTransform.call(this);
-      return transform.alGet('rgb');
-    }
-
-    public getTransform(): AVM1ColorTransform {
-      return AVM1ColorTransform.fromAS3ColorTransform(this.context,
-        this._targetAS3Object.transform.colorTransform);
-    }
-
-    public setRGB(offset): void {
-      let transform = AVM1Color.prototype.getTransform.call(this);
-      transform.alPut('rgb', offset);
-      AVM1Color.prototype.setTransform.call(this, transform);
-    }
-
-    public setTransform(transform: AVM1Object): void {
-      this._targetAS3Object.transform.colorTransform = toAS3ColorTransform(transform);
-    }
-  }
 }

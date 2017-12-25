@@ -403,7 +403,5 @@
 ///<reference path='utils/Timer.ts' />
 ///<reference path='utils/SetIntervalTimer.ts' />
 
-///<reference path='avm1.d.ts' />
-
 // ///<reference path='linker.ts' />
 ///<reference path='link.ts' />

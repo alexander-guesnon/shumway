@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-/// <reference path='../../build/ts/avm2.d.ts' />
-/// <reference path='flash.d.ts' />
-
 ///<reference path='settings.ts' />
 ///<reference path='stream.ts' />
 ///<reference path='parser.ts' />

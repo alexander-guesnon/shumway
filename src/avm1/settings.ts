@@ -16,17 +16,17 @@
 
 
 module Shumway.AVM1 {
-  import Option = Shumway.Options.Option;
-  import OptionSet = Shumway.Options.OptionSet;
+    import Option = Shumway.Options.Option;
+    import OptionSet = Shumway.Options.OptionSet;
 
-  import shumwayOptions = Shumway.Settings.shumwayOptions;
+    import shumwayOptions = Shumway.Settings.shumwayOptions;
 
-  let avm1Options = shumwayOptions.register(new OptionSet("AVM1"));
-  export let avm1TraceEnabled = avm1Options.register(new Option("t1", "traceAvm1", "boolean", false, "trace AVM1 execution"));
-  export let avm1ErrorsEnabled = avm1Options.register(new Option("e1", "errorsAvm1", "boolean", false, "fail on AVM1 warnings and errors"));
-  export let avm1WarningsEnabled = avm1Options.register(new Option("w1", "warningsAvm1", "boolean", false, "Emit messages for AVM1 warnings and errors"));
-  export let avm1TimeoutDisabled = avm1Options.register(new Option("ha1", "nohangAvm1", "boolean", false, "disable fail on AVM1 hang"));
-  export let avm1CompilerEnabled = avm1Options.register(new Option("ca1", "compileAvm1", "boolean", true, "compiles AVM1 code"));
-  export let avm1DebuggerEnabled = avm1Options.register(new Option("da1", "debugAvm1", "boolean", false, "allows AVM1 code debugging"));
-  export let avm1WellknownActionsCompilationsEnabled = avm1Options.register(new Option("cw1", "wellknownAvm1", "boolean", true, "Replaces well-known actions patterns instead of compilation"));
+    let avm1Options = shumwayOptions.register(new OptionSet("AVM1"));
+    export let avm1TraceEnabled = avm1Options.register(new Option("t1", "traceAvm1", "boolean", false, "trace AVM1 execution"));
+    export let avm1ErrorsEnabled = avm1Options.register(new Option("e1", "errorsAvm1", "boolean", false, "fail on AVM1 warnings and errors"));
+    export let avm1WarningsEnabled = avm1Options.register(new Option("w1", "warningsAvm1", "boolean", false, "Emit messages for AVM1 warnings and errors"));
+    export let avm1TimeoutDisabled = avm1Options.register(new Option("ha1", "nohangAvm1", "boolean", false, "disable fail on AVM1 hang"));
+    export let avm1CompilerEnabled = avm1Options.register(new Option("ca1", "compileAvm1", "boolean", true, "compiles AVM1 code"));
+    export let avm1DebuggerEnabled = avm1Options.register(new Option("da1", "debugAvm1", "boolean", false, "allows AVM1 code debugging"));
+    export let avm1WellknownActionsCompilationsEnabled = avm1Options.register(new Option("cw1", "wellknownAvm1", "boolean", true, "Replaces well-known actions patterns instead of compilation"));
 }
