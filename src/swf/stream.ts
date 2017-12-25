@@ -32,7 +32,7 @@ module Shumway.SWF {
 		bitBuffer: number;
 		bitLength: number;
 
-		constructor(buffer, offset?: number, length?: number, maxLength?: number) {
+		constructor(buffer: any, offset?: number, length?: number, maxLength?: number) {
 			if (offset === undefined)
 				offset = 0;
 			if (buffer.buffer instanceof ArrayBuffer) {
@@ -74,7 +74,7 @@ module Shumway.SWF {
 			return stream;
 		}
 
-		push(data) {
+		push(data: ArrayLike<number>) {
 			let bytes = this.bytes;
 			let newBytesLength = this.end + data.length;
 			if (newBytesLength > bytes.length) {

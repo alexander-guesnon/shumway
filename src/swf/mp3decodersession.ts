@@ -25,7 +25,7 @@ module Shumway.SWF {
 			mp3Worker = new Worker(MP3WORKER_PATH);
 			mp3Worker.addEventListener('message', function (e) {
 				if (e.data.action === 'console') {
-					console[e.data.method].call(console, e.data.message);
+					(console as any)[e.data.method].call(console, e.data.message);
 				}
 			});
 		}
@@ -36,7 +36,7 @@ module Shumway.SWF {
 
 	export class MP3DecoderSession {
 		private _sessionId: number;
-		private _onworkermessageBound: (any) => void;
+		private _onworkermessageBound: (x: any) => void;
 		private _worker: Worker;
 
 		public onframedata: (frameData: Uint8Array, channels: number, sampleRate: number, bitRate: number) => void;
@@ -55,7 +55,7 @@ module Shumway.SWF {
 			});
 		}
 
-		private onworkermessage(e) {
+		private onworkermessage(e: any) {
 			if (e.data.sessionId !== this._sessionId)
 				return;
 			let action = e.data.action;
@@ -84,7 +84,7 @@ module Shumway.SWF {
 			}
 		}
 
-		pushAsync(data) {
+		pushAsync(data: any) {
 			this._worker.postMessage({
 				sessionId: this._sessionId,
 				action: 'decode',
@@ -104,7 +104,7 @@ module Shumway.SWF {
 			let currentBufferSize = 8000;
 			let currentBuffer = new Float32Array(currentBufferSize);
 			let bufferPosition = 0;
-			let id3Tags = [];
+			let id3Tags: any = [];
 			let sessionAborted = false;
 
 			let promiseWrapper = new PromiseWrapper<{ data: Uint8Array; id3Tags: any; }>();

@@ -21,10 +21,10 @@ module Shumway.SWF.Parser {
 	export function defineButton(tag: ButtonTag, dictionary: any): any {
 		let characters = tag.characters;
 		let states = {
-			up: [],
-			over: [],
-			down: [],
-			hitTest: []
+			up: [] as Array<any>,
+			over: [] as Array<any>,
+			down: [] as Array<any>,
+			hitTest: [] as Array<any>
 		};
 		let i = 0, character;
 		while ((character = characters[i++])) {

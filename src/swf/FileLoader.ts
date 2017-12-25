@@ -89,7 +89,7 @@ module Shumway {
 	}
 
 	export interface ILoadListener {
-		onLoadOpen: (any) => void;
+		onLoadOpen: (x: any) => void;
 		onLoadProgress: (update: LoadProgressUpdate) => void;
 		onNewEagerlyParsedSymbols: (symbols: SWF.EagerlyParsedDictionaryEntry[],
 		                            delta: number) => Promise<any>;
@@ -198,7 +198,7 @@ module Shumway {
 			}
 		}
 
-		processError(error) {
+		processError(error: any) {
 			Debug.warning('Loading error encountered:', error);
 		}
 
@@ -227,7 +227,7 @@ module Shumway {
 
 		private processSWFFileUpdate(file: SWFFile, previousEagerlyParsedSymbolsCount: number,
 		                             previousFramesLoaded: number) {
-			let promise;
+			let promise: any;
 			let eagerlyParsedSymbolsDelta = file.eagerlyParsedSymbolsList.length -
 				previousEagerlyParsedSymbolsCount;
 			if (!eagerlyParsedSymbolsDelta) {

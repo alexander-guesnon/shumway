@@ -51,7 +51,7 @@ module Shumway.SWF.Parser {
 	 * and have to duplicate them for the other styles. The order is: fill1, line,
 	 * fill0. (That means we only ever recorded into fill0 if that's the only style.)
 	 */
-	function applySegmentToStyles(segment: PathSegment, styles,
+	function applySegmentToStyles(segment: PathSegment, styles: any,
 	                              linePaths: SegmentedPath[], fillPaths: SegmentedPath[]) {
 		if (!segment) {
 			return;
@@ -131,13 +131,13 @@ module Shumway.SWF.Parser {
 					styles = {fill0: 0, fill1: 0, line: 0};
 				}
 
-				if (record.flags & ShapeRecordFlags.HasFillStyle0) {
+				if ((record.flags & ShapeRecordFlags.HasFillStyle0) !== 0) {
 					styles.fill0 = record.fillStyle0;
 				}
-				if (record.flags & ShapeRecordFlags.HasFillStyle1) {
+				if ((record.flags & ShapeRecordFlags.HasFillStyle1) !== 0) {
 					styles.fill1 = record.fillStyle1;
 				}
-				if (record.flags & ShapeRecordFlags.HasLineStyle) {
+				if ((record.flags & ShapeRecordFlags.HasLineStyle) !== 0) {
 					styles.line = record.lineStyle;
 				}
 				if (styles.fill1) {
@@ -212,7 +212,7 @@ module Shumway.SWF.Parser {
 				}
 
 				if (record.flags & ShapeRecordFlags.IsStraight &&
-					(!isMorph || (morphRecord.flags & ShapeRecordFlags.IsStraight))) {
+					(!isMorph || (morphRecord.flags & ShapeRecordFlags.IsStraight) !== 0)) {
 					x += record.deltaX | 0;
 					y += record.deltaY | 0;
 					if (!isMorph) {
@@ -225,7 +225,7 @@ module Shumway.SWF.Parser {
 				} else {
 					let cx, cy;
 					let deltaX, deltaY;
-					if (!(record.flags & ShapeRecordFlags.IsStraight)) {
+					if ((record.flags & ShapeRecordFlags.IsStraight) === 0) {
 						cx = x + record.controlDeltaX | 0;
 						cy = y + record.controlDeltaY | 0;
 						x = cx + record.anchorDeltaX | 0;
@@ -241,16 +241,17 @@ module Shumway.SWF.Parser {
 					if (!isMorph) {
 						segment.curveTo(cx, cy, x, y);
 					} else {
-						if (!(morphRecord.flags & ShapeRecordFlags.IsStraight)) {
-							let morphCX = morphX + morphRecord.controlDeltaX | 0;
-							let morphCY = morphY + morphRecord.controlDeltaY | 0;
+						let morphCX, morphCY;
+						if ((morphRecord.flags & ShapeRecordFlags.IsStraight) === 0) {
+							morphCX = morphX + morphRecord.controlDeltaX | 0;
+							morphCY = morphY + morphRecord.controlDeltaY | 0;
 							morphX = morphCX + morphRecord.anchorDeltaX | 0;
 							morphY = morphCY + morphRecord.anchorDeltaY | 0;
 						} else {
 							deltaX = morphRecord.deltaX | 0;
 							deltaY = morphRecord.deltaY | 0;
-							let morphCX = morphX + (deltaX >> 1);
-							let morphCY = morphY + (deltaY >> 1);
+							morphCX = morphX + (deltaX >> 1);
+							morphCY = morphY + (deltaY >> 1);
 							morphX += deltaX;
 							morphY += deltaY;
 						}
@@ -278,7 +279,7 @@ module Shumway.SWF.Parser {
 			shape.morphCoordinates = new Int32Array(shape.coordinates.length);
 			shape.morphStyles = new DataBuffer(16);
 		}
-		for (i = 0; i < allPaths.length; i++) {
+		for (let i = 0; i < allPaths.length; i++) {
 			allPaths[i].serialize(shape);
 		}
 		return shape;
@@ -314,7 +315,7 @@ module Shumway.SWF.Parser {
 
 	let IDENTITY_MATRIX: ShapeMatrix = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};
 
-	function processStyle(style, isLineStyle: boolean, isMorph: boolean,
+	function processStyle(style: any, isLineStyle: boolean, isMorph: boolean,
 	                      dependencies: number[]): ShapeStyle {
 		let shapeStyle: ShapeStyle = style;
 		if (isMorph) {
@@ -348,8 +349,8 @@ module Shumway.SWF.Parser {
 			case FillType.RadialGradient:
 			case FillType.FocalRadialGradient:
 				let records = style.records;
-				let colors = shapeStyle.colors = [];
-				let ratios = shapeStyle.ratios = [];
+				let colors: Array<any> = shapeStyle.colors = [];
+				let ratios: Array<any> = shapeStyle.ratios = [];
 				for (let i = 0; i < records.length; i++) {
 					let record = records[i];
 					colors.push(record.color);
@@ -394,7 +395,7 @@ module Shumway.SWF.Parser {
 		return shapeStyle;
 	}
 
-	function processMorphStyle(style, isLineStyle: boolean, dependencies: number[]): ShapeStyle {
+	function processMorphStyle(style: any, isLineStyle: boolean, dependencies: number[]): ShapeStyle {
 		let morphStyle: ShapeStyle = Object.create(style);
 		if (isLineStyle) {
 			morphStyle.width = style.widthMorph;
@@ -422,8 +423,8 @@ module Shumway.SWF.Parser {
 			case FillType.RadialGradient:
 			case FillType.FocalRadialGradient:
 				let records = style.records;
-				let colors = morphStyle.colors = [];
-				let ratios = morphStyle.ratios = [];
+				let colors: Array<any> = morphStyle.colors = [];
+				let ratios: Array<any> = morphStyle.ratios = [];
 				for (let i = 0; i < records.length; i++) {
 					let record = records[i];
 					colors.push(record.colorMorph);
@@ -475,7 +476,7 @@ module Shumway.SWF.Parser {
 	}
 
 	export function defineShape(tag: ShapeTag) {
-		let dependencies = [];
+		let dependencies: Array<any> = [];
 		let fillPaths = createPathsList(tag.fillStyles, false, !!tag.recordsMorph, dependencies);
 		let linePaths = createPathsList(tag.lineStyles, true, !!tag.recordsMorph, dependencies);
 		let shape = convertRecordsToShapeData(tag.records, fillPaths, linePaths,
@@ -496,7 +497,7 @@ module Shumway.SWF.Parser {
 	class PathSegment {
 
 		private static _counter = 0;
-		public id;
+		public id: number;
 		private startPoint: string;
 		private endPoint: string;
 
@@ -687,7 +688,7 @@ module Shumway.SWF.Parser {
 	class SegmentedPath {
 		private _head: PathSegment;
 
-		constructor(public fillStyle, public lineStyle) {
+		constructor(public fillStyle: any, public lineStyle: any) {
 			this._head = null;
 		}
 
@@ -732,7 +733,7 @@ module Shumway.SWF.Parser {
 			let segment = this.head();
 			if (!segment) {
 				// Path is empty.
-				return;
+				return null;
 			}
 
 			while (segment) {

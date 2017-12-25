@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outFile": "../../build/ts/avm2.js",
+    "outFile": "../../build/ts/swf.js",
     "sourceMap": true,
     "declaration": true,
     "removeComments": false,
@@ -12,7 +12,7 @@
       "es2015.promise"
     ],
     "module": "amd",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noLib": false,
     "preserveConstEnums": true,
     "moduleResolution": "node",

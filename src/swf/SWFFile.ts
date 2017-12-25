@@ -225,17 +225,17 @@ module Shumway.SWF {
 				this._decompressor = Inflate.create(true);
 				// Parts of the header are compressed. Get those out of the way before starting tag parsing.
 				this._decompressor.onData = this.processFirstBatchOfDecompressedData.bind(this);
-				this._decompressor.onError = function (error) {
+				this._decompressor.onError = function (error: any) {
 					// TODO: Let the loader handle this error.
 					throw new Error(error);
-				}
+				};
 				this._decompressor.push(initialBytes.subarray(8));
 			} else if (isLzmaCompressed) {
 				this.data.set(initialBytes.subarray(0, 8));
 				this._uncompressedLoadedLength = 8;
 				this._decompressor = new LzmaDecoder(true);
 				this._decompressor.onData = this.processFirstBatchOfDecompressedData.bind(this);
-				this._decompressor.onError = function (error) {
+				this._decompressor.onError = function (error: any) {
 					// TODO: Let the loader handle this error.
 					Debug.warning('Invalid LZMA stream: ' + error);
 				};
@@ -390,6 +390,7 @@ module Shumway.SWF {
 				return;
 			}
 
+			let tagEnd;
 			switch (tagCode) {
 				case SwfTagCode.CODE_FILE_ATTRIBUTES:
 					this.setFileAttributes(tagLength);
@@ -473,7 +474,7 @@ module Shumway.SWF {
 					this._currentSoundStreamBlock = this.data.subarray(stream.pos, stream.pos += tagLength);
 					break;
 				case SwfTagCode.CODE_FRAME_LABEL:
-					let tagEnd = stream.pos + tagLength;
+					tagEnd = stream.pos + tagLength;
 					this._currentFrameLabel = stream.readString(-1);
 					// TODO: support SWF6+ anchors.
 					stream.pos = tagEnd;
@@ -484,7 +485,7 @@ module Shumway.SWF {
 				case SwfTagCode.CODE_END:
 					return;
 				case SwfTagCode.CODE_EXPORT_ASSETS:
-					let tagEnd = stream.pos + tagLength;
+					tagEnd = stream.pos + tagLength;
 					let exportsCount = stream.readUi16();
 					let exports = this._currentExports || (this._currentExports = []);
 					while (exportsCount--) {
@@ -881,7 +882,7 @@ module Shumway.SWF {
 		return (bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24) >>> 0;
 	}
 
-	function defineSymbol(swfTag, symbols) {
+	function defineSymbol(swfTag: any, symbols: any) {
 		switch (swfTag.code) {
 			case SwfTagCode.CODE_DEFINE_BITS:
 			case SwfTagCode.CODE_DEFINE_BITS_JPEG2:

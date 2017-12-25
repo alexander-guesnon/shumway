@@ -29,9 +29,9 @@ module Shumway.SWF.Parser {
 				readonly: true
 			},
 			records: tag.records,
-			coords: null,
+			coords: null as any,
 			static: true,
-			require: null
+			require: null as any
 		};
 		return label;
 	}

@@ -21,7 +21,7 @@ module Shumway {
 		GIF = 0x474946
 	}
 
-	let mimetypesForHeaders = {};
+	let mimetypesForHeaders: { [key: number]: string } = {};
 	mimetypesForHeaders[ImageTypeMagicHeaderBytes.JPG] = 'image/jpeg';
 	mimetypesForHeaders[ImageTypeMagicHeaderBytes.PNG] = 'image/png';
 	mimetypesForHeaders[ImageTypeMagicHeaderBytes.GIF] = 'image/gif';
