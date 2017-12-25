@@ -34,7 +34,7 @@ module Shumway.AVM1.Lib {
             AVM1Broadcaster.initialize(this.context, this);
         }
 
-        public loadClip(url: string, target): Boolean {
+        public loadClip(url: string, target: any): Boolean {
             let loadLevel: boolean = typeof target === 'number';
             let level: number;
             let target_mc: AVM1MovieClip;
@@ -80,7 +80,7 @@ module Shumway.AVM1.Lib {
             return true;
         }
 
-        public unloadClip(target): Boolean {
+        public unloadClip(target: any): Boolean {
             if (!this._loaderHelper) {
                 return false; // nothing was loaded by this loader
             }
@@ -115,7 +115,7 @@ module Shumway.AVM1.Lib {
             return true;
         }
 
-        public getProgress(target): number {
+        public getProgress(target: any): number {
             return this._loaderHelper.loaderInfo.bytesLoaded;
         }
 

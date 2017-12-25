@@ -108,7 +108,7 @@ module Shumway.AVM1.Lib {
             return this.as3ChildNodes.length;
         }
 
-        alGetOwnProperty(p): AVM1PropertyDescriptor {
+        alGetOwnProperty(p: any): AVM1PropertyDescriptor {
             if (alIsIndex(this.context, p)) {
                 let index = alToInteger(this.context, p);
                 if (index >= 0 && index < this.as3ChildNodes.length) {
@@ -132,7 +132,7 @@ module Shumway.AVM1.Lib {
                 undefined);
         }
 
-        public alGetOwnProperty(p): AVM1PropertyDescriptor {
+        public alGetOwnProperty(p: any): AVM1PropertyDescriptor {
             let name = alCoerceString(this.context, p);
             if (this._as3Attributes.axHasPublicProperty(name)) {
                 this._cachedNodePropertyDescriptor.value =
@@ -142,7 +142,7 @@ module Shumway.AVM1.Lib {
             return undefined;
         }
 
-        public alSetOwnProperty(p, desc: AVM1PropertyDescriptor): void {
+        public alSetOwnProperty(p: any, desc: AVM1PropertyDescriptor): void {
             let name = alCoerceString(this.context, p);
             if ((desc.flags & AVM1PropertyFlags.DATA)) {
                 let value = alCoerceString(this.context, desc.value);
@@ -150,12 +150,12 @@ module Shumway.AVM1.Lib {
             }
         }
 
-        public alHasOwnProperty(p): boolean {
+        public alHasOwnProperty(p: any): boolean {
             let name = alCoerceString(this.context, p);
             return this._as3Attributes.axHasPublicProperty(name);
         }
 
-        public alDeleteOwnProperty(p) {
+        public alDeleteOwnProperty(p: any) {
             let name = alCoerceString(this.context, p);
             this._as3Attributes.axDeletePublicProperty(name);
         }

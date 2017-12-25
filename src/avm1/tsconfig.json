@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outFile": "../../build/ts/avm2.js",
+    "outFile": "../../build/ts/avm1.js",
     "sourceMap": true,
     "declaration": true,
     "removeComments": false,

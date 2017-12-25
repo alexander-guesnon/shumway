@@ -60,7 +60,7 @@ module Shumway.AVM1.Lib {
             }, false);
         }
 
-        public static isDown(context: AVM1Context, code) {
+        public static isDown(context: AVM1Context, code: number) {
             let staticState: typeof AVM1Key = context.getStaticState(AVM1Key);
             return !!staticState._keyStates[code];
         }

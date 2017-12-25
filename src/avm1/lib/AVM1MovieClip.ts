@@ -136,7 +136,7 @@ module Shumway.AVM1.Lib {
             props.avm1Name = name;
 
             let mc: flash.display.MovieClip;
-            mc = Shumway.AVMX.AS.constructClassFromSymbol(props, this.context.sec.flash.display.MovieClip.axClass);
+            mc = Shumway.AVMX.AS.constructClassFromSymbol(props, this.context.sec.flash.display.MovieClip.axClass) as any;
 
             return mc;
         }
@@ -277,7 +277,7 @@ module Shumway.AVM1.Lib {
             return <AVM1MovieClip>this._insertChildAtDepth(mc, depth);
         }
 
-        public createTextField(name, depth, x, y, width, height): AVM1TextField {
+        public createTextField(name: any, depth: number, x: number, y: number, width: number, height: number): AVM1TextField {
             name = alToString(this.context, name);
             let text: flash.text.TextField = new this.context.sec.flash.text.TextField();
             text.name = name;
@@ -310,7 +310,7 @@ module Shumway.AVM1.Lib {
             let nativeAS3Object = this._as3Object;
             let mc: flash.display.MovieClip;
             if (nativeAS3Object._symbol) {
-                mc = Shumway.AVMX.AS.constructClassFromSymbol(nativeAS3Object._symbol, nativeAS3Object.axClass);
+                mc = Shumway.AVMX.AS.constructClassFromSymbol(nativeAS3Object._symbol, nativeAS3Object.axClass) as any;
             } else {
                 mc = new this.context.sec.flash.display.MovieClip();
             }
@@ -346,7 +346,7 @@ module Shumway.AVM1.Lib {
             return getAS3ObjectOrTemplate(this).enabled;
         }
 
-        public setEnabled(value) {
+        public setEnabled(value: any) {
             getAS3ObjectOrTemplate(this).enabled = value;
         }
 
@@ -368,7 +368,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.framesLoaded;
         }
 
-        public getBounds(bounds): AVM1Object {
+        public getBounds(bounds: any): AVM1Object {
             let obj = <flash.display.InteractiveObject>getAS3Object(bounds);
             if (!obj) {
                 return undefined;
@@ -417,7 +417,7 @@ module Shumway.AVM1.Lib {
             return maxDepth - DEPTH_OFFSET;
         }
 
-        public getRect(bounds): AVM1Object {
+        public getRect(bounds: any): AVM1Object {
             let obj = <flash.display.InteractiveObject>getAS3Object(bounds);
             if (!obj) {
                 return undefined;
@@ -434,7 +434,7 @@ module Shumway.AVM1.Lib {
             Debug.notImplemented('AVM1MovieClip.getTextSnapshot');
         }
 
-        public getURL(url, window, method) {
+        public getURL(url: any, window: any, method: any) {
             let request = new this.context.sec.flash.net.URLRequest(url);
             if (method) {
                 request.method = method;
@@ -442,16 +442,16 @@ module Shumway.AVM1.Lib {
             Shumway.AVMX.AS.FlashNetScript_navigateToURL(request, window);
         }
 
-        public globalToLocal(pt) {
+        public globalToLocal(pt: any) {
             let tmp = this._as3Object.globalToLocal(toAS3Point(pt));
             copyAS3PointTo(tmp, pt);
         }
 
-        public gotoAndPlay(frame) {
+        public gotoAndPlay(frame: any) {
             this._as3Object.gotoAndPlay(frame);
         }
 
-        public gotoAndStop(frame) {
+        public gotoAndStop(frame: any) {
             this._as3Object.gotoAndStop(frame);
         }
 
@@ -459,7 +459,7 @@ module Shumway.AVM1.Lib {
             return this._hitArea;
         }
 
-        public setHitArea(value) {
+        public setHitArea(value: any) {
             // The hitArea getter always returns exactly the value set here, so we have to store that.
             this._hitArea = value;
             let obj = value ? <flash.display.InteractiveObject>getAS3Object(value) : null;
@@ -546,7 +546,7 @@ module Shumway.AVM1.Lib {
             (<any>this.context).actions._loadVariables(this, url, method);
         }
 
-        public localToGlobal(pt) {
+        public localToGlobal(pt: any) {
             let tmp = this._as3Object.localToGlobal(toAS3Point(pt));
             copyAS3PointTo(tmp, pt);
         }
@@ -630,7 +630,7 @@ module Shumway.AVM1.Lib {
 
         public swapDepths(target: any): void {
             let child1 = this._as3Object;
-            let child2, target_mc;
+            let child2: any, target_mc: any;
             if (typeof target === 'number') {
                 child2 = child1.parent.getTimelineObjectAtDepth(<number>target);
                 if (child2) {
@@ -650,8 +650,8 @@ module Shumway.AVM1.Lib {
                 }
             }
             child1.parent.swapChildren(child1, child2);
-            let lower;
-            let higher;
+            let lower: AVM1MovieClip;
+            let higher: AVM1MovieClip;
             if (this.getDepth() < target_mc.getDepth()) {
                 lower = this;
                 higher = target_mc;
@@ -704,7 +704,7 @@ module Shumway.AVM1.Lib {
             getAS3ObjectOrTemplate(this).useHandCursor;
         }
 
-        public setUseHandCursor(value) {
+        public setUseHandCursor(value: any) {
             getAS3ObjectOrTemplate(this).useHandCursor = value;
         }
 
@@ -734,9 +734,9 @@ module Shumway.AVM1.Lib {
             return null;
         }
 
-        private _cachedPropertyResult;
+        private _cachedPropertyResult: any;
 
-        private _getCachedPropertyResult(value) {
+        private _getCachedPropertyResult(value: any) {
             if (!this._cachedPropertyResult) {
                 this._cachedPropertyResult = {
                     flags: AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
@@ -748,7 +748,7 @@ module Shumway.AVM1.Lib {
             return this._cachedPropertyResult;
         }
 
-        public alGetOwnProperty(name): AVM1PropertyDescriptor {
+        public alGetOwnProperty(name: any): AVM1PropertyDescriptor {
             let desc = super.alGetOwnProperty(name);
             if (desc) {
                 return desc;
@@ -799,7 +799,7 @@ module Shumway.AVM1.Lib {
             return Object.getOwnPropertyNames(processed);
         }
 
-        private _init(initObject) {
+        private _init(initObject: any) {
             if (initObject instanceof AVM1Object) {
                 alForEachProperty(initObject, (name: string) => {
                     this.alPut(name, initObject.alGet(name));
@@ -815,7 +815,7 @@ module Shumway.AVM1.Lib {
                 new AVM1EventHandler('onEnterFrame', 'enterFrame'),
                 new AVM1EventHandler('onKeyDown', 'keyDown'),
                 new AVM1EventHandler('onKeyUp', 'keyUp'),
-                new AVM1EventHandler('onKillFocus', 'focusOut', function (e) {
+                new AVM1EventHandler('onKillFocus', 'focusOut', function (e: any) {
                     return [e.relatedObject];
                 }),
                 new AVM1EventHandler('onLoad', 'load'),
@@ -827,7 +827,7 @@ module Shumway.AVM1.Lib {
                 new AVM1MovieClipButtonModeEvent('onReleaseOutside', 'releaseOutside'),
                 new AVM1MovieClipButtonModeEvent('onRollOut', 'mouseOut'),
                 new AVM1MovieClipButtonModeEvent('onRollOver', 'mouseOver'),
-                new AVM1EventHandler('onSetFocus', 'focusIn', function (e) {
+                new AVM1EventHandler('onSetFocus', 'focusIn', function (e: any) {
                     return [e.relatedObject];
                 }),
                 new AVM1EventHandler('onUnload', 'unload')

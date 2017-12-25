@@ -93,7 +93,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.backgroundColor;
         }
 
-        public setBackgroundColor(value) {
+        public setBackgroundColor(value: any) {
             value = alToInt32(this.context, value);
             this._as3Object.backgroundColor = value;
         }
@@ -133,7 +133,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.embedFonts;
         }
 
-        public setEmbedFonts(value) {
+        public setEmbedFonts(value: any) {
             value = alToBoolean(this.context, value);
             this._as3Object.embedFonts = value;
         }
@@ -171,7 +171,7 @@ module Shumway.AVM1.Lib {
             return this._html;
         }
 
-        public setHtml(value) {
+        public setHtml(value: any) {
             this._html = !!value;
             // Flash doesn't update the displayed text at this point, but the return
             // value of `TextField#htmlText` is as though `TextField#htmlText = TextField#text` had
@@ -200,7 +200,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.maxChars;
         }
 
-        public setMaxChars(value) {
+        public setMaxChars(value: any) {
             value = alCoerceNumber(this.context, value);
             this._as3Object.maxChars = value;
         }
@@ -249,7 +249,7 @@ module Shumway.AVM1.Lib {
             this._as3Object.selectable = value;
         }
 
-        public setNewTextFormat(value) {
+        public setNewTextFormat(value: any) {
             let as3TextFormat;
             if (value instanceof AVM1TextFormat) {
                 as3TextFormat = (<AVM1TextFormat>value)._as3Object;
@@ -313,7 +313,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.textWidth;
         }
 
-        public setTextWidth(value) {
+        public setTextWidth(value: any) {
             Debug.notImplemented('AVM1TextField.setTextWidth');
         }
 
@@ -352,7 +352,7 @@ module Shumway.AVM1.Lib {
             this._syncTextFieldValue(this._as3Object, this._variable);
         }
 
-        private _syncTextFieldValue(instance, name) {
+        private _syncTextFieldValue(instance: any, name: string) {
             let clip;
             let hasPath = name.indexOf('.') >= 0 || name.indexOf(':') >= 0;
             let avm1ContextUtils = this.context.utils;
@@ -409,7 +409,7 @@ module Shumway.AVM1.Lib {
                 new AVM1EventHandler('onDragOver', 'dragOver'),
                 new AVM1EventHandler('onKeyDown', 'keyDown'),
                 new AVM1EventHandler('onKeyUp', 'keyUp'),
-                new AVM1EventHandler('onKillFocus', 'focusOut', function (e) {
+                new AVM1EventHandler('onKillFocus', 'focusOut', function (e: any) {
                     return [e.relatedObject];
                 }),
                 new AVM1EventHandler('onLoad', 'load'),
@@ -420,7 +420,7 @@ module Shumway.AVM1.Lib {
                 new AVM1EventHandler('onReleaseOutside', 'releaseOutside'),
                 new AVM1EventHandler('onRollOut', 'mouseOut'),
                 new AVM1EventHandler('onRollOver', 'mouseOver'),
-                new AVM1EventHandler('onSetFocus', 'focusIn', function (e) {
+                new AVM1EventHandler('onSetFocus', 'focusIn', function (e: any) {
                     return [e.relatedObject];
                 })
             ]);

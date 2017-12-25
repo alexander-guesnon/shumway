@@ -210,7 +210,7 @@ module Shumway.AVM1 {
                     args = [urlString, targetString];
                     break;
                 case ActionCode.ActionWaitForFrame:
-                    let frame = stream.readUI16();
+                    frame = stream.readUI16();
                     let count = stream.readUI8();
                     args = [frame, count];
                     break;
@@ -220,8 +220,8 @@ module Shumway.AVM1 {
                     break;
                 case ActionCode.ActionGoToLabel:
                     let label = stream.readString();
-                    let nextActionCode = stream.readUI8();
-                    let play = false;
+                    nextActionCode = stream.readUI8();
+                    play = false;
                     if (nextActionCode !== 0x06 && nextActionCode !== 0x07) {
                         stream.position--;
                     } else {
@@ -279,7 +279,7 @@ module Shumway.AVM1 {
                     args = [offset];
                     break;
                 case ActionCode.ActionIf:
-                    let offset = stream.readSI16();
+                    offset = stream.readSI16();
                     args = [offset];
                     break;
                 case ActionCode.ActionGetURL2:
@@ -287,18 +287,18 @@ module Shumway.AVM1 {
                     args = [flags];
                     break;
                 case ActionCode.ActionGotoFrame2:
-                    let flags = stream.readUI8();
+                    flags = stream.readUI8();
                     args = [flags];
                     if (!!(flags & 2)) {
                         args.push(stream.readUI16());
                     }
                     break;
                 case ActionCode.ActionWaitForFrame2:
-                    let count = stream.readUI8();
+                    count = stream.readUI8();
                     args = [count];
                     break;
                 case ActionCode.ActionConstantPool:
-                    let count = stream.readUI16();
+                    count = stream.readUI16();
                     let constantPool = [];
                     for (let i = 0; i < count; i++) {
                         constantPool.push(stream.readString());
@@ -307,7 +307,7 @@ module Shumway.AVM1 {
                     break;
                 case ActionCode.ActionDefineFunction:
                     let functionName = stream.readString();
-                    let count = stream.readUI16();
+                    count = stream.readUI16();
                     let functionParams = [];
                     for (let i = 0; i < count; i++) {
                         functionParams.push(stream.readString());
@@ -321,7 +321,7 @@ module Shumway.AVM1 {
                     args = [functionBody, functionName, functionParams];
                     break;
                 case ActionCode.ActionWith:
-                    let codeSize = stream.readUI16();
+                    codeSize = stream.readUI16();
                     nextPosition += codeSize;
                     let withBody = new AVM1ActionsData(stream.readBytes(codeSize),
                         this.dataId + '_w' + stream.position, this._actionsData);
@@ -332,12 +332,12 @@ module Shumway.AVM1 {
                     args = [register];
                     break;
                 case ActionCode.ActionDefineFunction2:
-                    let functionName = stream.readString();
-                    let count = stream.readUI16();
+                    functionName = stream.readString();
+                    count = stream.readUI16();
                     let registerCount = stream.readUI8();
-                    let flags = stream.readUI16();
+                    flags = stream.readUI16();
                     let registerAllocation: ArgumentAssignment[] = [];
-                    let functionParams = [];
+                    functionParams = [];
                     for (let i = 0; i < count; i++) {
                         let register = stream.readUI8();
                         let paramName = stream.readString();
@@ -383,16 +383,16 @@ module Shumway.AVM1 {
                         suppressArguments |= ArgumentAssignmentType.Super;
                     }
 
-                    let codeSize = stream.readUI16();
+                    codeSize = stream.readUI16();
                     nextPosition += codeSize;
-                    let functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
+                    functionBody = new AVM1ActionsData(stream.readBytes(codeSize),
                         this.dataId + '_f' + stream.position, this._actionsData);
 
                     args = [functionBody, functionName, functionParams, registerCount,
                         registerAllocation, suppressArguments];
                     break;
                 case ActionCode.ActionTry:
-                    let flags = stream.readUI8();
+                    flags = stream.readUI8();
                     let catchIsRegisterFlag = !!(flags & 4);
                     let finallyBlockFlag = !!(flags & 2);
                     let catchBlockFlag = !!(flags & 1);
@@ -427,7 +427,7 @@ module Shumway.AVM1 {
             };
         }
 
-        skip(count) {
+        skip(count: number) {
             let stream = this._stream;
             while (count > 0 && stream.position < stream.end) {
                 let actionCode = stream.readUI8();
@@ -438,7 +438,7 @@ module Shumway.AVM1 {
         }
     }
 
-    let ActionNamesMap = {
+    let ActionNamesMap: any = {
         0x00: 'EOA',
         0x04: 'ActionNextFrame',
         0x05: 'ActionPreviousFrame',

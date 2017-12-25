@@ -519,7 +519,7 @@ module Shumway.AVM1.Lib {
             as3Object.nextScene();
         }
 
-        public ord(character) {
+        public ord(character: any) {
             return ('' + character).charCodeAt(0); // ASCII only?
         }
 

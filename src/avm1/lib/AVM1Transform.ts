@@ -34,7 +34,7 @@ module Shumway.AVM1.Lib {
             return this._targetAS3Object.transform;
         }
 
-        public avm1Constructor(target_mc) {
+        public avm1Constructor(target_mc: any) {
             this._target = this.context.resolveTarget(target_mc);
             this._targetAS3Object = <flash.display.InteractiveObject>getAS3Object(this._target);
         }

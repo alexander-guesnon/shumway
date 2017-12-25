@@ -37,7 +37,7 @@ module Shumway.AVM1.Lib {
             return this._as3Stage.align;
         }
 
-        public setAlign(value) {
+        public setAlign(value: any) {
             this._as3Stage.align = value;
         }
 
@@ -45,7 +45,7 @@ module Shumway.AVM1.Lib {
             return this._as3Stage.displayState;
         }
 
-        public setDisplayState(value) {
+        public setDisplayState(value: any) {
             this._as3Stage.displayState = value;
         }
 
@@ -53,7 +53,7 @@ module Shumway.AVM1.Lib {
             return this._as3Stage.fullScreenSourceRect;
         }
 
-        public setFullScreenSourceRect(value) {
+        public setFullScreenSourceRect(value: any) {
             this._as3Stage.fullScreenSourceRect = value;
         }
 
@@ -65,7 +65,7 @@ module Shumway.AVM1.Lib {
             return this._as3Stage.scaleMode;
         }
 
-        public setScaleMode(value) {
+        public setScaleMode(value: any) {
             this._as3Stage.scaleMode = value;
         }
 
@@ -73,7 +73,7 @@ module Shumway.AVM1.Lib {
             return this._as3Stage.showDefaultContextMenu;
         }
 
-        public setShowMenu(value) {
+        public setShowMenu(value: any) {
             this._as3Stage.showDefaultContextMenu = value;
         }
 

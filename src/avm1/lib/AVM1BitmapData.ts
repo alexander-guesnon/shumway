@@ -70,7 +70,7 @@ module Shumway.AVM1.Lib {
 			let bitmapClass = context.sec.flash.display.BitmapData.axClass;
 			if (symbol && (bitmapClass === symbolClass ||
 					bitmapClass.dPrototype.isPrototypeOf((<any>symbolClass).dPrototype))) {
-				let as3Object = Shumway.AVMX.AS.constructClassFromSymbol(symbol.symbolProps, bitmapClass);
+				let as3Object = Shumway.AVMX.AS.constructClassFromSymbol(symbol.symbolProps, bitmapClass) as any;
 				let bitmap = new AVM1BitmapData(context);
 				bitmap.alPrototype = context.globals.BitmapData.alGetPrototypeProperty();
 				bitmap._as3Object = as3Object;
@@ -110,7 +110,7 @@ module Shumway.AVM1.Lib {
 		public clone(): AVM1BitmapData {
 			let bitmap = new AVM1BitmapData(this.context);
 			bitmap.alPrototype = this.context.globals.BitmapData.alGetPrototypeProperty();
-			bitmap._as3Object = this._as3Object.clone();
+			bitmap._as3Object = this._as3Object.clone() as any;
 			return bitmap;
 		}
 

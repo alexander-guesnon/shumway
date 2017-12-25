@@ -75,7 +75,7 @@ module Shumway.AVM1.Natives {
             return '[object ' + alGetObjectClass(this) + ']';
         }
 
-        public addProperty(name, getter, setter) {
+        public addProperty(name: any, getter: any, setter: any) {
             if (typeof name !== 'string' || name === '') {
                 return false;
             }
@@ -94,11 +94,11 @@ module Shumway.AVM1.Natives {
             return true;
         }
 
-        public hasOwnProperty(name): boolean {
+        public hasOwnProperty(name: any): boolean {
             return this.alHasOwnProperty(name);
         }
 
-        public isPropertyEnumerable(name): boolean {
+        public isPropertyEnumerable(name: any): boolean {
             let desc = this.alGetProperty(name);
             return !(desc.flags & AVM1PropertyFlags.DONT_ENUM);
         }
@@ -136,7 +136,7 @@ module Shumway.AVM1.Natives {
             });
         }
 
-        public registerClass(name, theClass) {
+        public registerClass(name: any, theClass: any) {
             this.context.registerClass(name, theClass);
         }
 
@@ -336,7 +336,7 @@ module Shumway.AVM1.Natives {
             return native.value;
         }
 
-        public _toString(radix) {
+        public _toString(radix: number) {
             let native = alEnsureType<AVM1NumberNative>(this, AVM1NumberNative);
             return native.value.toString(radix || 10);
         }
@@ -613,7 +613,7 @@ module Shumway.AVM1.Natives {
             this.value = value;
         }
 
-        public alGetOwnProperty(p): AVM1PropertyDescriptor {
+        public alGetOwnProperty(p: any): AVM1PropertyDescriptor {
             if (alIsIndex(this.context, p)) {
                 let index = alToInt32(this.context, p);
                 if (Object.getOwnPropertyDescriptor(this.value, <any>index)) {
@@ -624,7 +624,7 @@ module Shumway.AVM1.Natives {
             return super.alGetOwnProperty(p);
         }
 
-        public alSetOwnProperty(p, v: AVM1PropertyDescriptor) {
+        public alSetOwnProperty(p: any, v: AVM1PropertyDescriptor) {
             if (alIsIndex(this.context, p)) {
                 let index = alToInt32(this.context, p);
                 if (!(v.flags & AVM1PropertyFlags.DATA) ||
@@ -638,7 +638,7 @@ module Shumway.AVM1.Natives {
             super.alSetOwnProperty(p, v);
         }
 
-        public alDeleteOwnProperty(p) {
+        public alDeleteOwnProperty(p: any) {
             if (alIsIndex(this.context, p)) {
                 let index = alToInt32(this.context, p);
                 delete this.value[index];
@@ -663,7 +663,7 @@ module Shumway.AVM1.Natives {
          * @param thisArg Optional. Value to use as this when executing fn.
          * @returns {any[]} A JavaScript array.
          */
-        public static mapToJSArray(arr: AVM1Object, fn: (item: any, index?: number) => any, thisArg?): any[] {
+        public static mapToJSArray(arr: AVM1Object, fn: (item: any, index?: number) => any, thisArg?: any): any[] {
             if (arr instanceof AVM1ArrayNative) {
                 return (<AVM1ArrayNative>arr).value.map(fn, thisArg);
             }
@@ -672,7 +672,7 @@ module Shumway.AVM1.Natives {
                 // TODO generate proper AVM1 exception.
                 throw new Error('Invalid type'); // Interpreter will catch this.
             }
-            let result = [];
+            let result: Array<any> = [];
             alIterateArray(arr.context, arr, (item: any, index: number) => {
                 result.push(fn.call(thisArg, item, index));
             });
@@ -783,7 +783,7 @@ module Shumway.AVM1.Natives {
                     Array.prototype.concat.apply(arr, items));
             }
             // Generic behavior
-            let a = [];
+            let a: Array<any> = [];
             let e: any = this;
             let isArrayObject = alIsArrayLike(this.context, this);
             let i = 0;
@@ -957,7 +957,7 @@ module Shumway.AVM1.Natives {
             if (!alIsFunction(comparefn)) {
                 arr.sort();
             } else {
-                let args = [undefined, undefined];
+                let args: Array<any> = [undefined, undefined];
                 arr.sort(function (a, b) {
                     args[0] = a;
                     args[1] = b;
@@ -1001,7 +1001,7 @@ module Shumway.AVM1.Natives {
             release || Shumway.Debug.assertNotImplemented(!(optionsVal & AVM1ArraySortOnOptions.UNIQUESORT), "UNIQUESORT");
             release || Shumway.Debug.assertNotImplemented(!(optionsVal & AVM1ArraySortOnOptions.RETURNINDEXEDARRAY), "RETURNINDEXEDARRAY");
 
-            let comparer = (a, b) => {
+            let comparer = (a: any, b: any) => {
                 let aObj = alToObject(context, a);
                 let bObj = alToObject(context, b);
                 if (!a || !b) {

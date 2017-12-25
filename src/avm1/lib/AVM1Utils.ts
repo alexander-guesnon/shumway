@@ -246,7 +246,7 @@ module Shumway.AVM1.Lib {
         }
 
         public onEventPropertyModified(propertyName: string) {
-            let propertyName = this.context.normalizeName(propertyName);
+            propertyName = this.context.normalizeName(propertyName);
             let event = this._eventsMap[propertyName];
             this._updateEvent(event);
         }
@@ -287,7 +287,7 @@ module Shumway.AVM1.Lib {
             return convertFromAS3Filters(this.context, this._as3Object.filters);
         }
 
-        public setFilters(value) {
+        public setFilters(value: any) {
             this._as3Object.filters = convertToAS3Filters(this.context, value);
         }
 
@@ -344,7 +344,7 @@ module Shumway.AVM1.Lib {
             // return this._as3Object.contextMenu;
         }
 
-        public setMenu(value) {
+        public setMenu(value: any) {
             Debug.somewhatImplemented('AVM1SymbolBase.setMenu');
             // this._as3Object.contextMenu = value;
         }
@@ -387,7 +387,7 @@ module Shumway.AVM1.Lib {
             return 'HIGH';
         }
 
-        public set_quality(value) {
+        public set_quality(value: any) {
             Debug.somewhatImplemented('AVM1SymbolBase.set_quality');
         }
 
@@ -638,7 +638,7 @@ module Shumway.AVM1.Lib {
         }
     }
 
-    function createAVM1NativeObject(ctor, nativeObject: flash.display.DisplayObject, context: AVM1Context) {
+    function createAVM1NativeObject(ctor: any, nativeObject: flash.display.DisplayObject, context: AVM1Context) {
         // We need to walk on __proto__ to find right ctor.prototype.
         let template;
         let proto = ctor.alGetPrototypeProperty();
@@ -664,7 +664,7 @@ module Shumway.AVM1.Lib {
         return avm1Object;
     }
 
-    export function getAVM1Object(as3Object, context: AVM1Context): AVM1Object {
+    export function getAVM1Object(as3Object: any, context: AVM1Context): AVM1Object {
         if (!as3Object) {
             return null;
         }
@@ -694,7 +694,7 @@ module Shumway.AVM1.Lib {
     }
 
     export function wrapAVM1NativeMembers(context: AVM1Context, wrap: AVM1Object, obj: any, members: string[], prefixFunctions: boolean = false): void {
-        function wrapFunction(fn) {
+        function wrapFunction(fn: any) {
             if (isNullOrUndefined(fn)) {
                 return undefined;
             }
@@ -709,7 +709,7 @@ module Shumway.AVM1.Lib {
             });
         }
 
-        function getMemberDescriptor(memberName): PropertyDescriptor {
+        function getMemberDescriptor(memberName: string): PropertyDescriptor {
             let desc;
             for (let p = obj; p; p = Object.getPrototypeOf(p)) {
                 desc = Object.getOwnPropertyDescriptor(p, memberName);
@@ -796,7 +796,7 @@ module Shumway.AVM1.Lib {
     export function initializeAVM1Object(as3Object: any,
                                          context: AVM1Context,
                                          placeObjectTag: any) {
-        let instanceAVM1 = <AVM1SymbolBase<flash.display.DisplayObject>>getAVM1Object(as3Object, context);
+        let instanceAVM1 = <AVM1SymbolBase<flash.display.InteractiveObject>>getAVM1Object(as3Object, context);
         release || Debug.assert(instanceAVM1);
 
         if (placeObjectTag.variableName) {
@@ -807,7 +807,7 @@ module Shumway.AVM1.Lib {
         if (!events) {
             return;
         }
-        let stageListeners = [];
+        let stageListeners: Array<any> = [];
         let as3Stage = (<any>context.globals.Stage)._as3Stage;
         for (let j = 0; j < events.length; j++) {
             let swfEvent = events[j];
@@ -825,8 +825,7 @@ module Shumway.AVM1.Lib {
             let handler = clipEventHandler.bind(null, actionsData, instanceAVM1);
             let flags = swfEvent.flags;
             for (let eventFlag in ClipEventMappings) {
-                eventFlag |= 0;
-                if (!(flags & (eventFlag | 0))) {
+                if ((flags & (+eventFlag)) === 0) {
                     continue;
                 }
                 let eventMapping = ClipEventMappings[eventFlag];
@@ -867,7 +866,7 @@ module Shumway.AVM1.Lib {
     }
 
     import AVM1ClipEvents = SWF.Parser.AVM1ClipEvents;
-    let ClipEventMappings: Map<number, { name: string; isStageEvent: boolean; isButtonEvent: boolean }>;
+    let ClipEventMappings: {[key: number] : { name: string; isStageEvent: boolean; isButtonEvent: boolean }};
     ClipEventMappings = Object.create(null);
     ClipEventMappings[AVM1ClipEvents.Load] = {name: 'load', isStageEvent: false, isButtonEvent: false};
     // AVM1's enterFrame happens at the same point in the cycle as AVM2's frameConstructed.

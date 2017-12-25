@@ -482,7 +482,7 @@ declare module Shumway.AVMX.AS.flash {
     class TextField extends flash.display.InteractiveObject {
       static axClass: typeof TextField;
 
-      getLineMetrics(index: number): void;
+      getLineMetrics(index: number): any;
 
       _name: string; // TODO remove
       antiAliasType: any;

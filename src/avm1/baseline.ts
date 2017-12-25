@@ -24,7 +24,7 @@ module Shumway.AVM1 {
         isEndOfActions: boolean;
     }
 
-    let cachedActionsCalls = null;
+    let cachedActionsCalls: any = null;
 
     function getActionsCalls() {
         if (!cachedActionsCalls) {
@@ -37,7 +37,7 @@ module Shumway.AVM1 {
      *  Bare-minimum JavaScript code generator to make debugging better.
      */
     export class ActionsDataCompiler {
-        private convertArgs(args: any[], id: number, res, ir: AnalyzerResults): string {
+        private convertArgs(args: any[], id: number, res: any, ir: AnalyzerResults): string {
             let parts: string[] = [];
             for (let i: number = 0; i < args.length; i++) {
                 let arg = args[i];
@@ -80,7 +80,7 @@ module Shumway.AVM1 {
             return parts.join(',');
         }
 
-        private convertAction(item: ActionCodeBlockItem, id: number, res, indexInBlock: number, ir: AnalyzerResults): string {
+        private convertAction(item: ActionCodeBlockItem, id: number, res: any, indexInBlock: number, ir: AnalyzerResults): string {
             switch (item.action.actionCode) {
                 case ActionCode.ActionJump:
                 case ActionCode.ActionReturn:

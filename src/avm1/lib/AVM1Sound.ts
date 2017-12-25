@@ -35,7 +35,7 @@ module Shumway.AVM1.Lib {
         private _channel: flash.media.SoundChannel;
         private _linkageID: string;
 
-        public avm1Constructor(target_mc) {
+        public avm1Constructor(target_mc: any) {
             this._target = this.context.resolveTarget(target_mc);
             this._sound = null;
             this._channel = null;
@@ -49,7 +49,7 @@ module Shumway.AVM1.Lib {
             }
 
             let props: flash.media.SoundSymbol = Object.create(symbol.symbolProps);
-            let sound: flash.media.Sound = Shumway.AVMX.AS.constructClassFromSymbol(props, this.context.sec.flash.media.Sound.axClass);
+            let sound: flash.media.Sound = Shumway.AVMX.AS.constructClassFromSymbol(props, this.context.sec.flash.media.Sound.axClass) as any;
             this._linkageID = id;
             this._sound = sound;
         }
