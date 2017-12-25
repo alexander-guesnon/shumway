@@ -39,7 +39,7 @@ module Shumway.AVMX.AS.flash.ui {
 		                    testingType: flash.display.HitTestingType): flash.display.DisplayObject {
 			let globalX = point.x * 20 | 0;
 			let globalY = point.y * 20 | 0;
-			let objects = [];
+			let objects: Array<display.DisplayObject> = [];
 			this.stage._containsGlobalPoint(globalX, globalY, testingType, objects);
 			release || assert(objects.length < 2);
 			if (objects.length) {

@@ -132,8 +132,8 @@ module Shumway.AVMX.AS.flash.net {
 			session.onhttpstatus = function (location: string, httpStatus: number, httpHeaders: any) {
 				let httpStatusEvent = new eventsPackage.HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false,
 					false, httpStatus);
-				let headers = [];
-				httpHeaders.split(/(?:\n|\r?\n)/g).forEach(function (h) {
+				let headers: Array<any> = [];
+				httpHeaders.split(/(?:\n|\r?\n)/g).forEach(function (h: any) {
 					let m = /^([^:]+): (.*)$/.exec(h);
 					if (m) {
 						headers.push(new self.sec.flash.net.URLRequestHeader(m[1], m[2]));

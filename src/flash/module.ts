@@ -31,8 +31,8 @@ module Shumway.Player {
 		IAssetResolver,
 		IRootElementService,
 		ICrossDomainSWFLoadingWhitelist {
-		syncDisplayObject(displayObject: flash.display.DisplayObject, async: boolean);
+		syncDisplayObject(displayObject: flash.display.DisplayObject, async: boolean): any;
 
-		requestRendering();
+		requestRendering(): void;
 	}
 }

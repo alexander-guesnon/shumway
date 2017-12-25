@@ -18,7 +18,7 @@ module Shumway.AVMX.AS.flash.system {
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export interface IFSCommandListener {
-		executeFSCommand(command: string, args: string);
+		executeFSCommand(command: string, args: string): void;
 	}
 
 	export function fscommand(sec: ISecurityDomain, command: string, args: string): void {

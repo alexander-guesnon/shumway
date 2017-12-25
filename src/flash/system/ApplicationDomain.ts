@@ -84,7 +84,7 @@ module Shumway.AVMX.AS.flash.system {
 			return !!this.getDefinitionImpl(name);
 		}
 
-		private getDefinitionImpl(name) {
+		private getDefinitionImpl(name: any) {
 			name = axCoerceString(name);
 			if (!name) {
 				this.sec.throwError('TypeError', Errors.NullPointerError, 'definitionName');

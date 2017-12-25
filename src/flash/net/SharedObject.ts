@@ -129,7 +129,7 @@ module Shumway.AVMX.AS.flash.net {
 		}
 
 		private _path: string;
-		private _data: Object;
+		private _data: any;
 		private _fps: number;
 		private _objectEncoding: flash.net.AMFEncoding;
 		private _pendingFlushId: number;

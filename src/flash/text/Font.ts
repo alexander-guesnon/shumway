@@ -768,7 +768,7 @@ module Shumway.AVMX.AS.flash.text {
 			this._id = flash.display.DisplayObject.getNextSyncID();
 		}
 
-		private static _deviceFontMetrics: Object;
+		private static _deviceFontMetrics: any;
 
 		private static _getFontMetrics(name: string, style: string) {
 			return this._deviceFontMetrics[name + style] || this._deviceFontMetrics[name];

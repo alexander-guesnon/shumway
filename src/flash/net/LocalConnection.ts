@@ -29,7 +29,7 @@ module Shumway.AVMX.AS.flash.net {
 	export class LocalConnection extends flash.events.EventDispatcher
 		implements ILocalConnectionReceiver {
 
-		static classInitializer = null;
+		static classInitializer: any = null;
 
 		constructor() {
 			super();
@@ -102,7 +102,7 @@ module Shumway.AVMX.AS.flash.net {
 			}
 		}
 
-		send(connectionName: string, methodName: string, ...args): void {
+		send(connectionName: string, methodName: string, ...args: Array<any>): void {
 			connectionName = axCoerceString(connectionName);
 			methodName = axCoerceString(methodName);
 			if (connectionName === null) {

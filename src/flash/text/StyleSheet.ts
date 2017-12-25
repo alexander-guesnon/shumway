@@ -109,7 +109,7 @@ module Shumway.AVMX.AS.flash.text {
 			let length = css.length;
 			let index = skipWhitespace(css, 0, length);
 			// Styles are only added once parsing completed successfully. Invalid syntax anywhere discards all new styles.
-			let newStyles = {};
+			let newStyles: any = {};
 			let currentNames = [];
 			let sawWhitespace = false;
 			let name = '';
@@ -153,7 +153,7 @@ module Shumway.AVMX.AS.flash.text {
 						name += char;
 				}
 			}
-			let styles = this._rules;
+			let styles: any = this._rules;
 			for (name in newStyles) {
 				styles[name.toLowerCase()] = newStyles[name];
 			}
@@ -164,7 +164,7 @@ module Shumway.AVMX.AS.flash.text {
 	function parseStyle(css: string, index: number, length: number, names: string[], newStyles: any) {
 		release || assert(index > 0);
 		release || assert(css[index - 1] === '{');
-		let style = {};
+		let style: any = {};
 		let name = '';
 		let sawWhitespace = false;
 		let upperCase = false;
@@ -186,7 +186,8 @@ module Shumway.AVMX.AS.flash.text {
 					sawWhitespace = false;
 					upperCase = false;
 					// Inner loop parsing property values.
-					/*valueLoop:*/ while (index < length) {
+					/*valueLoop:*/
+					while (index < length) {
 						char = css[index];
 						switch (char) {
 							case ';':

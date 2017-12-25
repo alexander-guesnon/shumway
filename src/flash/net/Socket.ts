@@ -250,14 +250,14 @@ module Shumway.AVMX.AS.flash.net {
 			return;
 		}
 
-		internalGetSecurityErrorMessage(host, port): string {
+		internalGetSecurityErrorMessage(host: any, port: number): string {
 			host = axCoerceString(host);
 			port |= 0;
 			release || somewhatImplemented("flash.net.Socket::internalGetSecurityErrorMessage");
 			return 'SecurityErrorEvent';
 		}
 
-		internalConnect(host, port) {
+		internalConnect(host: any, port: number) {
 			host = axCoerceString(host);
 			port |= 0;
 			release || somewhatImplemented("flash.net.Socket::internalConnect");

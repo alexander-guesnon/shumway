@@ -28,10 +28,10 @@ module Shumway.AVMX.AS.flash.net {
 	import ISoundSource = flash.media.ISoundSource;
 	import IDataDecoder = Shumway.ArrayUtilities.IDataDecoder;
 
-	declare let MediaSource;
-	declare let URL;
-	declare let Promise;
-	declare let window;
+	declare let MediaSource: any;
+	declare let URL: any;
+	declare let Promise: any;
+	declare let window: any;
 
 	export class NetStream extends flash.events.EventDispatcher implements ISoundSource {
 		_isDirty: boolean;
@@ -80,7 +80,7 @@ module Shumway.AVMX.AS.flash.net {
 		_videoReferrer: flash.media.Video;
 
 		private _videoStream: VideoStream;
-		private _contentTypeHint;
+		private _contentTypeHint: string;
 
 		// JS -> AS Bindings
 		static DIRECT_CONNECTIONS: string = "directConnections";
@@ -639,7 +639,7 @@ module Shumway.AVMX.AS.flash.net {
 	}
 
 	export interface IVideoElementService {
-		registerEventListener(id: number, listener: (eventType: VideoPlaybackEvent, data: any) => void);
+		registerEventListener(id: number, listener: (eventType: VideoPlaybackEvent, data: any) => void): void;
 
 		notifyVideoControl(id: number, eventType: VideoControlEvent, data: any): any;
 	}
@@ -678,8 +678,8 @@ module Shumway.AVMX.AS.flash.net {
 		private _url: string;
 		private _contentTypeHint: string;
 		private _state: VideoStreamState;
-		private _mediaSource;
-		private _mediaSourceBuffer;
+		private _mediaSource: any;
+		private _mediaSourceBuffer: any;
 		private _mediaSourceBufferLock: Promise<any>;
 		private _head: Uint8Array;
 		private _decoder: IDataDecoder;
@@ -755,9 +755,9 @@ module Shumway.AVMX.AS.flash.net {
 			let request = new this.sec.flash.net.URLRequest(url);
 			request._checkPolicyFile = checkPolicyFile;
 			let stream = new this.sec.flash.net.URLStream();
-			stream.addEventListener('httpStatus', function (e) {
+			stream.addEventListener('httpStatus', function (e: any) {
 				let responseHeaders = e.axGetPublicProperty('responseHeaders');
-				let contentTypeHeader = responseHeaders.filter(function (h) {
+				let contentTypeHeader = responseHeaders.filter(function (h: any) {
 					return h.axGetPublicProperty('name') === 'Content-Type';
 				})[0];
 				if (contentTypeHeader) {
@@ -767,14 +767,14 @@ module Shumway.AVMX.AS.flash.net {
 					}
 				}
 			}.bind(this));
-			stream.addEventListener('progress', function (e) {
+			stream.addEventListener('progress', function (e: any) {
 				let available = stream.bytesAvailable;
 				let bytes = new request.sec.flash.utils.ByteArray();
 				stream.readBytes(bytes, 0, available);
 				let chunk = new Uint8Array((<any> bytes)._buffer, 0, bytes.length);
 				this.appendBytes(chunk);
 			}.bind(this));
-			stream.addEventListener('complete', function (e) {
+			stream.addEventListener('complete', function (e: any) {
 				this.appendBytesAction('endSequence'); // NetStreamAppendBytesAction.END_SEQUENCE
 			}.bind(this));
 			stream.load(request);
@@ -787,7 +787,7 @@ module Shumway.AVMX.AS.flash.net {
 			let mux: RtmpJs.MP4.MP4Mux;
 			let mp4 = {
 				packets: 0,
-				init: function (metadata) {
+				init: function (metadata: any) {
 					if (!metadata.axGetPublicProperty('audiocodecid') && !metadata.axGetPublicProperty('videocodecid')) {
 						return; // useless metadata?
 					}
@@ -796,11 +796,11 @@ module Shumway.AVMX.AS.flash.net {
 					mux.oncodecinfo = function (mediaCodecs) {
 						this._contentTypeHint = buildMimeType(MP4_MIME_TYPE, mediaCodecs);
 					};
-					mux.ondata = function (data) {
+					mux.ondata = function (data: any) {
 						self.appendBytes(new Uint8Array(data));
 					}.bind(this);
 				},
-				packet: function (type, data, timestamp) {
+				packet: function (type: any, data: any, timestamp: any) {
 					mux.pushPacket(type, new Uint8Array(data), timestamp);
 				},
 				generate: function () {
@@ -832,10 +832,10 @@ module Shumway.AVMX.AS.flash.net {
 			release || assert(this._state === VideoStreamState.CLOSED);
 			this._state = VideoStreamState.OPENED_DATA_GENERATION;
 			let mediaSource = new MediaSource();
-			mediaSource.addEventListener('sourceopen', function (e) {
+			mediaSource.addEventListener('sourceopen', function (e: any) {
 				this._ensurePlaying();
 			}.bind(this));
-			mediaSource.addEventListener('sourceend', function (e) {
+			mediaSource.addEventListener('sourceend', function (e: any) {
 				this._mediaSource = null;
 			}.bind(this));
 			this._mediaSource = mediaSource;
@@ -872,7 +872,7 @@ module Shumway.AVMX.AS.flash.net {
 				if (contentType === FLV_MIME_TYPE) {
 					// FLV data needs to be parsed and wrapped with MP4 tags.
 					let flvDecoder = new FlvMp4Decoder(this.sec);
-					flvDecoder.onHeader = function (contentType) {
+					flvDecoder.onHeader = function (contentType: any) {
 						this._mediaSourceBuffer = this._mediaSource.addSourceBuffer(contentType);
 						this._mediaSourceBufferLock = Promise.resolve(undefined);
 					}.bind(this);
@@ -916,7 +916,7 @@ module Shumway.AVMX.AS.flash.net {
 			let buffer = this._mediaSourceBuffer;
 			this._mediaSourceBufferLock = this._mediaSourceBufferLock.then(function () {
 				buffer.appendBuffer(bytes);
-				return new Promise(function (resolve) {
+				return new Promise(function (resolve: any) {
 					buffer.addEventListener('update', function updateHandler() {
 						buffer.removeEventListener('update', updateHandler);
 						resolve();
@@ -1030,7 +1030,7 @@ module Shumway.AVMX.AS.flash.net {
 	// FLV-to-MP4 data transformation.
 	class FlvMp4Decoder implements IDataDecoder {
 		public onData: (bytes: Uint8Array) => void;
-		public onError: (e) => void;
+		public onError: (e: any) => void;
 		public onHeader: (contentType: string) => void;
 
 		private _flvParser: RtmpJs.FLV.FLVParser;
@@ -1062,7 +1062,7 @@ module Shumway.AVMX.AS.flash.net {
 					mp4Mux.oncodecinfo = function (codecs: string[]) {
 						this.onHeader(buildMimeType(MP4_MIME_TYPE, codecs));
 					}.bind(this);
-					mp4Mux.ondata = function (data) {
+					mp4Mux.ondata = function (data: any) {
 						this.onData.call(null, data);
 					}.bind(this);
 					this._mp4Mux = mp4Mux;
@@ -1076,7 +1076,7 @@ module Shumway.AVMX.AS.flash.net {
 			this._mp4Mux.flush();
 		}
 
-		private _onFlvError(e) {
+		private _onFlvError(e: any) {
 			if (this.onError) {
 				this.onError(e);
 			}

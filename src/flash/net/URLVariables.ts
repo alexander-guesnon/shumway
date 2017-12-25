@@ -17,8 +17,8 @@
 module Shumway.AVMX.AS.flash.net {
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 
-	declare let escape;
-	declare let unescape;
+	declare let escape: any;
+	declare let unescape: any;
 
 	export class URLVariables extends ASObject {
 

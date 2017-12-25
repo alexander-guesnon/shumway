@@ -22,9 +22,9 @@ module Shumway.AVMX.AS.flash.media {
 	export interface ISoundSource {
 		soundTransform: flash.media.SoundTransform;
 
-		updateSoundLevels(volume: number);
+		updateSoundLevels(volume: number): void;
 
-		stopSound();
+		stopSound(): void;
 	}
 
 	export class SoundMixer extends ASObject {
@@ -129,7 +129,7 @@ module Shumway.AVMX.AS.flash.media {
 			return SoundMixer._masterVolume;
 		}
 
-		static _setMasterVolume(volume) {
+		static _setMasterVolume(volume: number) {
 			volume = +volume;
 			SoundMixer._masterVolume = volume;
 			SoundMixer._updateAllSoundSources();

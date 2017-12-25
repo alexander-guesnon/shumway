@@ -20,7 +20,7 @@ module Shumway.AVMX.AS.flash.system {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import toKeyValueArray = Shumway.ObjectUtilities.toKeyValueArray;
 
-	declare let window;
+	declare let window: any;
 
 	export class Capabilities extends ASObject {
 

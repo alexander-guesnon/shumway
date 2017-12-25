@@ -143,7 +143,7 @@ module Shumway.AVMX.AS.flash.system {
 	}
 
 	export interface ICrossDomainSWFLoadingWhitelist {
-		addToSWFLoadingWhitelist(domain: string, insecure: boolean, ownDomain: boolean);
+		addToSWFLoadingWhitelist(domain: string, insecure: boolean, ownDomain: boolean): void;
 
 		checkDomainForSWFLoading(domain: string): CrossDomainSWFLoadingWhitelistResult;
 	}

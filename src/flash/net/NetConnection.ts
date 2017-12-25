@@ -138,19 +138,19 @@ module Shumway.AVMX.AS.flash.net {
 				this._rtmpConnection = rtmpConnection;
 				this._rtmpCreateStreamCallbacks = [null, null]; // reserve first two
 
-				rtmpConnection.onresponse = function (e) {
+				rtmpConnection.onresponse = function (e: any) {
 					//
 				};
-				rtmpConnection.onevent = function (e) {
+				rtmpConnection.onevent = function (e: any) {
 					//
 				};
-				rtmpConnection.onconnected = function (e) {
+				rtmpConnection.onconnected = function (e: any) {
 					this._connected = true;
 					this.dispatchEvent(new this.sec.flash.events.NetStatusEvent(events.NetStatusEvent.NET_STATUS,
 						false, false,
 						this.sec.createObjectFromJS({level: 'status', code: 'NetConnection.Connect.Success'})));
 				}.bind(this);
-				rtmpConnection.onstreamcreated = function (e) {
+				rtmpConnection.onstreamcreated = function (e: any) {
 					console.log('#streamcreated: ' + e.streamId);
 					let callback = this._rtmpCreateStreamCallbacks[e.transactionId];
 					delete this._rtmpCreateStreamCallbacks[e.transactionId];
@@ -160,7 +160,7 @@ module Shumway.AVMX.AS.flash.net {
 			}
 		}
 
-		_createRtmpStream(callback) {
+		_createRtmpStream(callback: any) {
 			let transactionId = this._rtmpCreateStreamCallbacks.length;
 			this._rtmpCreateStreamCallbacks[transactionId] = callback;
 			this._rtmpConnection.createStream(transactionId, null);

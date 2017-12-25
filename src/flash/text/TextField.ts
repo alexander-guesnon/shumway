@@ -1010,7 +1010,7 @@ module Shumway.AVMX.AS.flash.text {
 		static FromLabelData(data: any, loaderInfo: flash.display.LoaderInfo): TextSymbol {
 			let bounds = data.fillBounds;
 			let records: TextRecord[] = data.records;
-			let coords = data.coords = [];
+			let coords: Array<any> = data.coords = [];
 			let htmlText = '';
 			let size = 12;
 			let face = 'Times Roman';
@@ -1072,6 +1072,6 @@ module Shumway.AVMX.AS.flash.text {
 		}
 	}
 
-	let charEscapeMap = {'<': '&lt;', '>': '&gt;', '&': '&amp;'};
+	let charEscapeMap: any = {'<': '&lt;', '>': '&gt;', '&': '&amp;'};
 
 }
