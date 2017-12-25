@@ -16,213 +16,213 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF {
-  export let StreamNoDataError = {};
-  
-  let masks = new Uint32Array(33);
-  for (let i = 1, mask = 0; i <= 32; ++i) {
-    masks[i] = mask = (mask << 1) | 1;
-  }
-  
-  export class Stream {
-    bytes: Uint8Array;
-    view: DataView;
-    pos: number;
-    end: number;
+	export let StreamNoDataError = {};
 
-    bitBuffer: number;
-    bitLength: number;
+	let masks = new Uint32Array(33);
+	for (let i = 1, mask = 0; i <= 32; ++i) {
+		masks[i] = mask = (mask << 1) | 1;
+	}
 
-    constructor(buffer, offset?: number, length?: number, maxLength?: number) {
-      if (offset === undefined)
-        offset = 0;
-      if (buffer.buffer instanceof ArrayBuffer) {
-        offset += buffer.byteOffset;
-        buffer = buffer.buffer;
-      }
-      if (length === undefined)
-        length = buffer.byteLength - offset;
-      if (maxLength === undefined)
-        maxLength = length;
+	export class Stream {
+		bytes: Uint8Array;
+		view: DataView;
+		pos: number;
+		end: number;
 
-      this.bytes = new Uint8Array(buffer, offset, maxLength);
-      this.view = new DataView(buffer, offset, maxLength);
-      this.pos = 0;
-      this.end = length;
-      
-      this.bitBuffer = 0;
-      this.bitLength = 0;
-    }
-    
-    align() {
-      this.bitBuffer = this.bitLength = 0;
-    }
+		bitBuffer: number;
+		bitLength: number;
 
-    ensure(size: number) {
-      if (this.pos + size > this.end) {
-        throw StreamNoDataError;
-      }
-    }
+		constructor(buffer, offset?: number, length?: number, maxLength?: number) {
+			if (offset === undefined)
+				offset = 0;
+			if (buffer.buffer instanceof ArrayBuffer) {
+				offset += buffer.byteOffset;
+				buffer = buffer.buffer;
+			}
+			if (length === undefined)
+				length = buffer.byteLength - offset;
+			if (maxLength === undefined)
+				maxLength = length;
 
-    remaining(): number {
-      return this.end - this.pos;
-    }
+			this.bytes = new Uint8Array(buffer, offset, maxLength);
+			this.view = new DataView(buffer, offset, maxLength);
+			this.pos = 0;
+			this.end = length;
 
-    substream(begin: number, end: number): Stream {
-      let stream = new Stream(this.bytes);
-      stream.pos = begin;
-      stream.end = end;
-      return stream;
-    }
+			this.bitBuffer = 0;
+			this.bitLength = 0;
+		}
 
-    push(data) {
-      let bytes = this.bytes;
-      let newBytesLength = this.end + data.length;
-      if (newBytesLength > bytes.length) {
-        throw 'stream buffer overfow';
-      }
-      bytes.set(data, this.end);
-      this.end = newBytesLength;
-    }
+		align() {
+			this.bitBuffer = this.bitLength = 0;
+		}
 
-    readSi8(): number {
-      return this.view.getInt8(this.pos++);
-    }
+		ensure(size: number) {
+			if (this.pos + size > this.end) {
+				throw StreamNoDataError;
+			}
+		}
 
-    readSi16(): number {
-      let r = this.view.getInt16(this.pos, true);
-      this.pos += 2;
-      return r;
-    }
+		remaining(): number {
+			return this.end - this.pos;
+		}
 
-    readSi32(): number {
-      let r = this.view.getInt32(this.pos, true);
-      this.pos += 4;
-      return r;
-    }
+		substream(begin: number, end: number): Stream {
+			let stream = new Stream(this.bytes);
+			stream.pos = begin;
+			stream.end = end;
+			return stream;
+		}
 
-    readUi8(): number {
-      return this.bytes[this.pos++];
-    }
+		push(data) {
+			let bytes = this.bytes;
+			let newBytesLength = this.end + data.length;
+			if (newBytesLength > bytes.length) {
+				throw 'stream buffer overfow';
+			}
+			bytes.set(data, this.end);
+			this.end = newBytesLength;
+		}
 
-    readUi16(): number {
-      let r = this.view.getUint16(this.pos, true);
-      this.pos += 2;
-      return r;
-    }
+		readSi8(): number {
+			return this.view.getInt8(this.pos++);
+		}
 
-    readUi32(): number {
-      let r = this.view.getUint32(this.pos, true);
-      this.pos += 4;
-      return r;
-    }
+		readSi16(): number {
+			let r = this.view.getInt16(this.pos, true);
+			this.pos += 2;
+			return r;
+		}
 
-    readFixed(): number {
-      let r = this.view.getInt32(this.pos, true) / 65536;
-      this.pos += 4;
-      return r;
-    }
+		readSi32(): number {
+			let r = this.view.getInt32(this.pos, true);
+			this.pos += 4;
+			return r;
+		}
 
-    readFixed8(): number {
-      let r = this.view.getInt16(this.pos, true) / 256;
-      this.pos += 2;
-      return r;
-    }
+		readUi8(): number {
+			return this.bytes[this.pos++];
+		}
 
-    readFloat16(): number {
-      let ui16 = this.view.getUint16(this.pos, false);
-      this.pos += 2;
-      let sign = ui16 >> 15 ? -1 : 1;
-      let exponent = (ui16 & 0x7c00) >> 10;
-      let fraction = ui16 & 0x03ff;
-      if (!exponent)
-        return sign * Math.pow(2, -14) * (fraction / 1024);
-      if (exponent === 0x1f)
-        return fraction ? NaN : sign * Infinity;
-      return sign * Math.pow(2, exponent - 15) * (1 + (fraction / 1024));
-    }
+		readUi16(): number {
+			let r = this.view.getUint16(this.pos, true);
+			this.pos += 2;
+			return r;
+		}
 
-    readFloat(): number {
-      let r = this.view.getFloat32(this.pos, true);
-      this.pos += 4;
-      return r;
-    }
+		readUi32(): number {
+			let r = this.view.getUint32(this.pos, true);
+			this.pos += 4;
+			return r;
+		}
 
-    readDouble(): number {
-      let r = this.view.getFloat64(this.pos, true);
-      this.pos += 8;
-      return r;
-    }
+		readFixed(): number {
+			let r = this.view.getInt32(this.pos, true) / 65536;
+			this.pos += 4;
+			return r;
+		}
 
-    readEncodedU32(): number {
-      let bytes = this.bytes;
-      let val = bytes[this.pos++];
-      if (!(val & 0x080))
-        return val;
-      val = (val & 0x7f) | bytes[this.pos++] << 7;
-      if (!(val & 0x4000))
-        return val;
-      val = (val & 0x3fff) | bytes[this.pos++] << 14;
-      if (!(val & 0x200000))
-        return val;
-      val = (val & 0x1FFFFF) | bytes[this.pos++] << 21;
-      if (!(val & 0x10000000))
-        return val;
-      return (val & 0xFFFFFFF) | (bytes[this.pos++] << 28);
-    }
+		readFixed8(): number {
+			let r = this.view.getInt16(this.pos, true) / 256;
+			this.pos += 2;
+			return r;
+		}
 
-    readBool(): boolean {
-      return !!this.bytes[this.pos++];
-    }
+		readFloat16(): number {
+			let ui16 = this.view.getUint16(this.pos, false);
+			this.pos += 2;
+			let sign = ui16 >> 15 ? -1 : 1;
+			let exponent = (ui16 & 0x7c00) >> 10;
+			let fraction = ui16 & 0x03ff;
+			if (!exponent)
+				return sign * Math.pow(2, -14) * (fraction / 1024);
+			if (exponent === 0x1f)
+				return fraction ? NaN : sign * Infinity;
+			return sign * Math.pow(2, exponent - 15) * (1 + (fraction / 1024));
+		}
 
-    readSb(size: number): number {
-      return (this.readUb(size) << (32 - size)) >> (32 - size);
-    }
+		readFloat(): number {
+			let r = this.view.getFloat32(this.pos, true);
+			this.pos += 4;
+			return r;
+		}
 
-    readUb(size: number): number {
-      let buffer = this.bitBuffer;
-      let bitlen = this.bitLength;
-      let val = 0;
-      while (size > bitlen) {
-        if (bitlen > 24) {
-          // Avoid overflow. Save current buffer in val and add remaining bits later.
-          size -= bitlen;
-          val = buffer << size;
-          bitlen = 0;
-        }
-        buffer = (buffer << 8) | this.bytes[this.pos++];
-        bitlen += 8;
-      }
-      bitlen -= size;
-      val |= (buffer >>> bitlen) & masks[size];
-      this.bitBuffer = buffer;
-      this.bitLength = bitlen;
-      return val;
-    }
+		readDouble(): number {
+			let r = this.view.getFloat64(this.pos, true);
+			this.pos += 8;
+			return r;
+		}
 
-    readFb(size: number): number {
-      return this.readSb(size) / 65536;
-    }
+		readEncodedU32(): number {
+			let bytes = this.bytes;
+			let val = bytes[this.pos++];
+			if (!(val & 0x080))
+				return val;
+			val = (val & 0x7f) | bytes[this.pos++] << 7;
+			if (!(val & 0x4000))
+				return val;
+			val = (val & 0x3fff) | bytes[this.pos++] << 14;
+			if (!(val & 0x200000))
+				return val;
+			val = (val & 0x1FFFFF) | bytes[this.pos++] << 21;
+			if (!(val & 0x10000000))
+				return val;
+			return (val & 0xFFFFFFF) | (bytes[this.pos++] << 28);
+		}
 
-    readString(length: number): string {
-      let bytes = this.bytes;
-      let codes: Uint8Array;
-      let pos = this.pos;
-      if (length > -1) {
-        codes = bytes.subarray(pos, pos += length);
-      } else {
-        length = 0;
-        for (let i = pos; bytes[i]; i++) {
-          length++;
-        }
-        codes = bytes.subarray(pos, pos += length);
-        pos++;
-      }
-      this.pos = pos;
-      let str = Shumway.StringUtilities.utf8encode(codes);
-      if (str.indexOf('\0') >= 0) {
-        str = str.split('\0').join('');
-      }
-      return str;
-    }
-  } 
+		readBool(): boolean {
+			return !!this.bytes[this.pos++];
+		}
+
+		readSb(size: number): number {
+			return (this.readUb(size) << (32 - size)) >> (32 - size);
+		}
+
+		readUb(size: number): number {
+			let buffer = this.bitBuffer;
+			let bitlen = this.bitLength;
+			let val = 0;
+			while (size > bitlen) {
+				if (bitlen > 24) {
+					// Avoid overflow. Save current buffer in val and add remaining bits later.
+					size -= bitlen;
+					val = buffer << size;
+					bitlen = 0;
+				}
+				buffer = (buffer << 8) | this.bytes[this.pos++];
+				bitlen += 8;
+			}
+			bitlen -= size;
+			val |= (buffer >>> bitlen) & masks[size];
+			this.bitBuffer = buffer;
+			this.bitLength = bitlen;
+			return val;
+		}
+
+		readFb(size: number): number {
+			return this.readSb(size) / 65536;
+		}
+
+		readString(length: number): string {
+			let bytes = this.bytes;
+			let codes: Uint8Array;
+			let pos = this.pos;
+			if (length > -1) {
+				codes = bytes.subarray(pos, pos += length);
+			} else {
+				length = 0;
+				for (let i = pos; bytes[i]; i++) {
+					length++;
+				}
+				codes = bytes.subarray(pos, pos += length);
+				pos++;
+			}
+			this.pos = pos;
+			let str = Shumway.StringUtilities.utf8encode(codes);
+			if (str.indexOf('\0') >= 0) {
+				str = str.split('\0').join('');
+			}
+			return str;
+		}
+	}
 }
