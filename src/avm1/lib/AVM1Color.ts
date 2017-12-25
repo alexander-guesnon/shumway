@@ -30,7 +30,7 @@ module Shumway.AVM1.Lib {
         private _target: IAVM1SymbolBase;
         private _targetAS3Object: flash.display.InteractiveObject;
 
-        public avm1Constructor(target_mc) {
+        public avm1Constructor(target_mc: any) {
             this._target = this.context.resolveTarget(target_mc);
             this._targetAS3Object = <flash.display.InteractiveObject>getAS3Object(this._target);
         }
@@ -45,7 +45,7 @@ module Shumway.AVM1.Lib {
                 this._targetAS3Object.transform.colorTransform);
         }
 
-        public setRGB(offset): void {
+        public setRGB(offset: number): void {
             let transform = AVM1Color.prototype.getTransform.call(this);
             transform.alPut('rgb', offset);
             AVM1Color.prototype.setTransform.call(this, transform);

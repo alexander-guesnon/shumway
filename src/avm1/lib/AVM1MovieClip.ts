@@ -145,7 +145,7 @@ module Shumway.AVM1.Lib {
             return this.context.sec.flash.system.Capabilities.version;
         }
 
-        public attachMovie(symbolId, name, depth, initObject) {
+        public attachMovie(symbolId: string, name: string, depth: number, initObject: any) {
             let mc = this._constructMovieClipSymbol(symbolId, name);
             if (!mc) {
                 return undefined;
@@ -218,7 +218,7 @@ module Shumway.AVM1.Lib {
          * Using this map instead of always relaying lookups to the AVM2 MovieClip substantially
          * reduces the time spent in looking up children. In some cases by two orders of magnitude.
          */
-        private _childrenByName: Map<string, AVM1MovieClip>;
+        private _childrenByName: MapObject<AVM1MovieClip>;
 
         private _insertChildAtDepth<T extends flash.display.DisplayObject>(mc: T, depth: number): AVM1Object {
             let oldChild = this.getInstanceAtDepth(depth);
@@ -252,7 +252,7 @@ module Shumway.AVM1.Lib {
             }
             let newChildForName = this._lookupChildInAS3Object(name);
             if (newChildForName) {
-                this._childrenByName[name] = newChildForName;
+                this._childrenByName[name] = newChildForName as any;
             } else {
                 delete this._childrenByName[name];
             }
@@ -266,11 +266,11 @@ module Shumway.AVM1.Lib {
             release || assert(this._childrenByName[name] !== child);
             let currentChild = this._childrenByName[name];
             if (!currentChild || currentChild.getDepth() > child.getDepth()) {
-                this._childrenByName[name] = child;
+                this._childrenByName[name] = child as any;
             }
         }
 
-        public createEmptyMovieClip(name, depth): AVM1MovieClip {
+        public createEmptyMovieClip(name: any, depth: number): AVM1MovieClip {
             name = alToString(this.context, name);
             let mc: flash.display.MovieClip = new this.context.sec.flash.display.MovieClip();
             mc.name = name;
@@ -304,7 +304,7 @@ module Shumway.AVM1.Lib {
             return this._as3Object.dropTarget;
         }
 
-        public duplicateMovieClip(name, depth, initObject): AVM1MovieClip {
+        public duplicateMovieClip(name: any, depth: number, initObject: any): AVM1MovieClip {
             name = alToString(this.context, name);
             let parent = this.context.resolveTarget(null);
             let nativeAS3Object = this._as3Object;

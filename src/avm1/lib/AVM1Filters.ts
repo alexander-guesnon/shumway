@@ -269,9 +269,8 @@ module Shumway.AVM1.Lib {
     }
 
     export function convertFromAS3Filters(context: AVM1Context, as3Filters: ASObject): AVM1Object {
-        let arr = [];
+        let arr : Array<AVM1Object> = [];
         if (as3Filters) {
-
             let classes = context.globals.filters;
             for (let i = 0, length = as3Filters.axGetPublicProperty('length'); i < length; i++) {
                 let as3Filter = as3Filters.axGetPublicProperty(i);

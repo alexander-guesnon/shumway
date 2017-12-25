@@ -35,21 +35,21 @@ module Shumway.AVM1 {
 
     export interface AVM1ExportedSymbol {
         symbolId: number;
-        symbolProps;
+        symbolProps: any;
     }
 
     export interface IAVM1RuntimeUtils {
-        hasProperty(obj, name): boolean;
+        hasProperty(obj: any, name: string): boolean;
 
-        getProperty(obj, name): any;
+        getProperty(obj: any, name: string): any;
 
-        setProperty(obj, name, value): void;
+        setProperty(obj: any, name: string, value: any): void;
 
         warn(msg: string): void;
     }
 
     export interface IAVM1EventPropertyObserver {
-        onEventPropertyModified(name: string);
+        onEventPropertyModified(name: string): void;
     }
 
     export class ActionsDataFactory {
@@ -109,7 +109,7 @@ module Shumway.AVM1 {
 
         public static create: (loaderInfo: Shumway.AVMX.AS.flash.display.LoaderInfo) => AVM1Context;
 
-        public resolveTarget(target): any {
+        public resolveTarget(target: any): any {
         }
 
         public resolveRoot(): any {
@@ -118,10 +118,10 @@ module Shumway.AVM1 {
         public checkTimeout() {
         }
 
-        public executeActions(actionsData: AVM1ActionsData, scopeObj): void {
+        public executeActions(actionsData: AVM1ActionsData, scopeObj: any): void {
         }
 
-        public executeFunction(fn: AVM1Function, thisArg, args: any): any {
+        public executeFunction(fn: AVM1Function, thisArg: any, args: any): any {
         }
 
         /**
@@ -132,9 +132,9 @@ module Shumway.AVM1 {
          * To avoid runtime checks, the implementation is set during context initialization based on
          * the SWF version.
          */
-        public normalizeName: (name) => string;
+        public normalizeName: (name: any) => string;
 
-        private normalizeNameCaseSensitive(name): string {
+        private normalizeNameCaseSensitive(name: any): string {
             switch (typeof name) {
                 case 'number':
                 case 'string':
@@ -144,9 +144,9 @@ module Shumway.AVM1 {
             }
         }
 
-        private _nameCache: Map<string, string>;
+        private _nameCache: MapObject<string>;
 
-        private normalizeNameCaseInsensitive(name): string {
+        private normalizeNameCaseInsensitive(name: string): string {
             switch (typeof name) {
                 case 'number':
                     return name;
@@ -205,7 +205,7 @@ module Shumway.AVM1 {
             observers.forEach((observer: IAVM1EventPropertyObserver) => observer.onEventPropertyModified(propertyName));
         }
 
-        public addAsset(className: string, symbolId: number, symbolProps): void {
+        public addAsset(className: string, symbolId: number, symbolProps: any): void {
             release || Debug.assert(typeof className === 'string' && !isNaN(symbolId));
             this.assets[className.toLowerCase()] = symbolId;
             this.assetsSymbols[symbolId] = symbolProps;
@@ -259,7 +259,7 @@ module Shumway.AVM1 {
             Lib.AVM1Stage.bindStage(this, this.globals.Stage, stage);
         }
 
-        public getStaticState(cls): any {
+        public getStaticState(cls: any): any {
             let state = this.staticStates.get(cls);
             if (!state) {
                 state = Object.create(null);

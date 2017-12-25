@@ -30,9 +30,9 @@ module Shumway.AVM1.Lib {
     export interface IAVM1SymbolBase extends IHasAS3ObjectReference {
         context: AVM1Context;
 
-        initAVM1SymbolInstance(context: AVM1Context, as3Object: flash.display.InteractiveObject);
+        initAVM1SymbolInstance(context: AVM1Context, as3Object: flash.display.InteractiveObject): void;
 
-        updateAllEvents();
+        updateAllEvents(): void;
 
         getDepth(): number;
     }

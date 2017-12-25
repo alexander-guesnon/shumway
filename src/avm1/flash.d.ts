@@ -114,7 +114,7 @@ declare module Shumway.AVMX.AS.flash {
       mouseY: number;
       tabChildren: boolean;
       graphics: Graphics;
-      blendMode;
+      blendMode: any;
       cacheAsBitmap: boolean;
       loaderInfo: LoaderInfo;
       name: string;
@@ -125,10 +125,10 @@ declare module Shumway.AVMX.AS.flash {
       scrollRect: geom.Rectangle;
       enabled: boolean;
       visible: boolean;
-      opaqueBackground;
+      opaqueBackground: any;
       useHandCursor: boolean;
       buttonMode: boolean;
-      filters;
+      filters: any;
       _mouseOver: boolean;
       _mouseDown: boolean;
       _children: DisplayObject [];
@@ -136,39 +136,39 @@ declare module Shumway.AVMX.AS.flash {
       _symbol: DisplaySymbol;
       getBounds(obj: DisplayObject): flash.geom.Rectangle;
       getRect(obj: DisplayObject): flash.geom.Rectangle;
-      play();
-      stop();
+      play(): void;
+      stop(): void;
       gotoAndPlay: Function;
       gotoAndStop: Function;
-      prevFrame();
-      nextFrame();
-      prevScene();
-      nextScene();
+      prevFrame(): void;
+      nextFrame(): void;
+      prevScene(): void;
+      nextScene(): void;
       startDrag: Function;
-      stopDrag();
+      stopDrag(): void;
       globalToLocal(p: geom.Point): geom.Point;
       localToGlobal(p: geom.Point): geom.Point;
       hitTestObject: Function;
       hitTestPoint: Function;
       mask: DisplayObject;
-      _callFrame(frame: number);
+      _callFrame(frame: number): void;
     }
     class InteractiveObject extends DisplayObject  {
       tabEnabled: boolean;
       tabIndex: number;
       focusRect: boolean;
-      contextMenu;
+      contextMenu: any;
     }
     class DisplayObjectContainer extends InteractiveObject {
-      _as2SymbolClass;
+      _as2SymbolClass: any;
       _name: string;
       numChildren: number;
       currentFrame: number;
 
       getChildIndex(child: DisplayObject): number;
-      addChild(child: DisplayObject);
-      removeChild(child: DisplayObject);
-      addChildAt(child: DisplayObject, index: number);
+      addChild(child: DisplayObject): void;
+      removeChild(child: DisplayObject): void;
+      addChildAt(child: DisplayObject, index: number): void;
       addTimelineObjectAtDepth(child: DisplayObject, depth: number): void;
       getTimelineObjectAtDepth(depth: number): DisplayObject;
       swapChildren: Function;
@@ -178,7 +178,7 @@ declare module Shumway.AVMX.AS.flash {
     class MovieClip extends DisplayObjectContainer {
       static axClass: typeof MovieClip;
 
-      _as2SymbolClass;
+      _as2SymbolClass: any;
       _name: string;
       numChildren: number;
       currentFrame: number;
@@ -187,16 +187,16 @@ declare module Shumway.AVMX.AS.flash {
       hitArea: DisplayObject;
       trackAsMenu: boolean;
 
-      addFrameScript(frameIndex: number, script: (any?) => any /*, ...*/): void;
+      addFrameScript(frameIndex: number, script: (x?: any) => any /*, ...*/): void;
       _getAbsFrameNumber(frame: string, sceneName: string): number;
       callFrame(frame: number): void;
     }
     class Graphics extends ASObject {
       beginFill: Function;
       beginBitmapFill: Function;
-      clear();
+      clear(): void;
       curveTo: Function;
-      endFill();
+      endFill(): void;
       lineGradientStyle: Function;
       lineStyle: Function;
       lineTo: Function;
@@ -234,13 +234,13 @@ declare module Shumway.AVMX.AS.flash {
       height: number;
       transparent: boolean;
       constructor(width: number, height: number, trasparent: boolean, fillColor: number);
-      applyFilter(sourceBitmap: BitmapData, sourceRect: geom.Rectangle, destPoint: geom.Point, filter): void;
-      clone();
+      applyFilter(sourceBitmap: BitmapData, sourceRect: geom.Rectangle, destPoint: geom.Point, filter: any): void;
+      clone(): void;
       colorTransform(rect: flash.geom.Rectangle, colorTransform: flash.geom.ColorTransform): void;
       compare(otherBitmapData: BitmapData): boolean;
       copyChannel(sourceBitmapData: flash.display.BitmapData, sourceRect: flash.geom.Rectangle, destPoint: flash.geom.Point, sourceChannel: number, destChannel: number): void;
       copyPixels(sourceBitmap: BitmapData, sourceRect: geom.Rectangle, destPoint: geom.Point, alphaBitmap: BitmapData, alphaPoint: geom.Point, mergeAlpha: boolean): void;
-      draw(source, matrix: geom.Matrix, colorTransform: geom.ColorTransform, blendMode: string, clipRect: geom.Rectangle, smoothing: boolean): void;
+      draw(source: any, matrix: geom.Matrix, colorTransform: geom.ColorTransform, blendMode: string, clipRect: geom.Rectangle, smoothing: boolean): void;
       fillRect(rect: geom.Rectangle, color: number): void;
       floodFill(x: number, y: number, color: number): void;
       getColorBoundsRect(mask: number, color: number, findColor?: boolean): flash.geom.Rectangle;
@@ -256,7 +256,7 @@ declare module Shumway.AVMX.AS.flash {
       pixelDissolve(sourceBitmapData: flash.display.BitmapData, sourceRect: flash.geom.Rectangle, destPoint: flash.geom.Point, randomSeed?: number, numPixels?: number, fillColor?: number): number;
       scroll(x: number, y: number): void;
       threshold(sourceBitmapData: flash.display.BitmapData, sourceRect: flash.geom.Rectangle, destPoint: flash.geom.Point, operation: string, threshold: number, color?: number, mask?: number, copySource?: boolean): number;
-      dispose();
+      dispose(): void;
     }
     class Bitmap extends DisplayObject {
       constructor();
@@ -320,7 +320,7 @@ declare module Shumway.AVMX.AS.flash {
     }
     class IOErrorEvent extends Event {
       static IO_ERROR: string;
-      public errorID;
+      public errorID: any;
     }
   }
   module external {
@@ -328,7 +328,7 @@ declare module Shumway.AVMX.AS.flash {
       static axClass: typeof ExternalInterface;
 
       static available: boolean;
-      static addCallback(methodName: string, callback: Function);
+      static addCallback(methodName: string, callback: Function): void;
       static call: Function;
     }
   }
@@ -395,7 +395,7 @@ declare module Shumway.AVMX.AS.flash {
       public height: number;
       public size: Point;
       constructor(x: number, y: number, width: number, height: number);
-      public inflate(dx: number, dy: number);
+      public inflate(dx: number, dy: number): void;
       public inflatePoint(point: Point): void;
       public offset(dx: number, dy: number): void;
       public offsetPoint(point: Point): void;
@@ -426,7 +426,7 @@ declare module Shumway.AVMX.AS.flash {
     }
     class SoundChannel extends ASObject {
       soundTransform: SoundTransform;
-      stop();
+      stop(): void;
     }
     class SoundTransform extends ASObject  {}
     class SoundSymbol {}
@@ -439,7 +439,7 @@ declare module Shumway.AVMX.AS.flash {
       data: any;
     }
     class URLLoader extends events.EventDispatcher {
-      dataFormat;
+      dataFormat: any;
       data: any;
       bytesLoaded: number;
       bytesTotal: number;
@@ -476,24 +476,24 @@ declare module Shumway.AVMX.AS.flash {
       static allowInsecureDomain(domain: string): void;
       static loadPolicyFile(url: string): void;
     }
-    let fscommand: { axCall: (thisArg, sec: ISecurityDomain, command: string, args?: string) => any };
+    let fscommand: { axCall: (thisArg: any, sec: ISecurityDomain, command: string, args?: string) => any };
   }
   module text {
     class TextField extends flash.display.InteractiveObject {
       static axClass: typeof TextField;
 
-      getLineMetrics(index: number);
+      getLineMetrics(index: number): void;
 
       _name: string; // TODO remove
-      antiAliasType;
+      antiAliasType: any;
       autoSize: string;
-      background;
-      backgroundColor;
-      border;
-      borderColor;
-      textColor;
-      type;
-      bottomScrollV;
+      background: any;
+      backgroundColor: any;
+      border: any;
+      borderColor: any;
+      textColor: any;
+      type: any;
+      bottomScrollV: any;
       condenseWhite: boolean;
       embedFonts: boolean;
       getTextFormat: (beginIndex: number, endIndex: number) => TextFormat;
@@ -518,7 +518,7 @@ declare module Shumway.AVMX.AS.flash {
       _symbol: TextSymbol;
     }
     class TextFormat extends ASObject {
-      constructor(...args);
+      constructor(...args: Array<any>);
     }
     class TextSymbol extends display.DisplaySymbol {
       variableName: string;
@@ -541,7 +541,7 @@ declare module Shumway.AVMX.AS.flash {
     function getTimer(): Timer;
     class Timer extends ASObject {}
     class SetIntervalTimer extends Timer {
-      constructor(closure: Function, delay: number, repeat: boolean, ... args);
+      constructor(closure: Function, delay: number, repeat: boolean, ... args: Array<any>);
       reference: number;
       static _clearInterval: (id: number /*uint*/) => void;
     }
@@ -549,9 +549,9 @@ declare module Shumway.AVMX.AS.flash {
 }
 
 declare module Shumway.AVMX.AS {
-  function FlashUtilScript_getTimer();
-  function FlashNetScript_navigateToURL(request, window_);
-  function constructClassFromSymbol(symbol: Timeline.Symbol, axClass: ASClass);
+  function FlashUtilScript_getTimer(): void;
+  function FlashNetScript_navigateToURL(request: any, window_: any): void;
+  function constructClassFromSymbol(symbol: Timeline.Symbol, axClass: ASClass): void;
 }
 
 declare module Shumway.Timeline {

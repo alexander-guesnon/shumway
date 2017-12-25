@@ -55,6 +55,7 @@ module Shumway.AVM1 {
     }
 
     export class AVM1PropertyDescriptor {
+        [key: string]: any;
         public originalName: string;
 
         constructor(public flags: AVM1PropertyFlags,
@@ -92,6 +93,7 @@ module Shumway.AVM1 {
      * Base class for the ActionScript AVM1 object.
      */
     export class AVM1Object extends NullPrototypeObject {
+        [key: string]: any;
         // Using our own bag of properties
         private _ownProperties: any;
         private _prototype: AVM1Object;
@@ -178,7 +180,7 @@ module Shumway.AVM1 {
             return DEBUG_PROPERTY_PREFIX + name;
         }
 
-        public alGetOwnProperty(name): AVM1PropertyDescriptor {
+        public alGetOwnProperty(name: any): AVM1PropertyDescriptor {
             if (typeof name === 'string' && !this.context.isPropertyCaseSensitive) {
                 name = name.toLowerCase();
             }
@@ -187,7 +189,7 @@ module Shumway.AVM1 {
             return this._ownProperties[name];
         }
 
-        public alSetOwnProperty(p, desc: AVM1PropertyDescriptor): void {
+        public alSetOwnProperty(p: any, desc: AVM1PropertyDescriptor): void {
             let name = this.context.normalizeName(p);
             if (!desc.originalName && !this.context.isPropertyCaseSensitive) {
                 desc.originalName = p;
@@ -208,12 +210,12 @@ module Shumway.AVM1 {
             this._ownProperties[name] = desc;
         }
 
-        public alHasOwnProperty(p): boolean {
+        public alHasOwnProperty(p: any): boolean {
             let name = this.context.normalizeName(p);
             return !!this._ownProperties[name];
         }
 
-        public alDeleteOwnProperty(p) {
+        public alDeleteOwnProperty(p: any) {
             let name = this.context.normalizeName(p);
             delete this._ownProperties[name];
             if (!release) {
@@ -242,7 +244,7 @@ module Shumway.AVM1 {
             return keys;
         }
 
-        public alGetProperty(p): AVM1PropertyDescriptor {
+        public alGetProperty(p: any): AVM1PropertyDescriptor {
             let desc = this.alGetOwnProperty(p);
             if (desc) {
                 return desc;
@@ -253,8 +255,8 @@ module Shumway.AVM1 {
             return this._prototype.alGetProperty(p);
         }
 
-        public alGet(p): any {
-            name = this.context.normalizeName(p);
+        public alGet(p: any): any {
+            let name = this.context.normalizeName(p);
             let desc = this.alGetProperty(name);
             if (!desc) {
                 return undefined;
@@ -270,7 +272,7 @@ module Shumway.AVM1 {
             return getter.alCall(this);
         }
 
-        public alCanPut(p): boolean {
+        public alCanPut(p: any): boolean {
             let desc = this.alGetOwnProperty(p);
             if (desc) {
                 if ((desc.flags & AVM1PropertyFlags.ACCESSOR)) {
@@ -286,7 +288,7 @@ module Shumway.AVM1 {
             return proto.alCanPut(p);
         }
 
-        public alPut(p, v) {
+        public alPut(p: any, v: any) {
             // Perform all lookups with the canonicalized name, but keep the original name around to
             // pass it to `alSetOwnProperty`, which stores it on the descriptor.
             let originalName = p;
@@ -329,12 +331,12 @@ module Shumway.AVM1 {
             }
         }
 
-        public alHasProperty(p): boolean {
+        public alHasProperty(p: any): boolean {
             let desc = this.alGetProperty(p);
             return !!desc;
         }
 
-        public alDeleteProperty(p): boolean {
+        public alDeleteProperty(p: any): boolean {
             let desc = this.alGetOwnProperty(p);
             if (!desc) {
                 return true;
@@ -609,12 +611,12 @@ module Shumway.AVM1 {
         return n < 0 ? Math.ceil(n) : Math.floor(n);
     }
 
-    export function alToInt32(context: IAVM1Context, v): number {
+    export function alToInt32(context: IAVM1Context, v: any): number {
         let n = alToNumber(context, v);
         return n | 0;
     }
 
-    export function alToString(context: IAVM1Context, v): string {
+    export function alToString(context: IAVM1Context, v: any): string {
         if (typeof v === 'object' && v !== null) {
             v = alToPrimitive(context, v, AVM1DefaultValueHint.STRING);
         }
@@ -635,6 +637,7 @@ module Shumway.AVM1 {
             default:
                 release || Debug.assert(false);
         }
+        return '';
     }
 
     export function alIsName(context: IAVM1Context, v): boolean {

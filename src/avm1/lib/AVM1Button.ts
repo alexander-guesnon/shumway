@@ -159,7 +159,7 @@ module Shumway.AVM1.Lib {
             }
         }
 
-        private _keyDownHandler(event) {
+        private _keyDownHandler(event: any) {
             let actions = this._actions;
             for (let i = 0; i < actions.length; i++) {
                 let action = actions[i];
@@ -196,7 +196,7 @@ module Shumway.AVM1.Lib {
                 new AVM1EventHandler('onDragOver', 'dragOver'),
                 new AVM1EventHandler('onKeyDown', 'keyDown'),
                 new AVM1EventHandler('onKeyUp', 'keyUp'),
-                new AVM1EventHandler('onKillFocus', 'focusOut', function (e) {
+                new AVM1EventHandler('onKillFocus', 'focusOut', function (e: any) {
                     return [e.relatedObject];
                 }),
                 new AVM1EventHandler('onLoad', 'load'),
@@ -207,7 +207,7 @@ module Shumway.AVM1.Lib {
                 new AVM1EventHandler('onReleaseOutside', 'releaseOutside'),
                 new AVM1EventHandler('onRollOut', 'mouseOut'),
                 new AVM1EventHandler('onRollOver', 'mouseOver'),
-                new AVM1EventHandler('onSetFocus', 'focusIn', function (e) {
+                new AVM1EventHandler('onSetFocus', 'focusIn', function (e: any) {
                     return [e.relatedObject];
                 })
             ]);

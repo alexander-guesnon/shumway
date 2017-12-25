@@ -19,7 +19,7 @@
 module Shumway.AVM1.Lib {
     import flash = Shumway.AVMX.AS.flash;
 
-    function defaultTo(v, defaultValue) {
+    function defaultTo(v: any, defaultValue: any) {
         return v === undefined ? defaultValue : v;
     }
 

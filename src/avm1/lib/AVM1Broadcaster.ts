@@ -34,7 +34,7 @@ module Shumway.AVM1.Lib {
                 new Natives.AVM1ArrayNative(context, []));
             obj.alSetOwnProperty('_listeners', desc);
             desc = new AVM1PropertyDescriptor(AVM1PropertyFlags.DATA | AVM1PropertyFlags.DONT_ENUM,
-                new AVM1NativeFunction(context, function broadcastMessage(eventName: string, ...args): void {
+                new AVM1NativeFunction(context, function broadcastMessage(eventName: string, ...args: Array<any>): void {
                     let listenersField = this.alGet('_listeners');
                     if (!(listenersField instanceof Natives.AVM1ArrayNative)) {
                         return;
