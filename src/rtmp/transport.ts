@@ -31,14 +31,14 @@ module RtmpJs {
 	let PING_RESPONSE_CONTROL_MESSAGE_ID = 7;
 
 	export interface ITransportConnectedParameters {
-		properties;
-		information;
+		properties: any;
+		information: any;
 		isError: boolean;
 	}
 
 	export interface ITransportStreamCreatedParameters {
 		transactionId: number;
-		commandObject;
+		commandObject: any;
 		streamId: number;
 		stream: INetStream;
 		isError: boolean
@@ -47,8 +47,8 @@ module RtmpJs {
 	export interface ITransportResponse {
 		commandName: string;
 		transactionId: number;
-		commandObject;
-		response;
+		commandObject: any;
+		response: any;
 	}
 
 	export interface ITransportEvent {
@@ -173,7 +173,7 @@ module RtmpJs {
 			return (this.channel = channel);
 		}
 
-		call(procedureName: string, transactionId: number, commandObject, args) {
+		call(procedureName: string, transactionId: number, commandObject: any, args: any) {
 			let channel = this.channel;
 
 			let ba = new flash.utils.ByteArray();
@@ -189,11 +189,11 @@ module RtmpJs {
 			});
 		}
 
-		createStream(transactionId: number, commandObject) {
+		createStream(transactionId: number, commandObject: any) {
 			this.sendCommandOrResponse('createStream', transactionId, commandObject);
 		}
 
-		sendCommandOrResponse(commandName: string, transactionId: number, commandObject, response?) {
+		sendCommandOrResponse(commandName: string, transactionId: number, commandObject: any, response?: any) {
 			let channel = this.channel;
 
 			let ba = new flash.utils.ByteArray();
@@ -260,7 +260,7 @@ module RtmpJs {
 		onscriptdata: (type: string, ...data: any[]) => void;
 		oncallback: (...args: any[]) => void;
 
-		play(name: string, start?: number, duration?: number, reset?: boolean);
+		play(name: string, start?: number, duration?: number, reset?: boolean): void;
 	}
 
 	class NetStream implements INetStream {
@@ -271,7 +271,7 @@ module RtmpJs {
 		onscriptdata: (type: string, ...data: any[]) => void;
 		oncallback: (...args: any[]) => void;
 
-		constructor(transport, streamId) {
+		constructor(transport: any, streamId: any) {
 			this.transport = transport;
 			this.streamId = streamId;
 		}

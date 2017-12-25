@@ -23,7 +23,7 @@ module RtmpJs.Browser {
 		port: number;
 		ssl: boolean;
 
-		constructor(connectionSettings) {
+		constructor(connectionSettings: any) {
 			super();
 
 			if (typeof connectionSettings === 'string') {
@@ -35,7 +35,7 @@ module RtmpJs.Browser {
 			this.ssl = !!connectionSettings.ssl || false;
 		}
 
-		connect(properties, args?) {
+		connect(properties: any, args?: any) {
 			let TCPSocket = typeof navigator !== 'undefined' &&
 				(<any>navigator).mozTCPSocket;
 
@@ -46,7 +46,7 @@ module RtmpJs.Browser {
 
 			let channel = this._initChannel(properties, args);
 
-			let writeQueue = [], socketError = false;
+			let writeQueue: Array<Uint8Array> = [], socketError = false;
 			let socket: any = typeof ShumwayComRtmpSocket !== 'undefined' && ShumwayComRtmpSocket.isAvailable ?
 				new ShumwayComRtmpSocket(this.host, this.port, {
 					useSecureTransport: this.ssl,
@@ -55,11 +55,11 @@ module RtmpJs.Browser {
 				TCPSocket.open(this.host, this.port, {useSecureTransport: this.ssl, binaryType: 'arraybuffer'});
 
 
-			let sendData = function (data) {
+			let sendData = function (data: Uint8Array) {
 				return socket.send(data.buffer, data.byteOffset, data.byteLength);
 			};
 
-			socket.onopen = function (e) {
+			socket.onopen = function (e: any) {
 				channel.ondata = function (data) {
 					let buf = new Uint8Array(data);
 					writeQueue.push(buf);
@@ -76,7 +76,7 @@ module RtmpJs.Browser {
 				};
 				channel.start();
 			};
-			socket.ondrain = function (e) {
+			socket.ondrain = function (e: any) {
 				writeQueue.shift();
 				release || console.log('Write completed');
 				while (writeQueue.length > 0) {
@@ -87,14 +87,14 @@ module RtmpJs.Browser {
 					writeQueue.shift();
 				}
 			};
-			socket.onclose = function (e) {
+			socket.onclose = function (e: any) {
 				channel.stop(socketError);
 			};
-			socket.onerror = function (e) {
+			socket.onerror = function (e: any) {
 				socketError = true;
 				console.error('socket error: ' + e.data);
 			};
-			socket.ondata = function (e) {
+			socket.ondata = function (e: any) {
 				release || console.log('Bytes read: ' + e.data.byteLength);
 				channel.push(new Uint8Array(e.data));
 			};
@@ -116,7 +116,7 @@ module RtmpJs.Browser {
 		requestId: number;
 		data: Uint8Array[];
 
-		constructor(connectionSettings) {
+		constructor(connectionSettings: any) {
 			super();
 
 			let host = connectionSettings.host || 'localhost';
@@ -132,9 +132,9 @@ module RtmpJs.Browser {
 			this.data = [];
 		}
 
-		connect(properties, args?) {
+		connect(properties: any, args?: any) {
 			let channel = this._initChannel(properties, args);
-			channel.ondata = function (data) {
+			channel.ondata = function (data: any) {
 				release || console.log('Bytes written: ' + data.length);
 				this.data.push(new Uint8Array(data));
 			}.bind(this);
@@ -143,12 +143,12 @@ module RtmpJs.Browser {
 			}.bind(this);
 
 
-			post(this.baseUrl + '/fcs/ident2', null, function (data, status) {
+			post(this.baseUrl + '/fcs/ident2', null, function (data: any, status: any) {
 				if (status !== 404) {
 					throw new Error('Unexpected response: ' + status);
 				}
 
-				post(this.baseUrl + '/open/1', null, function (data, status) {
+				post(this.baseUrl + '/open/1', null, function (data: any, status: any) {
 					this.sessionId = String.fromCharCode.apply(null, data).slice(0, -1); // - '\n'
 					console.log('session id: ' + this.sessionId);
 
@@ -159,7 +159,7 @@ module RtmpJs.Browser {
 		}
 
 		tick() {
-			let continueSend = function (data, status) {
+			let continueSend = function (data: any, status: number) {
 				if (status !== 200) {
 					throw new Error('Invalid HTTP status');
 				}
@@ -179,15 +179,15 @@ module RtmpJs.Browser {
 			}
 
 			if (this.data.length > 0) {
-				let data;
+				let data: Uint8Array;
 				if (COMBINE_RTMPT_DATA) {
 					let length = 0;
-					this.data.forEach(function (i) {
+					this.data.forEach(function (i: Uint8Array) {
 						length += i.length;
 					});
 					let pos = 0;
 					data = new Uint8Array(length);
-					this.data.forEach(function (i) {
+					this.data.forEach(function (i: Uint8Array) {
 						data.set(i, pos);
 						pos += i.length;
 					});
@@ -206,7 +206,7 @@ module RtmpJs.Browser {
 
 	let emptyPostData = new Uint8Array([0]);
 
-	function post(path, data, onload) {
+	function post(path: any, data: any, onload: any) {
 		data || (data = emptyPostData);
 
 		let xhr: any = typeof ShumwayComRtmpXHR !== 'undefined' && ShumwayComRtmpXHR.isAvailable ?
@@ -214,10 +214,10 @@ module RtmpJs.Browser {
 		xhr.open('POST', path, true);
 		xhr.responseType = 'arraybuffer';
 		xhr.setRequestHeader('Content-Type', 'application/x-fcs');
-		xhr.onload = function (e) {
+		xhr.onload = function (e: any) {
 			onload(new Uint8Array(xhr.response), xhr.status);
 		};
-		xhr.onerror = function (e) {
+		xhr.onerror = function (e: any) {
 			console.log('error');
 			throw new Error('HTTP error');
 		};

@@ -24,6 +24,7 @@
     ]
   },
   "include": [
+    "./../../build/ts/base.d.ts",
     "./../../build/ts/tools.d.ts",
     "./../../build/ts/avm2.d.ts",
     "./references.ts",

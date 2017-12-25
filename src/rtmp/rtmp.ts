@@ -285,11 +285,12 @@ module RtmpJs {
 		private _initialize() {
 			let controlStream = this._getChunkStream(CONTROL_CHUNK_STREAM_ID);
 			controlStream.setBuffer(true);
-			controlStream.onmessage = function (e) {
+			controlStream.onmessage = function (e: any) {
 				if (e.streamId !== 0) {
 					return;
 				}
 				release || console.log('Control message: ' + e.typeId);
+				let ackWindowSize: number;
 				switch (e.typeId) {
 					case SET_CHUNK_SIZE_CONTROL_MESSAGE_ID:
 						let newChunkSize = (e.data[0] << 24) | (e.data[1] << 16) |
@@ -321,7 +322,7 @@ module RtmpJs {
 						}
 						break;
 					case ACK_WINDOW_SIZE_MESSAGE_ID:
-						let ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
+						ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
 							(e.data[2] << 8) | e.data[3];
 						if (ackWindowSize < 0) {
 							break;
@@ -329,7 +330,7 @@ module RtmpJs {
 						this.peerAckWindowSize = ackWindowSize;
 						break;
 					case SET_PEER_BANDWIDTH_MESSAGE_ID:
-						let ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
+						ackWindowSize = (e.data[0] << 24) | (e.data[1] << 16) |
 							(e.data[2] << 8) | e.data[3];
 						let limitType = e.data[4];
 						if (ackWindowSize < 0 || limitType > 2) {
@@ -523,7 +524,7 @@ module RtmpJs {
 			if (!chunkStream) {
 				this.chunkStreams[id] = chunkStream = new ChunkedStream(id);
 				chunkStream.setBuffer(true);
-				chunkStream.onmessage = function (message) {
+				chunkStream.onmessage = function (message: any) {
 					if (this.onmessage) {
 						this.onmessage(message);
 					}
@@ -534,20 +535,20 @@ module RtmpJs {
 
 		private _parseChunkedData() {
 			if (this.bufferLength < 1) {
-				return;
+				return 0;
 			}
 			let chunkType = (this.buffer[0] >> 6) & 3;
 			let chunkHeaderPosition = 1;
 			let chunkStreamId = this.buffer[0] & 0x3F;
 			if (chunkStreamId === 0) {
 				if (this.bufferLength < 2) {
-					return;
+					return 0;
 				}
 				chunkStreamId = this.buffer[1] + 64;
 				chunkHeaderPosition = 2;
 			} else if (chunkStreamId === 1) {
 				if (this.bufferLength < 2) {
-					return;
+					return 0;
 				}
 				chunkStreamId = (this.buffer[1] << 8) + this.buffer[2] + 64;
 				chunkHeaderPosition = 3;
@@ -555,7 +556,7 @@ module RtmpJs {
 			let chunkHeaderSize = chunkType === 0 ? 11 : chunkType === 1 ? 7 :
 				chunkType === 2 ? 3 : 0;
 			if (this.bufferLength < chunkHeaderPosition + chunkHeaderSize) {
-				return;
+				return 0;
 			}
 			let extendTimestampSize = chunkType !== 3 &&
 			this.buffer[chunkHeaderPosition] === 0xFF &&
@@ -564,7 +565,7 @@ module RtmpJs {
 			let totalChunkHeaderSize = chunkHeaderPosition + chunkHeaderSize +
 				extendTimestampSize;
 			if (this.bufferLength < totalChunkHeaderSize) {
-				return;
+				return 0;
 			}
 			let chunkStream = this._getChunkStream(chunkStreamId);
 
@@ -614,7 +615,7 @@ module RtmpJs {
 				tailLength = messageLength - read;
 			}
 			if (this.bufferLength < totalChunkHeaderSize + read) {
-				return;
+				return 0;
 			}
 			release || (!firstChunk && tailLength) || // limiting trace to first/last chunks
 			console.log('Chunk received: cs:' + chunkStreamId + '; ' +
@@ -648,14 +649,14 @@ module RtmpJs {
 			console.log('## connected');
 		}
 
-		public stop(error) {
+		public stop(error: any) {
 			if (error) {
 				console.error('socket error!!!');
 			}
 			console.log('## closed');
 		}
 
-		private _fail(message) {
+		private _fail(message: any) {
 			console.error('failed: ' + message);
 			this.state = 'failed';
 			this.onclose();

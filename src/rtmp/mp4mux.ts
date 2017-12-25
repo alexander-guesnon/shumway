@@ -51,8 +51,8 @@ module RtmpJs.MP4 {
 		let flags = data[i];
 		let codecId = flags >> 4;
 		let soundRateId = (flags >> 2) & 3;
-		let sampleSize = flags & 2 ? 16 : 8;
-		let channels = flags & 1 ? 2 : 1;
+		let sampleSize = (flags & 2) !==0 ? 16 : 8;
+		let channels = (flags & 1) !== 0 ? 2 : 1;
 		let samples: number;
 		i++;
 		switch (codecId) {
@@ -201,7 +201,7 @@ module RtmpJs.MP4 {
 			//
 		};
 
-		ondata: (data) => void = function (data) {
+		ondata: (data: any) => void = function (data) {
 			throw new Error('MP4Mux.ondata is not set');
 		};
 
@@ -214,7 +214,7 @@ module RtmpJs.MP4 {
 					trackInfo: t,
 					cachedDuration: 0,
 					samplesProcessed: 0,
-					initializationData: []
+					initializationData: [] as any
 				};
 				if (this.metadata.audioTrackId === index) {
 					this.audioTrackState = state;
