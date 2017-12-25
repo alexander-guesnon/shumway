@@ -15,24 +15,24 @@
  */
 // Class: NetDataEvent
 module Shumway.AVMX.AS.flash.events {
-  export class NetDataEvent extends flash.events.Event {
+	export class NetDataEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    timestamp: number;
-    info: ASObject;
+		timestamp: number;
+		info: ASObject;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                timestamp: number = 0, info: ASObject = null) {
-      super(type, bubbles, cancelable);
-      this.timestamp = +timestamp;
-      this.info = info;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            timestamp: number = 0, info: ASObject = null) {
+			super(type, bubbles, cancelable);
+			this.timestamp = +timestamp;
+			this.info = info;
+		}
 
-    // JS -> AS Bindings
-    static MEDIA_TYPE_DATA: string = "mediaTypeData";
-  }
+		// JS -> AS Bindings
+		static MEDIA_TYPE_DATA: string = "mediaTypeData";
+	}
 }

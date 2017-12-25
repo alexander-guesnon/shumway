@@ -15,24 +15,24 @@
  */
 // Class: IMEEvent
 module Shumway.AVMX.AS.flash.events {
-  export class IMEEvent extends flash.events.TextEvent {
+	export class IMEEvent extends flash.events.TextEvent {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    imeClient: flash.text.ime.IIMEClient;
+		imeClient: flash.text.ime.IIMEClient;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                text: string = "", imeClient: flash.text.ime.IIMEClient = null) {
-      super(type, bubbles, cancelable, text);
-      // TODO: coerce
-      this.imeClient = imeClient;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            text: string = "", imeClient: flash.text.ime.IIMEClient = null) {
+			super(type, bubbles, cancelable, text);
+			// TODO: coerce
+			this.imeClient = imeClient;
+		}
 
-    // JS -> AS Bindings
-    static IME_COMPOSITION: string = "imeComposition";
-    static IME_START_COMPOSITION: string = "imeStartComposition";
-  }
+		// JS -> AS Bindings
+		static IME_COMPOSITION: string = "imeComposition";
+		static IME_START_COMPOSITION: string = "imeStartComposition";
+	}
 }

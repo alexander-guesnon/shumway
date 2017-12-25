@@ -15,40 +15,40 @@
  */
 // Class: AntiAliasType
 module Shumway.AVMX.AS.flash.text {
-  export class AntiAliasType extends ASObject {
+	export class AntiAliasType extends ASObject {
 
-    static classInitializer: any = null;
-    static classSymbols : string [] = null;
-    static instanceSymbols: string [] = null;
+		static classInitializer: any = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor() {
-      super();
-    }
+		constructor() {
+			super();
+		}
 
-    // JS -> AS Bindings
-    static NORMAL: string = "normal";
-    static ADVANCED: string = "advanced";
+		// JS -> AS Bindings
+		static NORMAL: string = "normal";
+		static ADVANCED: string = "advanced";
 
-    static fromNumber(n: number): string {
-      switch (n) {
-        case 1:
-          return AntiAliasType.NORMAL;
-        case 2:
-          return AntiAliasType.ADVANCED;
-        default:
-          return null;
-      }
-    }
+		static fromNumber(n: number): string {
+			switch (n) {
+				case 1:
+					return AntiAliasType.NORMAL;
+				case 2:
+					return AntiAliasType.ADVANCED;
+				default:
+					return null;
+			}
+		}
 
-    static toNumber(value: string): number {
-      switch (value) {
-        case AntiAliasType.NORMAL:
-          return 1;
-        case AntiAliasType.ADVANCED:
-          return 2;
-        default:
-          return -1;
-      }
-    }
-  }
+		static toNumber(value: string): number {
+			switch (value) {
+				case AntiAliasType.NORMAL:
+					return 1;
+				case AntiAliasType.ADVANCED:
+					return 2;
+				default:
+					return -1;
+			}
+		}
+	}
 }

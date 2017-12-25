@@ -15,21 +15,21 @@
  */
 // Class: GesturePhase
 module Shumway.AVMX.AS.flash.events {
-  export class GesturePhase extends ASObject {
+	export class GesturePhase extends ASObject {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor() {
-      super();
-    }
+		constructor() {
+			super();
+		}
 
-    // JS -> AS Bindings
-    static BEGIN: string = "begin";
-    static UPDATE: string = "update";
-    static END: string = "end";
-    static ALL: string = "all";
-  }
+		// JS -> AS Bindings
+		static BEGIN: string = "begin";
+		static UPDATE: string = "update";
+		static END: string = "end";
+		static ALL: string = "all";
+	}
 }

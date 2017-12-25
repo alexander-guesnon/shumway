@@ -15,18 +15,18 @@
  */
 // Class: TextFieldType
 module Shumway.AVMX.AS.flash.text {
-  export class TextFieldType extends ASObject {
+	export class TextFieldType extends ASObject {
 
-    static classInitializer: any = null;
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classInitializer: any = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor() {
-      super();
-    }
+		constructor() {
+			super();
+		}
 
-    // JS -> AS Bindings
-    static INPUT: string = "input";
-    static DYNAMIC: string = "dynamic";
-  }
+		// JS -> AS Bindings
+		static INPUT: string = "input";
+		static DYNAMIC: string = "dynamic";
+	}
 }

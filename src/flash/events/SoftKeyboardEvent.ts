@@ -15,21 +15,21 @@
  */
 // Class: SoftKeyboardEvent
 module Shumway.AVMX.AS.flash.events {
-  export class SoftKeyboardEvent extends flash.events.Event {
+	export class SoftKeyboardEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles: boolean, cancelable: boolean,
-                relatedObjectVal: flash.display.InteractiveObject, triggerTypeVal: string) {
-      super(type, bubbles, cancelable);
-    }
+		constructor(type: string, bubbles: boolean, cancelable: boolean,
+		            relatedObjectVal: flash.display.InteractiveObject, triggerTypeVal: string) {
+			super(type, bubbles, cancelable);
+		}
 
-    // JS -> AS Bindings
-    static SOFT_KEYBOARD_ACTIVATE: string = "softKeyboardActivate";
-    static SOFT_KEYBOARD_DEACTIVATE: string = "softKeyboardDeactivate";
-    static SOFT_KEYBOARD_ACTIVATING: string = "softKeyboardActivating";
-  }
+		// JS -> AS Bindings
+		static SOFT_KEYBOARD_ACTIVATE: string = "softKeyboardActivate";
+		static SOFT_KEYBOARD_DEACTIVATE: string = "softKeyboardDeactivate";
+		static SOFT_KEYBOARD_ACTIVATING: string = "softKeyboardActivating";
+	}
 }

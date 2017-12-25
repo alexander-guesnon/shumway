@@ -15,375 +15,377 @@
  */
 // Class: MovieClip
 module Shumway.AVMX.AS.flash.display {
-  import MP3DecoderSession = SWF.MP3DecoderSession;
-  import DecodedSound = SWF.Parser.DecodedSound;
+	import MP3DecoderSession = SWF.MP3DecoderSession;
+	import DecodedSound = SWF.Parser.DecodedSound;
 
-  let MP3_MIME_TYPE = 'audio/mpeg';
+	let MP3_MIME_TYPE = 'audio/mpeg';
 
-  interface ISoundStreamAdapter {
-    currentTime: number;
-    paused: boolean;
-    isReady: boolean;
+	interface ISoundStreamAdapter {
+		currentTime: number;
+		paused: boolean;
+		isReady: boolean;
 
-    playFrom(time: number);
-    queueData(frame: DecodedSound);
-    finish();
-  }
+		playFrom(time: number);
 
-  class HTMLAudioElementAdapter implements ISoundStreamAdapter {
-    private _sec: ISecurityDomain;
-    private _element: HTMLAudioElement;
-    private _channel: media.SoundChannel;
+		queueData(frame: DecodedSound);
 
-    get isReady(): boolean {
-      return !!this._channel;
-    }
+		finish();
+	}
 
-    get element(): HTMLAudioElement {
-      return this._element;
-    }
+	class HTMLAudioElementAdapter implements ISoundStreamAdapter {
+		private _sec: ISecurityDomain;
+		private _element: HTMLAudioElement;
+		private _channel: media.SoundChannel;
 
-    get currentTime(): number {
-      return this._element.currentTime;
-    }
+		get isReady(): boolean {
+			return !!this._channel;
+		}
 
-    playFrom(time: number) {
-      let element = this._element;
-      if (element.paused) {
-        element.play();
-        element.addEventListener('playing', function setTime(e) {
-          element.removeEventListener('playing', setTime);
-          element.currentTime = time;
-        });
-      } else {
-        element.currentTime = time;
-      }
-    }
+		get element(): HTMLAudioElement {
+			return this._element;
+		}
 
-    get paused(): boolean {
-      return this._element.paused;
-    }
+		get currentTime(): number {
+			return this._element.currentTime;
+		}
 
-    set paused(value: boolean) {
-      let element = this._element;
-      if (value) {
-        if (!element.paused) {
-          element.pause();
-        }
-      } else {
-        if (element.paused) {
-          element.play();
-        }
-      }
-    }
+		playFrom(time: number) {
+			let element = this._element;
+			if (element.paused) {
+				element.play();
+				element.addEventListener('playing', function setTime(e) {
+					element.removeEventListener('playing', setTime);
+					element.currentTime = time;
+				});
+			} else {
+				element.currentTime = time;
+			}
+		}
 
-    constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
-      this._sec = sec;
-      this._element = element;
-    }
+		get paused(): boolean {
+			return this._element.paused;
+		}
 
-    createChannel() {
-      this._channel = flash.media.SoundChannel.initializeFromAudioElement(this._sec, this._element);
-    }
+		set paused(value: boolean) {
+			let element = this._element;
+			if (value) {
+				if (!element.paused) {
+					element.pause();
+				}
+			} else {
+				if (element.paused) {
+					element.play();
+				}
+			}
+		}
 
-    queueData(frame: DecodedSound) {
-      Debug.abstractMethod('HTMLAudioElementAdapter::queueData');
-    }
+		constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
+			this._sec = sec;
+			this._element = element;
+		}
 
-    finish() {
-      Debug.abstractMethod('HTMLAudioElementAdapter::finish');
-    }
-  }
+		createChannel() {
+			this._channel = flash.media.SoundChannel.initializeFromAudioElement(this._sec, this._element);
+		}
 
-  class MediaSourceStreamAdapter extends HTMLAudioElementAdapter {
-    private _mediaSource: MediaSource;
-    private _sourceBuffer: SourceBuffer;
-    private _updating: boolean;
-    private _loading: boolean;
-    private _rawFrames: any[];
-    private _isReady: boolean;
+		queueData(frame: DecodedSound) {
+			Debug.abstractMethod('HTMLAudioElementAdapter::queueData');
+		}
 
-    constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
-      super(sec, element);
-      this._mediaSource = new MediaSource();
-      this._sourceBuffer = null;
-      this._updating = false;
-      this._loading = true;
-      this._rawFrames = [];
-      this._isReady = false;
+		finish() {
+			Debug.abstractMethod('HTMLAudioElementAdapter::finish');
+		}
+	}
 
-      this._mediaSource.addEventListener('sourceopen', this._openMediaSource.bind(this));
-      this.element.src = URL.createObjectURL(this._mediaSource);
-    }
+	class MediaSourceStreamAdapter extends HTMLAudioElementAdapter {
+		private _mediaSource: MediaSource;
+		private _sourceBuffer: SourceBuffer;
+		private _updating: boolean;
+		private _loading: boolean;
+		private _rawFrames: any[];
+		private _isReady: boolean;
 
-    private _appendSoundData() {
-      if (this._rawFrames.length === 0 || this._updating || !this._sourceBuffer) {
-        return;
-      }
-      if (!this._loading) {
-        this._mediaSource.endOfStream();
-        return;
-      }
+		constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
+			super(sec, element);
+			this._mediaSource = new MediaSource();
+			this._sourceBuffer = null;
+			this._updating = false;
+			this._loading = true;
+			this._rawFrames = [];
+			this._isReady = false;
 
-      this._updating = true;
-      // There is an issue when multiple appendBuffers are added in a sequence,
-      // pushing frames one-by-one.
-      this._sourceBuffer.appendBuffer(this._rawFrames.shift());
+			this._mediaSource.addEventListener('sourceopen', this._openMediaSource.bind(this));
+			this.element.src = URL.createObjectURL(this._mediaSource);
+		}
 
-      // Making MediaSourceStreamAdapter be ready on first packet.
-      if (!this._isReady) {
-        this._isReady = true;
-        this.createChannel();
-      }
-    }
+		private _appendSoundData() {
+			if (this._rawFrames.length === 0 || this._updating || !this._sourceBuffer) {
+				return;
+			}
+			if (!this._loading) {
+				this._mediaSource.endOfStream();
+				return;
+			}
 
-    private _openMediaSource() {
-      let sourceBuffer = this._mediaSource.addSourceBuffer(MP3_MIME_TYPE);
-      sourceBuffer.addEventListener('update', function () {
-        this._updating = false;
-        this._appendSoundData();
-      }.bind(this));
-      this._sourceBuffer = sourceBuffer;
-      this._appendSoundData();
-    }
+			this._updating = true;
+			// There is an issue when multiple appendBuffers are added in a sequence,
+			// pushing frames one-by-one.
+			this._sourceBuffer.appendBuffer(this._rawFrames.shift());
 
-    queueData(frame: DecodedSound) {
-      this._rawFrames.push(frame.data);
-      this._appendSoundData();
-    }
+			// Making MediaSourceStreamAdapter be ready on first packet.
+			if (!this._isReady) {
+				this._isReady = true;
+				this.createChannel();
+			}
+		}
 
-    finish() {
-      this._loading = false;
-      this._appendSoundData();
-    }
-  }
+		private _openMediaSource() {
+			let sourceBuffer = this._mediaSource.addSourceBuffer(MP3_MIME_TYPE);
+			sourceBuffer.addEventListener('update', function () {
+				this._updating = false;
+				this._appendSoundData();
+			}.bind(this));
+			this._sourceBuffer = sourceBuffer;
+			this._appendSoundData();
+		}
 
-  class BlobStreamAdapter extends HTMLAudioElementAdapter {
-    private  _rawFrames: any[];
+		queueData(frame: DecodedSound) {
+			this._rawFrames.push(frame.data);
+			this._appendSoundData();
+		}
 
-    constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
-      super(sec, element);
-      this._rawFrames = [];
-    }
+		finish() {
+			this._loading = false;
+			this._appendSoundData();
+		}
+	}
 
-    queueData(frame: DecodedSound) {
-      this._rawFrames.push(frame.data);
-    }
+	class BlobStreamAdapter extends HTMLAudioElementAdapter {
+		private _rawFrames: any[];
 
-    finish() {
-      let blob = new Blob(this._rawFrames);
-      this.element.src = URL.createObjectURL(blob);
-      this.createChannel();
-    }
-  }
+		constructor(sec: ISecurityDomain, element: HTMLAudioElement) {
+			super(sec, element);
+			this._rawFrames = [];
+		}
 
-  function syncTime(element, movieClip) {
-    let initialized = false;
-    let startMediaTime, startRealTime;
-    element.addEventListener('timeupdate', function (e) {
-      if (!initialized) {
-        startMediaTime = element.currentTime;
-        startRealTime = performance.now();
-        initialized = true;
-        //movieClip._stage._frameScheduler.startTrackDelta();
-        return;
-      }
-      let mediaDelta = element.currentTime - startMediaTime;
-      let realDelta = performance.now() - startRealTime;
-      //movieClip._stage._frameScheduler.setDelta(realDelta - mediaDelta * 1000);
-    });
-    element.addEventListener('pause', function (e) {
-      //movieClip._stage._frameScheduler.endTrackDelta();
-      initialized = false;
-    });
-    element.addEventListener('seeking', function (e) {
-      //movieClip._stage._frameScheduler.endTrackDelta();
-      initialized = false;
-    });
-  }
+		queueData(frame: DecodedSound) {
+			this._rawFrames.push(frame.data);
+		}
 
-  class WebAudioAdapter implements ISoundStreamAdapter {
-    private _sec: ISecurityDomain;
-    private _channel: media.SoundChannel;
-    private _sound: media.Sound;
-    private _data;
-    private _position: number;
+		finish() {
+			let blob = new Blob(this._rawFrames);
+			this.element.src = URL.createObjectURL(blob);
+			this.createChannel();
+		}
+	}
 
-    get currentTime(): number {
-      return NaN;
-    }
+	function syncTime(element, movieClip) {
+		let initialized = false;
+		let startMediaTime, startRealTime;
+		element.addEventListener('timeupdate', function (e) {
+			if (!initialized) {
+				startMediaTime = element.currentTime;
+				startRealTime = performance.now();
+				initialized = true;
+				//movieClip._stage._frameScheduler.startTrackDelta();
+				return;
+			}
+			let mediaDelta = element.currentTime - startMediaTime;
+			let realDelta = performance.now() - startRealTime;
+			//movieClip._stage._frameScheduler.setDelta(realDelta - mediaDelta * 1000);
+		});
+		element.addEventListener('pause', function (e) {
+			//movieClip._stage._frameScheduler.endTrackDelta();
+			initialized = false;
+		});
+		element.addEventListener('seeking', function (e) {
+			//movieClip._stage._frameScheduler.endTrackDelta();
+			initialized = false;
+		});
+	}
 
-    playFrom(time: number) {
-      // tslint, noop
-    }
+	class WebAudioAdapter implements ISoundStreamAdapter {
+		private _sec: ISecurityDomain;
+		private _channel: media.SoundChannel;
+		private _sound: media.Sound;
+		private _data;
+		private _position: number;
 
-    get paused(): boolean {
-      return false;
-    }
+		get currentTime(): number {
+			return NaN;
+		}
 
-    set paused(value: boolean) {
-      // tslint, noop
-    }
+		playFrom(time: number) {
+			// tslint, noop
+		}
 
-    get isReady(): boolean {
-      return !!this._channel;
-    }
+		get paused(): boolean {
+			return false;
+		}
 
-    constructor(sec: ISecurityDomain, data: any) {
-      this._sec = sec;
-      this._channel = null;
-      this._sound = null;
-      this._data = data;
-      this._position = 0;
-    }
+		set paused(value: boolean) {
+			// tslint, noop
+		}
 
-    queueData(frame: DecodedSound) {
-      this._data.pcm.set(frame.pcm, this._position);
-      this._position += frame.pcm.length;
-    }
+		get isReady(): boolean {
+			return !!this._channel;
+		}
 
-    finish() {
-      // TODO Start from some seek offset, stopping
-      let sound = flash.media.Sound.initializeFromPCMData(this._sec, this._data);
-      let channel = sound.play();
-      this._sound = sound;
-      this._channel = channel;
-    }
-  }
+		constructor(sec: ISecurityDomain, data: any) {
+			this._sec = sec;
+			this._channel = null;
+			this._sound = null;
+			this._data = data;
+			this._position = 0;
+		}
 
-  class WebAudioMP3Adapter extends WebAudioAdapter {
-    private _decoderPosition: number;
-    private _decoderSession: MP3DecoderSession;
+		queueData(frame: DecodedSound) {
+			this._data.pcm.set(frame.pcm, this._position);
+			this._position += frame.pcm.length;
+		}
 
-    constructor(sec: ISecurityDomain, data: any) {
-      super(sec, data);
+		finish() {
+			// TODO Start from some seek offset, stopping
+			let sound = flash.media.Sound.initializeFromPCMData(this._sec, this._data);
+			let channel = sound.play();
+			this._sound = sound;
+			this._channel = channel;
+		}
+	}
 
-      this._decoderPosition = 0;
-      this._decoderSession = new MP3DecoderSession();
-      this._decoderSession.onframedata = function (frameData) {
-        let position = this._decoderPosition;
-        data.pcm.set(frameData, position);
-        this._decoderPosition = position + frameData.length;
-      }.bind(this);
-      this._decoderSession.onclosed = function () {
-        WebAudioAdapter.prototype.finish.call(this);
-      }.bind(this);
-      this._decoderSession.onerror = function (error) {
-        Debug.warning('MP3DecoderSession error: ' + error);
-      };
-    }
+	class WebAudioMP3Adapter extends WebAudioAdapter {
+		private _decoderPosition: number;
+		private _decoderSession: MP3DecoderSession;
 
-    queueData(frame: DecodedSound) {
-      this._decoderSession.pushAsync(frame.data);
-    }
+		constructor(sec: ISecurityDomain, data: any) {
+			super(sec, data);
 
-    finish() {
-      this._decoderSession.close();
-    }
-  }
+			this._decoderPosition = 0;
+			this._decoderSession = new MP3DecoderSession();
+			this._decoderSession.onframedata = function (frameData) {
+				let position = this._decoderPosition;
+				data.pcm.set(frameData, position);
+				this._decoderPosition = position + frameData.length;
+			}.bind(this);
+			this._decoderSession.onclosed = function () {
+				WebAudioAdapter.prototype.finish.call(this);
+			}.bind(this);
+			this._decoderSession.onerror = function (error) {
+				Debug.warning('MP3DecoderSession error: ' + error);
+			};
+		}
 
-  export class MovieClipSoundStream {
-    private movieClip: MovieClip;
-    private data;
-    private seekIndex: Array<number>;
-    private position: number;
-    private element;
-    private soundStreamAdapter: ISoundStreamAdapter;
-    private wasFullyLoaded: boolean;
+		queueData(frame: DecodedSound) {
+			this._decoderSession.pushAsync(frame.data);
+		}
 
-    private decode: (block: Uint8Array) => SWF.Parser.DecodedSound;
+		finish() {
+			this._decoderSession.close();
+		}
+	}
 
-    private expectedFrame: number;
-    private waitFor: number;
+	export class MovieClipSoundStream {
+		private movieClip: MovieClip;
+		private data;
+		private seekIndex: Array<number>;
+		private position: number;
+		private element;
+		private soundStreamAdapter: ISoundStreamAdapter;
+		private wasFullyLoaded: boolean;
 
-    public constructor(streamInfo: SWF.Parser.SoundStream, movieClip: MovieClip) {
-      this.movieClip = movieClip;
-      this.decode = streamInfo.decode.bind(streamInfo);
-      this.data = {
-        sampleRate: streamInfo.sampleRate,
-        channels: streamInfo.channels
-      };
-      this.seekIndex = [];
-      this.position = 0;
-      this.wasFullyLoaded = false;
-      this.expectedFrame = 0;
-      this.waitFor = 0;
+		private decode: (block: Uint8Array) => SWF.Parser.DecodedSound;
 
-      let sec = movieClip.sec;
-      let isMP3 = streamInfo.format === 'mp3';
-      if (isMP3 && !webAudioMP3Option.value) {
-        let element = document.createElement('audio');
-        element.preload = 'metadata'; // for mobile devices
-        element.loop = false;
-        syncTime(element, movieClip);
-        if (element.canPlayType(MP3_MIME_TYPE)) {
-          this.element = element;
-          if (!mediaSourceMP3Option.value) {
-            this.soundStreamAdapter = new BlobStreamAdapter(sec, element);
-          } else if (typeof MediaSource !== 'undefined' &&
-                     (<any>MediaSource).isTypeSupported(MP3_MIME_TYPE)) {
-            this.soundStreamAdapter = new MediaSourceStreamAdapter(sec, element);
-          } else {
-            // Falls back to blob playback.
-            Debug.warning('MediaSource is not supported');
-            this.soundStreamAdapter = new BlobStreamAdapter(sec, element);
-          }
-          return;
-        }
-        // Falls through to WebAudio if element cannot play MP3.
-      }
+		private expectedFrame: number;
+		private waitFor: number;
 
-      // TODO fix streamInfo.samplesCount name -- its actually average value
-      let totalSamples = (streamInfo.samplesCount + 1) * this.movieClip.totalFrames * streamInfo.channels;
-      this.data.pcm = new Float32Array(totalSamples);
-      this.soundStreamAdapter = !isMP3 ? new WebAudioAdapter(sec, this.data) :
-                                         new WebAudioMP3Adapter(sec, this.data);
-    }
+		public constructor(streamInfo: SWF.Parser.SoundStream, movieClip: MovieClip) {
+			this.movieClip = movieClip;
+			this.decode = streamInfo.decode.bind(streamInfo);
+			this.data = {
+				sampleRate: streamInfo.sampleRate,
+				channels: streamInfo.channels
+			};
+			this.seekIndex = [];
+			this.position = 0;
+			this.wasFullyLoaded = false;
+			this.expectedFrame = 0;
+			this.waitFor = 0;
 
-    public appendBlock(frameNum: number, streamBlock: Uint8Array) {
-      let decodedBlock = this.decode(streamBlock);
-      let streamPosition = this.position;
-      this.seekIndex[frameNum] = streamPosition + decodedBlock.seek * this.data.channels;
-      this.position = streamPosition + decodedBlock.samplesCount * this.data.channels;
-      this.soundStreamAdapter.queueData(decodedBlock);
-    }
+			let sec = movieClip.sec;
+			let isMP3 = streamInfo.format === 'mp3';
+			if (isMP3 && !webAudioMP3Option.value) {
+				let element = document.createElement('audio');
+				element.preload = 'metadata'; // for mobile devices
+				element.loop = false;
+				syncTime(element, movieClip);
+				if (element.canPlayType(MP3_MIME_TYPE)) {
+					this.element = element;
+					if (!mediaSourceMP3Option.value) {
+						this.soundStreamAdapter = new BlobStreamAdapter(sec, element);
+					} else if (typeof MediaSource !== 'undefined' &&
+						(<any>MediaSource).isTypeSupported(MP3_MIME_TYPE)) {
+						this.soundStreamAdapter = new MediaSourceStreamAdapter(sec, element);
+					} else {
+						// Falls back to blob playback.
+						Debug.warning('MediaSource is not supported');
+						this.soundStreamAdapter = new BlobStreamAdapter(sec, element);
+					}
+					return;
+				}
+				// Falls through to WebAudio if element cannot play MP3.
+			}
 
-    public playFrame(frameNum: number) {
-      if (isNaN(this.seekIndex[frameNum])) {
-        return;
-      }
+			// TODO fix streamInfo.samplesCount name -- its actually average value
+			let totalSamples = (streamInfo.samplesCount + 1) * this.movieClip.totalFrames * streamInfo.channels;
+			this.data.pcm = new Float32Array(totalSamples);
+			this.soundStreamAdapter = !isMP3 ? new WebAudioAdapter(sec, this.data) :
+				new WebAudioMP3Adapter(sec, this.data);
+		}
 
-      let PAUSE_WHEN_OF_SYNC_GREATER = 1.0;
-      let PLAYBACK_ADJUSTMENT = 0.25;
+		public appendBlock(frameNum: number, streamBlock: Uint8Array) {
+			let decodedBlock = this.decode(streamBlock);
+			let streamPosition = this.position;
+			this.seekIndex[frameNum] = streamPosition + decodedBlock.seek * this.data.channels;
+			this.position = streamPosition + decodedBlock.samplesCount * this.data.channels;
+			this.soundStreamAdapter.queueData(decodedBlock);
+		}
 
-      if (!this.wasFullyLoaded && this.movieClip._isFullyLoaded) {
-        this.wasFullyLoaded = true;
-        this.soundStreamAdapter.finish();
-      }
+		public playFrame(frameNum: number) {
+			if (isNaN(this.seekIndex[frameNum])) {
+				return;
+			}
 
-      if (this.soundStreamAdapter.isReady &&
-          !isNaN(this.soundStreamAdapter.currentTime)) {
-        let soundStreamData = this.data;
-        let time = this.seekIndex[frameNum] /
-          soundStreamData.sampleRate / soundStreamData.channels;
-        let elementTime = this.soundStreamAdapter.currentTime;
-        if (this.expectedFrame !== frameNum) {
-          this.soundStreamAdapter.playFrom(time);
-        } else if (this.waitFor > 0) {
-          if (this.waitFor <= time) {
-            this.soundStreamAdapter.paused = false;
-            this.waitFor = 0;
-          }
-        } else if (elementTime - time > PAUSE_WHEN_OF_SYNC_GREATER) {
-          Debug.warning('Sound is faster than frames by ' + (elementTime - time));
-          this.waitFor = elementTime - PLAYBACK_ADJUSTMENT;
-          this.soundStreamAdapter.paused = true;
-        } else if (time - elementTime > PAUSE_WHEN_OF_SYNC_GREATER) {
-          Debug.warning('Sound is slower than frames by ' + (time - elementTime));
-          this.soundStreamAdapter.playFrom(time + PLAYBACK_ADJUSTMENT);
-        }
-        this.expectedFrame = frameNum + 1;
-      }
-    }
-  }
+			let PAUSE_WHEN_OF_SYNC_GREATER = 1.0;
+			let PLAYBACK_ADJUSTMENT = 0.25;
+
+			if (!this.wasFullyLoaded && this.movieClip._isFullyLoaded) {
+				this.wasFullyLoaded = true;
+				this.soundStreamAdapter.finish();
+			}
+
+			if (this.soundStreamAdapter.isReady &&
+				!isNaN(this.soundStreamAdapter.currentTime)) {
+				let soundStreamData = this.data;
+				let time = this.seekIndex[frameNum] /
+					soundStreamData.sampleRate / soundStreamData.channels;
+				let elementTime = this.soundStreamAdapter.currentTime;
+				if (this.expectedFrame !== frameNum) {
+					this.soundStreamAdapter.playFrom(time);
+				} else if (this.waitFor > 0) {
+					if (this.waitFor <= time) {
+						this.soundStreamAdapter.paused = false;
+						this.waitFor = 0;
+					}
+				} else if (elementTime - time > PAUSE_WHEN_OF_SYNC_GREATER) {
+					Debug.warning('Sound is faster than frames by ' + (elementTime - time));
+					this.waitFor = elementTime - PLAYBACK_ADJUSTMENT;
+					this.soundStreamAdapter.paused = true;
+				} else if (time - elementTime > PAUSE_WHEN_OF_SYNC_GREATER) {
+					Debug.warning('Sound is slower than frames by ' + (time - elementTime));
+					this.soundStreamAdapter.playFrom(time + PLAYBACK_ADJUSTMENT);
+				}
+				this.expectedFrame = frameNum + 1;
+			}
+		}
+	}
 }

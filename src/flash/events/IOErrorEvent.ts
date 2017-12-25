@@ -15,34 +15,34 @@
  */
 // Class: IOErrorEvent
 module Shumway.AVMX.AS.flash.events {
-  export class IOErrorEvent extends flash.events.ErrorEvent {
-    static classInitializer: any = null;
+	export class IOErrorEvent extends flash.events.ErrorEvent {
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                text: string = "", id: number /*int*/ = 0) {
-      super(type, bubbles, cancelable, text, id);
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            text: string = "", id: number /*int*/ = 0) {
+			super(type, bubbles, cancelable, text, id);
+		}
 
-    // JS -> AS Bindings
-    static IO_ERROR: string = "ioError";
-    static NETWORK_ERROR: string = "networkError";
-    static DISK_ERROR: string = "diskError";
-    static VERIFY_ERROR: string = "verifyError";
+		// JS -> AS Bindings
+		static IO_ERROR: string = "ioError";
+		static NETWORK_ERROR: string = "networkError";
+		static DISK_ERROR: string = "diskError";
+		static VERIFY_ERROR: string = "verifyError";
 
-    clone(): Event {
-      let event = new this.sec.flash.events.IOErrorEvent(this.type, this.bubbles,
-                                                                    this.cancelable, this.text,
-                                                                    this.errorID);
-      //this.copyNativeData(event);
-      return event;
-    }
+		clone(): Event {
+			let event = new this.sec.flash.events.IOErrorEvent(this.type, this.bubbles,
+				this.cancelable, this.text,
+				this.errorID);
+			//this.copyNativeData(event);
+			return event;
+		}
 
-    toString(): string {
-      return this.formatToString('IOErrorEvent', 'type', 'bubbles', 'cancelable', 'text',
-                                 'errorID');
-    }
-  }
+		toString(): string {
+			return this.formatToString('IOErrorEvent', 'type', 'bubbles', 'cancelable', 'text',
+				'errorID');
+		}
+	}
 }

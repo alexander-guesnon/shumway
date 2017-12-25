@@ -15,25 +15,25 @@
  */
 // Class: SampleDataEvent
 module Shumway.AVMX.AS.flash.events {
-  export class SampleDataEvent extends flash.events.Event {
+	export class SampleDataEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    theposition: number;
-    thedata: flash.utils.ByteArray;
+		theposition: number;
+		thedata: flash.utils.ByteArray;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                theposition: number = 0, thedata: flash.utils.ByteArray = null) {
-      super(type, bubbles, cancelable);
-      this.theposition = +theposition;
-      // TODO: coerce
-      this.thedata = thedata;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            theposition: number = 0, thedata: flash.utils.ByteArray = null) {
+			super(type, bubbles, cancelable);
+			this.theposition = +theposition;
+			// TODO: coerce
+			this.thedata = thedata;
+		}
 
-    // JS -> AS Bindings
-    static SAMPLE_DATA: string = "sampleData";
-  }
+		// JS -> AS Bindings
+		static SAMPLE_DATA: string = "sampleData";
+	}
 }

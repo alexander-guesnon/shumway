@@ -15,32 +15,32 @@
  */
 // Class: TimerEvent
 module Shumway.AVMX.AS.flash.events {
-  export class TimerEvent extends flash.events.Event {
+	export class TimerEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles?: boolean, cancelable?: boolean) {
-      super(type, bubbles, cancelable);
-    }
+		constructor(type: string, bubbles?: boolean, cancelable?: boolean) {
+			super(type, bubbles, cancelable);
+		}
 
-    // JS -> AS Bindings
-    static TIMER: string = "timer";
-    static TIMER_COMPLETE: string = "timerComplete";
+		// JS -> AS Bindings
+		static TIMER: string = "timer";
+		static TIMER_COMPLETE: string = "timerComplete";
 
-    clone(): Event {
-      return new this.sec.flash.events.TimerEvent(this.type, this.bubbles,
-                                                             this.cancelable);
-    }
+		clone(): Event {
+			return new this.sec.flash.events.TimerEvent(this.type, this.bubbles,
+				this.cancelable);
+		}
 
-    toString(): string {
-      return this.formatToString('TimerEvent', 'type', 'bubbles', 'cancelable', 'eventPhase');
-    }
+		toString(): string {
+			return this.formatToString('TimerEvent', 'type', 'bubbles', 'cancelable', 'eventPhase');
+		}
 
-    updateAfterEvent(): void {
-      this.sec.player.requestRendering();
-    }
-  }
+		updateAfterEvent(): void {
+			this.sec.player.requestRendering();
+		}
+	}
 }

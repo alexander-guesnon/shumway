@@ -15,15 +15,15 @@
  */
 // Class: UncaughtErrorEvents
 module Shumway.AVMX.AS.flash.events {
-  export class UncaughtErrorEvents extends flash.events.EventDispatcher {
+	export class UncaughtErrorEvents extends flash.events.EventDispatcher {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor() {
-      super();
-    }
-  }
+		constructor() {
+			super();
+		}
+	}
 }

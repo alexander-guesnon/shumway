@@ -15,39 +15,39 @@
  */
 // Class: NetStatusEvent
 module Shumway.AVMX.AS.flash.events {
-  export class NetStatusEvent extends flash.events.Event {
+	export class NetStatusEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                info: Object = null) {
-      super(type, bubbles, cancelable);
-      this._info = info;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            info: Object = null) {
+			super(type, bubbles, cancelable);
+			this._info = info;
+		}
 
-    private _info: Object;
+		private _info: Object;
 
-    get info(): Object {
-      return this._info;
-    }
+		get info(): Object {
+			return this._info;
+		}
 
-    set info(value: Object) {
-      this._info = value;
-    }
+		set info(value: Object) {
+			this._info = value;
+		}
 
-    // JS -> AS Bindings
-    public static NET_STATUS: string = "netStatus";
+		// JS -> AS Bindings
+		public static NET_STATUS: string = "netStatus";
 
-    clone(): Event {
-      return new this.sec.flash.events.NetStatusEvent(this.type, this.bubbles,
-                                                                 this.cancelable, this.info);
-    }
+		clone(): Event {
+			return new this.sec.flash.events.NetStatusEvent(this.type, this.bubbles,
+				this.cancelable, this.info);
+		}
 
-    toString(): string {
-      return this.formatToString('NetStatusEvent', 'type', 'bubbles', 'cancelable', 'eventPhase', 'info');
-    }
-  }
+		toString(): string {
+			return this.formatToString('NetStatusEvent', 'type', 'bubbles', 'cancelable', 'eventPhase', 'info');
+		}
+	}
 }
