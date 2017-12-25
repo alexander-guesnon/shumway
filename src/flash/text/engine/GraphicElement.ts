@@ -67,7 +67,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get elementHeight(): number {
 			release || notImplemented("public flash.text.engine.GraphicElement::get elementHeight");
-			return;
+			return 0;
 			// return this._elementHeight;
 		}
 
@@ -80,7 +80,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get elementWidth(): number {
 			release || notImplemented("public flash.text.engine.GraphicElement::get elementWidth");
-			return;
+			return 0;
 			// return this._elementWidth;
 		}
 

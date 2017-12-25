@@ -353,7 +353,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		get caretIndex(): number /*int*/ {
 			release || notImplemented("public flash.text.TextField::get caretIndex");
-			return;
+			return 0;
 			// return this._caretIndex;
 		}
 
@@ -430,7 +430,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		get textInteractionMode(): string {
 			release || notImplemented("public flash.text.TextField::get textInteractionMode");
-			return;
+			return "";
 			// return this._textInteractionMode;
 		}
 
@@ -617,7 +617,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		get useRichTextClipboard(): boolean {
 			release || notImplemented("public flash.text.TextField::get useRichTextClipboard");
-			return;
+			return false;
 			// return this._useRichTextClipboard;
 		}
 
@@ -715,32 +715,32 @@ module Shumway.AVMX.AS.flash.text {
 			x = +x;
 			y = +y;
 			release || notImplemented("public flash.text.TextField::getCharIndexAtPoint");
-			return;
+			return 0;
 		}
 
 		getFirstCharInParagraph(charIndex: number /*int*/): number /*int*/ {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.TextField::getFirstCharInParagraph");
-			return;
+			return 0;
 		}
 
 		getLineIndexAtPoint(x: number, y: number): number /*int*/ {
 			x = +x;
 			y = +y;
 			release || notImplemented("public flash.text.TextField::getLineIndexAtPoint");
-			return;
+			return 0;
 		}
 
 		getLineIndexOfChar(charIndex: number /*int*/): number /*int*/ {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.TextField::getLineIndexOfChar");
-			return;
+			return 0;
 		}
 
 		getLineLength(lineIndex: number /*int*/): number /*int*/ {
 			lineIndex = lineIndex | 0;
 			release || notImplemented("public flash.text.TextField::getLineLength");
-			return;
+			return 0;
 		}
 
 		getLineMetrics(lineIndex: number /*int*/): flash.text.TextLineMetrics {
@@ -792,7 +792,7 @@ module Shumway.AVMX.AS.flash.text {
 		getParagraphLength(charIndex: number /*int*/): number /*int*/ {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.TextField::getParagraphLength");
-			return;
+			return 0;
 		}
 
 		/**
@@ -846,7 +846,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		getRawText(): string {
 			release || notImplemented("public flash.text.TextField::getRawText");
-			return;
+			return "";
 		}
 
 		replaceSelectedText(value: string): void {
@@ -902,7 +902,7 @@ module Shumway.AVMX.AS.flash.text {
 		getImageReference(id: string): flash.display.DisplayObject {
 			//id = "" + id;
 			release || notImplemented("public flash.text.TextField::getImageReference");
-			return;
+			return null;
 		}
 	}
 

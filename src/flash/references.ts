@@ -339,6 +339,7 @@
 ///<reference path='text/TextRun.ts' />
 ///<reference path='text/TextSnapshot.ts' />
 
+// ///<reference path='text/engine/TextJustifier.ts' />
 // ///<reference path='text/engine/BreakOpportunity.ts' />
 // ///<reference path='text/engine/CFFHinting.ts' />
 // ///<reference path='text/engine/ContentElement.ts' />
@@ -358,7 +359,6 @@
 // ///<reference path='text/engine/LigatureLevel.ts' />
 // ///<reference path='text/engine/LineJustification.ts' />
 // ///<reference path='text/engine/RenderingMode.ts' />
-// ///<reference path='text/engine/TextJustifier.ts' />
 // ///<reference path='text/engine/SpaceJustifier.ts' />
 // ///<reference path='text/engine/TabAlignment.ts' />
 // ///<reference path='text/engine/TabStop.ts' />

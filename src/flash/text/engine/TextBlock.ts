@@ -33,7 +33,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // ["userData", "textJustifier", "textJustifier", "tabStops", "tabStops", "createTextLine", "recreateTextLine"];
 
-		constructor(content: flash.text.engine.ContentElement = null, tabStops: ASVector<any /* flash.text.engine.TabStop */> = null, textJustifier: flash.text.engine.TextJustifier = null, lineRotation: string = "rotate0", baselineZero: string = "roman", bidiLevel: number /*int*/ = 0, applyNonLinearFontScaling: boolean = true, baselineFontDescription: flash.text.engine.FontDescription = null, baselineFontSize: number = 12) {
+		constructor(content: flash.text.engine.ContentElement = null, tabStops: any /*ASVector> /* flash.text.engine.TabStop */ = null, textJustifier: flash.text.engine.TextJustifier = null, lineRotation: string = "rotate0", baselineZero: string = "roman", bidiLevel: number /*int*/ = 0, applyNonLinearFontScaling: boolean = true, baselineFontDescription: flash.text.engine.FontDescription = null, baselineFontSize: number = 12) {
 			content = content;
 			tabStops = tabStops;
 			textJustifier = textJustifier;

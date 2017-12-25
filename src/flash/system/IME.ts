@@ -43,7 +43,7 @@ module Shumway.AVMX.AS.flash.system {
 		// static _isSupported: boolean;
 		get enabled(): boolean {
 			release || notImplemented("public flash.system.IME::get enabled");
-			return;
+			return false
 			// return this._enabled;
 		}
 
@@ -56,7 +56,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		get conversionMode(): string {
 			release || notImplemented("public flash.system.IME::get conversionMode");
-			return;
+			return "";
 			// return this._conversionMode;
 		}
 

@@ -30,7 +30,7 @@ module Shumway.AVMX.AS.flash.text {
 		// _charCount: number /*int*/;
 		get charCount(): number /*int*/ {
 			release || notImplemented("public flash.text.TextSnapshot::get charCount");
-			return;
+			return 0;
 			// return this._charCount;
 		}
 
@@ -39,20 +39,20 @@ module Shumway.AVMX.AS.flash.text {
 			textToFind = axCoerceString(textToFind);
 			caseSensitive = !!caseSensitive;
 			release || notImplemented("public flash.text.TextSnapshot::findText");
-			return;
+			return 0;
 		}
 
 		getSelected(beginIndex: number /*int*/, endIndex: number /*int*/): boolean {
 			beginIndex = beginIndex | 0;
 			endIndex = endIndex | 0;
 			release || notImplemented("public flash.text.TextSnapshot::getSelected");
-			return;
+			return false;
 		}
 
 		getSelectedText(includeLineEndings: boolean = false): string {
 			includeLineEndings = !!includeLineEndings;
 			release || notImplemented("public flash.text.TextSnapshot::getSelectedText");
-			return;
+			return "";
 		}
 
 		getText(beginIndex: number /*int*/, endIndex: number /*int*/, includeLineEndings: boolean = false): string {
@@ -60,14 +60,14 @@ module Shumway.AVMX.AS.flash.text {
 			endIndex = endIndex | 0;
 			includeLineEndings = !!includeLineEndings;
 			release || notImplemented("public flash.text.TextSnapshot::getText");
-			return;
+			return "";
 		}
 
 		getTextRunInfo(beginIndex: number /*int*/, endIndex: number /*int*/): ASArray {
 			beginIndex = beginIndex | 0;
 			endIndex = endIndex | 0;
 			release || notImplemented("public flash.text.TextSnapshot::getTextRunInfo");
-			return;
+			return null;
 		}
 
 		hitTestTextNearPos(x: number, y: number, maxDistance: number = 0): number {
@@ -75,7 +75,7 @@ module Shumway.AVMX.AS.flash.text {
 			y = +y;
 			maxDistance = +maxDistance;
 			release || notImplemented("public flash.text.TextSnapshot::hitTestTextNearPos");
-			return;
+			return 0;
 		}
 
 		setSelectColor(hexColor: number /*uint*/ = 16776960): void {

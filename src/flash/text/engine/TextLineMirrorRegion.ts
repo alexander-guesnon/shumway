@@ -51,37 +51,37 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _bounds: flash.geom.Rectangle;
 		get textLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get textLine");
-			return;
+			return null;
 			// return this._textLine;
 		}
 
 		get nextRegion(): flash.text.engine.TextLineMirrorRegion {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get nextRegion");
-			return;
+			return null;
 			// return this._nextRegion;
 		}
 
 		get previousRegion(): flash.text.engine.TextLineMirrorRegion {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get previousRegion");
-			return;
+			return null;
 			// return this._previousRegion;
 		}
 
 		get mirror(): flash.events.EventDispatcher {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get mirror");
-			return;
+			return null;
 			// return this._mirror;
 		}
 
 		get element(): flash.text.engine.ContentElement {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get element");
-			return;
+			return null;
 			// return this._element;
 		}
 
 		get bounds(): flash.geom.Rectangle {
 			release || notImplemented("public flash.text.engine.TextLineMirrorRegion::get bounds");
-			return;
+			return null;
 			// return this._bounds;
 		}
 	}

@@ -51,7 +51,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _composeTrailingIdeographicSpaces: boolean;
 		get justificationStyle(): string {
 			release || notImplemented("public flash.text.engine.EastAsianJustifier::get justificationStyle");
-			return;
+			return "";
 			// return this._justificationStyle;
 		}
 
@@ -64,7 +64,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get composeTrailingIdeographicSpaces(): boolean {
 			release || notImplemented("public flash.text.engine.EastAsianJustifier::get composeTrailingIdeographicSpaces");
-			return;
+			return false;
 			// return this._composeTrailingIdeographicSpaces;
 		}
 

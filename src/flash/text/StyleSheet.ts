@@ -98,9 +98,9 @@ module Shumway.AVMX.AS.flash.text {
 			if (typeof formatObject !== 'object') {
 				return null;
 			}
-			formatObject = transformASValueToJS(this.sec, formatObject, false);
+			let jsObject = transformASValueToJS(this.sec, formatObject, false);
 			let textFormat = new this.sec.flash.text.TextFormat();
-			textFormat.transform(formatObject);
+			textFormat.transform(jsObject);
 			return textFormat;
 		}
 
@@ -186,7 +186,7 @@ module Shumway.AVMX.AS.flash.text {
 					sawWhitespace = false;
 					upperCase = false;
 					// Inner loop parsing property values.
-					valueLoop: while (index < length) {
+					/*valueLoop:*/ while (index < length) {
 						char = css[index];
 						switch (char) {
 							case ';':

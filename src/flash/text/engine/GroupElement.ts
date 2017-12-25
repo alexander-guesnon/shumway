@@ -51,14 +51,14 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _elementCount: number /*int*/;
 		get elementCount(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.GroupElement::get elementCount");
-			return;
+			return 0;
 			// return this._elementCount;
 		}
 
 		getElementAt(index: number /*int*/): flash.text.engine.ContentElement {
 			index = index | 0;
 			release || notImplemented("public flash.text.engine.GroupElement::getElementAt");
-			return;
+			return null;
 		}
 
 		setElements(value: any /*ASVector*/): void {
@@ -71,7 +71,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			beginIndex = beginIndex | 0;
 			endIndex = endIndex | 0;
 			release || notImplemented("public flash.text.engine.GroupElement::groupElements");
-			return;
+			return null;
 		}
 
 		ungroupElements(groupIndex: number /*int*/): void {
@@ -84,14 +84,14 @@ module Shumway.AVMX.AS.flash.text.engine {
 			beginIndex = beginIndex | 0;
 			endIndex = endIndex | 0;
 			release || notImplemented("public flash.text.engine.GroupElement::mergeTextElements");
-			return;
+			return null;
 		}
 
 		splitTextElement(elementIndex: number /*int*/, splitIndex: number /*int*/): flash.text.engine.TextElement {
 			elementIndex = elementIndex | 0;
 			splitIndex = splitIndex | 0;
 			release || notImplemented("public flash.text.engine.GroupElement::splitTextElement");
-			return;
+			return null;
 		}
 
 		replaceElements(beginIndex: number /*int*/, endIndex: number /*int*/, newElements: any /*ASVector*/): any /*ASVector*/ {
@@ -105,7 +105,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		getElementAtCharIndex(charIndex: number /*int*/): flash.text.engine.ContentElement {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.engine.GroupElement::getElementAtCharIndex");
-			return;
+			return null;
 		}
 	}
 }

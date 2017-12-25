@@ -41,50 +41,50 @@ module Shumway.AVMX.AS.flash.ui {
 		// _device: flash.ui.GameInputDevice;
 		get numValues(): number /*int*/ {
 			release || notImplemented("public flash.ui.GameInputControl::get numValues");
-			return;
+			return 0;
 			// return this._numValues;
 		}
 
 		get index(): number /*int*/ {
 			release || notImplemented("public flash.ui.GameInputControl::get index");
-			return;
+			return 0;
 			// return this._index;
 		}
 
 		get relative(): boolean {
 			release || notImplemented("public flash.ui.GameInputControl::get relative");
-			return;
+			return false;
 			// return this._relative;
 		}
 
 		get type(): string {
 			release || notImplemented("public flash.ui.GameInputControl::get type");
-			return;
+			return "";
 			// return this._type;
 		}
 
 		get hand(): string {
 			release || notImplemented("public flash.ui.GameInputControl::get hand");
-			return;
+			return "";
 			// return this._hand;
 		}
 
 		get finger(): string {
 			release || notImplemented("public flash.ui.GameInputControl::get finger");
-			return;
+			return "";
 			// return this._finger;
 		}
 
 		get device(): flash.ui.GameInputDevice {
 			release || notImplemented("public flash.ui.GameInputControl::get device");
-			return;
+			return null;
 			// return this._device;
 		}
 
 		getValueAt(index: number /*int*/ = 0): number {
 			index = index | 0;
 			release || notImplemented("public flash.ui.GameInputControl::getValueAt");
-			return;
+			return 0;
 		}
 	}
 }

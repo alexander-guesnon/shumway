@@ -51,13 +51,13 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _lineJustification: string;
 		get locale(): string {
 			release || notImplemented("public flash.text.engine.TextJustifier::get locale");
-			return;
+			return "";
 			// return this._locale;
 		}
 
 		get lineJustification(): string {
 			release || notImplemented("public flash.text.engine.TextJustifier::get lineJustification");
-			return;
+			return "";
 			// return this._lineJustification;
 		}
 

@@ -46,7 +46,7 @@ module Shumway.AVMX.AS.flash.automation {
 
 		get fileNameBase(): string {
 			release || notImplemented("public flash.automation.StageCapture::get fileNameBase");
-			return;
+			return "";
 		}
 
 		set clipRect(value: flash.geom.Rectangle) {
@@ -57,12 +57,12 @@ module Shumway.AVMX.AS.flash.automation {
 
 		get clipRect(): flash.geom.Rectangle {
 			release || notImplemented("public flash.automation.StageCapture::get clipRect");
-			return;
+			return null;
 		}
 
 		captureBitmapData(): flash.display.BitmapData {
 			release || notImplemented("public flash.automation.StageCapture::captureBitmapData");
-			return;
+			return null;
 		}
 
 		set captureSource(value: string) {
@@ -73,7 +73,7 @@ module Shumway.AVMX.AS.flash.automation {
 
 		get captureSource(): string {
 			release || notImplemented("public flash.automation.StageCapture::get captureSource");
-			return;
+			return "";
 		}
 	}
 }

@@ -54,7 +54,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			fontWeight = axCoerceString(fontWeight);
 			fontPosture = axCoerceString(fontPosture);
 			release || notImplemented("public flash.text.engine.FontDescription::static isFontCompatible");
-			return;
+			return false;
 		}
 
 		static isDeviceFontCompatible(fontName: string, fontWeight: string, fontPosture: string): boolean {
@@ -62,7 +62,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			fontWeight = axCoerceString(fontWeight);
 			fontPosture = axCoerceString(fontPosture);
 			release || notImplemented("public flash.text.engine.FontDescription::static isDeviceFontCompatible");
-			return;
+			return false;
 		}
 
 		// _renderingMode: string;
@@ -74,7 +74,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _locked: boolean;
 		get renderingMode(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get renderingMode");
-			return;
+			return "";
 			// return this._renderingMode;
 		}
 
@@ -87,7 +87,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontLookup(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get fontLookup");
-			return;
+			return "";
 			// return this._fontLookup;
 		}
 
@@ -100,7 +100,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontName(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get fontName");
-			return;
+			return "";
 			// return this._fontName;
 		}
 
@@ -113,7 +113,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontPosture(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get fontPosture");
-			return;
+			return "";
 			// return this._fontPosture;
 		}
 
@@ -126,7 +126,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontWeight(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get fontWeight");
-			return;
+			return "";
 			// return this._fontWeight;
 		}
 
@@ -139,7 +139,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get cffHinting(): string {
 			release || notImplemented("public flash.text.engine.FontDescription::get cffHinting");
-			return;
+			return "";
 			// return this._cffHinting;
 		}
 
@@ -152,7 +152,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get locked(): boolean {
 			release || notImplemented("public flash.text.engine.FontDescription::get locked");
-			return;
+			return false;
 			// return this._locked;
 		}
 

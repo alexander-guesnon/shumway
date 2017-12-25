@@ -65,7 +65,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get hasEmbeddedVideo(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get hasEmbeddedVideo");
-			return;
+			return false;
 			// return Capabilities._hasEmbeddedVideo;
 		}
 
@@ -91,7 +91,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get hasMP3(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get hasMP3");
-			return;
+			return false;
 			// return Capabilities._hasMP3;
 		}
 
@@ -112,13 +112,13 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get hasStreamingAudio(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get hasStreamingAudio");
-			return;
+			return false;
 			// return Capabilities._hasStreamingAudio;
 		}
 
 		static get hasStreamingVideo(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get hasStreamingVideo");
-			return;
+			return false;
 			// return Capabilities._hasStreamingVideo;
 		}
 
@@ -133,7 +133,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get localFileReadDisable(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get localFileReadDisable");
-			return;
+			return false;
 			// return Capabilities._localFileReadDisable;
 		}
 

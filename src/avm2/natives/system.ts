@@ -20,7 +20,7 @@ module Shumway.AVMX.AS {
 	import defineNonEnumerableProperty = Shumway.ObjectUtilities.defineNonEnumerableProperty;
 
 	export module flash.system {
-		export class IME extends ASObject /* flash.events.EventDispatcher */ {
+		export class OriginalIME extends ASObject /* flash.events.EventDispatcher */ {
 			constructor() {
 				super();
 			}
@@ -70,14 +70,14 @@ module Shumway.AVMX.AS {
 			}
 		}
 
-		export class System extends ASObject {
+		export class OriginalSystem extends ASObject {
 			private static _useCodePage: boolean = false;
 
 			static classInitializer() {
 				defineNonEnumerableProperty(this, '$Bgargv', this.sec.createArray([]));
 			}
 
-			static get ime(): flash.system.IME {
+			static get ime(): flash.system.OriginalIME {
 				release || somewhatImplemented("public flash.system.System::get ime");
 				return null;
 			}
@@ -160,7 +160,7 @@ module Shumway.AVMX.AS {
 			}
 		}
 
-		export let OriginalSystem = System;
+		//export let OriginalSystem = System;
 	}
 }
 

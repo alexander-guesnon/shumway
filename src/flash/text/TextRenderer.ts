@@ -38,7 +38,7 @@ module Shumway.AVMX.AS.flash.text {
 		// static _displayMode: string;
 		get antiAliasType(): string {
 			release || notImplemented("public flash.text.TextRenderer::get antiAliasType");
-			return;
+			return "";
 			// return this._antiAliasType;
 		}
 
@@ -51,7 +51,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		get maxLevel(): number /*int*/ {
 			release || notImplemented("public flash.text.TextRenderer::get maxLevel");
-			return;
+			return 0;
 			// return this._maxLevel;
 		}
 
@@ -64,7 +64,7 @@ module Shumway.AVMX.AS.flash.text {
 
 		get displayMode(): string {
 			release || notImplemented("public flash.text.TextRenderer::get displayMode");
-			return;
+			return "";
 			// return this._displayMode;
 		}
 

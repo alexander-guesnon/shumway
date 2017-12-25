@@ -54,7 +54,7 @@ module Shumway.AVMX.AS.flash.trace {
 		static getLevel(target: number /*int*/ = 2): number /*int*/ {
 			target = target | 0;
 			release || notImplemented("public flash.trace.Trace::static getLevel");
-			return;
+			return 0;
 		}
 
 		static setListener(f: ASFunction): any {
@@ -65,7 +65,7 @@ module Shumway.AVMX.AS.flash.trace {
 
 		static getListener(): ASFunction {
 			release || notImplemented("public flash.trace.Trace::static getListener");
-			return;
+			return null;
 		}
 
 	}

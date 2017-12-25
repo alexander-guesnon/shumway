@@ -39,14 +39,14 @@ module Shumway.AVMX.AS.flash.sensors {
 		// static _isSupported: boolean;
 		get isSupported(): boolean {
 			release || notImplemented("public flash.sensors.Accelerometer::get isSupported");
-			return;
+			return false;
 			// return this._isSupported;
 		}
 
 		// _muted: boolean;
 		get muted(): boolean {
 			release || notImplemented("public flash.sensors.Accelerometer::get muted");
-			return;
+			return false;
 			// return this._muted;
 		}
 
