@@ -42,7 +42,7 @@ module Shumway.AVMX.AS.flash.filters {
 			}
 		}
 
-		_serialize(message) {
+		_serialize(message: any) {
 			let matrix: number[] = this._matrix;
 			message.ensureAdditionalCapacity((matrix.length + 1) * 4);
 			message.writeIntUnsafe(6);

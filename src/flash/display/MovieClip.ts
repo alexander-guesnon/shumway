@@ -38,7 +38,7 @@ module Shumway.AVMX.AS.flash.display {
 	}
 
 	interface SoundClip {
-		channel?;
+		channel?: any;
 		object: flash.media.Sound;
 	}
 
@@ -54,7 +54,7 @@ module Shumway.AVMX.AS.flash.display {
 			this._soundStream = null;
 		}
 
-		registerStartSounds(frameNum: number, soundStartInfo) {
+		registerStartSounds(frameNum: number, soundStartInfo: any) {
 			if (this._startSoundRegistrations === null) {
 				this._startSoundRegistrations = {};
 			}
@@ -71,7 +71,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 		}
 
-		private _startSounds(frameNum) {
+		private _startSounds(frameNum: number) {
 			let starts = this._startSoundRegistrations[frameNum];
 			if (starts) {
 				let sounds = this._soundClips || (this._soundClips = {});
@@ -98,7 +98,7 @@ module Shumway.AVMX.AS.flash.display {
 					}
 					if (!stop && (!sound.channel || !sound.channel.playing)) {
 						// TODO envelope, in/out point
-						let loops = info.flags & SoundInfoFlags.HasLoops ? info.loopCount : 0;
+						let loops = (info.flags & SoundInfoFlags.HasLoops) !== 0 ? info.loopCount : 0;
 						sound.channel = sound.object.play(0, loops);
 					}
 				}
@@ -116,7 +116,7 @@ module Shumway.AVMX.AS.flash.display {
 	}
 
 	export interface FrameScript {
-		(any?): any;
+		[key: string]: any;
 
 		precedence?: number[];
 		context?: MovieClip;
@@ -298,7 +298,7 @@ module Shumway.AVMX.AS.flash.display {
 				let avm1Context = symbol.avm1Context;
 				let actionsData = avm1Context.actionsDataFactory.createActionsData(
 					actionsBlock.actionsData, 's' + symbol.id + 'f' + frameIndex + 'i' + i);
-				let script: FrameScript = function (actionsData) {
+				let script: FrameScript = function (actionsData: any) {
 					let as2MovieClip = AVM1.Lib.getAVM1Object(this, avm1Context);
 					avm1Context.executeActions(actionsData, as2MovieClip);
 				}.bind(this, actionsData);
@@ -971,7 +971,7 @@ module Shumway.AVMX.AS.flash.display {
 			return this.framesLoaded >= this.totalFrames;
 		}
 
-		_registerStartSounds(frameNum: number, soundStartInfo) {
+		_registerStartSounds(frameNum: number, soundStartInfo: any) {
 			if (this._sounds === null) {
 				this._sounds = new MovieClipSoundsManager(this);
 			}

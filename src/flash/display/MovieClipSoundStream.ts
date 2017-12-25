@@ -25,11 +25,11 @@ module Shumway.AVMX.AS.flash.display {
 		paused: boolean;
 		isReady: boolean;
 
-		playFrom(time: number);
+		playFrom(time: number): void;
 
-		queueData(frame: DecodedSound);
+		queueData(frame: DecodedSound): void;
 
-		finish();
+		finish(): void;
 	}
 
 	class HTMLAudioElementAdapter implements ISoundStreamAdapter {
@@ -179,10 +179,10 @@ module Shumway.AVMX.AS.flash.display {
 		}
 	}
 
-	function syncTime(element, movieClip) {
+	function syncTime(element: any, movieClip: any) {
 		let initialized = false;
-		let startMediaTime, startRealTime;
-		element.addEventListener('timeupdate', function (e) {
+		let startMediaTime: number, startRealTime: number;
+		element.addEventListener('timeupdate', function (e: any) {
 			if (!initialized) {
 				startMediaTime = element.currentTime;
 				startRealTime = performance.now();
@@ -194,11 +194,11 @@ module Shumway.AVMX.AS.flash.display {
 			let realDelta = performance.now() - startRealTime;
 			//movieClip._stage._frameScheduler.setDelta(realDelta - mediaDelta * 1000);
 		});
-		element.addEventListener('pause', function (e) {
+		element.addEventListener('pause', function (e: any) {
 			//movieClip._stage._frameScheduler.endTrackDelta();
 			initialized = false;
 		});
-		element.addEventListener('seeking', function (e) {
+		element.addEventListener('seeking', function (e: any) {
 			//movieClip._stage._frameScheduler.endTrackDelta();
 			initialized = false;
 		});
@@ -208,7 +208,7 @@ module Shumway.AVMX.AS.flash.display {
 		private _sec: ISecurityDomain;
 		private _channel: media.SoundChannel;
 		private _sound: media.Sound;
-		private _data;
+		private _data: any;
 		private _position: number;
 
 		get currentTime(): number {
@@ -262,7 +262,7 @@ module Shumway.AVMX.AS.flash.display {
 
 			this._decoderPosition = 0;
 			this._decoderSession = new MP3DecoderSession();
-			this._decoderSession.onframedata = function (frameData) {
+			this._decoderSession.onframedata = function (frameData: any) {
 				let position = this._decoderPosition;
 				data.pcm.set(frameData, position);
 				this._decoderPosition = position + frameData.length;
@@ -286,10 +286,10 @@ module Shumway.AVMX.AS.flash.display {
 
 	export class MovieClipSoundStream {
 		private movieClip: MovieClip;
-		private data;
+		private data: any;
 		private seekIndex: Array<number>;
 		private position: number;
-		private element;
+		private element: any;
 		private soundStreamAdapter: ISoundStreamAdapter;
 		private wasFullyLoaded: boolean;
 

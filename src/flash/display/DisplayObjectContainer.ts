@@ -596,7 +596,7 @@ module Shumway.AVMX.AS.flash.display {
 			return anyChildHit || selfHit ? HitTestingResult.Shape : HitTestingResult.None;
 		}
 
-		private _getUnclippedChildren(testingType, globalX, globalY) {
+		private _getUnclippedChildren(testingType: HitTestingType, globalX: number, globalY: number) {
 			// Clipping masks complicate hit testing: for mouse target finding, where performance is
 			// most important, we want to test highest children first, then go down. OTOH, we want to
 			// test clipping masks before the elements they clip, potentially saving costly tests against
@@ -663,7 +663,7 @@ module Shumway.AVMX.AS.flash.display {
 
 			let globalX = globalPoint.x * 20 | 0;
 			let globalY = globalPoint.y * 20 | 0;
-			let objects = [];
+			let objects: Array<DisplayObject> = [];
 			this._containsGlobalPoint(globalX, globalY, HitTestingType.ObjectsUnderPoint, objects);
 			// getObjectsUnderPoint returns results in exactly the opposite order we collect them in.
 			return this.sec.createArrayUnsafe(objects.reverse());

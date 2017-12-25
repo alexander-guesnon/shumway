@@ -880,7 +880,7 @@ module Shumway.AVMX.AS.flash.display {
 	export interface IBitmapDataSerializer {
 		drawToBitmap(bitmapData: flash.display.BitmapData, source: flash.display.IBitmapDrawable,
 		             matrix: flash.geom.Matrix, colorTransform: flash.geom.ColorTransform,
-		             blendMode: string, clipRect: flash.geom.Rectangle, smoothing: boolean);
+		             blendMode: string, clipRect: flash.geom.Rectangle, smoothing: boolean): void;
 
 		requestBitmapData(bitmapData: BitmapData): DataBuffer;
 	}

@@ -21,11 +21,11 @@ module Shumway.AVMX.AS.flash.media {
 	import assert = Debug.assert;
 	import Telemetry = Shumway.Telemetry;
 
-	declare let Blob;
-	declare let URL;
-	declare let decodeMP3;
+	declare let Blob: any;
+	declare let URL: any;
+	declare let decodeMP3: any;
 
-	function getAudioDescription(soundData, onComplete) {
+	function getAudioDescription(soundData: any, onComplete: any) {
 		let audioElement = document.createElement('audio');
 		if (!audioElement.canPlayType(soundData.mimeType)) {
 			onComplete({
@@ -88,7 +88,7 @@ module Shumway.AVMX.AS.flash.media {
 					soundData.mimeType = symbol.packaged.mimeType;
 				}
 				let self = this;
-				getAudioDescription(soundData, function (description) {
+				getAudioDescription(soundData, function (description: any) {
 					self._length = description.duration;
 				});
 				this._soundData = soundData;
@@ -210,7 +210,7 @@ module Shumway.AVMX.AS.flash.media {
 					channel._playSoundDataViaAudio(this._soundData, startTime, loops);
 				} else if (!this._soundData.pcm) {
 					if (this._soundData.mimeType === 'audio/mpeg' && webAudioMP3Option.value) {
-						SWF.MP3DecoderSession.processAll(new Uint8Array(this._soundData.data)).then(function (result) {
+						SWF.MP3DecoderSession.processAll(new Uint8Array(this._soundData.data)).then(function (result: any) {
 							this._soundData.pcm = result.data;
 							this._soundData.end = result.data.length;
 							channel._playSoundDataViaChannel(this._soundData, startTime, loops);
@@ -252,7 +252,7 @@ module Shumway.AVMX.AS.flash.media {
 			let data = new this.sec.flash.utils.ByteArray();
 			let dataPosition = 0;
 			let playUsingWebAudio = webAudioOption.value;
-			let mp3DecodingSession = null;
+			let mp3DecodingSession: any = null;
 			let soundData = new SoundData();
 			soundData.completed = false;
 
@@ -262,7 +262,7 @@ module Shumway.AVMX.AS.flash.media {
 
 				if (playUsingWebAudio && !mp3DecodingSession) {
 					// initialize MP3 decoding
-					mp3DecodingSession = decodeMP3(soundData, function (duration, final) {
+					mp3DecodingSession = decodeMP3(soundData, function (duration: number, final: boolean) {
 						if (self._length === 0) {
 							// once we have some data, trying to play it
 							self._soundData = soundData;
@@ -296,7 +296,7 @@ module Shumway.AVMX.AS.flash.media {
 				if (!playUsingWebAudio) {
 					self._soundData = soundData;
 
-					getAudioDescription(soundData, function (description) {
+					getAudioDescription(soundData, function (description: any) {
 						self._length = description.duration;
 					});
 
@@ -318,7 +318,7 @@ module Shumway.AVMX.AS.flash.media {
 		channels: number;
 		sampleRate: number;
 		pcm: Float32Array;
-		packaged;
+		packaged: any;
 
 		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
 			super(data, sec.flash.media.Sound.axClass);

@@ -886,7 +886,7 @@ module Shumway.AVMX.AS.flash.display {
 		/**
 		 * Clamps the rotation value to the range (-180, 180).
 		 */
-		private static _clampRotation(value): number {
+		private static _clampRotation(value: number): number {
 			value %= 360;
 			if (value > 180) {
 				value -= 360;
@@ -1410,7 +1410,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		// `get width` is overriden in `Stage` and has to be able to call this.
-		_getWidth() {
+		_getWidth(): number {
 			return this._getTransformedBounds(this._parent, true).width / 20;
 		}
 
@@ -1775,7 +1775,7 @@ module Shumway.AVMX.AS.flash.display {
 		/**
 		 * Tree visitor that lets you skip nodes or return early.
 		 */
-		public visit(visitor: (DisplayObject) => VisitorFlags, visitorFlags: VisitorFlags, displayObjectFlags: DisplayObjectFlags = DisplayObjectFlags.None) {
+		public visit(visitor: (d: DisplayObject) => VisitorFlags, visitorFlags: VisitorFlags, displayObjectFlags: DisplayObjectFlags = DisplayObjectFlags.None) {
 			let stack: DisplayObject [];
 			let displayObject: DisplayObject;
 			let displayObjectContainer: DisplayObjectContainer;

@@ -33,7 +33,7 @@ module Shumway {
 		Dirty = DirtyBounds | DirtyContent | DirtyStyle | DirtyFlow
 	}
 
-	let _decodeHTMLMap = {
+	let _decodeHTMLMap: any = {
 		lt: '<',
 		gt: '>',
 		amp: '&',
@@ -145,7 +145,7 @@ module Shumway {
 			let endIndex = 0;
 			let textFormat = this.defaultTextFormat.clone();
 			let prevTextRun: flash.text.TextRun = null;
-			let stack = [];
+			let stack: Array<flash.text.TextFormat> = [];
 
 			let handler: HTMLParserHandler;
 			Shumway.HTMLParser(htmlText, handler = {

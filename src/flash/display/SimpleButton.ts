@@ -303,6 +303,7 @@ module Shumway.AVMX.AS.flash.display {
 	}
 
 	export class ButtonSymbol extends Timeline.DisplaySymbol {
+		[keyState: string]: any;
 		upState: ButtonState = null;
 		overState: ButtonState = null;
 		downState: ButtonState = null;

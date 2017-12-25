@@ -657,7 +657,7 @@ module Shumway.AVMX.AS.flash.display {
 			release || Debug.warning('Not implemented: flash.display.Loader loading-error handling');
 		}
 
-		private _addScenesToMovieClip(mc: MovieClip, sceneData, numFrames: number) {
+		private _addScenesToMovieClip(mc: MovieClip, sceneData: any, numFrames: number) {
 			// Creating scenes so we will always have frames assigned to some scene.
 			if (!sceneData) {
 				mc.addScene('Scene 1', [], 0, numFrames);
@@ -698,7 +698,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 		}
 
-		private createContentRoot(symbol: SpriteSymbol, sceneData) {
+		private createContentRoot(symbol: SpriteSymbol, sceneData: any) {
 			let isAS2LoadedFromAS3 = false;
 			if (symbol.isAVM1Object && !this._contentLoaderInfo._avm1Context) {
 				// For outermost AVM1 SWF we need to create AVM1Context.

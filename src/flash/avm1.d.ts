@@ -32,9 +32,9 @@ declare module Shumway.AVM1 {
 
 		static create(loaderInfo: flash.display.LoaderInfo): AVM1Context;
 
-		addAsset(className: string, symbolId: number, symbolProps): void;
+		addAsset(className: string, symbolId: number, symbolProps: any): void;
 
-		executeActions(actionsData: AVM1ActionsData, scopeObj): void;
+		executeActions(actionsData: AVM1ActionsData, scopeObj: any): void;
 
 		setStage(stage: flash.display.Stage): void;
 	}

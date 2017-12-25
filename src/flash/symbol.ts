@@ -124,7 +124,7 @@ module Shumway.Timeline {
 	}
 
 	export class SoundStart {
-		constructor(public soundId: number, public soundInfo) {
+		constructor(public soundId: number, public soundInfo: any) {
 		}
 	}
 }

@@ -355,7 +355,7 @@ module Shumway.AVMX.AS.flash.geom {
 				m[1] * point.x + m[3] * point.y + m[5]);
 		}
 
-		public transformPointInPlace(point): Point {
+		public transformPointInPlace(point: Point): Point {
 			let m = this._data;
 			point.setTo(m[0] * point.x + m[2] * point.y + m[4],
 				m[1] * point.x + m[3] * point.y + m[5]);

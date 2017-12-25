@@ -244,7 +244,7 @@ module Shumway.AVMX.AS.flash.external {
 			}
 		}
 
-		static convertToJSString(obj): string {
+		static convertToJSString(obj: any): string {
 			if (typeof obj == 'string') {
 				return '"' + obj.split('\r').join('\\r').split('\n').join('\\n').split('"').join('\\"') + '"';
 			}

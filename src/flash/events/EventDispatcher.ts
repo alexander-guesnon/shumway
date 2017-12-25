@@ -41,8 +41,7 @@ module Shumway.AVMX.AS.flash.events {
 		 */
 		private _aliasCount = 0;
 
-		preInit()
-		{
+		preInit() {
 
 		}
 
@@ -107,7 +106,7 @@ module Shumway.AVMX.AS.flash.events {
 		/**
 		 * Release the snapshot, hopefully no other mutations occured so we can reuse the entry list.
 		 */
-		releaseSnapshot(snapshot) {
+		releaseSnapshot(snapshot: EventListenerEntry []) {
 			// We ignore any non current snapshots.
 			if (this._entries !== snapshot) {
 				return;

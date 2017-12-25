@@ -32,7 +32,8 @@ module Shumway.AVMX.AS.flash.geom {
 		0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15
 	]);
 
-	function getRotationMatrix(theta, u, v, w, a, b, c, sec: ISecurityDomain) {
+	function getRotationMatrix(theta: number, u: number, v: number, w: number,
+	                           a: number, b: number, c: number, sec: ISecurityDomain) {
 		// http://inside.mines.edu/~gmurray/ArbitraryAxisRotation/
 		let u2 = u * u, v2 = v * v, w2 = w * w;
 		let L2 = u2 + v2 + w2, L = Math.sqrt(L2);
@@ -66,7 +67,7 @@ module Shumway.AVMX.AS.flash.geom {
 
 	export class Matrix3D extends ASObject {
 
-		static classInitializer = null;
+		static classInitializer: any = null;
 
 		static axClass: typeof Matrix3D;
 

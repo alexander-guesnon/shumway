@@ -23,7 +23,7 @@ module Shumway.AVMX.AS.flash.display {
 		static axClass: typeof Shape;
 
 
-		static classInitializer = null;
+		static classInitializer: any = null;
 
 		_symbol: ShapeSymbol;
 
