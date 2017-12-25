@@ -545,12 +545,13 @@ module Shumway.AVM1 {
 
     // TODO create classes for the ActionScript errors.
 
-    function AVM1TypeError(msg?) {
+    class AVM1TypeError extends Error {
+        constructor(msg?: any) {
+            super(msg);
+        }
     }
 
-    AVM1TypeError.prototype = Object.create(Error.prototype);
-
-    export function alToPrimitive(context: IAVM1Context, v, preferredType?: AVM1DefaultValueHint) {
+    export function alToPrimitive(context: IAVM1Context, v: any, preferredType?: AVM1DefaultValueHint) {
         if (!(v instanceof AVM1Object)) {
             return v;
         }
@@ -558,7 +559,7 @@ module Shumway.AVM1 {
         return preferredType !== undefined ? obj.alDefaultValue(preferredType) : obj.alDefaultValue();
     }
 
-    export function alToBoolean(context: IAVM1Context, v): boolean {
+    export function alToBoolean(context: IAVM1Context, v: any): boolean {
         switch (typeof v) {
             case 'undefined':
                 return false;
@@ -572,9 +573,10 @@ module Shumway.AVM1 {
             default:
                 release || Debug.assert(false);
         }
+        return false;
     }
 
-    export function alToNumber(context: IAVM1Context, v): number {
+    export function alToNumber(context: IAVM1Context, v: any): number {
         if (typeof v === 'object' && v !== null) {
             v = alToPrimitive(context, v, AVM1DefaultValueHint.NUMBER);
         }
@@ -598,9 +600,10 @@ module Shumway.AVM1 {
             default:
                 release || Debug.assert(false);
         }
+        return 0;
     }
 
-    export function alToInteger(context: IAVM1Context, v): number {
+    export function alToInteger(context: IAVM1Context, v: any): number {
         let n = alToNumber(context, v);
         if (isNaN(n)) {
             return 0;
@@ -640,13 +643,13 @@ module Shumway.AVM1 {
         return '';
     }
 
-    export function alIsName(context: IAVM1Context, v): boolean {
+    export function alIsName(context: IAVM1Context, v: any): boolean {
         return typeof v === 'number' ||
             typeof v === 'string' &&
             (context.isPropertyCaseSensitive || v === v.toLowerCase());
     }
 
-    export function alToObject(context: IAVM1Context, v): AVM1Object {
+    export function alToObject(context: IAVM1Context, v: any): AVM1Object {
         switch (typeof v) {
             case 'undefined':
                 throw new AVM1TypeError();
@@ -668,6 +671,7 @@ module Shumway.AVM1 {
             default:
                 release || Debug.assert(false);
         }
+        return null;
     }
 
     export function alNewObject(context: IAVM1Context): AVM1Object {
@@ -691,21 +695,21 @@ module Shumway.AVM1 {
      * This is useful when dealing with AVM2 objects in the implementation of AVM1 builtins: they
      * frequently expect either a string or `null`, but not `undefined`.
      */
-    export function alCoerceString(context: IAVM1Context, x): string {
+    export function alCoerceString(context: IAVM1Context, x: any): string {
         if (x instanceof AVM1Object) {
             return alToString(context, x);
         }
         return Shumway.AVMX.axCoerceString(x);
     }
 
-    export function alCoerceNumber(context: IAVM1Context, x): number {
+    export function alCoerceNumber(context: IAVM1Context, x: any): number {
         if (isNullOrUndefined(x)) {
             return undefined;
         }
         return alToNumber(context, x);
     }
 
-    export function alIsIndex(context: IAVM1Context, p) {
+    export function alIsIndex(context: IAVM1Context, p: any) {
         if (p instanceof AVM1Object) {
             return isIndex(alToString(context, p));
         }
@@ -720,12 +724,12 @@ module Shumway.AVM1 {
         return obj instanceof AVM1Function;
     }
 
-    export function alCallProperty(obj: AVM1Object, p, args?: any[]): any {
+    export function alCallProperty(obj: AVM1Object, p: any, args?: any[]): any {
         let callable: IAVM1Callable = obj.alGet(p);
         callable.alCall(obj, args);
     }
 
-    export function alInstanceOf(context: IAVM1Context, obj, cls): boolean {
+    export function alInstanceOf(context: IAVM1Context, obj: any, cls: any): boolean {
         if (!(obj instanceof AVM1Object)) {
             return false;
         }
@@ -741,11 +745,11 @@ module Shumway.AVM1 {
         return false;
     }
 
-    export function alIsArray(context: IAVM1Context, v): boolean {
+    export function alIsArray(context: IAVM1Context, v: any): boolean {
         return alInstanceOf(context, v, context.builtins.Array);
     }
 
-    export function alIsArrayLike(context: IAVM1Context, v): boolean {
+    export function alIsArrayLike(context: IAVM1Context, v: any): boolean {
         if (!(v instanceof AVM1Object)) {
             return false;
         }
@@ -767,7 +771,7 @@ module Shumway.AVM1 {
         }
     }
 
-    export function alIsString(context: IAVM1Context, v): boolean {
+    export function alIsString(context: IAVM1Context, v: any): boolean {
         return typeof v === 'string';
     }
 

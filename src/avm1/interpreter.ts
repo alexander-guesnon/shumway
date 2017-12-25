@@ -21,7 +21,7 @@ module Shumway.AVM1 {
     import Telemetry = Shumway.Telemetry;
     import assert = Shumway.Debug.assert;
 
-    declare let Proxy;
+    declare let Proxy: any;
 
     declare class Error {
         constructor(obj: string);
@@ -33,7 +33,7 @@ module Shumway.AVM1 {
 
     export let Debugger = {
         pause: false,
-        breakpoints: {}
+        breakpoints: {} as any
     };
 
     function avm1Warn(message: string, arg1?: any, arg2?: any, arg3?: any, arg4?: any) {
@@ -127,15 +127,15 @@ module Shumway.AVM1 {
             this._context = context;
         }
 
-        public hasProperty(obj, name): boolean {
+        public hasProperty(obj: any, name: string): boolean {
             return as2HasProperty(this._context, obj, name);
         }
 
-        public getProperty(obj, name): any {
+        public getProperty(obj: any, name: string): any {
             return as2GetProperty(this._context, obj, name);
         }
 
-        public setProperty(obj, name, value: any): void {
+        public setProperty(obj: any, name: string, value: any): void {
             return as2SetProperty(this._context, obj, name, value);
         }
 
@@ -212,7 +212,7 @@ module Shumway.AVM1 {
             return previousFrame;
         }
 
-        executeActions(actionsData: AVM1ActionsData, scopeObj): void {
+        executeActions(actionsData: AVM1ActionsData, scopeObj: any): void {
             if (this.executionProhibited) {
                 return; // no more avm1 for this context
             }
@@ -237,7 +237,7 @@ module Shumway.AVM1 {
             }
         }
 
-        public executeFunction(fn: AVM1Function, thisArg, args: any[]): any {
+        public executeFunction(fn: AVM1Function, thisArg: any, args: any[]): any {
             if (this.executionProhibited) {
                 return; // no more avm1 for this context
             }
@@ -270,22 +270,22 @@ module Shumway.AVM1 {
     };
 
     class AVM1Error {
-        constructor(public error) {
+        constructor(public error: any) {
         }
     }
 
     class AVM1CriticalError extends Error {
-        constructor(message: string, public error?) {
+        constructor(message: string, public error?: any) {
             super(message);
         }
     }
 
-    function isAVM1MovieClip(obj): boolean {
+    function isAVM1MovieClip(obj: any): boolean {
         return typeof obj === 'object' && obj &&
             obj instanceof Lib.AVM1MovieClip;
     }
 
-    function as2GetType(v): string {
+    function as2GetType(v: any): string {
         if (v === null) {
             return 'null';
         }
@@ -385,7 +385,7 @@ module Shumway.AVM1 {
         return false;
     }
 
-    function as2InstanceOf(obj, constructor): boolean {
+    function as2InstanceOf(obj: any, constructor: any): boolean {
         // TODO refactor this -- quick and dirty hack for now
         if (isNullOrUndefined(obj) || isNullOrUndefined(constructor)) {
             return false;
@@ -445,7 +445,7 @@ module Shumway.AVM1 {
         return result;
     }
 
-    function as2SyncEvents(context: AVM1Context, name): void {
+    function as2SyncEvents(context: AVM1Context, name: any): void {
         name = alCoerceString(context, name);
         if (name[0] !== 'o' || name[1] !== 'n') { // TODO check case?
             return;
@@ -454,7 +454,7 @@ module Shumway.AVM1 {
         (<AVM1ContextImpl>context).broadcastEventPropertyChange(name);
     }
 
-    function as2CastError(ex) {
+    function as2CastError(ex: any) {
         if (typeof InternalError !== 'undefined' &&
             ex instanceof InternalError && (<any>ex).message === 'too much recursion') {
             // HACK converting too much recursion into AVM1CriticalError
@@ -463,7 +463,7 @@ module Shumway.AVM1 {
         return ex;
     }
 
-    function as2Construct(ctor, args) {
+    function as2Construct(ctor: any, args: any) {
         let result;
         if (alIsFunction(ctor)) {
             result = (<AVM1Function>ctor).alConstruct(args);
@@ -474,7 +474,7 @@ module Shumway.AVM1 {
         return result;
     }
 
-    function as2Enumerate(obj, fn: (name) => void, thisArg): void {
+    function as2Enumerate(obj: any, fn: (name: any) => void, thisArg: any): void {
         let processed = Object.create(null); // TODO remove/refactor
         alForEachProperty(obj, function (name) {
             if (processed[name]) {
@@ -509,7 +509,7 @@ module Shumway.AVM1 {
 
     let DEFAULT_REGISTER_COUNT = 4;
 
-    function executeActionsData(context: AVM1ContextImpl, actionsData: AVM1ActionsData, scope) {
+    function executeActionsData(context: AVM1ContextImpl, actionsData: AVM1ActionsData, scope: any) {
         let actionTracer = context.actionTracer;
 
         let globalPropertiesScopeList = new AVM1ScopeListItem(
@@ -543,7 +543,7 @@ module Shumway.AVM1 {
         }
     }
 
-    function createBuiltinType(context: AVM1Context, cls, args: any[]): any {
+    function createBuiltinType(context: AVM1Context, cls: any, args: any[]): any {
         let builtins = context.builtins;
         let obj = undefined;
         if (cls === builtins.Array || cls === builtins.Object ||
@@ -876,7 +876,7 @@ module Shumway.AVM1 {
         }
     }
 
-    function isGlobalObject(obj) {
+    function isGlobalObject(obj: any) {
         return obj === this;
     }
 
@@ -916,7 +916,7 @@ module Shumway.AVM1 {
         value: undefined
     };
 
-    function avm1IsTarget(target): boolean {
+    function avm1IsTarget(target: any): boolean {
         // TODO refactor
         return target instanceof AVM1Object && Lib.hasAS3ObjectReference(target);
     }
@@ -979,7 +979,7 @@ module Shumway.AVM1 {
         let i = 0, j = variableName.length;
         let markedAsTarget = true;
         let resolved, ch, needsScopeResolution;
-        let propertyName = null, scope = null, obj = undefined;
+        let propertyName: any = null, scope: any = null, obj: any = undefined;
         if (variableName[0] === '/') {
             resolved = avm1ResolveSimpleVariable(ectx.scopeList, '_root', AVM1ResolveVariableFlags.READ | AVM1ResolveVariableFlags.GET_VALUE);
             if (resolved) {
@@ -1006,7 +1006,7 @@ module Shumway.AVM1 {
             }
 
             let propertyName;
-            let q = i;
+            q = i;
             if (variableName[i] === '.' && variableName[i + 1] === '.') {
                 i += 2;
                 propertyName = '_parent';
@@ -1027,7 +1027,7 @@ module Shumway.AVM1 {
 
             if (markedAsTarget) {
                 // Trying movie clip children first
-                let child = obj instanceof Lib.AVM1MovieClip ? (<Lib.AVM1MovieClip>obj)._lookupChildByName(propertyName) : undefined;
+                let child: any = obj instanceof Lib.AVM1MovieClip ? (<Lib.AVM1MovieClip>obj)._lookupChildByName(propertyName) : undefined;
                 if (child) {
                     valueFound = true;
                     obj = child;
@@ -1131,7 +1131,7 @@ module Shumway.AVM1 {
         return (<Lib.AVM1MovieClip>target).get_root();
     }
 
-    function avm1ProcessWith(ectx: ExecutionContext, obj, withBlock) {
+    function avm1ProcessWith(ectx: ExecutionContext, obj: any, withBlock: any) {
         if (isNullOrUndefined(obj)) {
             // Not executing anything in the block.
             avm1Warn('The with statement object cannot be undefined.');
@@ -1146,9 +1146,9 @@ module Shumway.AVM1 {
     }
 
     function avm1ProcessTry(ectx: ExecutionContext,
-                            catchIsRegisterFlag, finallyBlockFlag,
-                            catchBlockFlag, catchTarget,
-                            tryBlock, catchBlock, finallyBlock) {
+                            catchIsRegisterFlag: any, finallyBlockFlag: any,
+                            catchBlockFlag: any, catchTarget: any,
+                            tryBlock: any, catchBlock: any, finallyBlock: any) {
         let currentContext = ectx.context;
         let scopeList = ectx.scopeList;
         let registers = ectx.registers;
@@ -2849,12 +2849,12 @@ module Shumway.AVM1 {
         let instructionsExecuted = 0;
         let abortExecutionAt = currentContext.abortExecutionAt;
 
+        let ir = actionsData.ir;
         if (avm1DebuggerEnabled.value &&
             (Debugger.pause || Debugger.breakpoints[(<AnalyzerResults>ir).dataId])) {
             debugger;
         }
 
-        let ir = actionsData.ir;
         release || Debug.assert(ir);
 
         let position = 0;
@@ -2880,7 +2880,7 @@ module Shumway.AVM1 {
 
     class ActionTracer {
         private _indentation = 0;
-        private _indentStringCache = [];
+        private _indentStringCache: Array<string> = [];
 
         private _getIndentString(): string {
             return this._indentStringCache[this._indentation] ||

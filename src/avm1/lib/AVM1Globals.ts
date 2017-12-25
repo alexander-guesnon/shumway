@@ -368,7 +368,7 @@ module Shumway.AVM1.Lib {
             }
         }
 
-        public gotoAndStop(scene: string, frame?: any) {
+        public gotoAndStop(scene: any, frame?: any) {
             let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
             let as3Object = <flash.display.MovieClip>getAS3Object(nativeTarget);
             if (arguments.length < 2) {
@@ -378,7 +378,7 @@ module Shumway.AVM1.Lib {
             }
         }
 
-        public ifFrameLoaded(scene: string, frame?: any) {
+        public ifFrameLoaded(scene: any, frame?: any) {
             // ignoring scene parameter ?
             let nativeTarget = <AVM1MovieClip>this.context.resolveTarget(null);
             let frameNum = arguments.length < 2 ? arguments[0] : arguments[1];
