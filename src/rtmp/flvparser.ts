@@ -37,7 +37,7 @@ module RtmpJs.FLV {
 		public onHeader: (header: FLVHeader) => void;
 		public onTag: (tag: FLVTag) => void;
 		public onClose: () => void;
-		public onError: (error) => void;
+		public onError: (error: any) => void;
 
 		public constructor() {
 			this.state = 0;
@@ -70,6 +70,7 @@ module RtmpJs.FLV {
 			let parsed = 0, end = parseBuffer.length;
 			while (parsed < end) {
 				let chunkParsed = 0;
+				let flags: number;
 				switch (this.state) {
 					case 0:
 						if (parsed + 9 > end) {
@@ -93,7 +94,7 @@ module RtmpJs.FLV {
 							this._error('Invalid FLV header');
 							break;
 						}
-						let flags = parseBuffer[parsed + 4];
+						flags = parseBuffer[parsed + 4];
 						let extra = headerLength > 9 ? parseBuffer.subarray(parsed + 9, parsed + headerLength) : null;
 
 						this.onHeader && this.onHeader({
@@ -121,7 +122,7 @@ module RtmpJs.FLV {
 						if (dataOffset + dataSize > end) {
 							break;
 						}
-						let flags = parseBuffer[parsed + 4];
+						flags = parseBuffer[parsed + 4];
 						let streamID = (parseBuffer[parsed + 12] << 16) |
 							(parseBuffer[parsed + 13] << 8) | parseBuffer[parsed + 14];
 						if (streamID !== 0 || (flags & 0xC0) !== 0) {
@@ -136,7 +137,7 @@ module RtmpJs.FLV {
 						let needPreprocessing = !!(flags & 0x20);
 						let timestamp = (parseBuffer[parsed + 8] << 16) |
 							(parseBuffer[parsed + 9] << 8) | parseBuffer[parsed + 10] |
-							(parseBuffer[parseBuffer + 11] << 24) /* signed part */;
+							(parseBuffer[parsed + 11] << 24) /* signed part */;
 						this.onTag && this.onTag({
 							type: dataType,
 							needPreprocessing: needPreprocessing,

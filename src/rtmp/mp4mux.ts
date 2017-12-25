@@ -489,6 +489,7 @@ module RtmpJs.MP4 {
 				let tfhd: Iso.TrackFragmentHeaderBox;
 				let trun: Iso.TrackRunBox;
 				let trunSamples: Iso.TrackRunSample[];
+				let tfhdFlags: number, trunFlags: number;
 
 				trafDataStarts.push(tdatPosition);
 				switch (trackInfo.codecId) {
@@ -503,9 +504,9 @@ module RtmpJs.MP4 {
 							trunSamples.push({duration: audioFrameDuration, size: audioPacket.data.length});
 							trackState.samplesProcessed += audioPacket.samples;
 						}
-						let tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
+						tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
 						tfhd = new Iso.TrackFragmentHeaderBox(tfhdFlags, trackId, 0 /* offset */, 0 /* index */, 0 /* duration */, 0 /* size */, Iso.SampleFlags.SAMPLE_DEPENDS_ON_NO_OTHERS);
-						let trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
+						trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
 							Iso.TrackRunFlags.SAMPLE_DURATION_PRESENT | Iso.TrackRunFlags.SAMPLE_SIZE_PRESENT;
 						trun = new Iso.TrackRunBox(trunFlags, trunSamples, 0 /* data offset */, 0 /* first flags */);
 						trackState.cachedDuration = Math.round(trackState.samplesProcessed * trackInfo.timescale / trackInfo.samplerate);
@@ -535,9 +536,9 @@ module RtmpJs.MP4 {
 								flags: frameFlags, compositionTimeOffset: (compositionTime - nextTime)
 							});
 						}
-						let tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
+						tfhdFlags = Iso.TrackFragmentFlags.DEFAULT_SAMPLE_FLAGS_PRESENT;
 						tfhd = new Iso.TrackFragmentHeaderBox(tfhdFlags, trackId, 0 /* offset */, 0 /* index */, 0 /* duration */, 0 /* size */, Iso.SampleFlags.SAMPLE_DEPENDS_ON_NO_OTHERS);
-						let trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
+						trunFlags = Iso.TrackRunFlags.DATA_OFFSET_PRESENT |
 							Iso.TrackRunFlags.SAMPLE_DURATION_PRESENT | Iso.TrackRunFlags.SAMPLE_SIZE_PRESENT |
 							Iso.TrackRunFlags.SAMPLE_FLAGS_PRESENT | Iso.TrackRunFlags.SAMPLE_COMPOSITION_TIME_OFFSET;
 						trun = new Iso.TrackRunBox(trunFlags, trunSamples, 0 /* data offset */, 0 /* first flag */);

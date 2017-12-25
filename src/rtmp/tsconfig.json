@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outFile": "../../build/ts/swf.js",
+    "outFile": "../../build/ts/rtmp.js",
     "sourceMap": true,
     "declaration": true,
     "removeComments": false,
@@ -24,8 +24,8 @@
     ]
   },
   "include": [
-    "./../../build/ts/base.d.ts",
     "./../../build/ts/tools.d.ts",
+    "./../../build/ts/avm2.d.ts",
     "./references.ts",
     "./**/*.ts"
   ]
