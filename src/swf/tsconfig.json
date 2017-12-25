@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "outFile": "../../build/ts/avm2.js",
+    "sourceMap": true,
+    "declaration": true,
+    "removeComments": false,
+    "target": "es5",
+    "lib": [
+      "DOM",
+      "ES5",
+      "ES2015.Collection",
+      "es2015.promise"
+    ],
+    "module": "amd",
+    "noImplicitAny": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "./../../build/ts/base.d.ts",
+    "./../../build/ts/tools.d.ts",
+    "./references.ts",
+    "./**/*.ts"
+  ]
+}
