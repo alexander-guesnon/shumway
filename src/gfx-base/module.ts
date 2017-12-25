@@ -41,7 +41,7 @@ module Shumway.GFX {
     export let traceLevel = TraceLevel.Verbose;
     export let writer: IndentingWriter = null;
 
-    export function frameCount(name) {
+    export function frameCount(name: any) {
         counter.count(name);
         frameCounter.count(name);
     }
@@ -56,9 +56,9 @@ module Shumway.GFX {
         profile && timelineBuffer && timelineBuffer.leave(name, data);
     }
 
-    let nativeAddColorStop = null;
-    let nativeCreateLinearGradient = null;
-    let nativeCreateRadialGradient = null;
+    let nativeAddColorStop: any = null;
+    let nativeCreateLinearGradient: any = null;
+    let nativeCreateRadialGradient: any = null;
 
     /**
      * Transforms a fill or stroke style by the given color matrix.
@@ -451,7 +451,7 @@ module Shumway.GFX {
         });
 
         // Expose our pollyfill to the global object.
-        window['Path2D'] = Path;
+        (window as any)['Path2D'] = Path;
     }
 
     if (typeof CanvasPattern !== "undefined") {
@@ -783,7 +783,7 @@ module Shumway.GFX {
 
         allocate(w: number, h: number): ISurfaceRegion;
 
-        free(surfaceRegion: ISurfaceRegion);
+        free(surfaceRegion: ISurfaceRegion): void;
     }
 
     export interface ISurfaceRegion {

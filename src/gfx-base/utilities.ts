@@ -107,7 +107,7 @@ module Shumway {
          * Visits each node in the list in the forward or reverse direction as long as
          * the callback returns |true|;
          */
-        visit(callback: (T) => boolean, forward: boolean = true) {
+        visit(callback: (x: T) => boolean, forward: boolean = true) {
             let node: T = (forward ? this._head : this._tail);
             while (node) {
                 if (!callback(node)) {

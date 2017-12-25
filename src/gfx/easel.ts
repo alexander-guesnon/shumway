@@ -24,22 +24,22 @@ module Shumway.GFX {
 
     import DisplayParameters = Shumway.Remoting.DisplayParameters;
 
-    declare let GUI;
+    declare let GUI: any;
 
     export interface IState {
-        onMouseUp(easel: Easel, event: MouseEvent);
+        onMouseUp(easel: Easel, event: MouseEvent): void;
 
-        onMouseDown(easel: Easel, event: MouseEvent);
+        onMouseDown(easel: Easel, event: MouseEvent): void;
 
-        onMouseMove(easel: Easel, event: MouseEvent);
+        onMouseMove(easel: Easel, event: MouseEvent): void;
 
-        onMouseClick(easel: Easel, event: MouseEvent);
+        onMouseClick(easel: Easel, event: MouseEvent): void;
 
-        onKeyUp(easel: Easel, event: KeyboardEvent);
+        onKeyUp(easel: Easel, event: KeyboardEvent): void;
 
-        onKeyDown(easel: Easel, event: KeyboardEvent);
+        onKeyDown(easel: Easel, event: KeyboardEvent): void;
 
-        onKeyPress(easel: Easel, event: KeyboardEvent);
+        onKeyPress(easel: Easel, event: KeyboardEvent): void;
     }
 
     export class UIState implements IState {
@@ -422,7 +422,7 @@ module Shumway.GFX {
         /**
          * Primitive event dispatching features.
          */
-        addEventListener(type: string, listener) {
+        addEventListener(type: string, listener: any) {
             if (!this._eventListeners[type]) {
                 this._eventListeners[type] = [];
             }
@@ -582,15 +582,15 @@ module Shumway.GFX {
             return this.getMousePosition(event, this._world);
         }
 
-        private _onMouseDown(event) {
+        private _onMouseDown(event: any) {
             // this._renderers.forEach(renderer => renderer.render());
         }
 
-        private _onMouseUp(event) {
+        private _onMouseUp(event: any) {
 
         }
 
-        private _onMouseMove(event) {
+        private _onMouseMove(event: any) {
 
         }
 

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outFile": "../../build/ts/avm2.js",
+    "outFile": "../../build/ts/gfx.js",
     "sourceMap": true,
     "declaration": true,
     "removeComments": false,

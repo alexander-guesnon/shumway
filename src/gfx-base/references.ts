@@ -23,9 +23,9 @@
 /// <reference path='renderables/renderables.ts'/>
 /// <reference path='filters.ts'/>
 
-interface CanvasPattern {
+/*interface CanvasPattern {
     setTransform: (matrix: SVGMatrix) => void;
-}
+}*/
 
 interface CanvasGradient {
     setTransform: (matrix: SVGMatrix) => void;
@@ -42,36 +42,21 @@ interface CanvasRenderingContext2D {
 
     imageSmoothingEnabled: boolean
     mozImageSmoothingEnabled: boolean
+    msImageSmoothingEnabled: boolean
 
     fillRule: string;
     mozFillRule: string;
 
-    enterBuildingClippingRegion();
+    enterBuildingClippingRegion(): void;
 
-    leaveBuildingClippingRegion();
+    leaveBuildingClippingRegion(): void;
 }
 
-declare class Path2D {
-    constructor();
+interface Path2D {
+    /*constructor();
     constructor(path: Path2D);
     constructor(paths: Path2D[], fillRule?: string);
-    constructor(d: any);
+    constructor(d: any);*/
 
     addPath(path: Path2D, transform?: SVGMatrix): void;
-
-    moveTo(x: number, y: number): void;
-
-    lineTo(x: number, y: number): void;
-
-    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
-
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
-
-    rect(x: number, y: number, w: number, h: number): void;
-
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
-
-    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
-
-    closePath(): void;
 }

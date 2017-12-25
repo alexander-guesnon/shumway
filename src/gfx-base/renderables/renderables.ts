@@ -33,7 +33,7 @@ module Shumway.GFX {
     import VideoPlaybackEvent = Shumway.Remoting.VideoPlaybackEvent;
     import VideoControlEvent = Shumway.Remoting.VideoControlEvent;
 
-    declare let registerInspectorAsset;
+    declare let registerInspectorAsset: any;
 
     /**
      * Represents some source renderable content.
@@ -626,7 +626,7 @@ module Shumway.GFX {
             context.save();
             context.beginPath();
             context.lineWidth = 2;
-            context.fillStyle = this.fillStyle;
+            context.fillStyle = this.fillStyle as string;
             context.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
             context.restore();
         }
@@ -781,7 +781,7 @@ module Shumway.GFX {
                 return this._paths;
             }
 
-            let paths = this._paths = [];
+            let paths: Array<StyledPath> = this._paths = [];
 
             let fillPath: Path2D = null;
             let strokePath: Path2D = null;
@@ -802,7 +802,8 @@ module Shumway.GFX {
             let coordinatesIndex = 0;
             let commandsCount = data.commandsPosition;
             // Description of serialization format can be found in flash.display.Graphics.
-            for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+            let commandIndex;
+            for (commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
                 let command = commands[commandIndex];
                 switch (command) {
                     case PathCommand.MoveTo:
@@ -979,7 +980,7 @@ module Shumway.GFX {
             context.save();
             context.beginPath();
             context.lineWidth = 2;
-            context.fillStyle = this.fillStyle;
+            context.fillStyle = this.fillStyle as string;
             context.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
 //      context.textBaseline = "top";
 //      context.fillStyle = "white";
@@ -1007,7 +1008,7 @@ module Shumway.GFX {
                 return this._morphPaths[ratio];
             }
 
-            let paths = this._morphPaths[ratio] = [];
+            let paths: Array<StyledPath> = this._morphPaths[ratio] = [];
 
             let fillPath: Path2D = null;
             let strokePath: Path2D = null;
@@ -1031,7 +1032,8 @@ module Shumway.GFX {
             let coordinatesIndex = 0;
             let commandsCount = data.commandsPosition;
             // Description of serialization format can be found in flash.display.Graphics.
-            for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+            let commandIndex;
+            for (commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
                 let command = commands[commandIndex];
                 switch (command) {
                     case PathCommand.MoveTo:
@@ -1126,12 +1128,12 @@ module Shumway.GFX {
                         }
                         break;
                     case PathCommand.LineStyleGradient:
-                        let gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
+                        gradientStyle = this._readMorphGradient(styles, morphStyles, ratio, context);
                         strokePath = this._createMorphPath(PathType.StrokeFill, ratio, gradientStyle,
                             false, null, x, y);
                         break;
                     case PathCommand.LineStyleBitmap:
-                        let bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
+                        bitmapStyle = this._readMorphBitmap(styles, morphStyles, ratio, context);
                         strokePath = this._createMorphPath(PathType.StrokeFill, ratio, bitmapStyle.style,
                             bitmapStyle.smoothImage, null, x, y);
                         break;
@@ -1258,7 +1260,7 @@ module Shumway.GFX {
             let lines: TextLine[] = [this];
             let runs = this.runs;
 
-            let currentLine = this;
+            let currentLine: TextLine = this;
             currentLine.width = 0;
             currentLine.runs = [];
 
@@ -1370,7 +1372,7 @@ module Shumway.GFX {
         textRect: Rectangle;
         lines: TextLine[];
 
-        constructor(bounds) {
+        constructor(bounds: any) {
             super();
             this._textBounds = bounds.clone();
             this._textRunData = null;
@@ -1386,7 +1388,7 @@ module Shumway.GFX {
             this.setBounds(bounds);
         }
 
-        setBounds(bounds): void {
+        setBounds(bounds: any): void {
             super.setBounds(bounds);
             this._textBounds.set(bounds);
             this.textRect.setElements(bounds.x + 2, bounds.y + 2, bounds.w - 2, bounds.h - 2);
@@ -1631,7 +1633,7 @@ module Shumway.GFX {
                 // Their rounding is a bit weird, though: fractions below .9 are rounded down.
                 // We can only fully implement this in browsers that support `currentTransform`.
                 let boundPoints = RenderableText.absoluteBoundPoints;
-                let m: SVGMatrix = context['currentTransform'];
+                let m: SVGMatrix = (context as any)['currentTransform'];
                 if (m) {
                     rect = rect.clone();
                     let matrix = new Matrix(m.a, m.b, m.c, m.d, m.e, m.f);

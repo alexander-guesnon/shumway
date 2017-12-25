@@ -44,10 +44,10 @@ module Shumway.Remoting.GFX {
     import IDataInput = Shumway.ArrayUtilities.IDataInput;
     import IDataOutput = Shumway.ArrayUtilities.IDataOutput;
     import assert = Shumway.Debug.assert;
-    let writer = null; // new IndentingWriter();
+    let writer: IndentingWriter = null; // new IndentingWriter();
 
-    declare let registerInspectorAsset;
-    declare let registerInspectorStage;
+    declare let registerInspectorAsset: any;
+    declare let registerInspectorStage: any;
 
     export class GFXChannelSerializer {
         public output: IDataOutput;
@@ -105,7 +105,7 @@ module Shumway.Remoting.GFX {
                 registerInspectorStage(stage);
             }
 
-            function updateStageBounds(node) {
+            function updateStageBounds(node: any) {
                 let stageBounds = node.getBounds(true);
                 // Easel stage is the root stage and is not scaled, our stage is so
                 // we need to scale down.

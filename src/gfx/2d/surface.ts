@@ -4,7 +4,7 @@ module Shumway.GFX.Canvas2D {
     import assert = Shumway.Debug.assert;
     import clamp = Shumway.NumberUtilities.clamp;
 
-    declare let registerScratchCanvas;
+    declare let registerScratchCanvas: any;
 
     let isFirefox = navigator.userAgent.indexOf('Firefox') != -1;
 
@@ -73,7 +73,7 @@ module Shumway.GFX.Canvas2D {
             // Drop Shadow Filter
             let dropShadowFilter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
             dropShadowFilter.setAttribute("id", "svgDropShadowFilter");
-            let feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
+            feGaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
             feGaussianFilter.setAttribute("in", "SourceAlpha");
             feGaussianFilter.setAttribute("stdDeviation", "3");
             dropShadowFilter.appendChild(feGaussianFilter);
@@ -95,7 +95,7 @@ module Shumway.GFX.Canvas2D {
             feComposite.setAttribute("in2", "offsetblur");
             feComposite.setAttribute("operator", "in");
             dropShadowFilter.appendChild(feComposite);
-            let feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+            feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
             feComposite.setAttribute("in2", "SourceAlpha");
             feComposite.setAttribute("operator", "out");
             feComposite.setAttribute("result", "outer");
@@ -104,7 +104,7 @@ module Shumway.GFX.Canvas2D {
             let feMerge = document.createElementNS("http://www.w3.org/2000/svg", "feMerge");
             let feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
             feMerge.appendChild(feMergeNode);
-            let feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
+            feMergeNode = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode");
             feMerge.appendChild(feMergeNode);
             Filters._svgDropshadowMergeNode = feMergeNode;
             dropShadowFilter.appendChild(feMerge);
@@ -119,7 +119,7 @@ module Shumway.GFX.Canvas2D {
             feColorMatrix.setAttribute("type", "matrix");
             colorMatrixFilter.appendChild(feColorMatrix);
 
-            let feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+            feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
             feComposite.setAttribute("in2", "SourceAlpha");
             feComposite.setAttribute("operator", "in");
             colorMatrixFilter.appendChild(feComposite);
@@ -195,7 +195,7 @@ module Shumway.GFX.Canvas2D {
     if (filters && Filters._svgFiltersAreSupported) {
         // Temporary hack to work around a bug that prevents SVG filters to work for off-screen canvases.
         if (!('registerScratchCanvas' in window)) {
-            window['registerScratchCanvas'] = function (scratchCanvas) {
+            (window as any)['registerScratchCanvas'] = function (scratchCanvas: any) {
                 scratchCanvas.style.display = 'none';
                 document.body.appendChild(scratchCanvas);
             }

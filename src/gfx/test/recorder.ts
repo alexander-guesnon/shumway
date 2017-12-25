@@ -34,26 +34,26 @@ module Shumway.GFX.Test {
         Int32Array = 12,
     }
 
-    function writeUint8Array(buffer, data) {
+    function writeUint8Array(buffer: any, data: any) {
         buffer.writeInt(data.length);
         buffer.writeRawBytes(data);
     }
 
     // Borrowed from other frame typed arrays does not match current global
     // objects, so instanceof does not work.
-    function isInstanceOfTypedArray(obj, name: string): boolean {
+    function isInstanceOfTypedArray(obj: any, name: string): boolean {
         return ('byteLength' in obj) &&
             ('buffer' in obj) &&
             (obj.constructor && obj.constructor.name) === name;
     }
 
-    function isInstanceOfArrayBuffer(obj): boolean {
+    function isInstanceOfArrayBuffer(obj: any): boolean {
         return ('byteLength' in obj) &&
             (obj.constructor && obj.constructor.name) === 'ArrayBuffer';
     }
 
-    function serializeObj(obj) {
-        function serialize(item) {
+    function serializeObj(obj: any) {
+        function serialize(item: any) {
             switch (typeof item) {
                 case 'undefined':
                     buffer.writeByte(MovieRecordObjectType.Undefined);
@@ -237,7 +237,7 @@ module Shumway.GFX.Test {
         return deserializeObjImpl(buffer);
     }
 
-    function deserializeObjImpl(buffer: DataBuffer) {
+    function deserializeObjImpl(buffer: DataBuffer): any {
         let type: MovieRecordObjectType = buffer.readByte();
         switch (type) {
             case MovieRecordObjectType.Undefined:
@@ -260,7 +260,7 @@ module Shumway.GFX.Test {
                 }
                 return arr;
             case MovieRecordObjectType.Object:
-                let obj = {};
+                let obj: any = {};
                 let key;
                 while ((key = buffer.readUTF())) {
                     obj[key] = deserializeObjImpl(buffer);
@@ -279,7 +279,7 @@ module Shumway.GFX.Test {
                 return new Int32Array(readUint8Array(buffer).buffer);
             default:
                 release || Debug.assert(false);
-                break
+                return undefined;
         }
     }
 

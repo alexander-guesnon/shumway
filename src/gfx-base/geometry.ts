@@ -21,17 +21,17 @@ module Shumway.GFX.Geometry {
     import epsilonEquals = Shumway.NumberUtilities.epsilonEquals;
     import assert = Shumway.Debug.assert;
 
-    export function radianToDegrees(r) {
+    export function radianToDegrees(r: number) {
         return r * 180 / Math.PI;
     }
 
-    export function degreesToRadian(d) {
+    export function degreesToRadian(d: number) {
         return d * Math.PI / 180;
     }
 
     let E = 0.0001;
 
-    function eqFloat(a, b) {
+    function eqFloat(a: number, b: number) {
         return Math.abs(a - b) < E;
     }
 
@@ -225,11 +225,11 @@ module Shumway.GFX.Geometry {
             this.h = 0;
         }
 
-        intersect(other: Rectangle) {
+        intersect(other: Rectangle): void {
             let result = Rectangle.createEmpty();
             if (this.isEmpty() || other.isEmpty()) {
                 result.setEmpty();
-                return result;
+                return;
             }
             result.x = Math.max(this.x, other.x);
             result.y = Math.max(this.y, other.y);
@@ -412,7 +412,7 @@ module Shumway.GFX.Geometry {
             return OBB.getBounds(this.corners);
         }
 
-        public static getBounds(points) {
+        public static getBounds(points: Array<Point>) {
             let min = new Point(Number.MAX_VALUE, Number.MAX_VALUE);
             let max = new Point(Number.MIN_VALUE, Number.MIN_VALUE);
             for (let i = 0; i < 4; i++) {
@@ -434,9 +434,10 @@ module Shumway.GFX.Geometry {
 
         private intersectsOneWay(other: OBB): boolean {
             for (let i = 0; i < 2; i++) {
+                let tMin, tMax;
                 for (let j = 0; j < 4; j++) {
                     let t = other.corners[j].dot(this.axes[i]);
-                    let tMin, tMax;
+
                     if (j === 0) {
                         tMax = tMin = t;
                     } else {
@@ -1122,7 +1123,7 @@ module Shumway.GFX.Geometry {
         private size: number;
         private sizeInBits: number;
 
-        constructor(w, h, sizeInBits = 7) {
+        constructor(w: number, h: number, sizeInBits = 7) {
             let size = this.size = 1 << sizeInBits;
             this.sizeInBits = sizeInBits;
             this.w = w;
@@ -1435,7 +1436,7 @@ module Shumway.GFX.Geometry {
                 lines[3] = tmp;
             }
 
-            let tiles = [];
+            let tiles: Array<Tile> = [];
 
             let lastY1, lastY2;
             let i = Math.floor(lines[0].x / this.tileW);
@@ -1565,7 +1566,7 @@ module Shumway.GFX.Geometry {
             if (!(this._source.hasFlags(NodeFlags.Scalable))) {
                 level = clamp(level, -MIN_CACHE_LEVELS, 0);
             }
-            let scale = pow2(level);
+            scale = pow2(level);
             let levelIndex = MIN_CACHE_LEVELS + level;
             let cache = this._cacheLevels[levelIndex];
             if (!cache) {
@@ -1647,7 +1648,7 @@ module Shumway.GFX.Geometry {
             scratchContext.restore();
             profile && timelineBuffer && timelineBuffer.leave("renderTiles");
 
-            let remainingUncachedTiles = null;
+            let remainingUncachedTiles: Array<Tile> = null;
             for (let i = 0; i < uncachedTiles.length; i++) {
                 let tile = uncachedTiles[i];
                 let region = tile.bounds.clone();

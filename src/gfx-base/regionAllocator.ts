@@ -63,7 +63,7 @@ module Shumway.GFX {
             /**
              * Frees the specified region.
              */
-            free(region: Region);
+            free(region: Region): void;
         }
 
         /**
@@ -125,13 +125,13 @@ module Shumway.GFX {
 
             private _insert(w: number, h: number, depth: number): CompactCell {
                 if (depth > CompactAllocator.MAX_DEPTH) {
-                    return;
+                    return null;
                 }
                 if (this.allocated) {
-                    return;
+                    return null;
                 }
                 if (this.w < w || this.h < h) {
-                    return;
+                    return null;
                 }
                 if (!this._children) {
                     let orientation = !this._horizontal;
@@ -166,6 +166,7 @@ module Shumway.GFX {
                         return result;
                     }
                 }
+                return null;
             }
         }
 
@@ -249,7 +250,7 @@ module Shumway.GFX {
         export class BucketCell extends RegionAllocator.Region {
             region: RegionAllocator.Region;
 
-            constructor(x, y, w, h, region) {
+            constructor(x: number, y: number, w: number, h: number, region: any) {
                 super(x, y, w, h);
                 this.region = region;
             }
@@ -338,7 +339,7 @@ module Shumway.GFX {
             /**
              * Adds a surface to the pool of allocation surfaces.
              */
-            addSurface(surface: ISurface);
+            addSurface(surface: ISurface): void;
 
             /**
              * Allocates a 2D region.
@@ -348,7 +349,7 @@ module Shumway.GFX {
             /**
              * Frees the specified region.
              */
-            free(region: ISurfaceRegion);
+            free(region: ISurfaceRegion): void;
         }
 
         export class SimpleAllocator implements ISurfaceRegionAllocator {

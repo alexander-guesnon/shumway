@@ -16,9 +16,9 @@ module Shumway.GFX.Canvas2D {
 
     import ISurfaceRegionAllocator = SurfaceRegionAllocator.ISurfaceRegionAllocator;
 
-    declare let registerScratchCanvas;
+    declare let registerScratchCanvas: any;
 
-    let writer = null; // new IndentingWriter(false, dumpLine);
+    let writer: IndentingWriter = null; // new IndentingWriter(false, dumpLine);
 
     let MIN_CACHE_LEVELS = 5;
     let MAX_CACHE_LEVELS = 3;
@@ -98,6 +98,7 @@ module Shumway.GFX.Canvas2D {
     }
 
     export class Canvas2DRendererOptions extends RendererOptions {
+        [key: string]: any;
         /**
          * Whether to force snapping matrices to device pixels.
          */
@@ -452,7 +453,8 @@ module Shumway.GFX.Canvas2D {
                     canvas.width = W;
                     canvas.height = H;
                     // Shape caches can be compact since regions are never freed explicitly.
-                    let allocator = allocator = new RegionAllocator.CompactAllocator(W, H);
+                    // AMBIGUOUS
+                    let allocator : RegionAllocator.IRegionAllocator /*= allocator*/ = new RegionAllocator.CompactAllocator(W, H);
                     return new Canvas2DSurface(
                         canvas, allocator
                     );
@@ -524,7 +526,7 @@ module Shumway.GFX.Canvas2D {
             let paintFlashing = !!(state.flags & RenderFlags.PaintFlashing);
 
             if (!state.hasFlags(RenderFlags.CacheShapes)) {
-                return;
+                return false;
             }
 
             if (paintStencil || paintClip || !state.colorMatrix.isIdentity() ||

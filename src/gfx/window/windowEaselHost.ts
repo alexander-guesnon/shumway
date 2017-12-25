@@ -29,10 +29,10 @@ module Shumway.GFX.Window {
         public constructor(easel: Easel, peer: Shumway.Remoting.ITransportPeer) {
             super(easel);
             this._peer = peer;
-            this._peer.onSyncMessage = function (msg) {
+            this._peer.onSyncMessage = function (msg: any) {
                 return this._onWindowMessage(msg, false);
             }.bind(this);
-            this._peer.onAsyncMessage = function (msg) {
+            this._peer.onAsyncMessage = function (msg: any) {
                 this._onWindowMessage(msg, true);
             }.bind(this);
         }

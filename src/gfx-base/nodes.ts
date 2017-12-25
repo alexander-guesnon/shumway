@@ -185,6 +185,7 @@ module Shumway.GFX {
         else if (nodeType === NodeType.Group) return "Group";
         else if (nodeType === NodeType.Stage) return "Stage";
         else if (nodeType === NodeType.Renderable) return "Renderable";
+        return "";
     }
 
     /**
@@ -609,7 +610,7 @@ module Shumway.GFX {
          * Finds the closest ancestor with a given set of flags that are either turned on or off.
          */
         _findClosestAncestor(flags: NodeFlags, on: boolean): Node {
-            let node = this;
+            let node : Node = this;
             while (node) {
                 if (node.hasFlags(flags) === on) {
                     return node;
@@ -689,21 +690,22 @@ module Shumway.GFX {
          * Dispatch on node types.
          */
         public visit(visitor: NodeVisitor, state: State) {
+            const thisAny = this as any;
             switch (this._type) {
                 case NodeType.Node:
                     visitor.visitNode(this, state);
                     break;
                 case NodeType.Group:
-                    visitor.visitGroup(<Group>this, state);
+                    visitor.visitGroup(thisAny, state);
                     break;
                 case NodeType.Stage:
-                    visitor.visitStage(<Stage>this, state);
+                    visitor.visitStage(thisAny, state);
                     break;
                 case NodeType.Shape:
-                    visitor.visitShape(<Shape>this, state);
+                    visitor.visitShape(thisAny, state);
                     break;
                 case NodeType.Renderable:
-                    visitor.visitRenderable(<Renderable>this, state);
+                    visitor.visitRenderable(thisAny, state);
                     break;
                 default:
                     Debug.unexpectedCase();
