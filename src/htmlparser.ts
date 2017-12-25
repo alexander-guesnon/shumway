@@ -16,196 +16,197 @@
 
 module Shumway {
 
-  /*
-   * HTML Parser By John Resig (ejohn.org)
-   * Original code by Erik Arvidsson, Mozilla Public License
-   * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
-   *
-   * // Use like so:
-   * HTMLParser(htmlString, {
-   *     start: function(tag, attrs, unary) {},
-   *     end: function(tag) {},
-   *     chars: function(text) {},
-   *     comment: function(text) {}
-   * });
-   *
-   */
+	/*
+	 * HTML Parser By John Resig (ejohn.org)
+	 * Original code by Erik Arvidsson, Mozilla Public License
+	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+	 *
+	 * // Use like so:
+	 * HTMLParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 */
 
-  // Regular Expressions for parsing tags and attributes
-  let startTag = /^<([-A-Za-z0-9_]+)((?:\s+[-A-Za-z0-9_]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/,
-    endTag = /^<\/([-A-Za-z0-9_]+)[^>]*>/,
-    attr = /([-A-Za-z0-9_]+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g;
+	// Regular Expressions for parsing tags and attributes
+	let startTag = /^<([-A-Za-z0-9_]+)((?:\s+[-A-Za-z0-9_]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/,
+		endTag = /^<\/([-A-Za-z0-9_]+)[^>]*>/,
+		attr = /([-A-Za-z0-9_]+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g;
 
-  // Empty Elements - HTML 4.01
-  let empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed");
+	// Empty Elements - HTML 4.01
+	let empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed");
 
-  // Block Elements - HTML 4.01
-  let block = makeMap("address,applet,blockquote,button,center,dd,del,dir,div,dl,dt,fieldset,form,frameset,hr,iframe,ins,isindex,li,map,menu,noframes,noscript,object,ol,p,pre,script,table,tbody,td,tfoot,th,thead,tr,ul");
+	// Block Elements - HTML 4.01
+	let block = makeMap("address,applet,blockquote,button,center,dd,del,dir,div,dl,dt,fieldset,form,frameset,hr,iframe,ins,isindex,li,map,menu,noframes,noscript,object,ol,p,pre,script,table,tbody,td,tfoot,th,thead,tr,ul");
 
-  // Inline Elements - HTML 4.01
-  let inline = makeMap("a,abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var");
+	// Inline Elements - HTML 4.01
+	let inline = makeMap("a,abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var");
 
-  // Elements that you can, intentionally, leave open
-  // (and which close themselves)
-  let closeSelf = makeMap("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr");
+	// Elements that you can, intentionally, leave open
+	// (and which close themselves)
+	let closeSelf = makeMap("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr");
 
-  // Attributes that have their values filled in disabled="disabled"
-  let fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected");
+	// Attributes that have their values filled in disabled="disabled"
+	let fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected");
 
-  // Special Elements (can contain anything)
-  let special = makeMap("script,style");
+	// Special Elements (can contain anything)
+	let special = makeMap("script,style");
 
-  export interface HTMLParserHandler {
-    comment?: (text: string) => void;
-    chars?: (text: string) => void;
-    start?: (tag: string, attrs: any, unary: boolean) => void;
-    end?: (tag: string) => void;
-  }
+	export interface HTMLParserHandler {
+		comment?: (text: string) => void;
+		chars?: (text: string) => void;
+		start?: (tag: string, attrs: any, unary: boolean) => void;
+		end?: (tag: string) => void;
+	}
 
-  export function HTMLParser( html: string, handler: HTMLParserHandler ) {
-    let index, chars, match, stack = [], last = html;
+	export function HTMLParser(html: string, handler: HTMLParserHandler) {
+		let index: number, chars: boolean, match: any, stack: Array<any> = [], last = html;
 
-    function top(){
-      return stack[ stack.length - 1 ];
-    }
+		function top(): any {
+			return stack[stack.length - 1];
+		}
 
-    while ( html ) {
-      chars = true;
+		while (html) {
+			chars = true;
 
-      // Make sure we're not in a script or style element
-      if ( !top() || !special[ top() ] ) {
+			// Make sure we're not in a script or style element
+			if (!top() || !special[top()]) {
 
-        // Comment
-        if ( html.indexOf("<!--") == 0 ) {
-          index = html.indexOf("-->");
+				// Comment
+				if (html.indexOf("<!--") == 0) {
+					index = html.indexOf("-->");
 
-          if ( index >= 0 ) {
-            if ( handler.comment )
-              handler.comment( html.substring( 4, index ) );
-            html = html.substring( index + 3 );
-            chars = false;
-          }
+					if (index >= 0) {
+						if (handler.comment)
+							handler.comment(html.substring(4, index));
+						html = html.substring(index + 3);
+						chars = false;
+					}
 
-          // end tag
-        } else if ( html.indexOf("</") == 0 ) {
-          match = html.match( endTag );
+					// end tag
+				} else if (html.indexOf("</") == 0) {
+					match = html.match(endTag);
 
-          if ( match ) {
-            html = html.substring( match[0].length );
-            match[0].replace( endTag, parseEndTag );
-            chars = false;
-          }
+					if (match) {
+						html = html.substring(match[0].length);
+						match[0].replace(endTag, parseEndTag);
+						chars = false;
+					}
 
-          // start tag
-        } else if ( html.indexOf("<") == 0 ) {
-          match = html.match( startTag );
+					// start tag
+				} else if (html.indexOf("<") == 0) {
+					match = html.match(startTag);
 
-          if ( match ) {
-            html = html.substring( match[0].length );
-            match[0].replace( startTag, parseStartTag );
-            chars = false;
-          }
-        }
+					if (match) {
+						html = html.substring(match[0].length);
+						match[0].replace(startTag, parseStartTag);
+						chars = false;
+					}
+				}
 
-        if ( chars ) {
-          index = html.indexOf("<");
+				if (chars) {
+					index = html.indexOf("<");
 
-          let text = index < 0 ? html : html.substring( 0, index );
-          html = index < 0 ? "" : html.substring( index );
+					let text = index < 0 ? html : html.substring(0, index);
+					html = index < 0 ? "" : html.substring(index);
 
-          if ( handler.chars )
-            handler.chars( text );
-        }
+					if (handler.chars)
+						handler.chars(text);
+				}
 
-      } else {
-        html = html.replace(new RegExp("(.*)<\/" + top() + "[^>]*>"), function(all: string, text: string){
-          text = text.replace(/<!--(.*?)-->/g, "$1")
-            .replace(/<!\[CDATA\[(.*?)]]>/g, "$1");
+			} else {
+				html = html.replace(new RegExp("(.*)<\/" + top() + "[^>]*>"), function (all: string, text: string) {
+					text = text.replace(/<!--(.*?)-->/g, "$1")
+						.replace(/<!\[CDATA\[(.*?)]]>/g, "$1");
 
-          if ( handler.chars )
-            handler.chars( text );
+					if (handler.chars)
+						handler.chars(text);
 
-          return "";
-        });
+					return "";
+				});
 
-        parseEndTag( "", top() );
-      }
+				parseEndTag("", top());
+			}
 
-      if ( html == last )
-        throw "Parse Error: " + html;
-      last = html;
-    }
+			if (html == last)
+				throw "Parse Error: " + html;
+			last = html;
+		}
 
-    // Clean up any remaining tags
-    parseEndTag();
+		// Clean up any remaining tags
+		parseEndTag();
 
-    function parseStartTag( tag: string, tagName: string, rest: string, unary: string ) {
-      tagName = tagName.toLowerCase();
+		function parseStartTag(tag: string, tagName: string, rest: string, unary: string) {
+			tagName = tagName.toLowerCase();
 
-      if ( block[ tagName ] ) {
-        while ( top() && inline[ top() ] ) {
-          parseEndTag( "", top() );
-        }
-      }
+			if (block[tagName]) {
+				while (top() && inline[top()]) {
+					parseEndTag("", top());
+				}
+			}
 
-      if ( closeSelf[ tagName ] && top() == tagName ) {
-        parseEndTag( "", tagName );
-      }
+			if (closeSelf[tagName] && top() == tagName) {
+				parseEndTag("", tagName);
+			}
 
-      unary = empty[ tagName ] || !!unary;
+			let unary_ = empty[tagName] || !!unary;
 
-      if ( !unary )
-        stack.push( tagName );
+			if (!unary_)
+				stack.push(tagName);
 
-      if ( handler.start ) {
-        let attrs = Object.create(null);
+			if (handler.start) {
+				let attrs = Object.create(null);
 
-        rest.replace(attr, function(match: string, name: string) {
-          name = name.toLowerCase();
+				rest.replace(attr, function (match: string, name: string) {
+					name = name.toLowerCase();
 
-          let value = arguments[2] ? arguments[2] :
-            arguments[3] ? arguments[3] :
-              arguments[4] ? arguments[4] :
-                fillAttrs[name] ? name : "";
+					let value = arguments[2] ? arguments[2] :
+						arguments[3] ? arguments[3] :
+							arguments[4] ? arguments[4] :
+								fillAttrs[name] ? name : "";
 
-          attrs[name] = value;
+					attrs[name] = value;
 
-          return match;
-        });
+					return match;
+				});
 
-        if ( handler.start )
-          handler.start( tagName, attrs, !!unary );
-      }
-    }
+				if (handler.start)
+					handler.start(tagName, attrs, unary_);
+			}
+		}
 
-    function parseEndTag( tag?: string, tagName?: string ) {
-      // If no tag name is provided, clean shop
-      if ( !tagName )
-        let pos = 0;
+		function parseEndTag(tag?: string, tagName?: string) {
+			// If no tag name is provided, clean shop
+			let pos;
+			if (!tagName)
+				pos = 0;
 
-      // Find the closest opened tag of the same type
-      else
-        for ( let pos = stack.length - 1; pos >= 0; pos-- )
-          if ( stack[ pos ] == tagName )
-            break;
+			// Find the closest opened tag of the same type
+			else
+				for (pos = stack.length - 1; pos >= 0; pos--)
+					if (stack[pos] == tagName)
+						break;
 
-      if ( pos >= 0 ) {
-        // Close all the open elements, up the stack
-        for ( let i = stack.length - 1; i >= pos; i-- )
-          if ( handler.end )
-            handler.end( stack[ i ] );
+			if (pos >= 0) {
+				// Close all the open elements, up the stack
+				for (let i = stack.length - 1; i >= pos; i--)
+					if (handler.end)
+						handler.end(stack[i]);
 
-        // Remove the open elements from the stack
-        stack.length = pos;
-      }
-    }
-  };
+				// Remove the open elements from the stack
+				stack.length = pos;
+			}
+		}
+	}
 
-  function makeMap(str: string){
-    let obj = {}, items = str.split(",");
-    for ( let i = 0; i < items.length; i++ )
-      obj[ items[i] ] = true;
-    return obj;
-  }
+	function makeMap(str: string) {
+		let obj: { [key: string]: boolean } = {}, items = str.split(",");
+		for (let i = 0; i < items.length; i++)
+			obj[items[i]] = true;
+		return obj;
+	}
 
 }
