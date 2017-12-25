@@ -37,7 +37,7 @@ module Shumway.AVMX.AS.flash.display {
 	import geom = flash.geom;
 	import utils = flash.utils;
 
-	function distanceSq(x1, y1, x2, y2) {
+	function distanceSq(x1: number, y1: number, x2: number, y2: number) {
 		let dX = x2 - x1;
 		let dY = y2 - y1;
 		return dX * dX + dY * dY;
@@ -59,7 +59,7 @@ module Shumway.AVMX.AS.flash.display {
 		return quadraticBezier(from, cp, to, t);
 	}
 
-	function cubicBezier(from: number, cp: number, cp2: number, to: number, t): number {
+	function cubicBezier(from: number, cp: number, cp2: number, to: number, t: number): number {
 		let tSq = t * t;
 		let inverseT = 1 - t;
 		let inverseTSq = inverseT * inverseT;
@@ -67,7 +67,7 @@ module Shumway.AVMX.AS.flash.display {
 			3 * cp2 * inverseT * tSq + to * t * tSq;
 	}
 
-	function cubicBezierExtremes(from: number, cp: number, cp2: number, to): number[] {
+	function cubicBezierExtremes(from: number, cp: number, cp2: number, to: number): number[] {
 		let d1 = cp - from;
 		let d2 = cp2 - cp;
 		// We only ever need d2 * 2
@@ -93,7 +93,8 @@ module Shumway.AVMX.AS.flash.display {
 		return result;
 	}
 
-	function cubicXAtY(x0, y0, cx, cy, cx1, cy1, x1, y1, y) {
+	function cubicXAtY(x0: number, y0: number, cx: number, cy: number,
+	                   cx1: number, cy1: number, x1: number, y1: number, y: number) {
 		let dX = 3.0 * (cx - x0);
 		let dY = 3.0 * (cy - y0);
 
@@ -104,11 +105,11 @@ module Shumway.AVMX.AS.flash.display {
 		let c3Y = y1 - y0 - dY - bY;
 
 		// Find one root - any root - then factor out (t-r) to get a quadratic poly.
-		function f(t) {
+		function f(t: number) {
 			return t * (dY + t * (bY + t * c3Y)) + y0 - y;
 		}
 
-		function pointAt(t) {
+		function pointAt(t: number) {
 			if (t < 0) {
 				t = 0;
 			} else if (t > 1) {
@@ -119,7 +120,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		// Bisect the specified range to isolate an interval with a root.
-		function bisectCubicBezierRange(f, l, r, limit) {
+		function bisectCubicBezierRange(f: Function, l: number, r: number, limit: number) {
 			if (Math.abs(r - l) <= limit) {
 				return;
 			}
@@ -179,7 +180,7 @@ module Shumway.AVMX.AS.flash.display {
 		return result;
 	}
 
-	function findRoot(x0, x2, f, maxIterations, epsilon) {
+	function findRoot(x0: number, x2: number, f: Function, maxIterations: number, epsilon: number) {
 		let x1;
 		let y0;
 		let y1;
@@ -889,7 +890,8 @@ module Shumway.AVMX.AS.flash.display {
 			// from x,y an infinite ray to the right is "cast". All operations are then
 			// tested for intersections with this ray, where each intersection means
 			// switching between being outside and inside the shape.
-			for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+			let commandIndex;
+			for (commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
 				let command = commands[commandIndex];
 				switch (command) {
 					case PathCommand.MoveTo:
@@ -1023,7 +1025,8 @@ module Shumway.AVMX.AS.flash.display {
 			let maxY = 0;
 
 			// Description of serialization format can be found in ShapeData.
-			for (let commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
+			let commandIndex;
+			for (commandIndex = 0; commandIndex < commandsCount; commandIndex++) {
 				let command = commands[commandIndex];
 				switch (command) {
 					case PathCommand.MoveTo:

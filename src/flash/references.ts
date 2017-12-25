@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-/// <reference path='../../build/ts/avm2.d.ts' />
-/// <reference path='../../build/ts/swf.d.ts' />
-
 ///<reference path='module.ts' />
 ///<reference path='../htmlparser.ts' />
 ///<reference path='../TextContent.ts' />
 ///<reference path='settings.ts' />
 
 ///<reference path='symbol.ts' />
-
-///<reference path='../rtmp/references.ts' />
 
 ///<reference path='geom/Matrix.ts' />
 ///<reference path='geom/Matrix3D.ts' />

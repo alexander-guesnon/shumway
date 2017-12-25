@@ -43,7 +43,7 @@ module Shumway.AVMX.AS.flash.display {
 		// _index: number /*int*/;
 		get value(): ASArray {
 			release || notImplemented("public flash.display.ShaderParameter::get value");
-			return;
+			return null;
 			// return this._value;
 		}
 
@@ -56,13 +56,13 @@ module Shumway.AVMX.AS.flash.display {
 
 		get type(): string {
 			release || notImplemented("public flash.display.ShaderParameter::get type");
-			return;
+			return "";
 			// return this._type;
 		}
 
 		get index(): number /*int*/ {
 			release || notImplemented("public flash.display.ShaderParameter::get index");
-			return;
+			return 0;
 			// return this._index;
 		}
 	}

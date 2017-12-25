@@ -52,10 +52,15 @@ module Shumway.AVMX.AS.flash.display {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // [];
 
-		constructor(bitmapData: flash.display.BitmapData = null, pixelSnapping: string = "auto", smoothing: boolean = false) {
+		preInit()
+		{
 			if (this._symbol && !this._fieldsInitialized) {
 				this.applySymbol();
 			}
+			super.preInit();
+		}
+
+		constructor(bitmapData: flash.display.BitmapData = null, pixelSnapping: string = "auto", smoothing: boolean = false) {
 			super();
 			if (!this._symbol) {
 				this.bitmapData = bitmapData;

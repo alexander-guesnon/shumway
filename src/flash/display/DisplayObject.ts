@@ -606,7 +606,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		_setParent(parent: DisplayObjectContainer, depth: number) {
 			let oldParent = this._parent;
-			release || assert(parent !== this);
+			release || assert(parent !== this as any);
 			this._parent = parent;
 			this._setDepth(depth);
 			if (parent) {
@@ -848,7 +848,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * Finds the nearest ancestor with a given set of flags that are either turned on or off.
 		 */
 		private _findNearestAncestor(flags: DisplayObjectFlags, on: boolean): DisplayObject {
-			let node = this;
+			let node: DisplayObject = this;
 			while (node) {
 				if (node._hasFlags(flags) === on) {
 					return node;
@@ -859,13 +859,14 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_findFurthestAncestorOrSelf(): DisplayObject {
-			let node = this;
+			let node: DisplayObject = this;
 			while (node) {
 				if (!node._parent) {
 					return node;
 				}
 				node = node._parent;
 			}
+			return null;
 		}
 
 		/**
@@ -1547,7 +1548,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * the main timeline object and a Loader's content.
 		 */
 		get root(): DisplayObject {
-			let node = this;
+			let node: DisplayObject = this;
 			do {
 				if (node._root === node) {
 					return node;
@@ -1562,7 +1563,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * |_stage| property points to itself.
 		 */
 		get stage(): flash.display.Stage {
-			let node = this;
+			let node: DisplayObject = this;
 			do {
 				if (node._stage === node) {
 					release || assert(this.sec.flash.display.Stage.axIsType(node));
@@ -1876,10 +1877,10 @@ module Shumway.AVMX.AS.flash.display {
 			} else if (symbol instanceof flash.text.TextSymbol) {
 				release || assert(this.sec.flash.text.StaticText.axIsType(this));
 				let newTextContent = (<flash.text.TextSymbol>symbol).textContent;
-				if ((<flash.text.StaticText>this)._textContent === newTextContent) {
+				if ((this as any)._textContent === newTextContent) {
 					return;
 				}
-				(<flash.text.StaticText>this)._textContent = newTextContent;
+				(this as any)._textContent = newTextContent;
 				this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyTextContent);
 			}
 			this._symbol = symbol;
@@ -1954,7 +1955,7 @@ module Shumway.AVMX.AS.flash.display {
 					objects[0] = this;
 				} else if (testingType === HitTestingType.ObjectsUnderPoint ||
 					this.sec.flash.display.InteractiveObject.axIsType(this) &&
-					(<InteractiveObject>this)._mouseEnabled) {
+					(this as any)._mouseEnabled) {
 					// For getObjectsUnderPoint, push all direct hits, for mouse target finding
 					// InteractiveObjects only.
 					objects.push(this);
@@ -2050,7 +2051,7 @@ module Shumway.AVMX.AS.flash.display {
 		 */
 		private _getDistance(ancestor: DisplayObject): number {
 			let d = 0;
-			let node = this;
+			let node: DisplayObject = this;
 			while (node && node !== ancestor) {
 				d++;
 				node = node._parent;
@@ -2065,7 +2066,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (!node) {
 				return null;
 			}
-			let ancestor = this;
+			let ancestor: DisplayObject = this;
 			let d1 = ancestor._getDistance(null);
 			let d2 = node._getDistance(null);
 			while (d1 > d2) {

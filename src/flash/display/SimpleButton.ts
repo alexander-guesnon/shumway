@@ -72,13 +72,17 @@ module Shumway.AVMX.AS.flash.display {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // [];
 
+		preInit() {
+			if (this._symbol && !this._fieldsInitialized) {
+				this.applySymbol();
+			}
+			super.preInit();
+		}
+
 		constructor(upState?: flash.display.DisplayObject,
 		            overState?: flash.display.DisplayObject,
 		            downState?: flash.display.DisplayObject,
 		            hitTestState?: flash.display.DisplayObject) {
-			if (this._symbol && !this._fieldsInitialized) {
-				this.applySymbol();
-			}
 			super();
 			this.sec.flash.display.DisplayObject.axClass._advancableInstances.push(this);
 			if (!this._fieldsInitialized) {

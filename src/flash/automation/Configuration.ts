@@ -26,7 +26,7 @@ module Shumway.AVMX.AS.flash.automation {
 		// Static   AS -> JS Bindings
 		get testAutomationConfiguration(): string {
 			release || release || notImplemented("public flash.automation.Configuration::get testAutomationConfiguration");
-			return;
+			return "";
 		}
 
 		set deviceConfiguration(configData: string) {
@@ -37,7 +37,7 @@ module Shumway.AVMX.AS.flash.automation {
 
 		get deviceConfiguration(): string {
 			release || release || notImplemented("public flash.automation.Configuration::get deviceConfiguration");
-			return;
+			return "";
 		}
 
 		// Instance JS -> AS Bindings

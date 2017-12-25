@@ -41,7 +41,13 @@ module Shumway.AVMX.AS.flash.events {
 		 */
 		private _aliasCount = 0;
 
+		preInit()
+		{
+
+		}
+
 		constructor() {
+			this.preInit();
 			this._entries = [];
 		}
 
@@ -362,7 +368,7 @@ module Shumway.AVMX.AS.flash.events {
 				return true;
 			}
 			if (this.sec.flash.display.DisplayObject.axIsType(this)) {
-				let node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
+				let node: flash.display.DisplayObject = (this as any)._parent;
 				do {
 					if (node._hasEventListener(type)) {
 						return true;
@@ -385,7 +391,7 @@ module Shumway.AVMX.AS.flash.events {
 				return true;
 			} else if (event._bubbles && this.sec.flash.display.DisplayObject.axIsType(this)) {
 				// Check to see if there are any event listeners on the path to the root.
-				for (let node = (<flash.display.DisplayObject>this)._parent; node; node = node._parent) {
+				for (let node = (this as any)._parent; node; node = node._parent) {
 					if (node._hasEventListener(event.type)) {
 						return false;
 					}
@@ -422,7 +428,7 @@ module Shumway.AVMX.AS.flash.events {
 			let ancestors: flash.display.DisplayObject [] = [];
 
 			if (!event.isBroadcastEvent() && this.sec.flash.display.DisplayObject.axIsType(this)) {
-				let node: flash.display.DisplayObject = (<flash.display.DisplayObject>this)._parent;
+				let node: flash.display.DisplayObject = (this as any)._parent;
 
 				// Gather all parent display objects that have event listeners for this event type.
 				while (node) {

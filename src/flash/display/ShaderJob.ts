@@ -49,7 +49,7 @@ module Shumway.AVMX.AS.flash.display {
 		// _progress: number;
 		get shader(): flash.display.Shader {
 			release || notImplemented("public flash.display.ShaderJob::get shader");
-			return;
+			return null;
 			// return this._shader;
 		}
 
@@ -62,7 +62,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get target(): ASObject {
 			release || notImplemented("public flash.display.ShaderJob::get target");
-			return;
+			return null;
 			// return this._target;
 		}
 
@@ -75,7 +75,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get width(): number /*int*/ {
 			release || notImplemented("public flash.display.ShaderJob::get width");
-			return;
+			return 0;
 			// return this._width;
 		}
 
@@ -88,7 +88,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get height(): number /*int*/ {
 			release || notImplemented("public flash.display.ShaderJob::get height");
-			return;
+			return 0;
 			// return this._height;
 		}
 
@@ -101,7 +101,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get progress(): number {
 			release || notImplemented("public flash.display.ShaderJob::get progress");
-			return;
+			return 0;
 			// return this._progress;
 		}
 

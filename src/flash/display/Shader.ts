@@ -46,7 +46,7 @@ module Shumway.AVMX.AS.flash.display {
 		// _precisionHint: string;
 		get data(): flash.display.ShaderData {
 			release || notImplemented("public flash.display.Shader::get data");
-			return;
+			return null;
 			// return this._data;
 		}
 
@@ -59,7 +59,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get precisionHint(): string {
 			release || notImplemented("public flash.display.Shader::get precisionHint");
-			return;
+			return "";
 			// return this._precisionHint;
 		}
 
