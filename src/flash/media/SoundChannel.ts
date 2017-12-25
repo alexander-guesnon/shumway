@@ -33,11 +33,12 @@ module Shumway.AVMX.AS.flash.media {
 		createScriptProcessor(a, b, c);
 	}
 
-	function createAudioChannel(sampleRate, channels) {
+	function createAudioChannel(sampleRate: number, channels: number) {
 		if (WebAudioChannel.isSupported) {
 			return new WebAudioChannel(sampleRate, channels);
 		} else {
 			error('PCM data playback is not supported by the browser');
+			return null;
 		}
 	}
 

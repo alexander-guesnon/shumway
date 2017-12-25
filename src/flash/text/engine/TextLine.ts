@@ -78,103 +78,103 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _mirrorRegions: ASVector<flash.text.engine.TextLineMirrorRegion>;
 		get textBlock(): flash.text.engine.TextBlock {
 			release || notImplemented("public flash.text.engine.TextLine::get textBlock");
-			return;
+			return null;
 			// return this._textBlock;
 		}
 
 		get hasGraphicElement(): boolean {
 			release || notImplemented("public flash.text.engine.TextLine::get hasGraphicElement");
-			return;
+			return false;
 			// return this._hasGraphicElement;
 		}
 
 		get hasTabs(): boolean {
 			release || notImplemented("public flash.text.engine.TextLine::get hasTabs");
-			return;
+			return false;
 			// return this._hasTabs;
 		}
 
 		get nextLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextLine::get nextLine");
-			return;
+			return null;
 			// return this._nextLine;
 		}
 
 		get previousLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextLine::get previousLine");
-			return;
+			return null;
 			// return this._previousLine;
 		}
 
 		get ascent(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get ascent");
-			return;
+			return 0;
 			// return this._ascent;
 		}
 
 		get descent(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get descent");
-			return;
+			return 0;
 			// return this._descent;
 		}
 
 		get textHeight(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get textHeight");
-			return;
+			return 0;
 			// return this._textHeight;
 		}
 
 		get textWidth(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get textWidth");
-			return;
+			return 0;
 			// return this._textWidth;
 		}
 
 		get totalAscent(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get totalAscent");
-			return;
+			return 0;
 			// return this._totalAscent;
 		}
 
 		get totalDescent(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get totalDescent");
-			return;
+			return 0;
 			// return this._totalDescent;
 		}
 
 		get totalHeight(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get totalHeight");
-			return;
+			return 0;
 			// return this._totalHeight;
 		}
 
 		get textBlockBeginIndex(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.TextLine::get textBlockBeginIndex");
-			return;
+			return 0;
 			// return this._textBlockBeginIndex;
 		}
 
 		get rawTextLength(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.TextLine::get rawTextLength");
-			return;
+			return 0;
 			// return this._rawTextLength;
 		}
 
 		get specifiedWidth(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get specifiedWidth");
-			return;
+			return 0;
 			// return this._specifiedWidth;
 		}
 
 		get unjustifiedTextWidth(): number {
 			release || notImplemented("public flash.text.engine.TextLine::get unjustifiedTextWidth");
-			return;
+			return 0;
 			// return this._unjustifiedTextWidth;
 		}
 
 		get validity(): string {
 			release || notImplemented("public flash.text.engine.TextLine::get validity");
-			return;
+			return "";
 			// return this._validity;
 		}
 
@@ -187,11 +187,11 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get atomCount(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.TextLine::get atomCount");
-			return;
+			return 0;
 			// return this._atomCount;
 		}
 
-		get mirrorRegions(): ASVector<any /* flash.text.engine.TextLineMirrorRegion */> {
+		get mirrorRegions(): any /*ASVector*/ /* flash.text.engine.TextLineMirrorRegion */ {
 			release || notImplemented("public flash.text.engine.TextLine::get mirrorRegions");
 			return;
 			// return this._mirrorRegions;
@@ -201,72 +201,72 @@ module Shumway.AVMX.AS.flash.text.engine {
 			stageX = +stageX;
 			stageY = +stageY;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomIndexAtPoint");
-			return;
+			return 0;
 		}
 
 		getAtomIndexAtCharIndex(charIndex: number /*int*/): number /*int*/ {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomIndexAtCharIndex");
-			return;
+			return 0;
 		}
 
 		getAtomBounds(atomIndex: number /*int*/): flash.geom.Rectangle {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomBounds");
-			return;
+			return null;
 		}
 
 		getAtomBidiLevel(atomIndex: number /*int*/): number /*int*/ {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomBidiLevel");
-			return;
+			return 0;
 		}
 
 		getAtomTextRotation(atomIndex: number /*int*/): string {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomTextRotation");
-			return;
+			return "";
 		}
 
 		getAtomTextBlockBeginIndex(atomIndex: number /*int*/): number /*int*/ {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomTextBlockBeginIndex");
-			return;
+			return 0;
 		}
 
 		getAtomTextBlockEndIndex(atomIndex: number /*int*/): number /*int*/ {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomTextBlockEndIndex");
-			return;
+			return 0;
 		}
 
 		getAtomCenter(atomIndex: number /*int*/): number {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomCenter");
-			return;
+			return 0;
 		}
 
 		getAtomWordBoundaryOnLeft(atomIndex: number /*int*/): boolean {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomWordBoundaryOnLeft");
-			return;
+			return false;
 		}
 
 		getAtomGraphic(atomIndex: number /*int*/): flash.display.DisplayObject {
 			atomIndex = atomIndex | 0;
 			release || notImplemented("public flash.text.engine.TextLine::getAtomGraphic");
-			return;
+			return null;
 		}
 
 		getBaselinePosition(baseline: string): number {
 			baseline = axCoerceString(baseline);
 			release || notImplemented("public flash.text.engine.TextLine::getBaselinePosition");
-			return;
+			return 0;
 		}
 
 		dump(): string {
 			release || notImplemented("public flash.text.engine.TextLine::dump");
-			return;
+			return "";
 		}
 	}
 }

@@ -37,7 +37,7 @@ module Shumway.AVMX.AS.flash.net {
 		// JS -> AS Bindings
 		static encodePostingAuthorization: (password: string) => string;
 		static encodePublishAuthorization: (password: string) => string;
-		static encodeIPMulticastAddressSpec: (address: string, port: any = null, source: string = null) => string;
+		static encodeIPMulticastAddressSpec: (address: string, port?: any, source?: string) => string;
 		static encodeBootstrapPeerIDSpec: (peerID: string) => string;
 
 		makeUnique: () => void;
@@ -47,11 +47,11 @@ module Shumway.AVMX.AS.flash.net {
 		postingEnabled: boolean;
 		peerToPeerDisabled: boolean;
 		ipMulticastMemberUpdatesEnabled: boolean;
-		setPublishPassword: (password: string = null, salt: string = null) => void;
-		setPostingPassword: (password: string = null, salt: string = null) => void;
+		setPublishPassword: (password?: string, salt?: string) => void;
+		setPostingPassword: (password?: string, salt?: string) => void;
 		serverChannelEnabled: boolean;
 		addBootstrapPeer: (peerID: string) => void;
-		addIPMulticastAddress: (address: string, port: any = null, source: string = null) => void;
+		addIPMulticastAddress: (address: string, port?: any, source?: string) => void;
 		groupspecWithoutAuthorizations: () => string;
 		groupspecWithAuthorizations: () => string;
 		authorizations: () => string;

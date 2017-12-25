@@ -380,31 +380,31 @@ module Shumway.AVMX.AS.flash.ui {
 		// static _physicalKeyboardType: string;
 		static get capsLock(): boolean {
 			release || notImplemented("public flash.ui.Keyboard::get capsLock");
-			return;
+			return false;
 			// return this._capsLock;
 		}
 
 		static get numLock(): boolean {
 			release || notImplemented("public flash.ui.Keyboard::get numLock");
-			return;
+			return false;
 			// return this._numLock;
 		}
 
 		static get hasVirtualKeyboard(): boolean {
 			release || notImplemented("public flash.ui.Keyboard::get hasVirtualKeyboard");
-			return;
+			return false;
 			// return this._hasVirtualKeyboard;
 		}
 
 		static get physicalKeyboardType(): string {
 			release || notImplemented("public flash.ui.Keyboard::get physicalKeyboardType");
-			return;
+			return "";
 			// return this._physicalKeyboardType;
 		}
 
 		static isAccessible(): boolean {
 			release || notImplemented("public flash.ui.Keyboard::static isAccessible");
-			return;
+			return false;
 		}
 
 	}

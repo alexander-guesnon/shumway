@@ -32,12 +32,12 @@ module Shumway.AVMX.AS.flash.ui {
 			super();
 		}
 
-		// _data: ASVector<any>;
+		// _data: any /*ASVector*/;
 		// _hotSpot: flash.geom.Point;
 		// _frameRate: number;
 		get data(): GenericVector {
 			release || notImplemented("public flash.ui.MouseCursorData::get data");
-			return;
+			return null;
 			// return this._data;
 		}
 
@@ -50,7 +50,7 @@ module Shumway.AVMX.AS.flash.ui {
 
 		get hotSpot(): flash.geom.Point {
 			release || notImplemented("public flash.ui.MouseCursorData::get hotSpot");
-			return;
+			return null;
 			// return this._hotSpot;
 		}
 
@@ -63,7 +63,7 @@ module Shumway.AVMX.AS.flash.ui {
 
 		get frameRate(): number {
 			release || notImplemented("public flash.ui.MouseCursorData::get frameRate");
-			return;
+			return 0;
 			// return this._frameRate;
 		}
 

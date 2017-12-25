@@ -44,7 +44,7 @@ module Shumway.AVMX.AS.flash.media {
 		// _depth: number /*int*/;
 		// _videoWidth: number /*int*/;
 		// _videoHeight: number /*int*/;
-		// _colorSpaces: ASVector<any>;
+		// _colorSpaces: any /*ASVector*/;
 		get viewPort(): flash.geom.Rectangle {
 			release || notImplemented("public flash.media.StageVideo::get viewPort");
 			return;

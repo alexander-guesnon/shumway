@@ -44,13 +44,13 @@ module Shumway.AVMX.AS.flash.globalization {
 		// _currencyString: string;
 		get value(): number {
 			release || notImplemented("public flash.globalization.CurrencyParseResult::get value");
-			return;
+			return 0;
 			// return this._value;
 		}
 
 		get currencyString(): string {
 			release || notImplemented("public flash.globalization.CurrencyParseResult::get currencyString");
-			return;
+			return "";
 			// return this._currencyString;
 		}
 

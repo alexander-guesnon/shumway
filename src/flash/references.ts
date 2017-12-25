@@ -286,9 +286,9 @@
 // ///<reference path='profiler/Telemetry.ts' />
 
 // ///<reference path='sampler/ClassFactory.ts' />
+// ///<reference path='sampler/Sample.ts' />
 // ///<reference path='sampler/DeleteObjectSample.ts' />
 // ///<reference path='sampler/NewObjectSample.ts' />
-// ///<reference path='sampler/Sample.ts' />
 // ///<reference path='sampler/StackFrame.ts' />
 
 // ///<reference path='security/CertificateStatus.ts' />

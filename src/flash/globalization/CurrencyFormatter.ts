@@ -39,7 +39,7 @@ module Shumway.AVMX.AS.flash.globalization {
 		format: (value: number, withCurrencySymbol: boolean = false) => string;
 
 		// AS -> JS Bindings
-		static getAvailableLocaleIDNames(): ASVector<any> {
+		static getAvailableLocaleIDNames(): any /*ASVector*/ {
 			release || notImplemented("public flash.globalization.CurrencyFormatter::static getAvailableLocaleIDNames");
 			return;
 		}

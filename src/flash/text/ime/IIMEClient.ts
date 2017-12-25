@@ -35,7 +35,7 @@ module Shumway.AVMX.AS.flash.text.ime {
 		selectionActiveIndex: number
 		/*int*/
 		;
-		updateComposition: (text: string, attributes: ASVector<any>, compositionStartIndex: number /*int*/, compositionEndIndex: number /*int*/) => void;
+		updateComposition: (text: string, attributes: any /*ASVector*/, compositionStartIndex: number /*int*/, compositionEndIndex: number /*int*/) => void;
 		confirmComposition: (text: string = null, preserveSelection: boolean = false) => void;
 		getTextBounds: (startIndex: number /*int*/, endIndex: number /*int*/) => flash.geom.Rectangle;
 		selectRange: (anchorIndex: number /*int*/, activeIndex: number /*int*/) => void;

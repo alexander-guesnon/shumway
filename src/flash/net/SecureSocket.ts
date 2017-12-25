@@ -41,7 +41,7 @@ module Shumway.AVMX.AS.flash.net {
 		// static _isSupported: boolean;
 		get isSupported(): boolean {
 			release || notImplemented("public flash.net.SecureSocket::get isSupported");
-			return;
+			return false;
 			// return this._isSupported;
 		}
 
@@ -49,7 +49,7 @@ module Shumway.AVMX.AS.flash.net {
 		// _serverCertificate: flash.security.X509Certificate;
 		get serverCertificate(): flash.security.X509Certificate {
 			release || notImplemented("public flash.net.SecureSocket::get serverCertificate");
-			return;
+			return null;
 			// return this._serverCertificate;
 		}
 

@@ -77,7 +77,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		static get audioPlaybackMode(): string {
 			release || notImplemented("public flash.media.SoundMixer::get audioPlaybackMode");
-			return;
+			return "";
 			// return SoundMixer._audioPlaybackMode;
 		}
 
@@ -90,7 +90,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		static get useSpeakerphoneForVoice(): boolean {
 			release || notImplemented("public flash.media.SoundMixer::get useSpeakerphoneForVoice");
-			return;
+			return false;
 			// return SoundMixer._useSpeakerphoneForVoice;
 		}
 
@@ -122,7 +122,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		static areSoundsInaccessible(): boolean {
 			release || notImplemented("public flash.media.SoundMixer::static areSoundsInaccessible");
-			return;
+			return false;
 		}
 
 		static _getMasterVolume(): number {

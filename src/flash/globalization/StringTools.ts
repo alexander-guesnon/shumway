@@ -38,7 +38,7 @@ module Shumway.AVMX.AS.flash.globalization {
 
 
 		// AS -> JS Bindings
-		static getAvailableLocaleIDNames(): ASVector<any> {
+		static getAvailableLocaleIDNames(): any /*ASVector*/ {
 			release || notImplemented("public flash.globalization.StringTools::static getAvailableLocaleIDNames");
 			return;
 		}

@@ -74,7 +74,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _tabStops: ASVector<flash.text.engine.TabStop>;
 		get applyNonLinearFontScaling(): boolean {
 			release || notImplemented("public flash.text.engine.TextBlock::get applyNonLinearFontScaling");
-			return;
+			return false
 			// return this._applyNonLinearFontScaling;
 		}
 
@@ -87,7 +87,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get baselineFontDescription(): flash.text.engine.FontDescription {
 			release || notImplemented("public flash.text.engine.TextBlock::get baselineFontDescription");
-			return;
+			return null;
 			// return this._baselineFontDescription;
 		}
 
@@ -100,7 +100,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get baselineFontSize(): number {
 			release || notImplemented("public flash.text.engine.TextBlock::get baselineFontSize");
-			return;
+			return 0;
 			// return this._baselineFontSize;
 		}
 
@@ -113,7 +113,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get baselineZero(): string {
 			release || notImplemented("public flash.text.engine.TextBlock::get baselineZero");
-			return;
+			return "";
 			// return this._baselineZero;
 		}
 
@@ -126,7 +126,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get content(): flash.text.engine.ContentElement {
 			release || notImplemented("public flash.text.engine.TextBlock::get content");
-			return;
+			return null;
 			// return this._content;
 		}
 
@@ -139,7 +139,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get bidiLevel(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.TextBlock::get bidiLevel");
-			return;
+			return 0;
 			// return this._bidiLevel;
 		}
 
@@ -152,31 +152,31 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get firstInvalidLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextBlock::get firstInvalidLine");
-			return;
+			return null;
 			// return this._firstInvalidLine;
 		}
 
 		get firstLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextBlock::get firstLine");
-			return;
+			return null;
 			// return this._firstLine;
 		}
 
 		get lastLine(): flash.text.engine.TextLine {
 			release || notImplemented("public flash.text.engine.TextBlock::get lastLine");
-			return;
+			return null;
 			// return this._lastLine;
 		}
 
 		get textLineCreationResult(): string {
 			release || notImplemented("public flash.text.engine.TextBlock::get textLineCreationResult");
-			return;
+			return "";
 			// return this._textLineCreationResult;
 		}
 
 		get lineRotation(): string {
 			release || notImplemented("public flash.text.engine.TextBlock::get lineRotation");
-			return;
+			return "";
 			// return this._lineRotation;
 		}
 
@@ -190,31 +190,31 @@ module Shumway.AVMX.AS.flash.text.engine {
 		findNextAtomBoundary(afterCharIndex: number /*int*/): number /*int*/ {
 			afterCharIndex = afterCharIndex | 0;
 			release || notImplemented("public flash.text.engine.TextBlock::findNextAtomBoundary");
-			return;
+			return 0;
 		}
 
 		findPreviousAtomBoundary(beforeCharIndex: number /*int*/): number /*int*/ {
 			beforeCharIndex = beforeCharIndex | 0;
 			release || notImplemented("public flash.text.engine.TextBlock::findPreviousAtomBoundary");
-			return;
+			return 0;
 		}
 
 		findNextWordBoundary(afterCharIndex: number /*int*/): number /*int*/ {
 			afterCharIndex = afterCharIndex | 0;
 			release || notImplemented("public flash.text.engine.TextBlock::findNextWordBoundary");
-			return;
+			return 0;
 		}
 
 		findPreviousWordBoundary(beforeCharIndex: number /*int*/): number /*int*/ {
 			beforeCharIndex = beforeCharIndex | 0;
 			release || notImplemented("public flash.text.engine.TextBlock::findPreviousWordBoundary");
-			return;
+			return 0;
 		}
 
 		getTextLineAtCharIndex(charIndex: number /*int*/): flash.text.engine.TextLine {
 			charIndex = charIndex | 0;
 			release || notImplemented("public flash.text.engine.TextBlock::getTextLineAtCharIndex");
-			return;
+			return null;
 		}
 
 		releaseLineCreationData(): void {
@@ -231,7 +231,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		dump(): string {
 			release || notImplemented("public flash.text.engine.TextBlock::dump");
-			return;
+			return "";
 		}
 
 		DoCreateTextLine(previousLine: flash.text.engine.TextLine, width: number, lineOffset: number = 0, fitSomething: boolean = false, reuseLine: flash.text.engine.TextLine = null): flash.text.engine.TextLine {
@@ -241,7 +241,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			fitSomething = !!fitSomething;
 			reuseLine = reuseLine;
 			release || notImplemented("public flash.text.engine.TextBlock::DoCreateTextLine");
-			return;
+			return null;
 		}
 
 //    getTabStops(): ASVector<flash.text.engine.TabStop> {
@@ -253,7 +253,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 //    }
 		getTextJustifier(): flash.text.engine.TextJustifier {
 			release || notImplemented("public flash.text.engine.TextBlock::getTextJustifier");
-			return;
+			return null;
 		}
 
 		setTextJustifier(value: flash.text.engine.TextJustifier): void {

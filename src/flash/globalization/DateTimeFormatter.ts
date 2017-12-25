@@ -42,7 +42,7 @@ module Shumway.AVMX.AS.flash.globalization {
 		formatUTC: (dateTime: ASDate) => string;
 
 		// AS -> JS Bindings
-		static getAvailableLocaleIDNames(): ASVector<any> {
+		static getAvailableLocaleIDNames(): any /*ASVector*/ {
 			release || notImplemented("public flash.globalization.DateTimeFormatter::static getAvailableLocaleIDNames");
 			return;
 		}
@@ -85,14 +85,14 @@ module Shumway.AVMX.AS.flash.globalization {
 			return;
 		}
 
-		getMonthNames(nameStyle: string = "full", context: string = "standalone"): ASVector<any> {
+		getMonthNames(nameStyle: string = "full", context: string = "standalone"): any /*ASVector*/ {
 			nameStyle = axCoerceString(nameStyle);
 			context = axCoerceString(context);
 			release || notImplemented("public flash.globalization.DateTimeFormatter::getMonthNames");
 			return;
 		}
 
-		getWeekdayNames(nameStyle: string = "full", context: string = "standalone"): ASVector<any> {
+		getWeekdayNames(nameStyle: string = "full", context: string = "standalone"): any /*ASVector*/ {
 			nameStyle = axCoerceString(nameStyle);
 			context = axCoerceString(context);
 			release || notImplemented("public flash.globalization.DateTimeFormatter::getWeekdayNames");

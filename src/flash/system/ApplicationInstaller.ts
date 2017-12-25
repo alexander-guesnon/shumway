@@ -35,19 +35,19 @@ module Shumway.AVMX.AS.flash.system {
 		static stringsDigest(strings: ASXML): string {
 			strings = strings;
 			release || notImplemented("public flash.system.ApplicationInstaller::static stringsDigest");
-			return;
+			return "";
 		}
 
 		static iconDigest(icon: flash.utils.ByteArray): string {
 			icon = icon;
 			release || notImplemented("public flash.system.ApplicationInstaller::static iconDigest");
-			return;
+			return "";
 		}
 
 		// _isInstalled: boolean;
 		get isInstalled(): boolean {
 			release || notImplemented("public flash.system.ApplicationInstaller::get isInstalled");
-			return;
+			return false;
 			// return this._isInstalled;
 		}
 

@@ -38,7 +38,7 @@ module Shumway.AVMX.AS.flash.display3D {
 
 		// AS -> JS Bindings
 
-		uploadFromVector(data: ASVector<any>, startOffset: number /*int*/, count: number /*int*/): void {
+		uploadFromVector(data: any /*ASVector*/, startOffset: number /*int*/, count: number /*int*/): void {
 			data = data;
 			startOffset = startOffset | 0;
 			count = count | 0;

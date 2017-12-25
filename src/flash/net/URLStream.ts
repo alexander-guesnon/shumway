@@ -72,7 +72,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get diskCacheEnabled(): boolean {
 			release || notImplemented("public flash.net.URLStream::get diskCacheEnabled");
-			return;
+			return false;
 			// return this._diskCacheEnabled;
 		}
 

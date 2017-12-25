@@ -42,13 +42,13 @@ module Shumway.AVMX.AS.flash.ui {
 		// _name: string;
 		get numControls(): number /*int*/ {
 			release || notImplemented("public flash.ui.GameInputDevice::get numControls");
-			return;
+			return 0;
 			// return this._numControls;
 		}
 
 		get sampleInterval(): number /*int*/ {
 			release || notImplemented("public flash.ui.GameInputDevice::get sampleInterval");
-			return;
+			return 0;
 			// return this._sampleInterval;
 		}
 
@@ -61,7 +61,7 @@ module Shumway.AVMX.AS.flash.ui {
 
 		get enabled(): boolean {
 			release || notImplemented("public flash.ui.GameInputDevice::get enabled");
-			return;
+			return false;
 			// return this._enabled;
 		}
 
@@ -74,20 +74,20 @@ module Shumway.AVMX.AS.flash.ui {
 
 		get id(): string {
 			release || notImplemented("public flash.ui.GameInputDevice::get id");
-			return;
+			return "";
 			// return this._id;
 		}
 
 		get name(): string {
 			release || notImplemented("public flash.ui.GameInputDevice::get name");
-			return;
+			return "";
 			// return this._name;
 		}
 
 		getControlAt(i: number /*int*/): flash.ui.GameInputControl {
 			i = i | 0;
 			release || notImplemented("public flash.ui.GameInputDevice::getControlAt");
-			return;
+			return null;
 		}
 
 		startCachingSamples(numSamples: number /*int*/, controls: GenericVector): void {
@@ -106,7 +106,7 @@ module Shumway.AVMX.AS.flash.ui {
 			data = data;
 			append = !!append;
 			release || notImplemented("public flash.ui.GameInputDevice::getCachedSamples");
-			return;
+			return 0;
 		}
 	}
 }

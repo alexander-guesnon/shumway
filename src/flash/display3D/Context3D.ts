@@ -17,7 +17,6 @@
 module Shumway.AVMX.AS.flash.display3D {
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class Context3D extends flash.events.EventDispatcher {
 
@@ -37,7 +36,7 @@ module Shumway.AVMX.AS.flash.display3D {
 		// JS -> AS Bindings
 
 		setTextureAt: (sampler: number /*int*/, texture: flash.display3D.textures.TextureBase) => void;
-		setRenderToTexture: (texture: flash.display3D.textures.TextureBase, enableDepthAndStencil: boolean = false, antiAlias: number /*int*/ = 0, surfaceSelector: number /*int*/ = 0) => void;
+		setRenderToTexture: (texture: flash.display3D.textures.TextureBase, enableDepthAndStencil?: boolean, antiAlias?: number /*int*/, surfaceSelector?: number /*int*/) => void;
 		setRenderToBackBuffer: () => void;
 
 		// AS -> JS Bindings
@@ -46,13 +45,13 @@ module Shumway.AVMX.AS.flash.display3D {
 		// _enableErrorChecking: boolean;
 		get driverInfo(): string {
 			release || notImplemented("public flash.display3D.Context3D::get driverInfo");
-			return;
+			return "";
 			// return this._driverInfo;
 		}
 
 		get enableErrorChecking(): boolean {
 			release || notImplemented("public flash.display3D.Context3D::get enableErrorChecking");
-			return;
+			return false;
 			// return this._enableErrorChecking;
 		}
 
@@ -109,7 +108,7 @@ module Shumway.AVMX.AS.flash.display3D {
 			return;
 		}
 
-		setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: ASVector<any>, numRegisters: number /*int*/ = -1): void {
+		setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: any /*ASVector*/, numRegisters: number /*int*/ = -1): void {
 			programType = axCoerceString(programType);
 			firstRegister = firstRegister | 0;
 			data = data;
@@ -203,13 +202,13 @@ module Shumway.AVMX.AS.flash.display3D {
 			numVertices = numVertices | 0;
 			data32PerVertex = data32PerVertex | 0;
 			release || notImplemented("public flash.display3D.Context3D::createVertexBuffer");
-			return;
+			return null;
 		}
 
 		createIndexBuffer(numIndices: number /*int*/): flash.display3D.IndexBuffer3D {
 			numIndices = numIndices | 0;
 			release || notImplemented("public flash.display3D.Context3D::createIndexBuffer");
-			return;
+			return null
 		}
 
 		createTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): flash.display3D.textures.Texture {
@@ -219,7 +218,7 @@ module Shumway.AVMX.AS.flash.display3D {
 			optimizeForRenderToTexture = !!optimizeForRenderToTexture;
 			streamingLevels = streamingLevels | 0;
 			release || notImplemented("public flash.display3D.Context3D::createTexture");
-			return;
+			return null;
 		}
 
 		createCubeTexture(size: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): flash.display3D.textures.CubeTexture {
@@ -228,12 +227,12 @@ module Shumway.AVMX.AS.flash.display3D {
 			optimizeForRenderToTexture = !!optimizeForRenderToTexture;
 			streamingLevels = streamingLevels | 0;
 			release || notImplemented("public flash.display3D.Context3D::createCubeTexture");
-			return;
+			return null;
 		}
 
 		createProgram(): flash.display3D.Program3D {
 			release || notImplemented("public flash.display3D.Context3D::createProgram");
-			return;
+			return null;
 		}
 
 		drawToBitmapData(destination: flash.display.BitmapData): void {
@@ -242,7 +241,9 @@ module Shumway.AVMX.AS.flash.display3D {
 			return;
 		}
 
-		setRenderToTextureInternal(texture: flash.display3D.textures.TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
+		setRenderToTextureInternal(texture: flash.display3D.textures.TextureBase, targetType: number /*int*/,
+		                           enableDepthAndStencil: boolean = false, antiAlias: number /*int*/ = 0,
+		                           surfaceSelector: number /*int*/ = 0): void {
 			texture = texture;
 			targetType = targetType | 0;
 			enableDepthAndStencil = !!enableDepthAndStencil;

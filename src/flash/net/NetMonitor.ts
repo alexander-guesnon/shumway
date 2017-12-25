@@ -30,7 +30,7 @@ module Shumway.AVMX.AS.flash.net {
 			super();
 		}
 
-		listStreams(): ASVector<any> {
+		listStreams(): any /*ASVector*/ {
 			release || notImplemented("public flash.net.NetMonitor::listStreams");
 			return;
 		}

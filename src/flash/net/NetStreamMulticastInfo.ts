@@ -37,6 +37,7 @@ module Shumway.AVMX.AS.flash.net {
 		            fragmentsReceivedFromServer: number,
 		            receiveDataBytesPerSecondFromIPMulticast: number,
 		            bytesReceivedFromIPMulticast: number, fragmentsReceivedFromIPMulticast: number) {
+			super();
 			this.sendDataBytesPerSecond = +sendDataBytesPerSecond;
 			this.sendControlBytesPerSecond = +sendControlBytesPerSecond;
 			this.receiveDataBytesPerSecond = +receiveDataBytesPerSecond;
@@ -56,7 +57,6 @@ module Shumway.AVMX.AS.flash.net {
 			this.receiveDataBytesPerSecondFromIPMulticast = +receiveDataBytesPerSecondFromIPMulticast;
 			this.bytesReceivedFromIPMulticast = +bytesReceivedFromIPMulticast;
 			this.fragmentsReceivedFromIPMulticast = +fragmentsReceivedFromIPMulticast;
-			super();
 		}
 
 		// JS -> AS Bindings

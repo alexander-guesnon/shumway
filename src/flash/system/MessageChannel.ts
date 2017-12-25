@@ -41,13 +41,13 @@ module Shumway.AVMX.AS.flash.system {
 		// _state: string;
 		get messageAvailable(): boolean {
 			release || notImplemented("public flash.system.MessageChannel::get messageAvailable");
-			return;
+			return false;
 			// return this._messageAvailable;
 		}
 
 		get state(): string {
 			release || notImplemented("public flash.system.MessageChannel::get state");
-			return;
+			return "";
 			// return this._state;
 		}
 

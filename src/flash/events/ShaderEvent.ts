@@ -24,7 +24,7 @@ module Shumway.AVMX.AS.flash.events {
 
 		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
 		            bitmap: flash.display.BitmapData = null, array: flash.utils.ByteArray = null,
-		            vector: ASVector<any> = null) {
+		            vector: any /*ASVector*/ = null) {
 			super(type, bubbles, cancelable);
 		}
 

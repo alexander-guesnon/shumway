@@ -39,7 +39,7 @@ module Shumway.AVMX.AS.flash.globalization {
 
 
 		// AS -> JS Bindings
-		static determinePreferredLocales(want: ASVector<any>, have: ASVector<any>, keyword: string = "userinterface"): ASVector<any> {
+		static determinePreferredLocales(want: any /*ASVector*/, have: any /*ASVector*/, keyword: string = "userinterface"): any /*ASVector*/ {
 			want = want;
 			have = have;
 			keyword = axCoerceString(keyword);

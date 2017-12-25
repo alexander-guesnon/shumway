@@ -59,7 +59,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get disableAVM1Loading(): boolean {
 			release || notImplemented("public flash.system.Security::get disableAVM1Loading");
-			return;
+			return false;
 			// return Security._disableAVM1Loading;
 		}
 
@@ -116,7 +116,7 @@ module Shumway.AVMX.AS.flash.system {
 			toplevel = toplevel;
 			args = args;
 			release || notImplemented("public flash.system.Security::static duplicateSandboxBridgeInputArguments");
-			return;
+			return null;
 		}
 
 		static duplicateSandboxBridgeOutputArgument(toplevel: ASObject, arg: any): any {

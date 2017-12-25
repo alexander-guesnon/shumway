@@ -51,7 +51,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _decimalAlignmentToken: string;
 		get alignment(): string {
 			release || notImplemented("public flash.text.engine.TabStop::get alignment");
-			return;
+			return "";
 			// return this._alignment;
 		}
 
@@ -64,7 +64,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get position(): number {
 			release || notImplemented("public flash.text.engine.TabStop::get position");
-			return;
+			return 0;
 			// return this._position;
 		}
 
@@ -77,7 +77,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get decimalAlignmentToken(): string {
 			release || notImplemented("public flash.text.engine.TabStop::get decimalAlignmentToken");
-			return;
+			return "";
 			// return this._decimalAlignmentToken;
 		}
 

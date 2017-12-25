@@ -53,7 +53,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _maximumSpacing: number;
 		get letterSpacing(): boolean {
 			release || notImplemented("public flash.text.engine.SpaceJustifier::get letterSpacing");
-			return;
+			return false;
 			// return this._letterSpacing;
 		}
 
@@ -66,7 +66,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get minimumSpacing(): number {
 			release || notImplemented("public flash.text.engine.SpaceJustifier::get minimumSpacing");
-			return;
+			return 0;
 			// return this._minimumSpacing;
 		}
 
@@ -79,7 +79,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get optimumSpacing(): number {
 			release || notImplemented("public flash.text.engine.SpaceJustifier::get optimumSpacing");
-			return;
+			return 0;
 			// return this._optimumSpacing;
 		}
 
@@ -92,7 +92,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get maximumSpacing(): number {
 			release || notImplemented("public flash.text.engine.SpaceJustifier::get maximumSpacing");
-			return;
+			return 0;
 			// return this._maximumSpacing;
 		}
 

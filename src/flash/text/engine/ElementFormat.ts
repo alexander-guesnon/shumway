@@ -81,7 +81,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _locked: boolean;
 		get alignmentBaseline(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get alignmentBaseline");
-			return;
+			return "";
 			// return this._alignmentBaseline;
 		}
 
@@ -94,7 +94,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get alpha(): number {
 			release || notImplemented("public flash.text.engine.ElementFormat::get alpha");
-			return;
+			return 0;
 			// return this._alpha;
 		}
 
@@ -107,7 +107,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get baselineShift(): number {
 			release || notImplemented("public flash.text.engine.ElementFormat::get baselineShift");
-			return;
+			return 0;
 			// return this._baselineShift;
 		}
 
@@ -120,7 +120,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get breakOpportunity(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get breakOpportunity");
-			return;
+			return "";
 			// return this._breakOpportunity;
 		}
 
@@ -133,7 +133,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get color(): number /*uint*/ {
 			release || notImplemented("public flash.text.engine.ElementFormat::get color");
-			return;
+			return 0;
 			// return this._color;
 		}
 
@@ -146,7 +146,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get dominantBaseline(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get dominantBaseline");
-			return;
+			return "";
 			// return this._dominantBaseline;
 		}
 
@@ -159,7 +159,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontDescription(): flash.text.engine.FontDescription {
 			release || notImplemented("public flash.text.engine.ElementFormat::get fontDescription");
-			return;
+			return null;
 			// return this._fontDescription;
 		}
 
@@ -172,7 +172,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get digitCase(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get digitCase");
-			return;
+			return "";
 			// return this._digitCase;
 		}
 
@@ -185,7 +185,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get digitWidth(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get digitWidth");
-			return;
+			return "";
 			// return this._digitWidth;
 		}
 
@@ -198,7 +198,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get ligatureLevel(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get ligatureLevel");
-			return;
+			return "";
 			// return this._ligatureLevel;
 		}
 
@@ -211,7 +211,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get fontSize(): number {
 			release || notImplemented("public flash.text.engine.ElementFormat::get fontSize");
-			return;
+			return 0;
 			// return this._fontSize;
 		}
 
@@ -224,7 +224,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get kerning(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get kerning");
-			return;
+			return "";
 			// return this._kerning;
 		}
 
@@ -237,7 +237,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get locale(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get locale");
-			return;
+			return "";
 			// return this._locale;
 		}
 
@@ -250,7 +250,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get textRotation(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get textRotation");
-			return;
+			return "";
 			// return this._textRotation;
 		}
 
@@ -263,7 +263,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get trackingRight(): number {
 			release || notImplemented("public flash.text.engine.ElementFormat::get trackingRight");
-			return;
+			return 0;
 			// return this._trackingRight;
 		}
 
@@ -276,7 +276,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get trackingLeft(): number {
 			release || notImplemented("public flash.text.engine.ElementFormat::get trackingLeft");
-			return;
+			return 0;
 			// return this._trackingLeft;
 		}
 
@@ -289,7 +289,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get typographicCase(): string {
 			release || notImplemented("public flash.text.engine.ElementFormat::get typographicCase");
-			return;
+			return "";
 			// return this._typographicCase;
 		}
 
@@ -302,7 +302,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get locked(): boolean {
 			release || notImplemented("public flash.text.engine.ElementFormat::get locked");
-			return;
+			return false;
 			// return this._locked;
 		}
 
@@ -315,7 +315,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		getFontMetrics(): flash.text.engine.FontMetrics {
 			release || notImplemented("public flash.text.engine.ElementFormat::getFontMetrics");
-			return;
+			return null;
 		}
 	}
 }

@@ -110,34 +110,34 @@ module Shumway.AVMX.AS.flash.ui {
 
 			switch (type) {
 				case events.MouseEvent.MOUSE_DOWN:
-					if (data.buttons & MouseButtonFlags.Left) {
+					if ((data.buttons & MouseButtonFlags.Left) !== 0) {
 						data.buttons = MouseButtonFlags.Left;
-					} else if (data.buttons & MouseButtonFlags.Middle) {
+					} else if ((data.buttons & MouseButtonFlags.Middle) !== 0) {
 						type = events.MouseEvent.MIDDLE_MOUSE_DOWN;
 						data.buttons = MouseButtonFlags.Middle;
-					} else if (data.buttons & MouseButtonFlags.Right) {
+					} else if ((data.buttons & MouseButtonFlags.Right) !== 0) {
 						type = events.MouseEvent.RIGHT_MOUSE_DOWN;
 						data.buttons = MouseButtonFlags.Right;
 					}
 					target._mouseDown = true;
 					break;
 				case events.MouseEvent.MOUSE_UP:
-					if (data.buttons & MouseButtonFlags.Left) {
+					if ((data.buttons & MouseButtonFlags.Left) !== 0) {
 						data.buttons = MouseButtonFlags.Left;
-					} else if (data.buttons & MouseButtonFlags.Middle) {
+					} else if ((data.buttons & MouseButtonFlags.Middle) !== 0) {
 						type = events.MouseEvent.MIDDLE_MOUSE_UP;
 						data.buttons = MouseButtonFlags.Middle;
-					} else if (data.buttons & MouseButtonFlags.Right) {
+					} else if ((data.buttons & MouseButtonFlags.Right) !== 0) {
 						type = events.MouseEvent.RIGHT_MOUSE_UP;
 						data.buttons = MouseButtonFlags.Right;
 					}
 					target._mouseDown = false;
 					break;
 				case events.MouseEvent.CLICK:
-					if (!(data.buttons & MouseButtonFlags.Left)) {
-						if (data.buttons & MouseButtonFlags.Middle) {
+					if ((data.buttons & MouseButtonFlags.Left) === 0) {
+						if ((data.buttons & MouseButtonFlags.Middle) !== 0) {
 							type = events.MouseEvent.MIDDLE_CLICK;
-						} else if (data.buttons & MouseButtonFlags.Right) {
+						} else if ((data.buttons & MouseButtonFlags.Right) !== 0) {
 							type = events.MouseEvent.RIGHT_CLICK;
 						}
 					}
@@ -145,7 +145,9 @@ module Shumway.AVMX.AS.flash.ui {
 					break;
 				case events.MouseEvent.DOUBLE_CLICK:
 					if (!target.doubleClickEnabled) {
-						return;
+						return null;
+						// AMBIGUOUS
+						// return stage;
 					}
 					data.buttons = 0;
 					break;

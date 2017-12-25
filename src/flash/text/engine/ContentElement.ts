@@ -58,19 +58,19 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// _textRotation: string;
 		get textBlock(): flash.text.engine.TextBlock {
 			release || notImplemented("public flash.text.engine.ContentElement::get textBlock");
-			return;
+			return null;
 			// return this._textBlock;
 		}
 
 		get textBlockBeginIndex(): number /*int*/ {
 			release || notImplemented("public flash.text.engine.ContentElement::get textBlockBeginIndex");
-			return;
+			return 0;
 			// return this._textBlockBeginIndex;
 		}
 
 		get elementFormat(): flash.text.engine.ElementFormat {
 			release || notImplemented("public flash.text.engine.ContentElement::get elementFormat");
-			return;
+			return null;
 			// return this._elementFormat;
 		}
 
@@ -83,7 +83,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get eventMirror(): flash.events.EventDispatcher {
 			release || notImplemented("public flash.text.engine.ContentElement::get eventMirror");
-			return;
+			return null;
 			// return this._eventMirror;
 		}
 
@@ -96,25 +96,25 @@ module Shumway.AVMX.AS.flash.text.engine {
 
 		get groupElement(): flash.text.engine.GroupElement {
 			release || notImplemented("public flash.text.engine.ContentElement::get groupElement");
-			return;
+			return null;
 			// return this._groupElement;
 		}
 
 		get rawText(): string {
 			release || notImplemented("public flash.text.engine.ContentElement::get rawText");
-			return;
+			return "";
 			// return this._rawText;
 		}
 
 		get text(): string {
 			release || notImplemented("public flash.text.engine.ContentElement::get text");
-			return;
+			return "";
 			// return this._text;
 		}
 
 		get textRotation(): string {
 			release || notImplemented("public flash.text.engine.ContentElement::get textRotation");
-			return;
+			return "";
 			// return this._textRotation;
 		}
 

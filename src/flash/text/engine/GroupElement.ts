@@ -33,7 +33,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // ["getElementIndex"];
 
-		constructor(elements: ASVector<any> = null, elementFormat: flash.text.engine.ElementFormat = null, eventMirror: flash.events.EventDispatcher = null, textRotation: string = "rotate0") {
+		constructor(elements: any /*ASVector*/ = null, elementFormat: flash.text.engine.ElementFormat = null, eventMirror: flash.events.EventDispatcher = null, textRotation: string = "rotate0") {
 			elements = elements;
 			elementFormat = elementFormat;
 			eventMirror = eventMirror;
@@ -61,7 +61,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			return;
 		}
 
-		setElements(value: ASVector<any>): void {
+		setElements(value: any /*ASVector*/): void {
 			value = value;
 			release || notImplemented("public flash.text.engine.GroupElement::setElements");
 			return;
@@ -94,7 +94,7 @@ module Shumway.AVMX.AS.flash.text.engine {
 			return;
 		}
 
-		replaceElements(beginIndex: number /*int*/, endIndex: number /*int*/, newElements: ASVector<any>): ASVector<any> {
+		replaceElements(beginIndex: number /*int*/, endIndex: number /*int*/, newElements: any /*ASVector*/): any /*ASVector*/ {
 			beginIndex = beginIndex | 0;
 			endIndex = endIndex | 0;
 			newElements = newElements;

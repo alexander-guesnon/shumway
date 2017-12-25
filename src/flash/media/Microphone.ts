@@ -42,13 +42,13 @@ module Shumway.AVMX.AS.flash.media {
 		static getMicrophone(index: number /*int*/ = -1): flash.media.Microphone {
 			index = index | 0;
 			release || notImplemented("public flash.media.Microphone::static getMicrophone");
-			return;
+			return null;
 		}
 
 		static getEnhancedMicrophone(index: number /*int*/ = -1): flash.media.Microphone {
 			index = index | 0;
 			release || notImplemented("public flash.media.Microphone::static getEnhancedMicrophone");
-			return;
+			return null;
 		}
 
 		// _rate: number /*int*/;
@@ -69,7 +69,7 @@ module Shumway.AVMX.AS.flash.media {
 		// _enhancedOptions: flash.media.MicrophoneEnhancedOptions;
 		get rate(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get rate");
-			return;
+			return 0;
 			// return this._rate;
 		}
 
@@ -82,7 +82,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get codec(): string {
 			release || notImplemented("public flash.media.Microphone::get codec");
-			return;
+			return "";
 			// return this._codec;
 		}
 
@@ -95,7 +95,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get framesPerPacket(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get framesPerPacket");
-			return;
+			return 0;
 			// return this._framesPerPacket;
 		}
 
@@ -108,7 +108,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get encodeQuality(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get encodeQuality");
-			return;
+			return 0;
 			// return this._encodeQuality;
 		}
 
@@ -121,7 +121,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get noiseSuppressionLevel(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get noiseSuppressionLevel");
-			return;
+			return 0;
 			// return this._noiseSuppressionLevel;
 		}
 
@@ -134,7 +134,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get enableVAD(): boolean {
 			release || notImplemented("public flash.media.Microphone::get enableVAD");
-			return;
+			return false;
 			// return this._enableVAD;
 		}
 
@@ -147,13 +147,13 @@ module Shumway.AVMX.AS.flash.media {
 
 		get activityLevel(): number {
 			release || notImplemented("public flash.media.Microphone::get activityLevel");
-			return;
+			return 0;
 			// return this._activityLevel;
 		}
 
 		get gain(): number {
 			release || notImplemented("public flash.media.Microphone::get gain");
-			return;
+			return 0;
 			// return this._gain;
 		}
 
@@ -166,43 +166,43 @@ module Shumway.AVMX.AS.flash.media {
 
 		get index(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get index");
-			return;
+			return 0;
 			// return this._index;
 		}
 
 		get muted(): boolean {
 			release || notImplemented("public flash.media.Microphone::get muted");
-			return;
+			return false;
 			// return this._muted;
 		}
 
 		get name(): string {
 			release || notImplemented("public flash.media.Microphone::get name");
-			return;
+			return "";
 			// return this._name;
 		}
 
 		get silenceLevel(): number {
 			release || notImplemented("public flash.media.Microphone::get silenceLevel");
-			return;
+			return 0;
 			// return this._silenceLevel;
 		}
 
 		get silenceTimeout(): number /*int*/ {
 			release || notImplemented("public flash.media.Microphone::get silenceTimeout");
-			return;
+			return 0;
 			// return this._silenceTimeout;
 		}
 
 		get useEchoSuppression(): boolean {
 			release || notImplemented("public flash.media.Microphone::get useEchoSuppression");
-			return;
+			return false;
 			// return this._useEchoSuppression;
 		}
 
 		get soundTransform(): flash.media.SoundTransform {
 			release || notImplemented("public flash.media.Microphone::get soundTransform");
-			return;
+			return null;
 			// return this._soundTransform;
 		}
 

@@ -37,12 +37,12 @@ module Shumway.AVMX.AS.flash.ui {
 		// static _inputMode: string;
 		// static _supportsTouchEvents: boolean;
 		// static _supportsGestureEvents: boolean;
-		// static _supportedGestures: ASVector<any>;
+		// static _supportedGestures: any /*ASVector*/;
 		// static _maxTouchPoints: number /*int*/;
 		// static _mapTouchToMouse: boolean;
 		static get inputMode(): string {
 			release || notImplemented("public flash.ui.Multitouch::get inputMode");
-			return;
+			return "";
 			// return this._inputMode;
 		}
 

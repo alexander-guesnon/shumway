@@ -48,7 +48,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get MIN_DOMAIN_MEMORY_LENGTH(): number /*uint*/ {
 			release || notImplemented("public flash.system.ApplicationDomain::get MIN_DOMAIN_MEMORY_LENGTH");
-			return;
+			return 0;
 			// return this._MIN_DOMAIN_MEMORY_LENGTH;
 		}
 
@@ -61,7 +61,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		get domainMemory(): flash.utils.ByteArray {
 			release || notImplemented("public flash.system.ApplicationDomain::get domainMemory");
-			return;
+			return null;
 			// return this._domainMemory;
 		}
 
@@ -96,7 +96,7 @@ module Shumway.AVMX.AS.flash.system {
 
 		getQualifiedDefinitionNames(): GenericVector {
 			release || notImplemented("public flash.system.ApplicationDomain::getQualifiedDefinitionNames");
-			return;
+			return null;
 		}
 	}
 }
