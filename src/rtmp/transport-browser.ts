@@ -15,209 +15,212 @@
  */
 
 module RtmpJs.Browser {
-  let DEFAULT_RTMP_PORT = 1935;
-  let COMBINE_RTMPT_DATA = true;
+	let DEFAULT_RTMP_PORT = 1935;
+	let COMBINE_RTMPT_DATA = true;
 
-  export class RtmpTransport extends BaseTransport {
-    host: string;
-    port: number;
-    ssl: boolean;
+	export class RtmpTransport extends BaseTransport {
+		host: string;
+		port: number;
+		ssl: boolean;
 
-    constructor(connectionSettings) {
-      super();
+		constructor(connectionSettings) {
+			super();
 
-      if (typeof connectionSettings === 'string') {
-        connectionSettings = {host: connectionSettings};
-      }
+			if (typeof connectionSettings === 'string') {
+				connectionSettings = {host: connectionSettings};
+			}
 
-      this.host = connectionSettings.host || 'localhost';
-      this.port = connectionSettings.port || DEFAULT_RTMP_PORT;
-      this.ssl = !!connectionSettings.ssl || false;
-    }
+			this.host = connectionSettings.host || 'localhost';
+			this.port = connectionSettings.port || DEFAULT_RTMP_PORT;
+			this.ssl = !!connectionSettings.ssl || false;
+		}
 
-    connect(properties, args?) {
-      let TCPSocket = typeof navigator !== 'undefined' &&
-                      (<any>navigator).mozTCPSocket;
+		connect(properties, args?) {
+			let TCPSocket = typeof navigator !== 'undefined' &&
+				(<any>navigator).mozTCPSocket;
 
-      if (!TCPSocket) {
-        throw new Error('Your browser does not support socket communication.\n' +
-          'Currenly only Firefox with enabled mozTCPSocket is allowed (see README.md).');
-      }
+			if (!TCPSocket) {
+				throw new Error('Your browser does not support socket communication.\n' +
+					'Currenly only Firefox with enabled mozTCPSocket is allowed (see README.md).');
+			}
 
-      let channel = this._initChannel(properties, args);
+			let channel = this._initChannel(properties, args);
 
-      let writeQueue = [], socketError = false;
-      let socket: any = typeof ShumwayComRtmpSocket !== 'undefined' && ShumwayComRtmpSocket.isAvailable ?
-        new ShumwayComRtmpSocket(this.host, this.port, { useSecureTransport: this.ssl, binaryType: 'arraybuffer' }) :
-        TCPSocket.open(this.host, this.port, { useSecureTransport: this.ssl, binaryType: 'arraybuffer' });
-
-
-      let sendData = function (data) {
-        return socket.send(data.buffer, data.byteOffset, data.byteLength);
-      };
-
-      socket.onopen = function (e) {
-        channel.ondata = function (data) {
-          let buf = new Uint8Array(data);
-          writeQueue.push(buf);
-          if (writeQueue.length > 1) {
-            return;
-          }
-          release || console.log('Bytes written: ' + buf.length);
-          if (sendData(buf)) {
-            writeQueue.shift();
-          }
-        };
-        channel.onclose = function () {
-          socket.close();
-        };
-        channel.start();
-      };
-      socket.ondrain = function (e) {
-        writeQueue.shift();
-        release || console.log('Write completed');
-        while (writeQueue.length > 0) {
-          release || console.log('Bytes written: ' + writeQueue[0].length);
-          if (!sendData(writeQueue[0])) {
-            break;
-          }
-          writeQueue.shift();
-        }
-      };
-      socket.onclose = function (e) {
-        channel.stop(socketError);
-      };
-      socket.onerror = function (e) {
-        socketError = true;
-        console.error('socket error: ' + e.data);
-      };
-      socket.ondata = function (e) {
-        release || console.log('Bytes read: ' + e.data.byteLength);
-        channel.push(new Uint8Array(e.data));
-      };
-    }
-  }
+			let writeQueue = [], socketError = false;
+			let socket: any = typeof ShumwayComRtmpSocket !== 'undefined' && ShumwayComRtmpSocket.isAvailable ?
+				new ShumwayComRtmpSocket(this.host, this.port, {
+					useSecureTransport: this.ssl,
+					binaryType: 'arraybuffer'
+				}) :
+				TCPSocket.open(this.host, this.port, {useSecureTransport: this.ssl, binaryType: 'arraybuffer'});
 
 
-  /*
-   * RtmptTransport uses systemXHR to send HTTP requests.
-   * See https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#XMLHttpRequest%28%29 and
-   * https://github.com/mozilla-b2g/gaia/blob/master/apps/email/README.md#running-in-firefox
-   *
-   * Spec at http://red5.electroteque.org/dev/doc/html/rtmpt.html
-   */
-  export class RtmptTransport extends BaseTransport {
-    baseUrl: string;
-    stopped: boolean;
-    sessionId: string;
-    requestId: number;
-    data: Uint8Array[];
+			let sendData = function (data) {
+				return socket.send(data.buffer, data.byteOffset, data.byteLength);
+			};
 
-    constructor(connectionSettings) {
-      super();
+			socket.onopen = function (e) {
+				channel.ondata = function (data) {
+					let buf = new Uint8Array(data);
+					writeQueue.push(buf);
+					if (writeQueue.length > 1) {
+						return;
+					}
+					release || console.log('Bytes written: ' + buf.length);
+					if (sendData(buf)) {
+						writeQueue.shift();
+					}
+				};
+				channel.onclose = function () {
+					socket.close();
+				};
+				channel.start();
+			};
+			socket.ondrain = function (e) {
+				writeQueue.shift();
+				release || console.log('Write completed');
+				while (writeQueue.length > 0) {
+					release || console.log('Bytes written: ' + writeQueue[0].length);
+					if (!sendData(writeQueue[0])) {
+						break;
+					}
+					writeQueue.shift();
+				}
+			};
+			socket.onclose = function (e) {
+				channel.stop(socketError);
+			};
+			socket.onerror = function (e) {
+				socketError = true;
+				console.error('socket error: ' + e.data);
+			};
+			socket.ondata = function (e) {
+				release || console.log('Bytes read: ' + e.data.byteLength);
+				channel.push(new Uint8Array(e.data));
+			};
+		}
+	}
 
-      let host = connectionSettings.host || 'localhost';
-      let url = (connectionSettings.ssl ? 'https' : 'http') + '://' + host;
-      if (connectionSettings.port) {
-        url += ':' + connectionSettings.port;
-      }
-      this.baseUrl = url;
 
-      this.stopped = false;
-      this.sessionId = null;
-      this.requestId = 0;
-      this.data = [];
-    }
+	/*
+	 * RtmptTransport uses systemXHR to send HTTP requests.
+	 * See https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#XMLHttpRequest%28%29 and
+	 * https://github.com/mozilla-b2g/gaia/blob/master/apps/email/README.md#running-in-firefox
+	 *
+	 * Spec at http://red5.electroteque.org/dev/doc/html/rtmpt.html
+	 */
+	export class RtmptTransport extends BaseTransport {
+		baseUrl: string;
+		stopped: boolean;
+		sessionId: string;
+		requestId: number;
+		data: Uint8Array[];
 
-    connect(properties, args?) {
-      let channel = this._initChannel(properties, args);
-      channel.ondata = function (data) {
-        release || console.log('Bytes written: ' + data.length);
-        this.data.push(new Uint8Array(data));
-      }.bind(this);
-      channel.onclose = function () {
-        this.stopped = true;
-      }.bind(this);
+		constructor(connectionSettings) {
+			super();
+
+			let host = connectionSettings.host || 'localhost';
+			let url = (connectionSettings.ssl ? 'https' : 'http') + '://' + host;
+			if (connectionSettings.port) {
+				url += ':' + connectionSettings.port;
+			}
+			this.baseUrl = url;
+
+			this.stopped = false;
+			this.sessionId = null;
+			this.requestId = 0;
+			this.data = [];
+		}
+
+		connect(properties, args?) {
+			let channel = this._initChannel(properties, args);
+			channel.ondata = function (data) {
+				release || console.log('Bytes written: ' + data.length);
+				this.data.push(new Uint8Array(data));
+			}.bind(this);
+			channel.onclose = function () {
+				this.stopped = true;
+			}.bind(this);
 
 
-      post(this.baseUrl + '/fcs/ident2', null, function (data, status) {
-        if (status !== 404) {
-          throw new Error('Unexpected response: ' + status);
-        }
+			post(this.baseUrl + '/fcs/ident2', null, function (data, status) {
+				if (status !== 404) {
+					throw new Error('Unexpected response: ' + status);
+				}
 
-        post(this.baseUrl + '/open/1', null, function (data, status) {
-          this.sessionId = String.fromCharCode.apply(null, data).slice(0, -1); // - '\n'
-          console.log('session id: ' + this.sessionId);
+				post(this.baseUrl + '/open/1', null, function (data, status) {
+					this.sessionId = String.fromCharCode.apply(null, data).slice(0, -1); // - '\n'
+					console.log('session id: ' + this.sessionId);
 
-          this.tick();
-          channel.start();
-        }.bind(this));
-      }.bind(this));
-    }
+					this.tick();
+					channel.start();
+				}.bind(this));
+			}.bind(this));
+		}
 
-    tick() {
-      let continueSend = function (data, status) {
-        if (status !== 200) {
-          throw new Error('Invalid HTTP status');
-        }
+		tick() {
+			let continueSend = function (data, status) {
+				if (status !== 200) {
+					throw new Error('Invalid HTTP status');
+				}
 
-        let idle = data[0];
-        if (data.length > 1) {
-          this.channel.push(data.subarray(1));
-        }
-        setTimeout(this.tick.bind(this), idle * 16);
-      }.bind(this);
+				let idle = data[0];
+				if (data.length > 1) {
+					this.channel.push(data.subarray(1));
+				}
+				setTimeout(this.tick.bind(this), idle * 16);
+			}.bind(this);
 
-      if (this.stopped) {
-        post(this.baseUrl + '/close/2', null, function () {
-          // do nothing
-        });
-        return;
-      }
+			if (this.stopped) {
+				post(this.baseUrl + '/close/2', null, function () {
+					// do nothing
+				});
+				return;
+			}
 
-      if (this.data.length > 0) {
-        let data;
-        if (COMBINE_RTMPT_DATA) {
-          let length = 0;
-          this.data.forEach(function (i) {
-            length += i.length;
-          });
-          let pos = 0;
-          data = new Uint8Array(length);
-          this.data.forEach(function (i) {
-            data.set(i, pos);
-            pos += i.length;
-          });
-          this.data.length = 0;
-        } else {
-          data = this.data.shift();
-        }
-        post(this.baseUrl + '/send/' + this.sessionId + '/' + (this.requestId++),
-          data, continueSend);
-      } else {
-        post(this.baseUrl + '/idle/' + this.sessionId + '/' + (this.requestId++),
-          null, continueSend);
-      }
-    }
-  }
+			if (this.data.length > 0) {
+				let data;
+				if (COMBINE_RTMPT_DATA) {
+					let length = 0;
+					this.data.forEach(function (i) {
+						length += i.length;
+					});
+					let pos = 0;
+					data = new Uint8Array(length);
+					this.data.forEach(function (i) {
+						data.set(i, pos);
+						pos += i.length;
+					});
+					this.data.length = 0;
+				} else {
+					data = this.data.shift();
+				}
+				post(this.baseUrl + '/send/' + this.sessionId + '/' + (this.requestId++),
+					data, continueSend);
+			} else {
+				post(this.baseUrl + '/idle/' + this.sessionId + '/' + (this.requestId++),
+					null, continueSend);
+			}
+		}
+	}
 
-  let emptyPostData = new Uint8Array([0]);
+	let emptyPostData = new Uint8Array([0]);
 
-  function post(path, data, onload) {
-    data || (data = emptyPostData);
+	function post(path, data, onload) {
+		data || (data = emptyPostData);
 
-    let xhr: any = typeof ShumwayComRtmpXHR !== 'undefined' && ShumwayComRtmpXHR.isAvailable ?
-      new ShumwayComRtmpXHR() : new (<any>XMLHttpRequest)({mozSystem: true});
-    xhr.open('POST', path, true);
-    xhr.responseType = 'arraybuffer';
-    xhr.setRequestHeader('Content-Type', 'application/x-fcs');
-    xhr.onload = function (e) {
-      onload(new Uint8Array(xhr.response), xhr.status);
-    };
-    xhr.onerror = function (e) {
-      console.log('error');
-      throw new Error('HTTP error');
-    };
-    xhr.send(data);
-  }
+		let xhr: any = typeof ShumwayComRtmpXHR !== 'undefined' && ShumwayComRtmpXHR.isAvailable ?
+			new ShumwayComRtmpXHR() : new (<any>XMLHttpRequest)({mozSystem: true});
+		xhr.open('POST', path, true);
+		xhr.responseType = 'arraybuffer';
+		xhr.setRequestHeader('Content-Type', 'application/x-fcs');
+		xhr.onload = function (e) {
+			onload(new Uint8Array(xhr.response), xhr.status);
+		};
+		xhr.onerror = function (e) {
+			console.log('error');
+			throw new Error('HTTP error');
+		};
+		xhr.send(data);
+	}
 }

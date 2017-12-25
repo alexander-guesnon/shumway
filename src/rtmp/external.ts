@@ -15,118 +15,126 @@
  */
 
 module RtmpJs.Browser {
-  export class ShumwayComRtmpSocket {
-    public static get isAvailable(): boolean {
-      return !!(typeof ShumwayCom !== 'undefined' && ShumwayCom.createRtmpSocket);
-    }
+	export class ShumwayComRtmpSocket {
+		public static get isAvailable(): boolean {
+			return !!(typeof ShumwayCom !== 'undefined' && ShumwayCom.createRtmpSocket);
+		}
 
-    private _socket: RtmpSocket;
-    private _onopen: () => void;
-    private _ondata: (e: {data: ArrayBuffer}) => void;
-    private _ondrain: () => void;
-    private _onerror: (e: any) => void;
-    private _onclose: () => void;
+		private _socket: RtmpSocket;
+		private _onopen: () => void;
+		private _ondata: (e: { data: ArrayBuffer }) => void;
+		private _ondrain: () => void;
+		private _onerror: (e: any) => void;
+		private _onclose: () => void;
 
-    public constructor(host: string, port: number, params: any) {
-      this._socket = ShumwayCom.createRtmpSocket({host: host, port: port, ssl: params.useSecureTransport});
-    }
+		public constructor(host: string, port: number, params: any) {
+			this._socket = ShumwayCom.createRtmpSocket({host: host, port: port, ssl: params.useSecureTransport});
+		}
 
-    get onopen(): () => void {
-      return this._onopen;
-    }
-    set onopen(callback: () => void) {
-      this._socket.setOpenCallback(this._onopen = callback);
-    }
+		get onopen(): () => void {
+			return this._onopen;
+		}
 
-    get ondata(): (e: {data: ArrayBuffer}) => void {
-      return this._ondata;
-    }
-    set ondata(callback: (e: {data: ArrayBuffer}) => void) {
-      this._socket.setDataCallback(this._ondata = callback);
-    }
+		set onopen(callback: () => void) {
+			this._socket.setOpenCallback(this._onopen = callback);
+		}
 
-    get ondrain(): () => void {
-      return this._ondrain;
-    }
-    set ondrain(callback: () => void) {
-      this._socket.setDrainCallback(this._ondrain = callback);
-    }
+		get ondata(): (e: { data: ArrayBuffer }) => void {
+			return this._ondata;
+		}
 
-    get onerror(): (e: any) => void {
-      return this._onerror;
-    }
-    set onerror(callback: (e: any) => void) {
-      this._socket.setErrorCallback(this._onerror = callback);
-    }
+		set ondata(callback: (e: { data: ArrayBuffer }) => void) {
+			this._socket.setDataCallback(this._ondata = callback);
+		}
 
-    get onclose(): () => void {
-      return this._onclose;
-    }
-    set onclose(callback: () => void) {
-      this._socket.setCloseCallback(this._onclose = callback);
-    }
+		get ondrain(): () => void {
+			return this._ondrain;
+		}
 
-    send(buffer: ArrayBuffer, offset: number, count: number): boolean {
-      return this._socket.send(buffer, offset, count);
-    }
+		set ondrain(callback: () => void) {
+			this._socket.setDrainCallback(this._ondrain = callback);
+		}
 
-    close(): void {
-      this._socket.close();
-    }
-  }
+		get onerror(): (e: any) => void {
+			return this._onerror;
+		}
 
-  export class ShumwayComRtmpXHR {
-    public static get isAvailable(): boolean {
-      return !!(typeof ShumwayCom !== 'undefined' && ShumwayCom.createRtmpXHR);
-    }
+		set onerror(callback: (e: any) => void) {
+			this._socket.setErrorCallback(this._onerror = callback);
+		}
 
-    private _xhr: RtmpXHR;
-    private _onload: () => void;
-    private _onerror: () => void;
+		get onclose(): () => void {
+			return this._onclose;
+		}
 
-    get status(): number {
-      return this._xhr.status;
-    }
+		set onclose(callback: () => void) {
+			this._socket.setCloseCallback(this._onclose = callback);
+		}
 
-    get response(): any {
-      return this._xhr.response;
-    }
+		send(buffer: ArrayBuffer, offset: number, count: number): boolean {
+			return this._socket.send(buffer, offset, count);
+		}
 
-    get responseType(): string {
-      return this._xhr.responseType;
-    }
-    set responseType(type: string) {
-      this._xhr.responseType = type;
-    }
+		close(): void {
+			this._socket.close();
+		}
+	}
 
-    get onload(): () => void {
-      return this._onload;
-    }
-    set onload(callback: () => void) {
-      this._xhr.setLoadCallback(this._onload = callback);
-    }
+	export class ShumwayComRtmpXHR {
+		public static get isAvailable(): boolean {
+			return !!(typeof ShumwayCom !== 'undefined' && ShumwayCom.createRtmpXHR);
+		}
 
-    get onerror(): () => void {
-      return this._onload;
-    }
-    set onerror(callback: () => void) {
-      this._xhr.setErrorCallback(this._onerror = callback);
-    }
+		private _xhr: RtmpXHR;
+		private _onload: () => void;
+		private _onerror: () => void;
 
-    public constructor() {
-      this._xhr = ShumwayCom.createRtmpXHR();
-    }
+		get status(): number {
+			return this._xhr.status;
+		}
 
-    open(method: string, path: string, async: boolean = true): void {
-      this._xhr.open(method, path, async);
-    }
+		get response(): any {
+			return this._xhr.response;
+		}
 
-    setRequestHeader(header: string, value: string): void {
-      this._xhr.setRequestHeader(header, value);
-    }
+		get responseType(): string {
+			return this._xhr.responseType;
+		}
 
-    send(data?: any): void {
-      this._xhr.send(data);
-    }
-  }
+		set responseType(type: string) {
+			this._xhr.responseType = type;
+		}
+
+		get onload(): () => void {
+			return this._onload;
+		}
+
+		set onload(callback: () => void) {
+			this._xhr.setLoadCallback(this._onload = callback);
+		}
+
+		get onerror(): () => void {
+			return this._onload;
+		}
+
+		set onerror(callback: () => void) {
+			this._xhr.setErrorCallback(this._onerror = callback);
+		}
+
+		public constructor() {
+			this._xhr = ShumwayCom.createRtmpXHR();
+		}
+
+		open(method: string, path: string, async: boolean = true): void {
+			this._xhr.open(method, path, async);
+		}
+
+		setRequestHeader(header: string, value: string): void {
+			this._xhr.setRequestHeader(header, value);
+		}
+
+		send(data?: any): void {
+			this._xhr.send(data);
+		}
+	}
 }
