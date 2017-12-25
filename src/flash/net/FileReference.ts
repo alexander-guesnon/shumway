@@ -38,37 +38,37 @@ module Shumway.AVMX.AS.flash.net {
 		// _data: flash.utils.ByteArray;
 		get creationDate(): ASDate {
 			release || notImplemented("public flash.net.FileReference::get creationDate");
-			return;
+			return null;
 			// return this._creationDate;
 		}
 
 		get creator(): string {
 			release || notImplemented("public flash.net.FileReference::get creator");
-			return;
+			return "";
 			// return this._creator;
 		}
 
 		get modificationDate(): ASDate {
 			release || notImplemented("public flash.net.FileReference::get modificationDate");
-			return;
+			return null;
 			// return this._modificationDate;
 		}
 
 		get name(): string {
 			release || notImplemented("public flash.net.FileReference::get name");
-			return;
+			return "";
 			// return this._name;
 		}
 
 		get size(): number {
 			release || notImplemented("public flash.net.FileReference::get size");
-			return;
+			return 0;
 			// return this._size;
 		}
 
 		get type(): string {
 			release || notImplemented("public flash.net.FileReference::get type");
-			return;
+			return "";
 			// return this._type;
 		}
 
@@ -94,14 +94,14 @@ module Shumway.AVMX.AS.flash.net {
 
 		get data(): flash.utils.ByteArray {
 			release || notImplemented("public flash.net.FileReference::get data");
-			return;
+			return null;
 			// return this._data;
 		}
 
 		browse(typeFilter: ASArray = null): boolean {
 			typeFilter = typeFilter;
 			release || notImplemented("public flash.net.FileReference::browse");
-			return;
+			return false;
 		}
 	}
 }

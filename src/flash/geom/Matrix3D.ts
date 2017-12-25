@@ -94,7 +94,7 @@ module Shumway.AVMX.AS.flash.geom {
 			toMat = toMat;
 			percent = +percent;
 			release || notImplemented("public flash.geom.Matrix3D::static interpolate");
-			return;
+			return null;
 		}
 
 		setTargetDisplayObject(object: flash.display.DisplayObject): void {
@@ -265,13 +265,13 @@ module Shumway.AVMX.AS.flash.geom {
 		decompose(orientationStyle: string = "eulerAngles"): Float64Vector {
 			orientationStyle = axCoerceString(orientationStyle);
 			release || notImplemented("public flash.geom.Matrix3D::decompose");
-			return;
+			return null;
 		}
 
 		recompose(components: Float64Vector, orientationStyle: string = "eulerAngles"): boolean {
 			orientationStyle = axCoerceString(orientationStyle);
 			release || notImplemented("public flash.geom.Matrix3D::recompose");
-			return;
+			return false;
 		}
 
 		appendTranslation(x: number, y: number, z: number): void {

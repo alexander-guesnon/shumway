@@ -38,7 +38,7 @@ module Shumway.AVMX.AS.flash.geom {
 			m = m;
 			v = v;
 			release || notImplemented("public flash.geom.Utils3D::static projectVector");
-			return;
+			return null;
 		}
 
 		static projectVectors(m: flash.geom.Matrix3D, verts: Float64Vector, projectedVerts: Float64Vector, uvts: Float64Vector): void {
@@ -57,7 +57,7 @@ module Shumway.AVMX.AS.flash.geom {
 			at = at;
 			up = up;
 			release || notImplemented("public flash.geom.Utils3D::static pointTowards");
-			return;
+			return null;
 		}
 
 	}

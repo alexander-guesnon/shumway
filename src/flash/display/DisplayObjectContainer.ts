@@ -168,7 +168,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get textSnapshot(): flash.text.TextSnapshot {
 			release || notImplemented("public DisplayObjectContainer::get textSnapshot");
-			return;
+			return null;
 			// return this._textSnapshot;
 		}
 
@@ -672,7 +672,7 @@ module Shumway.AVMX.AS.flash.display {
 		areInaccessibleObjectsUnderPoint(point: flash.geom.Point): boolean {
 			point = point;
 			release || notImplemented("public DisplayObjectContainer::areInaccessibleObjectsUnderPoint");
-			return;
+			return false;
 		}
 
 		contains(child: DisplayObject): boolean {

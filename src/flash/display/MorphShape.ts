@@ -35,10 +35,14 @@ module Shumway.AVMX.AS.flash.display {
 			this._setFlags(DisplayObjectFlags.ContainsMorph);
 		}
 
-		constructor() {
+		preInit() {
 			if (this._symbol && !this._fieldsInitialized) {
 				this.applySymbol();
 			}
+			super.preInit();
+		}
+
+		constructor() {
 			super();
 			release || assert(!this._symbol);
 		}

@@ -47,7 +47,7 @@ module Shumway.AVMX.AS.flash.media {
 		// _colorSpaces: any /*ASVector*/;
 		get viewPort(): flash.geom.Rectangle {
 			release || notImplemented("public flash.media.StageVideo::get viewPort");
-			return;
+			return null;
 			// return this._viewPort;
 		}
 
@@ -60,7 +60,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get pan(): flash.geom.Point {
 			release || notImplemented("public flash.media.StageVideo::get pan");
-			return;
+			return null;
 			// return this._pan;
 		}
 
@@ -73,7 +73,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get zoom(): flash.geom.Point {
 			release || notImplemented("public flash.media.StageVideo::get zoom");
-			return;
+			return null;
 			// return this._zoom;
 		}
 
@@ -86,7 +86,7 @@ module Shumway.AVMX.AS.flash.media {
 
 		get depth(): number /*int*/ {
 			release || notImplemented("public flash.media.StageVideo::get depth");
-			return;
+			return 0;
 			// return this._depth;
 		}
 
@@ -99,19 +99,19 @@ module Shumway.AVMX.AS.flash.media {
 
 		get videoWidth(): number /*int*/ {
 			release || notImplemented("public flash.media.StageVideo::get videoWidth");
-			return;
+			return 0;
 			// return this._videoWidth;
 		}
 
 		get videoHeight(): number /*int*/ {
 			release || notImplemented("public flash.media.StageVideo::get videoHeight");
-			return;
+			return 0;
 			// return this._videoHeight;
 		}
 
 		get colorSpaces(): Float64Vector {
 			release || notImplemented("public flash.media.StageVideo::get colorSpaces");
-			return;
+			return null;
 			// return this._colorSpaces;
 		}
 

@@ -32,10 +32,10 @@ module Shumway.AVMX.AS.flash.display {
 		static CtorToken = {};
 
 		constructor(token: Object) {
+			super();
 			if (token !== LoaderInfo.CtorToken) {
 				this.sec.throwError('ArgumentError', Errors.CantInstantiateError, 'LoaderInfo$');
 			}
-			super();
 			this._loader = null;
 			this._loaderUrl = '';
 			this.reset();
@@ -83,7 +83,7 @@ module Shumway.AVMX.AS.flash.display {
 		static getLoaderInfoByDefinition(object: Object): flash.display.LoaderInfo {
 			object = object;
 			release || notImplemented("public flash.display.LoaderInfo::static getLoaderInfoByDefinition");
-			return;
+			return null;
 		}
 
 		_url: string;
@@ -432,6 +432,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (!symbol) {
 				Debug.warning("Attempt to resolve symbol for AVM2 class failed: Symbol " +
 					symbolId + " not found.");
+				return null;
 			} else {
 				Object.defineProperty(classDefinition.tPrototype, "_symbol", {value: symbol});
 				return symbol;

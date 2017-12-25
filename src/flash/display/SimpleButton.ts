@@ -212,7 +212,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get soundTransform(): flash.media.SoundTransform {
 			release || notImplemented("public flash.display.SimpleButton::get soundTransform");
-			return;
+			return null;
 			// return this._soundTransform;
 		}
 

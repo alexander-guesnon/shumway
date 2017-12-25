@@ -36,6 +36,7 @@
     "./automation/**/*.ts",
     "./desktop/**/*.ts",
     "./globalization/**/*.ts",
-    "./text/engine/*.ts"
+    "./text/engine/*.ts",
+    "./text/ime/*.ts"
   ]
 }

@@ -58,10 +58,14 @@ module Shumway.AVMX.AS.flash.display {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // [];
 
-		constructor() {
+		preInit() {
 			if (this._symbol && !this._fieldsInitialized) {
 				this.applySymbol();
 			}
+			super.preInit();
+		}
+
+		constructor() {
 			super();
 			if (!this._fieldsInitialized) {
 				this._initializeFields();
@@ -163,7 +167,7 @@ module Shumway.AVMX.AS.flash.display {
 					case SwfTagCode.CODE_PLACE_OBJECT3:
 						let placeObjectTag = <Shumway.SWF.Parser.PlaceObjectTag>tag;
 						let depth = placeObjectTag.depth;
-						let child = this.getTimelineObjectAtDepth(depth);
+						child = this.getTimelineObjectAtDepth(depth);
 						let hasCharacter = placeObjectTag.symbolId > -1;
 
 						// Check for invalid flag constellations.
@@ -283,7 +287,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		get soundTransform(): flash.media.SoundTransform {
 			release || notImplemented("public flash.display.Sprite::get soundTransform");
-			return;
+			return null;
 			// return this._soundTransform;
 		}
 
@@ -369,7 +373,8 @@ module Shumway.AVMX.AS.flash.display {
 		               testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
 			// If looking for a drop target, ignore this object if it is the one being dragged.
 			if (testingType === HitTestingType.Drop && this._dragMode > DragMode.Inactive) {
-				return;
+				// AMBIGUOUS
+				return HitTestingResult.None;
 			}
 			let result = this._boundsAndMaskContainPoint(globalX, globalY, localX, localY, testingType);
 			if (!result && testingType === HitTestingType.Mouse && this._hitArea && this._mouseEnabled) {

@@ -220,7 +220,7 @@ module Shumway.AVMX.AS.flash.display {
 		private _getPixelData(rect: flash.geom.Rectangle): Int32Array {
 			let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
 			if (r.isEmpty()) {
-				return;
+				return new Int32Array(0);
 			}
 			let xMin = r.x;
 			let xMax = r.x + r.width;
@@ -364,11 +364,12 @@ module Shumway.AVMX.AS.flash.display {
 			this._ensureBitmapData();
 			let a = uARGB >>> 24;
 			let uRGB = uARGB & 0x00ffffff;
+			let pARGB: number;
 			if (this._transparent) {
 				let uARGB = uRGB | a << 24;
-				let pARGB = premultiplyARGB(uARGB);
+				pARGB = premultiplyARGB(uARGB);
 			} else {
-				let pARGB = uRGB | 0xff000000;
+				pARGB = uRGB | 0xff000000;
 			}
 			this._view[y * this._rect.width + x] = swap32(pARGB);
 			this._invalidate();
@@ -395,7 +396,7 @@ module Shumway.AVMX.AS.flash.display {
 		compare(otherBitmapData: flash.display.BitmapData): ASObject {
 			otherBitmapData = otherBitmapData;
 			release || notImplemented("public flash.display.BitmapData::compare");
-			return;
+			return null;
 		}
 
 		copyChannel(sourceBitmapData: flash.display.BitmapData, sourceRect: flash.geom.Rectangle,
@@ -609,10 +610,11 @@ module Shumway.AVMX.AS.flash.display {
 			this._ensureBitmapData();
 			// TODO: what guarantees this, and why do we even need it?
 			release || assert(this._type === ImageType.PremultipliedAlphaARGB);
+			let pARGB: number;
 			if (this._transparent) {
-				let pARGB = premultiplyARGB(uARGB);
+				pARGB = premultiplyARGB(uARGB);
 			} else {
-				let pARGB = uARGB | 0xff000000;
+				pARGB = uARGB | 0xff000000;
 			}
 			let pBGRA = swap32(pARGB);
 			let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
@@ -671,7 +673,7 @@ module Shumway.AVMX.AS.flash.display {
 			sourceRect = sourceRect;
 			filter = filter;
 			release || somewhatImplemented("public flash.display.BitmapData::generateFilterRect");
-			return;
+			return null;
 		}
 
 		getColorBoundsRect(mask: number /*uint*/, color: number /*uint*/,
@@ -698,8 +700,8 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		getVector(rect: flash.geom.Rectangle): Uint32Vector {
-			let outputVector = new this.sec.Uint32Vector(pixelData.length);
 			let pixelData = this._getPixelData(rect);
+			let outputVector = new this.sec.Uint32Vector(pixelData.length);
 			if (!pixelData) {
 				return outputVector;
 			}
@@ -783,7 +785,7 @@ module Shumway.AVMX.AS.flash.display {
 			numPixels = numPixels | 0;
 			fillColor = fillColor >>> 0;
 			release || somewhatImplemented("public flash.display.BitmapData::pixelDissolve");
-			return;
+			return 0;
 		}
 
 		scroll(x: number /*int*/, y: number /*int*/): void {
@@ -814,7 +816,7 @@ module Shumway.AVMX.AS.flash.display {
 			mask = mask >>> 0;
 			copySource = !!copySource;
 			release || somewhatImplemented("public flash.display.BitmapData::threshold");
-			return;
+			return 0;
 		}
 
 		lock(): void {
@@ -829,7 +831,7 @@ module Shumway.AVMX.AS.flash.display {
 		histogram(hRect: flash.geom.Rectangle = null): GenericVector {
 			hRect = hRect;
 			release || notImplemented("public flash.display.BitmapData::histogram");
-			return;
+			return null;
 		}
 
 		encode(rect: flash.geom.Rectangle, compressor: ASObject,
@@ -838,7 +840,7 @@ module Shumway.AVMX.AS.flash.display {
 			compressor = compressor;
 			byteArray = byteArray;
 			release || notImplemented("public flash.display.BitmapData::encode");
-			return;
+			return null
 		}
 
 		/**

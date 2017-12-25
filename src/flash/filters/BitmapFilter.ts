@@ -137,7 +137,8 @@ module Shumway.AVMX.AS.flash.filters {
 
 		static sanitizeAlphas(alphas: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
 			let arr: number [] = [];
-			for (let i = 0, n = Math.min(alphas.length, maxLen); i < n; i++) {
+			let i, n;
+			for (i = 0, n = Math.min(alphas.length, maxLen); i < n; i++) {
 				arr[i] = NumberUtilities.clamp(+alphas[i], 0, 1);
 			}
 			while (i < minLen) {
@@ -148,7 +149,8 @@ module Shumway.AVMX.AS.flash.filters {
 
 		static sanitizeRatios(ratios: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
 			let arr: number [] = [];
-			for (let i = 0, n = Math.min(ratios.length, maxLen); i < n; i++) {
+			let i, n;
+			for (i = 0, n = Math.min(ratios.length, maxLen); i < n; i++) {
 				arr[i] = NumberUtilities.clamp(+ratios[i], 0, 255);
 			}
 			while (i < minLen) {

@@ -43,12 +43,15 @@ module Shumway.AVMX.AS.flash.media {
 			this._videoHeight = 0;
 		}
 
-		constructor(width: number /*int*/ = 320, height: number /*int*/ = 240) {
-			width |= 0;
-			height |= 0;
+		preInit() {
 			if (this._symbol && !this._fieldsInitialized) {
 				this.applySymbol();
 			}
+			super.preInit();
+		}
+		constructor(width: number /*int*/ = 320, height: number /*int*/ = 240) {
+			width |= 0;
+			height |= 0;
 			super();
 			if (!this._fieldsInitialized) {
 				this._initializeFields();

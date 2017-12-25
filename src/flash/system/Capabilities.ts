@@ -233,31 +233,31 @@ module Shumway.AVMX.AS.flash.system {
 
 		static get hasTLS(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get hasTLS");
-			return;
+			return false;
 			// return Capabilities._hasTLS;
 		}
 
 		static get maxLevelIDC(): string {
 			release || notImplemented("public flash.system.Capabilities::get maxLevelIDC");
-			return;
+			return "";
 			// return Capabilities._maxLevelIDC;
 		}
 
 		static get supports32BitProcesses(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get supports32BitProcesses");
-			return;
+			return false;
 			// return Capabilities._supports32BitProcesses;
 		}
 
 		static get supports64BitProcesses(): boolean {
 			release || notImplemented("public flash.system.Capabilities::get supports64BitProcesses");
-			return;
+			return false;
 			// return Capabilities._supports64BitProcesses;
 		}
 
 		static get _internal(): number /*uint*/ {
 			release || notImplemented("public flash.system.Capabilities::get _internal");
-			return;
+			return 0;
 			// return Capabilities.__internal;
 		}
 

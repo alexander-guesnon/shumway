@@ -578,7 +578,8 @@ module Shumway.AVMX.AS.flash.display {
 				sceneName = axCoerceString(sceneName);
 				let scenes = this._scenes;
 				release || assert(scenes.length, "There should be at least one scene defined.");
-				for (let i = 0; i < scenes.length; i++) {
+				let i;
+				for (i = 0; i < scenes.length; i++) {
 					scene = scenes[i];
 					if (scene.name === sceneName) {
 						break;
@@ -809,6 +810,7 @@ module Shumway.AVMX.AS.flash.display {
 				}
 			}
 			release || assertUnreachable("Must have at least one scene covering all frames.");
+			return null;
 		}
 
 		/**

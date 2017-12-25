@@ -233,7 +233,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastInfo(): flash.net.NetStreamMulticastInfo {
 			release || notImplemented("public flash.net.NetStream::get multicastInfo");
-			return;
+			return null;
 			// return this._multicastInfo;
 		}
 
@@ -266,13 +266,13 @@ module Shumway.AVMX.AS.flash.net {
 
 		get objectEncoding(): number /*uint*/ {
 			release || notImplemented("public flash.net.NetStream::get objectEncoding");
-			return;
+			return 0;
 			// return this._objectEncoding;
 		}
 
 		get multicastPushNeighborLimit(): number {
 			release || notImplemented("public flash.net.NetStream::get multicastPushNeighborLimit");
-			return;
+			return 0;
 			// return this._multicastPushNeighborLimit;
 		}
 
@@ -285,7 +285,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastWindowDuration(): number {
 			release || notImplemented("public flash.net.NetStream::get multicastWindowDuration");
-			return;
+			return 0;
 			// return this._multicastWindowDuration;
 		}
 
@@ -298,7 +298,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastRelayMarginDuration(): number {
 			release || notImplemented("public flash.net.NetStream::get multicastRelayMarginDuration");
-			return;
+			return 0;
 			// return this._multicastRelayMarginDuration;
 		}
 
@@ -311,7 +311,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastAvailabilityUpdatePeriod(): number {
 			release || notImplemented("public flash.net.NetStream::get multicastAvailabilityUpdatePeriod");
-			return;
+			return 0;
 			// return this._multicastAvailabilityUpdatePeriod;
 		}
 
@@ -324,7 +324,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastFetchPeriod(): number {
 			release || notImplemented("public flash.net.NetStream::get multicastFetchPeriod");
-			return;
+			return 0;
 			// return this._multicastFetchPeriod;
 		}
 
@@ -337,7 +337,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get multicastAvailabilitySendToAll(): boolean {
 			release || notImplemented("public flash.net.NetStream::get multicastAvailabilitySendToAll");
-			return;
+			return false;
 			// return this._multicastAvailabilitySendToAll;
 		}
 
@@ -350,31 +350,31 @@ module Shumway.AVMX.AS.flash.net {
 
 		get farID(): string {
 			release || notImplemented("public flash.net.NetStream::get farID");
-			return;
+			return "";
 			// return this._farID;
 		}
 
 		get nearNonce(): string {
 			release || notImplemented("public flash.net.NetStream::get nearNonce");
-			return;
+			return "";
 			// return this._nearNonce;
 		}
 
 		get farNonce(): string {
 			release || notImplemented("public flash.net.NetStream::get farNonce");
-			return;
+			return "";
 			// return this._farNonce;
 		}
 
 		get peerStreams(): ASArray {
 			release || notImplemented("public flash.net.NetStream::get peerStreams");
-			return;
+			return null;
 			// return this._peerStreams;
 		}
 
 		get audioReliable(): boolean {
 			release || notImplemented("public flash.net.NetStream::get audioReliable");
-			return;
+			return false;
 			// return this._audioReliable;
 		}
 
@@ -387,7 +387,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get videoReliable(): boolean {
 			release || notImplemented("public flash.net.NetStream::get videoReliable");
-			return;
+			return false;
 			// return this._videoReliable;
 		}
 
@@ -400,7 +400,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get dataReliable(): boolean {
 			release || notImplemented("public flash.net.NetStream::get dataReliable");
-			return;
+			return false;
 			// return this._dataReliable;
 		}
 
@@ -413,7 +413,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get audioSampleAccess(): boolean {
 			release || notImplemented("public flash.net.NetStream::get audioSampleAccess");
-			return;
+			return false;
 			// return this._audioSampleAccess;
 		}
 
@@ -426,7 +426,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get videoSampleAccess(): boolean {
 			release || notImplemented("public flash.net.NetStream::get videoSampleAccess");
-			return;
+			return false;
 			// return this._videoSampleAccess;
 		}
 
@@ -450,7 +450,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get useHardwareDecoder(): boolean {
 			release || notImplemented("public flash.net.NetStream::get useHardwareDecoder");
-			return;
+			return false;
 			// return this._useHardwareDecoder;
 		}
 
@@ -463,7 +463,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get useJitterBuffer(): boolean {
 			release || notImplemented("public flash.net.NetStream::get useJitterBuffer");
-			return;
+			return false;
 			// return this._useJitterBuffer;
 		}
 
@@ -476,7 +476,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get videoStreamSettings(): flash.media.VideoStreamSettings {
 			release || notImplemented("public flash.net.NetStream::get videoStreamSettings");
-			return;
+			return null;
 			// return this._videoStreamSettings;
 		}
 

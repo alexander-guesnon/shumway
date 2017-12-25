@@ -20,9 +20,10 @@ module Shumway.AVMX.AS.flash.geom {
 
 	export class Vector3D extends ASObject {
 		static classInitializer() {
-			this.X_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
-			this.Y_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
-			this.Z_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
+			const th = this as any;
+			th.X_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
+			th.Y_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
+			th.Z_AXIS = Object.freeze(this.Create(1, 0, 0, 0));
 		}
 
 		static Create(x: number, y: number, z: number, w: number) {

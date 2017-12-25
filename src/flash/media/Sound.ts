@@ -108,11 +108,14 @@ module Shumway.AVMX.AS.flash.media {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // ["load"];
 
-		constructor(stream?: flash.net.URLRequest, context?: flash.media.SoundLoaderContext) {
+		preInit() {
 			if (this._symbol) {
 				this.applySymbol();
 			}
+			super.preInit();
+		}
 
+		constructor(stream?: flash.net.URLRequest, context?: flash.media.SoundLoaderContext) {
 			super();
 
 			Telemetry.instance.reportTelemetry({topic: 'feature', feature: Telemetry.Feature.SOUND_FEATURE});
@@ -233,7 +236,7 @@ module Shumway.AVMX.AS.flash.media {
 			length = +length;
 			startPosition = +startPosition;
 			release || notImplemented("public flash.media.Sound::extract");
-			return;
+			return 0;
 		}
 
 		load(request: flash.net.URLRequest, context?: SoundLoaderContext): void {
@@ -244,7 +247,7 @@ module Shumway.AVMX.AS.flash.media {
 			let checkPolicyFile: boolean = context ? context.checkPolicyFile : false;
 			let bufferTime: number = context ? context.bufferTime : 1000;
 
-			let _this = this;
+			let self = this;
 			let stream = this._stream = new this.sec.flash.net.URLStream();
 			let data = new this.sec.flash.utils.ByteArray();
 			let dataPosition = 0;
@@ -254,23 +257,23 @@ module Shumway.AVMX.AS.flash.media {
 			soundData.completed = false;
 
 			stream.addEventListener("progress", function (event) {
-				_this._bytesLoaded = event.axGetPublicProperty("bytesLoaded");
-				_this._bytesTotal = event.axGetPublicProperty("bytesTotal");
+				self._bytesLoaded = event.axGetPublicProperty("bytesLoaded");
+				self._bytesTotal = event.axGetPublicProperty("bytesTotal");
 
 				if (playUsingWebAudio && !mp3DecodingSession) {
 					// initialize MP3 decoding
 					mp3DecodingSession = decodeMP3(soundData, function (duration, final) {
-						if (_this._length === 0) {
+						if (self._length === 0) {
 							// once we have some data, trying to play it
-							_this._soundData = soundData;
+							self._soundData = soundData;
 
-							_this._playQueue.forEach(function (item) {
+							self._playQueue.forEach(function (item) {
 								item.channel._playSoundDataViaChannel(soundData, item.startTime);
 							});
 						}
 						// estimate duration based on bytesTotal and current loaded data time
-						_this._length = final ? duration * 1000 : Math.max(duration,
-							mp3DecodingSession.estimateDuration(_this._bytesTotal)) * 1000;
+						self._length = final ? duration * 1000 : Math.max(duration,
+							mp3DecodingSession.estimateDuration(self._bytesTotal)) * 1000;
 					});
 				}
 
@@ -281,23 +284,23 @@ module Shumway.AVMX.AS.flash.media {
 				}
 				dataPosition += bytesAvailable;
 
-				_this.dispatchEvent(event);
+				self.dispatchEvent(event);
 			});
 
 			stream.addEventListener("complete", function (event) {
-				_this.dispatchEvent(event);
+				self.dispatchEvent(event);
 				soundData.data = (<any> data)._buffer;
 				soundData.mimeType = 'audio/mpeg';
 				soundData.completed = true;
 
 				if (!playUsingWebAudio) {
-					_this._soundData = soundData;
+					self._soundData = soundData;
 
 					getAudioDescription(soundData, function (description) {
-						_this._length = description.duration;
+						self._length = description.duration;
 					});
 
-					_this._playQueue.forEach(function (item) {
+					self._playQueue.forEach(function (item) {
 						item.channel._playSoundDataViaAudio(soundData, item.startTime);
 					});
 				}

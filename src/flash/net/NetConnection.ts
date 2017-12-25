@@ -196,7 +196,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get connectedProxyType(): string {
 			release || notImplemented("public flash.net.NetConnection::get connectedProxyType");
-			return;
+			return "";
 			// return this._connectedProxyType;
 		}
 
@@ -210,7 +210,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get maxPeerConnections(): number /*uint*/ {
 			release || notImplemented("public flash.net.NetConnection::get maxPeerConnections");
-			return;
+			return 0;
 			// return this._maxPeerConnections;
 		}
 
@@ -223,31 +223,31 @@ module Shumway.AVMX.AS.flash.net {
 
 		get nearID(): string {
 			release || notImplemented("public flash.net.NetConnection::get nearID");
-			return;
+			return "";
 			// return this._nearID;
 		}
 
 		get farID(): string {
 			release || notImplemented("public flash.net.NetConnection::get farID");
-			return;
+			return "";
 			// return this._farID;
 		}
 
 		get nearNonce(): string {
 			release || notImplemented("public flash.net.NetConnection::get nearNonce");
-			return;
+			return "";
 			// return this._nearNonce;
 		}
 
 		get farNonce(): string {
 			release || notImplemented("public flash.net.NetConnection::get farNonce");
-			return;
+			return "";
 			// return this._farNonce;
 		}
 
 		get unconnectedPeerStreams(): ASArray {
 			release || notImplemented("public flash.net.NetConnection::get unconnectedPeerStreams");
-			return;
+			return null;
 			// return this._unconnectedPeerStreams;
 		}
 

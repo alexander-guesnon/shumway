@@ -52,19 +52,19 @@ module Shumway.AVMX.AS.flash.net {
 		// _bytesPending: number /*uint*/;
 		get bytesAvailable(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::get bytesAvailable");
-			return;
+			return 0;
 			// return this._bytesAvailable;
 		}
 
 		get connected(): boolean {
 			release || notImplemented("public flash.net.Socket::get connected");
-			return;
+			return false;
 			// return this._connected;
 		}
 
 		get objectEncoding(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::get objectEncoding");
-			return;
+			return 0;
 			// return this._objectEncoding;
 		}
 
@@ -77,7 +77,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get endian(): string {
 			release || notImplemented("public flash.net.Socket::get endian");
-			return;
+			return "";
 			// return this._endian;
 		}
 
@@ -90,7 +90,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get bytesPending(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::get bytesPending");
-			return;
+			return 0;
 			// return this._bytesPending;
 		}
 
@@ -173,65 +173,65 @@ module Shumway.AVMX.AS.flash.net {
 
 		readBoolean(): boolean {
 			release || notImplemented("public flash.net.Socket::readBoolean");
-			return;
+			return false;
 		}
 
 		readByte(): number /*int*/ {
 			release || notImplemented("public flash.net.Socket::readByte");
-			return;
+			return 0;
 		}
 
 		readUnsignedByte(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::readUnsignedByte");
-			return;
+			return 0;
 		}
 
 		readShort(): number /*int*/ {
 			release || notImplemented("public flash.net.Socket::readShort");
-			return;
+			return 0;
 		}
 
 		readUnsignedShort(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::readUnsignedShort");
-			return;
+			return 0;
 		}
 
 		readInt(): number /*int*/ {
 			release || notImplemented("public flash.net.Socket::readInt");
-			return;
+			return 0;
 		}
 
 		readUnsignedInt(): number /*uint*/ {
 			release || notImplemented("public flash.net.Socket::readUnsignedInt");
-			return;
+			return 0;
 		}
 
 		readFloat(): number {
 			release || notImplemented("public flash.net.Socket::readFloat");
-			return;
+			return 0;
 		}
 
 		readDouble(): number {
 			release || notImplemented("public flash.net.Socket::readDouble");
-			return;
+			return 0;
 		}
 
 		readMultiByte(length: number /*uint*/, charSet: string): string {
 			length = length >>> 0;
 			charSet = axCoerceString(charSet);
 			release || notImplemented("public flash.net.Socket::readMultiByte");
-			return;
+			return "";
 		}
 
 		readUTF(): string {
 			release || notImplemented("public flash.net.Socket::readUTF");
-			return;
+			return "";
 		}
 
 		readUTFBytes(length: number /*uint*/): string {
 			length = length >>> 0;
 			release || notImplemented("public flash.net.Socket::readUTFBytes");
-			return;
+			return "";
 		}
 
 		flush(): void {

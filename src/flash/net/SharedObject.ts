@@ -60,7 +60,7 @@ module Shumway.AVMX.AS.flash.net {
 		static deleteAll(url: string): number /*int*/ {
 			url = axCoerceString(url);
 			release || notImplemented("public flash.net.SharedObject::static deleteAll");
-			return;
+			return 0;
 		}
 
 		static getDiskUsage(url: string): number /*int*/ {
@@ -116,7 +116,7 @@ module Shumway.AVMX.AS.flash.net {
 			remotePath = axCoerceString(remotePath);
 			secure = !!secure;
 			release || notImplemented("public flash.net.SharedObject::static getRemote");
-			return;
+			return null;
 		}
 
 		static get defaultObjectEncoding(): number /*uint*/ {
@@ -155,7 +155,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		get client(): ASObject {
 			release || notImplemented("public flash.net.SharedObject::get client");
-			return;
+			return null;
 			// return this._client;
 		}
 
@@ -200,7 +200,7 @@ module Shumway.AVMX.AS.flash.net {
 				}
 			}
 			if (isEmpty && !getSharedObjectStorage().getItem(this._path)) {
-				return;
+				return "";
 			}
 			let serializedData = new this.sec.flash.utils.ByteArray();
 			serializedData.objectEncoding = this._objectEncoding;

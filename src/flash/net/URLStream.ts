@@ -167,7 +167,7 @@ module Shumway.AVMX.AS.flash.net {
 
 		readBoolean(): boolean {
 			release || notImplemented("public flash.net.URLStream::readBoolean");
-			return;
+			return false;
 		}
 
 		readByte(): number /*int*/ {
@@ -176,12 +176,12 @@ module Shumway.AVMX.AS.flash.net {
 
 		readUnsignedByte(): number /*uint*/ {
 			release || notImplemented("public flash.net.URLStream::readUnsignedByte");
-			return;
+			return 0;
 		}
 
 		readShort(): number /*int*/ {
 			release || notImplemented("public flash.net.URLStream::readShort");
-			return;
+			return 0;
 		}
 
 		readUnsignedShort(): number /*uint*/ {
@@ -190,29 +190,29 @@ module Shumway.AVMX.AS.flash.net {
 
 		readUnsignedInt(): number /*uint*/ {
 			release || notImplemented("public flash.net.URLStream::readUnsignedInt");
-			return;
+			return 0;
 		}
 
 		readInt(): number /*int*/ {
 			release || notImplemented("public flash.net.URLStream::readInt");
-			return;
+			return 0;
 		}
 
 		readFloat(): number {
 			release || notImplemented("public flash.net.URLStream::readFloat");
-			return;
+			return 0;
 		}
 
 		readDouble(): number {
 			release || notImplemented("public flash.net.URLStream::readDouble");
-			return;
+			return 0;
 		}
 
 		readMultiByte(length: number /*uint*/, charSet: string): string {
 			length = length >>> 0;
 			charSet = axCoerceString(charSet);
 			release || notImplemented("public flash.net.URLStream::readMultiByte");
-			return;
+			return "";
 		}
 
 		readUTF(): string {
