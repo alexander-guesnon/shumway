@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-/// <reference path='../../build/ts/base.d.ts' />
-/// <reference path='../../build/ts/tools.d.ts' />
-/// <reference path='../../build/ts/gfx-base.d.ts' />
-
 /// <reference path='2d/debug.ts'/>
 /// <reference path='2d/surface.ts'/>
 /// <reference path='2d/2d.ts'/>
@@ -32,10 +28,10 @@
 /// <reference path='test/recordingEaselHost.ts' />
 
 interface WebGLActiveInfo {
-  location: any;
+    location: any;
 }
 
 interface WebGLProgram extends WebGLObject {
-  uniforms: any;
-  attributes: any;
+    uniforms: any;
+    attributes: any;
 }

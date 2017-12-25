@@ -84,7 +84,7 @@ module.exports = function(grunt) {
         cmd: commonArguments + 'gfx.js src/gfx/references.ts'
       },
       build_gfx_base_ts: {
-        cmd: commonArguments + 'gfx-base.js src/gfx/references-base.ts'
+        cmd: commonArguments + 'gfx-base.js src/gfx-base/references.ts'
       },
       build_flash_ts: {
         cmd: commonArguments + 'flash.js src/flash/references.ts'
