@@ -859,7 +859,7 @@ module Shumway.AVMX.AS.flash.text {
 			}
 
 			if (!font) {
-				let font = new this.sec.flash.text.Font();
+				font = new this.sec.flash.text.Font();
 				font._fontName = names[0];
 				font._fontFamily = this.resolveFontName(names[0].toLowerCase());
 				font._fontStyle = style;
