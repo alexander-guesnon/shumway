@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outFile": "../../build/ts/player.js",
+    "outFile": "../../build/ts/shell.js",
     "sourceMap": true,
     "declaration": true,
     "removeComments": false,

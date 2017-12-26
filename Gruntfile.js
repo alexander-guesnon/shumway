@@ -27,8 +27,8 @@ module.exports = function(grunt) {
       grunt.option("color", false);
   }
 
-  var tscCommand = 'node ./node_modules/typescript/bin/tsc.js';
-  var commonArguments = tscCommand + ' --target ES5 --sourcemap -d --out build/ts/';
+  var tscCommand = 'node ./node_modules/typescript/lib/tsc.js';
+  var commonArguments = tscCommand + ' -p ';
 
   var defaultBrowserManifestFile = './resources/browser_manifests/browser_manifest.json';
   var defaultTestsManifestFile = 'test_manifest.json';
@@ -63,34 +63,37 @@ module.exports = function(grunt) {
         cmd: 'make -C extension/mozcentral/ build'
       },
       build_base_ts: {
-        cmd: commonArguments + 'base.js src/base/references.ts'
+        cmd: commonArguments + 'src/base'
       },
       build_tools_ts: {
-        cmd: commonArguments + 'tools.js src/tools/references.ts'
+        cmd: commonArguments + 'src/tools'
       },
       build_swf_ts: {
-        cmd: commonArguments + 'swf.js src/swf/references.ts'
+        cmd: commonArguments + 'src/swf'
       },
       build_avm2_ts: {
-        cmd: commonArguments + 'avm2.js src/avm2/references.ts'
+        cmd: commonArguments + 'src/avm2'
       },
       build_avm2_tests: {
         cmd: 'make -C test/avm2/'
       },
       build_avm1_ts: {
-        cmd: commonArguments + 'avm1.js src/avm1/references.ts'
+        cmd: commonArguments + 'src/avm1'
       },
       build_gfx_ts: {
-        cmd: commonArguments + 'gfx.js src/gfx/references.ts'
+        cmd: commonArguments + 'src/gfx'
       },
       build_gfx_base_ts: {
-        cmd: commonArguments + 'gfx-base.js src/gfx-base/references.ts'
+        cmd: commonArguments + 'src/gfx-base'
+      },
+      build_rtmp_ts: {
+        cmd: commonArguments + 'src/rtmp'
       },
       build_flash_ts: {
-        cmd: commonArguments + 'flash.js src/flash/references.ts'
+        cmd: commonArguments + 'src/flash'
       },
       build_player_ts: {
-        cmd: commonArguments + 'player.js src/player/references.ts'
+        cmd: commonArguments + 'src/player'
       },
       build_shell_ts: {
         cmd: tscCommand + ' --target ES5 --sourcemap --out build/ts/shell.js src/shell/references.ts'
@@ -306,12 +309,13 @@ module.exports = function(grunt) {
         tasks: [
           'exec:build_gfx_ts',
           'exec:build_swf_ts',
-          'exec:build_avm2_ts'
+          'exec:build_avm2_ts',
         ]
       },
       natives: {
         tasks: [
           { args: ['exec:build_playerglobal'].concat(parallelArgs), grunt: true },
+          { args: ['exec:build_rtmp_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_flash_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_avm1_ts'].concat(parallelArgs), grunt: true }
         ]
@@ -324,6 +328,7 @@ module.exports = function(grunt) {
       flash: {
         tasks: [
           { args: ['exec:build_playerglobal'].concat(parallelArgs), grunt: true },
+          { args: ['exec:build_rtmp_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_flash_ts'].concat(parallelArgs), grunt: true }
         ]
       }
@@ -370,6 +375,10 @@ module.exports = function(grunt) {
       avm1_ts: {
         files: ['src/avm1/*.ts'],
         tasks: ['exec:build_avm1_ts']
+      },
+      rtmp_ts: {
+        files: ['src/rtmp/*.ts'],
+        tasks: ['exec:build_rtmp_ts']
       },
       player_ts: {
         files: ['src/flash/**/*.ts',
@@ -720,6 +729,7 @@ module.exports = function(grunt) {
   grunt.registerTask('swf', ['exec:build_swf_ts', 'test-quick']);
   grunt.registerTask('flash', ['parallel:flash', 'test-quick']);
   grunt.registerTask('avm1', ['parallel:avm1', 'test-quick']);
+  grunt.registerTask('rtmp', ['exec:build_rtmp_ts', 'test-quick']);
   grunt.registerTask('player', ['exec:build_player_ts', 'test-quick']);
   grunt.registerTask('shell', ['exec:build_shell_ts', 'test-quick']);
   grunt.registerTask('tools', ['exec:build_tools_ts', 'test-quick']);
