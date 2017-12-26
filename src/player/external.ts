@@ -72,7 +72,7 @@ module Shumway.Player {
 			});
 		}
 
-		private _notifySession(session: FileLoadingSession, args): void {
+		private _notifySession(session: FileLoadingSession, args: any): void {
 			let sessionId = args.sessionId;
 			switch (args.topic) {
 				case "open":
@@ -101,7 +101,7 @@ module Shumway.Player {
 			let sessionId = this._nextSessionId++;
 			let service = this;
 			let session = {
-				open: function (request) {
+				open: function (request: any) {
 					let path = service.resolveUrl(request.url);
 					console.log('Session #' + sessionId + ': loading ' + path);
 					ShumwayCom.loadFile({
@@ -123,7 +123,7 @@ module Shumway.Player {
 			return new (<any>window).URL(url, this._baseUrl).href;
 		}
 
-		navigateTo(url, target) {
+		navigateTo(url: any, target: any) {
 			ShumwayCom.navigateTo({
 				url: this.resolveUrl(url),
 				target: target
@@ -152,7 +152,7 @@ module Shumway.Player {
 			let service = this;
 			let reader: Shumway.BinaryFileReader;
 			return {
-				open: function (request) {
+				open: function (request: any) {
 					let self: any = this;
 					let path = service.resolveUrl(request.url);
 					console.log('FileLoadingService: loading ' + path + ", data: " + request.data);
@@ -243,7 +243,7 @@ module Shumway.Player {
 			}
 		}
 
-		private _promiseFile(path, responseType) {
+		private _promiseFile(path: any, responseType: any) {
 			return new Promise(function (resolve, reject) {
 				SWF.enterTimeline('Load file', path);
 				let xhr = new XMLHttpRequest();
@@ -342,7 +342,7 @@ module Shumway.Player {
 
 		_sendMessage(connectionName: string, methodName: string, argsBuffer: ArrayBuffer,
 		             sender: ILocalConnectionSender, senderDomain: string, senderIsSecure: boolean) {
-			return undefined;
+			return undefined as any;
 		}
 
 		send(connectionName: string, methodName: string, argsBuffer: ArrayBuffer,

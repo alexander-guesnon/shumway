@@ -27,7 +27,7 @@ module Shumway.Player.Window {
 		constructor(sec: ISecurityDomain, peer: Shumway.Remoting.ITransportPeer) {
 			super(sec);
 			this._peer = peer;
-			this._peer.onAsyncMessage = function (msg) {
+			this._peer.onAsyncMessage = function (msg: any) {
 				this.onWindowMessage(msg);
 			}.bind(this);
 			this._assetDecodingRequests = [];
@@ -35,7 +35,7 @@ module Shumway.Player.Window {
 
 		update(updates: DataBuffer, assets: any[]): void {
 			let bytes = updates.getBytes();
-			let message = {
+			let message: any = {
 				type: 'player',
 				updates: bytes,
 				assets: assets,
@@ -47,7 +47,7 @@ module Shumway.Player.Window {
 
 		updateAndGet(updates: DataBuffer, assets: any[]): any {
 			let bytes = updates.getBytes();
-			let message = {
+			let message: any = {
 				type: 'player',
 				updates: bytes,
 				assets: assets,
@@ -64,7 +64,7 @@ module Shumway.Player.Window {
 		}
 
 		videoControl(id: number, eventType: VideoControlEvent, data: any): any {
-			let message = {
+			let message: any = {
 				type: 'videoControl',
 				id: id,
 				eventType: eventType,
@@ -117,7 +117,7 @@ module Shumway.Player.Window {
 			});
 		}
 
-		private onWindowMessage(data) {
+		private onWindowMessage(data: any) {
 			if (typeof data === 'object' && data !== null) {
 				switch (data.type) {
 					case 'gfx':

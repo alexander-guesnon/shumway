@@ -61,7 +61,7 @@ module Shumway {
 			return this._onTime;
 		}
 
-		startFrame(frameRate) {
+		startFrame(frameRate: number) {
 			let interval = 1000 / frameRate;
 
 			let adjustedInterval = interval;
@@ -109,7 +109,7 @@ module Shumway {
 			this._drawsSkipped++;
 		}
 
-		setDelta(value) {
+		setDelta(value: number) {
 			if (!this._trackDelta) {
 				return;
 			}

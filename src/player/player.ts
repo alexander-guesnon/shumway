@@ -413,7 +413,7 @@ module Shumway.Player {
 				for (let i in this.movieParams) {
 					parameters.axSetPublicProperty(i, this.movieParams[i]);
 				}
-				loaderContext.parameters = <Shumway.AVMX.AS.ASObject>parameters;
+				(loaderContext as any).parameters = <Shumway.AVMX.AS.ASObject>parameters;
 			}
 			return loaderContext;
 		}
@@ -662,14 +662,14 @@ module Shumway.Player {
 				stage.setStageWidth(1024);
 				stage.setStageHeight(1024);
 
-				let symbols = [];
+				let symbols: Array<Shumway.Timeline.DisplaySymbol> = [];
 				loaderInfo._dictionary.forEach(function (symbol, key) {
 					if (symbol instanceof Shumway.Timeline.DisplaySymbol) {
 						symbols.push(symbol);
 					}
 				});
 
-				function show(symbol) {
+				function show(symbol: Shumway.Timeline.DisplaySymbol) {
 					flash.display.DisplayObject.reset();
 					flash.display.MovieClip.reset();
 					let symbolInstance = symbol.symbolClass.initializeFrom(symbol);
@@ -770,8 +770,9 @@ module Shumway.Player {
 		}
 
 		checkDomainForSWFLoading(domain: string): CrossDomainSWFLoadingWhitelistResult {
+			let url: any;
 			try {
-				let url = new (<any>window).URL(domain);
+				url = new (<any>window).URL(domain);
 			} catch (e) {
 				return CrossDomainSWFLoadingWhitelistResult.Failed;
 			}

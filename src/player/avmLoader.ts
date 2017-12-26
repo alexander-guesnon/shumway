@@ -29,7 +29,7 @@ module Shumway {
 		let result = new PromiseWrapper<AXSecurityDomain>();
 		release || assert(!!(libraries & AVM2LoadLibrariesFlags.Builtin));
 		SWF.enterTimeline('Load builton.abc file');
-		SystemResourcesLoadingService.instance.load(SystemResourceId.BuiltinAbc).then(function (buffer) {
+		SystemResourcesLoadingService.instance.load(SystemResourceId.BuiltinAbc).then(function (buffer: any) {
 			let sec = new Shumway.AVMX.AXSecurityDomain();
 			let env = {url: 'builtin.abc', app: sec.system};
 			let builtinABC = new Shumway.AVMX.ABCFile(env, new Uint8Array(buffer));
@@ -67,6 +67,7 @@ module Shumway {
 			}
 
 			result.resolve(sec);
+			return null;
 		}, result.reject);
 		return result.promise;
 	}

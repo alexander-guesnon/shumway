@@ -643,7 +643,7 @@ module Shumway.Remoting.Player {
 			return {
 				tag: MessageTag.FocusEvent,
 				type: <FocusEventType>typeId
-			}
+			} as any;
 		}
 
 		private _readMouseEvent(): MouseEventAndPointData {
@@ -662,7 +662,7 @@ module Shumway.Remoting.Player {
 				altKey: !!(flags & KeyboardEventFlags.AltKey),
 				shiftKey: !!(flags & KeyboardEventFlags.ShiftKey),
 				buttons: buttons
-			};
+			} as any;
 		}
 
 		private _readKeyboardEvent(): KeyboardEventData {
@@ -682,7 +682,7 @@ module Shumway.Remoting.Player {
 				ctrlKey: !!(flags & KeyboardEventFlags.CtrlKey),
 				altKey: !!(flags & KeyboardEventFlags.AltKey),
 				shiftKey: !!(flags & KeyboardEventFlags.ShiftKey)
-			};
+			} as any;
 		}
 	}
 }
