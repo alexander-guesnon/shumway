@@ -15,107 +15,110 @@
  */
 
 module Shumway.Shell {
-  export class MicroTask {
-    runAt: number;
-    constructor(public id: number, public fn: () => any, public args: any[],
-                public interval: number, public repeat: boolean) {
-    }
-  }
-  
-  let jsGlobal = (function() { return this || (1, eval)('this//# sourceURL=jsGlobal-getter'); })();
+	export class MicroTask {
+		runAt: number;
 
-  export class MicroTasksQueue {
-    private tasks: MicroTask[] = [];
-    private nextId: number = 1;
-    private time: number = 1388556000000; // 1-Jan-2014
-    private stopped: boolean = true;
+		constructor(public id: number, public fn: () => any, public args: any[],
+		            public interval: number, public repeat: boolean) {
+		}
+	}
 
-    constructor() {
-    }
+	let jsGlobal = (function () {
+		return this || (1, eval)('this//# sourceURL=jsGlobal-getter');
+	})();
 
-    public get isEmpty(): boolean {
-      return this.tasks.length === 0;
-    }
+	export class MicroTasksQueue {
+		private tasks: MicroTask[] = [];
+		private nextId: number = 1;
+		private time: number = 1388556000000; // 1-Jan-2014
+		private stopped: boolean = true;
 
-    public scheduleInterval(fn: () => any, args: any[], interval: number, repeat: boolean) {
-      let MIN_INTERVAL = 4;
-      interval = Math.round((interval || 0)/10) * 10;
-      if (interval < MIN_INTERVAL) {
-        interval = MIN_INTERVAL;
-      }
-      let taskId = this.nextId++;
-      let task = new MicroTask(taskId, fn, args, interval, repeat);
-      this.enqueue(task);
-      return task;
-    }
+		constructor() {
+		}
 
-    public enqueue(task: MicroTask) {
-      let tasks = this.tasks;
-      task.runAt = this.time + task.interval;
-      let i = tasks.length;
-      while (i > 0 && tasks[i - 1].runAt > task.runAt) {
-        i--;
-      }
-      if (i === tasks.length) {
-        tasks.push(task);
-      } else {
-        tasks.splice(i, 0, task);
-      }
-    }
+		public get isEmpty(): boolean {
+			return this.tasks.length === 0;
+		}
 
-    public dequeue(): MicroTask {
-      let task = this.tasks.shift();
-      this.time = task.runAt;
-      return task;
-    }
+		public scheduleInterval(fn: () => any, args: any[], interval: number, repeat: boolean) {
+			let MIN_INTERVAL = 4;
+			interval = Math.round((interval || 0) / 10) * 10;
+			if (interval < MIN_INTERVAL) {
+				interval = MIN_INTERVAL;
+			}
+			let taskId = this.nextId++;
+			let task = new MicroTask(taskId, fn, args, interval, repeat);
+			this.enqueue(task);
+			return task;
+		}
 
-    public remove(id: number) {
-      let tasks = this.tasks;
-      for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id === id) {
-          tasks.splice(i, 1);
-          return;
-        }
-      }
-    }
+		public enqueue(task: MicroTask) {
+			let tasks = this.tasks;
+			task.runAt = this.time + task.interval;
+			let i = tasks.length;
+			while (i > 0 && tasks[i - 1].runAt > task.runAt) {
+				i--;
+			}
+			if (i === tasks.length) {
+				tasks.push(task);
+			} else {
+				tasks.splice(i, 0, task);
+			}
+		}
 
-    public clear() {
-      this.tasks.length = 0;
-    }
+		public dequeue(): MicroTask {
+			let task = this.tasks.shift();
+			this.time = task.runAt;
+			return task;
+		}
 
-    /**
-     * Runs micro tasks for a certain |duration| and |count| whichever comes first. Optionally,
-     * if the |clear| option is specified, the micro task queue is cleared even if not all the
-     * tasks have been executed.
-     *
-     * If a |preCallback| function is specified, only continue execution if |preCallback()| returns true.
-     */
-    run(duration: number = 0, count: number = 0, clear: boolean = false, preCallback: Function = null) {
-      this.stopped = false;
-      let executedTasks = 0;
-      let stopAt = Date.now() + duration;
-      while (!this.isEmpty && !this.stopped) {
-        if (duration > 0 && Date.now() >= stopAt) {
-          break;
-        }
-        if (count > 0 && executedTasks >= count) {
-          break;
-        }
-        let task = this.dequeue();
-        if (preCallback && !preCallback(task)) {
-          return;
-        }
-        task.fn.apply(null, task.args);
-        executedTasks ++;
-      }
-      if (clear) {
-        this.clear();
-      }
-      this.stopped = true;
-    }
+		public remove(id: number) {
+			let tasks = this.tasks;
+			for (let i = 0; i < tasks.length; i++) {
+				if (tasks[i].id === id) {
+					tasks.splice(i, 1);
+					return;
+				}
+			}
+		}
 
-    stop() {
-      this.stopped = true;
-    }
-  }
+		public clear() {
+			this.tasks.length = 0;
+		}
+
+		/**
+		 * Runs micro tasks for a certain |duration| and |count| whichever comes first. Optionally,
+		 * if the |clear| option is specified, the micro task queue is cleared even if not all the
+		 * tasks have been executed.
+		 *
+		 * If a |preCallback| function is specified, only continue execution if |preCallback()| returns true.
+		 */
+		run(duration: number = 0, count: number = 0, clear: boolean = false, preCallback: Function = null) {
+			this.stopped = false;
+			let executedTasks = 0;
+			let stopAt = Date.now() + duration;
+			while (!this.isEmpty && !this.stopped) {
+				if (duration > 0 && Date.now() >= stopAt) {
+					break;
+				}
+				if (count > 0 && executedTasks >= count) {
+					break;
+				}
+				let task = this.dequeue();
+				if (preCallback && !preCallback(task)) {
+					return;
+				}
+				task.fn.apply(null, task.args);
+				executedTasks++;
+			}
+			if (clear) {
+				this.clear();
+			}
+			this.stopped = true;
+		}
+
+		stop() {
+			this.stopped = true;
+		}
+	}
 }

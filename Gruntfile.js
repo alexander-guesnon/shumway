@@ -738,9 +738,9 @@ module.exports = function(grunt) {
     'copy_relooper',
     'parallel:natives',
     'exec:build_player_ts',
-    'exec:build_shell_ts',
-    'bundles',
-    'merge-modules'
+    //'exec:build_shell_ts',
+    //'bundles',
+    //'merge-modules'
   ]);
   grunt.registerTask('shu', [
     'build',
