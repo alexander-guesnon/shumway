@@ -28,10 +28,10 @@
 /// <reference path='test/recordingEaselHost.ts' />
 
 interface WebGLActiveInfo {
-    location: any;
+	location: any;
 }
 
 interface WebGLProgram extends WebGLObject {
-    uniforms: any;
-    attributes: any;
+	uniforms: any;
+	attributes: any;
 }

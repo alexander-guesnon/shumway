@@ -17,36 +17,36 @@
 ///<reference path='../references.ts' />
 
 module Shumway.AVM1.Lib {
-    import flash = Shumway.AVMX.AS.flash;
-    import assert = Shumway.Debug.assert;
+	import flash = Shumway.AVMX.AS.flash;
+	import assert = Shumway.Debug.assert;
 
-    export class AVM1Mouse extends AVM1Object {
-        public static createAVM1Class(context: AVM1Context): AVM1Object {
-            let wrapped = wrapAVM1NativeClass(context, false, AVM1Mouse, ['show', 'hide'], []);
-            return wrapped;
-        }
+	export class AVM1Mouse extends AVM1Object {
+		public static createAVM1Class(context: AVM1Context): AVM1Object {
+			let wrapped = wrapAVM1NativeClass(context, false, AVM1Mouse, ['show', 'hide'], []);
+			return wrapped;
+		}
 
-        public static bindStage(context: AVM1Context, cls: AVM1Object, stage: flash.display.Stage): void {
-            stage.addEventListener('mouseDown', function (e: flash.events.MouseEvent) {
-                alCallProperty(cls, 'broadcastMessage', ['onMouseDown']);
-            }, false);
-            stage.addEventListener('mouseMove', function (e: flash.events.MouseEvent) {
-                alCallProperty(cls, 'broadcastMessage', ['onMouseMove']);
-            }, false);
-            stage.addEventListener('mouseOut', function (e: flash.events.MouseEvent) {
-                alCallProperty(cls, 'broadcastMessage', ['onMouseMove']);
-            }, false);
-            stage.addEventListener('mouseUp', function (e: flash.events.MouseEvent) {
-                alCallProperty(cls, 'broadcastMessage', ['onMouseUp']);
-            }, false);
-        }
+		public static bindStage(context: AVM1Context, cls: AVM1Object, stage: flash.display.Stage): void {
+			stage.addEventListener('mouseDown', function (e: flash.events.MouseEvent) {
+				alCallProperty(cls, 'broadcastMessage', ['onMouseDown']);
+			}, false);
+			stage.addEventListener('mouseMove', function (e: flash.events.MouseEvent) {
+				alCallProperty(cls, 'broadcastMessage', ['onMouseMove']);
+			}, false);
+			stage.addEventListener('mouseOut', function (e: flash.events.MouseEvent) {
+				alCallProperty(cls, 'broadcastMessage', ['onMouseMove']);
+			}, false);
+			stage.addEventListener('mouseUp', function (e: flash.events.MouseEvent) {
+				alCallProperty(cls, 'broadcastMessage', ['onMouseUp']);
+			}, false);
+		}
 
-        public static hide() {
-            // TODO hide();
-        }
+		public static hide() {
+			// TODO hide();
+		}
 
-        public static show() {
-            // TODO show();
-        }
-    }
+		public static show() {
+			// TODO show();
+		}
+	}
 }

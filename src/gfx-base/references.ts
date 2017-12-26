@@ -28,35 +28,35 @@
 }*/
 
 interface CanvasGradient {
-    setTransform: (matrix: SVGMatrix) => void;
+	setTransform: (matrix: SVGMatrix) => void;
 }
 
 interface CanvasRenderingContext2D {
-    stackDepth: number;
+	stackDepth: number;
 
-    fill(path: Path2D, fillRule?: string): void;
+	fill(path: Path2D, fillRule?: string): void;
 
-    clip(path: Path2D, fillRule?: string): void;
+	clip(path: Path2D, fillRule?: string): void;
 
-    stroke(path: Path2D): void;
+	stroke(path: Path2D): void;
 
-    imageSmoothingEnabled: boolean
-    mozImageSmoothingEnabled: boolean
-    msImageSmoothingEnabled: boolean
+	imageSmoothingEnabled: boolean
+	mozImageSmoothingEnabled: boolean
+	msImageSmoothingEnabled: boolean
 
-    fillRule: string;
-    mozFillRule: string;
+	fillRule: string;
+	mozFillRule: string;
 
-    enterBuildingClippingRegion(): void;
+	enterBuildingClippingRegion(): void;
 
-    leaveBuildingClippingRegion(): void;
+	leaveBuildingClippingRegion(): void;
 }
 
 interface Path2D {
-    /*constructor();
-    constructor(path: Path2D);
-    constructor(paths: Path2D[], fillRule?: string);
-    constructor(d: any);*/
+	/*constructor();
+	constructor(path: Path2D);
+	constructor(paths: Path2D[], fillRule?: string);
+	constructor(d: any);*/
 
-    addPath(path: Path2D, transform?: SVGMatrix): void;
+	addPath(path: Path2D, transform?: SVGMatrix): void;
 }
