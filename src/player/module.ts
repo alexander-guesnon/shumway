@@ -15,18 +15,18 @@
  */
 
 module Shumway.Player {
-  export let timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("Player") : null;
-  export let counter = new Shumway.Metrics.Counter(!release);
+	export let timelineBuffer = Shumway.Tools ? new Shumway.Tools.Profiler.TimelineBuffer("Player") : null;
+	export let counter = new Shumway.Metrics.Counter(!release);
 
-  export let writer = null; // new IndentingWriter();
+	export let writer = null; // new IndentingWriter();
 
-  export function enterTimeline(name: string, data?: any) {
-    writer && writer.enter(name);
-    profile && timelineBuffer && timelineBuffer.enter(name, data);
-  }
+	export function enterTimeline(name: string, data?: any) {
+		writer && writer.enter(name);
+		profile && timelineBuffer && timelineBuffer.enter(name, data);
+	}
 
-  export function leaveTimeline(name: string, data?: any) {
-    writer && writer.leave(name);
-    profile && timelineBuffer && timelineBuffer.leave(name, data);
-  }
+	export function leaveTimeline(name: string, data?: any) {
+		writer && writer.leave(name);
+		profile && timelineBuffer && timelineBuffer.leave(name, data);
+	}
 }

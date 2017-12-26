@@ -15,60 +15,59 @@
  */
 
 module Shumway {
-  import BinaryFileReader = Shumway.BinaryFileReader;
-  import assert = Shumway.Debug.assert;
-  import AXSecurityDomain = Shumway.AVMX.AXSecurityDomain;
+	import BinaryFileReader = Shumway.BinaryFileReader;
+	import assert = Shumway.Debug.assert;
+	import AXSecurityDomain = Shumway.AVMX.AXSecurityDomain;
 
-  export enum AVM2LoadLibrariesFlags {
-    Builtin = 1,
-    Playerglobal = 2,
-    Shell = 4
-  }
+	export enum AVM2LoadLibrariesFlags {
+		Builtin = 1,
+		Playerglobal = 2,
+		Shell = 4
+	}
 
-  export function createSecurityDomain(libraries: AVM2LoadLibrariesFlags): Promise<AXSecurityDomain> {
-    let result = new PromiseWrapper<AXSecurityDomain>();
-    release || assert (!!(libraries & AVM2LoadLibrariesFlags.Builtin));
-    SWF.enterTimeline('Load builton.abc file');
-    SystemResourcesLoadingService.instance.load(SystemResourceId.BuiltinAbc).then(function (buffer) {
-      let sec = new Shumway.AVMX.AXSecurityDomain();
-      let env = {url: 'builtin.abc', app: sec.system};
-      let builtinABC = new Shumway.AVMX.ABCFile(env, new Uint8Array(buffer));
-      sec.system.loadABC(builtinABC);
-      sec.initialize();
-      sec.system.executeABC(builtinABC);
-      SWF.leaveTimeline();
+	export function createSecurityDomain(libraries: AVM2LoadLibrariesFlags): Promise<AXSecurityDomain> {
+		let result = new PromiseWrapper<AXSecurityDomain>();
+		release || assert(!!(libraries & AVM2LoadLibrariesFlags.Builtin));
+		SWF.enterTimeline('Load builton.abc file');
+		SystemResourcesLoadingService.instance.load(SystemResourceId.BuiltinAbc).then(function (buffer) {
+			let sec = new Shumway.AVMX.AXSecurityDomain();
+			let env = {url: 'builtin.abc', app: sec.system};
+			let builtinABC = new Shumway.AVMX.ABCFile(env, new Uint8Array(buffer));
+			sec.system.loadABC(builtinABC);
+			sec.initialize();
+			sec.system.executeABC(builtinABC);
+			SWF.leaveTimeline();
 
 
-      //// If library is shell.abc, then just go ahead and run it now since
-      //// it's not worth doing it lazily given that it is so small.
-      //if (!!(libraries & AVM2LoadLibrariesFlags.Shell)) {
-      //  let shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
-      //  sec.system.loadAndExecuteABC(shellABC);
-      //  result.resolve(sec);
-      //  SystemResourcesLoadingService.instance.load(SystemResourceId.ShellAbc).then(function (buffer) {
-      //    let shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
-      //    sec.system.loadAndExecuteABC(shellABC);
-      //    result.resolve(sec);
-      //  }, result.reject);
-      //  return;
-      //}
+			//// If library is shell.abc, then just go ahead and run it now since
+			//// it's not worth doing it lazily given that it is so small.
+			//if (!!(libraries & AVM2LoadLibrariesFlags.Shell)) {
+			//  let shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
+			//  sec.system.loadAndExecuteABC(shellABC);
+			//  result.resolve(sec);
+			//  SystemResourcesLoadingService.instance.load(SystemResourceId.ShellAbc).then(function (buffer) {
+			//    let shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
+			//    sec.system.loadAndExecuteABC(shellABC);
+			//    result.resolve(sec);
+			//  }, result.reject);
+			//  return;
+			//}
 
-      if (!!(libraries & AVM2LoadLibrariesFlags.Playerglobal)) {
-        SWF.enterTimeline('Load playerglobal files');
-        return Promise.all([
-          SystemResourcesLoadingService.instance.load(SystemResourceId.PlayerglobalAbcs),
-          SystemResourcesLoadingService.instance.load(SystemResourceId.PlayerglobalManifest)]).
-          then(function (results) {
-            let catalog = new Shumway.AVMX.ABCCatalog(sec.system, new Uint8Array(results[0]),
-                                                      results[1]);
-            sec.addCatalog(catalog);
-            SWF.leaveTimeline();
-            result.resolve(sec);
-          }, result.reject);
-      }
+			if (!!(libraries & AVM2LoadLibrariesFlags.Playerglobal)) {
+				SWF.enterTimeline('Load playerglobal files');
+				return Promise.all([
+					SystemResourcesLoadingService.instance.load(SystemResourceId.PlayerglobalAbcs),
+					SystemResourcesLoadingService.instance.load(SystemResourceId.PlayerglobalManifest)]).then(function (results) {
+					let catalog = new Shumway.AVMX.ABCCatalog(sec.system, new Uint8Array(results[0]),
+						results[1]);
+					sec.addCatalog(catalog);
+					SWF.leaveTimeline();
+					result.resolve(sec);
+				}, result.reject);
+			}
 
-      result.resolve(sec);
-    }, result.reject);
-    return result.promise;
-  }
+			result.resolve(sec);
+		}, result.reject);
+		return result.promise;
+	}
 }

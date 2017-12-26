@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "outFile": "../../build/ts/player.js",
+    "sourceMap": true,
+    "declaration": true,
+    "removeComments": false,
+    "target": "es5",
+    "lib": [
+      "DOM",
+      "ES5",
+      "ES2015.Collection",
+      "es2015.promise"
+    ],
+    "module": "amd",
+    "noImplicitAny": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "./../../build/ts/base.d.ts",
+    "./../../build/ts/tools.d.ts",
+    "./../../build/ts/avm2.d.ts",
+    "./../../build/ts/swf.d.ts",
+    "./../../build/ts/flash.d.ts",
+    "./../flash/avm1.d.ts",
+    "./references.ts"
+  ]
+}
