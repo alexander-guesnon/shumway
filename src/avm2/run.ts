@@ -938,16 +938,16 @@ module Shumway.AVMX {
 			}
 			// If there are no more properties in the object then follow the prototype chain.
 			while (true) {
-				let object = safeGetPrototypeOf(obj);
-				if (!object) {
+				obj = safeGetPrototypeOf(obj);
+				if (!obj) {
 					this.index = 0;
 					this.object = null;
 					return;
 				}
-				nextIndex = object.axNextNameIndex(0);
+				nextIndex = obj.axNextNameIndex(0);
 				if (nextIndex > 0) {
 					this.index = nextIndex;
-					this.object = object;
+					this.object = obj;
 					return;
 				}
 			}
