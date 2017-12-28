@@ -15,8 +15,9 @@ module Shumway.Shell.Fuzz {
   }
 
   function randomNumber(min: number, max: number, exclude: number = Infinity) {
+  	let value;
     do {
-      let value = Math.floor(Math.random() * (max - min + 1)) + min
+      value = Math.floor(Math.random() * (max - min + 1)) + min
     } while (value === exclude);
     return value;
   }
@@ -48,7 +49,7 @@ module Shumway.Shell.Fuzz {
     writer.enter('<tags>');
     writer.writeLn('<FileAttributes hasMetaData="1" allowABC="0" suppressCrossDomainCaching="0" swfRelativeURLs="0" useNetwork="0"/>');
 
-    let frameCount = randomNumber(1, 32);
+    frameCount = randomNumber(1, 32);
     for (let i = 0; i < frameCount; i++) {
       writeFrame(writer, true, frameCount, -1);
     }
@@ -102,7 +103,7 @@ module Shumway.Shell.Fuzz {
     }
   }
 
-  function writeActions(writer: IndentingWriter, actionsWriter) {
+  function writeActions(writer: IndentingWriter, actionsWriter: any) {
     writer.enter('<DoAction>');
     writer.enter('<actions>');
     actionsWriter(writer);

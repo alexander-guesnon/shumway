@@ -21,14 +21,14 @@ module Shumway.Shell {
     public mimeType:string;
     public data:string;
 
-    constructor(url, method, mimeType, data) {
+    constructor(url: string, method: string, mimeType: string, data: string) {
       this.url = url;
       this.method = method;
       this.mimeType = mimeType;
       this.data = data;
     }
 
-    readAll(progress, complete) {
+    readAll(progress: any, complete: any) {
       setTimeout(function () {
         try {
           let url = this.url + '';
@@ -40,9 +40,9 @@ module Shumway.Shell {
       }.bind(this));
     }
 
-    readAsync(ondata, onerror, onopen, oncomplete, onhttpstatus) {
+    readAsync(ondata: any, onerror: any, onopen: any, oncomplete: any, onhttpstatus: any) {
       onopen && setTimeout(onopen);
-      this.readAll(null, function (data, err) {
+      this.readAll(null, function (data: any, err: any) {
         if (data) {
           ondata(data, { loaded: data.byteLength, total: data.byteLength});
           oncomplete();
@@ -54,15 +54,15 @@ module Shumway.Shell {
   }
 
   let shellTelemetry = {
-    reportTelemetry: function (data) {
+    reportTelemetry: function (data: any) {
     }
   };
 
   let shellFileLoadingService = {
-    baseUrl: null,
+    baseUrl: null as string,
     createSession: function () {
       return {
-        open: function (request) {
+        open: function (request: any) {
           let self = this;
           let path = Shumway.FileLoadingService.instance.resolveUrl(request.url);
           new BinaryFileReader(path, request.method, request.mimeType, request.data).readAsync(
@@ -81,14 +81,14 @@ module Shumway.Shell {
         }
       };
     },
-    setBaseUrl: function (url) {
+    setBaseUrl: function (url: any) {
       shellFileLoadingService.baseUrl = url;
       return url;
     },
-    resolveUrl: function (url) {
+    resolveUrl: function (url: any) {
       return new (<any>URL)(url, shellFileLoadingService.baseUrl).href;
     },
-    navigateTo: function (url, target) {
+    navigateTo: function (url: any, target: any) {
     }
   };
 

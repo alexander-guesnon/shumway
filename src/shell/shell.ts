@@ -18,13 +18,13 @@
  * Lets you run Shumway from the command line.
  */
 
-declare let scriptArgs;
-declare let arguments;
-declare let load;
-declare let quit;
-declare let read;
-declare let help;
-declare let printErr;
+declare let scriptArgs: any;
+declare let arguments: any;
+declare let load: any;
+declare let quit: any;
+declare let read: any;
+declare let help: any;
+declare let printErr: any;
 
 // Number of errors thrown, used for shell scripting to return non-zero exit codes.
 let errors = 0;
@@ -38,19 +38,19 @@ let playerglobalInfo = {
 	catalog: homePath + "build/playerglobal/playerglobal.json"
 };
 
-declare let readFile, readBinaryFile, readbuffer;
+declare let readFile: any, readBinaryFile: any, readbuffer: any;
 let isV8 = typeof readbuffer !== 'undefined';
 let isJSC = typeof readFile !== 'undefined';
 if (isV8) {
 	let oldread = read;
-	read = function (path, type) {
+	read = function (path: any, type: any) {
 		return type === 'binary' ? new Uint8Array(readbuffer(path)) : oldread(path);
 	}
 } else if (isJSC) {
 	if (typeof readBinaryFile === 'undefined') {
 		throw new Error('readBinaryFile was not found');
 	}
-	read = function (path, type) {
+	read = function (path: any, type: any) {
 		return type === 'binary' ? new Uint8Array(readBinaryFile(path)) : readFile(path);
 	}
 }
@@ -68,9 +68,7 @@ if (isV8 || isJSC) {
  * number of times to run the test following it. This makes it easy to disable test by pushing a zero in
  * front.
  */
-let unitTests = [];
-
-declare let microTaskQueue: Shumway.Shell.MicroTasksQueue;
+let unitTests: Array<any> = [];
 
 let commandLineArguments: string [];
 // SpiderMonkey
@@ -80,7 +78,7 @@ if (typeof scriptArgs === "undefined") {
 	commandLineArguments = scriptArgs;
 }
 
-let disableBundleSelection;
+let disableBundleSelection: any;
 try {
 	disableBundleSelection = read('build/ts/shell.conf') === 'dist';
 } catch (e) {
@@ -252,19 +250,20 @@ module Shumway.Shell {
 		}
 
 		argumentParser.addArgument("h", "help", "boolean", {
-			parse: function (x) {
+			parse: function (x: any) {
 				printUsage();
 			}
 		});
 
-		let files = [];
+		let files: Array<any> = [];
 
 		// Try and parse command line arguments.
 
 		try {
-			argumentParser.parse(commandLineArguments).filter(function (value, index, array) {
+			argumentParser.parse(commandLineArguments).filter(function (value: string, index: number, array: Array<any>) {
 				if (value[0] === "@" || value.endsWith(".abc") || value.endsWith(".swf") || value.endsWith(".js") || value.endsWith(".json")) {
 					files.push(value);
+					return false;
 				} else {
 					return true;
 				}
@@ -312,7 +311,7 @@ module Shumway.Shell {
 		Shumway.AVMX.setWriters(writerFlags);
 
 		if (compileOption.value) {
-			let buffers = [];
+			let buffers: Array<Uint8Array> = [];
 			files.forEach(function (file) {
 				let buffer = new Uint8Array(read(file, "binary"));
 				if (file.endsWith(".abc")) {
@@ -397,7 +396,7 @@ module Shumway.Shell {
 				return file.endsWith(".abc") || file[0] === "@";
 			})) {
 			executeABCFiles(files);
-			return;
+			return false;
 		}
 		files.forEach(function (file) {
 			if (file.endsWith(".js")) {
@@ -430,8 +429,9 @@ module Shumway.Shell {
 
 			let sec = createSecurityDomain(builtinABCPath, null, null);
 			let player = new Shumway.Player.Player(sec, new ShellGFXServer());
+			let buffer;
 			try {
-				let buffer = read(file, 'binary');
+				buffer = read(file, 'binary');
 			} catch (e) {
 				console.log("Error loading SWF: " + e.message);
 				quit(127);
@@ -442,7 +442,7 @@ module Shumway.Shell {
 			return player;
 		}
 
-		let player = null;
+		let player: any = null;
 		let asyncLoading = true;
 		// TODO: resolve absolute file path for the base URL.
 		(<any>Shumway.FileLoadingService.instance).setBaseUrl('file://' + file);
@@ -485,15 +485,15 @@ module Shumway.Shell {
 			writer.writeLn("executeJSON: " + file);
 		}
 		// Remove comments
-		let json = JSON.parse(read(file, "text").split("\n").filter(function (line) {
+		let json = JSON.parse(read(file, "text").split("\n").filter(function (line: string) {
 			return line.trim().indexOf("//") !== 0;
 		}).join("\n"));
 
-		json.forEach(function (run, i) {
+		json.forEach(function (run: Array<any>, i: number) {
 			printErr("Running batch " + (i + 1) + " of " + json.length + " (" + run[1].length + " tests)");
 			let sec = createSecurityDomain(builtinABCPath, null, null);
 			// Run libraries.
-			run[0].forEach(function (file) {
+			run[0].forEach(function (file: any) {
 				let buffer = new Uint8Array(read(file, "binary"));
 				let env = {url: file, app: sec.application};
 				let abc = new ABCFile(env, buffer);
@@ -503,7 +503,7 @@ module Shumway.Shell {
 				sec.application.loadAndExecuteABC(abc);
 			});
 			// Run files.
-			run[1].forEach(function (file) {
+			run[1].forEach(function (file: any) {
 				try {
 					if (verbose) {
 						writer.writeLn("executeABC: " + file);
@@ -619,7 +619,7 @@ module Shumway.Shell {
 	}
 
 	function extractABCsFromSWF(buffer: Uint8Array): Uint8Array [] {
-		let abcData = [];
+		let abcData: Array<Uint8Array> = [];
 		try {
 			let loadListener: ILoadListener = {
 				onLoadOpen: function (file: Shumway.SWF.SWFFile) {
@@ -658,7 +658,7 @@ module Shumway.Shell {
 		let fileName = file.replace(/^.*[\\\/]/, '');
 
 		function parseABC(buffer: Uint8Array) {
-			let env = {url: fileName, app: null};
+			let env = {url: fileName, app: null} as any;
 			let abcFile = new ABCFile(env, buffer);
 			// abcFile.trace(writer);
 		}
@@ -676,12 +676,12 @@ module Shumway.Shell {
 						buffer[1] === 'W'.charCodeAt(0) &&
 						buffer[2] === 'S'.charCodeAt(0))) {
 					writer.redLn("Cannot parse: " + file + " because it doesn't have a valid header. " + buffer[0] + " " + buffer[1] + " " + buffer[2]);
-					return
+					return false;
 				}
 				let startSWF = Date.now();
 				let swfFile: Shumway.SWF.SWFFile;
 				let loadListener: ILoadListener = {
-					onLoadOpen: function (swfFile: Shumway.SWF.SWFFile) {
+					onLoadOpen: function (swfFile: any) {
 						if (scanParseOption.value) {
 							return;
 						}
@@ -733,7 +733,7 @@ module Shumway.Shell {
 		return true;
 	}
 
-	function createSecurityDomain(builtinABCPath: string, shellABCPath: string, libraryPathInfo): ISecurityDomain {
+	function createSecurityDomain(builtinABCPath: string, shellABCPath: string, libraryPathInfo: any): ISecurityDomain {
 		let buffer = read(builtinABCPath, 'binary');
 		let sec = <ISecurityDomain>new AVMX.AXSecurityDomain();
 		let env = {url: builtinABCPath, app: sec.system};

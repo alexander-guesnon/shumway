@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         cmd: commonArguments + 'src/player'
       },
       build_shell_ts: {
-        cmd: tscCommand + ' --target ES5 --sourcemap --out build/ts/shell.js src/shell/references.ts'
+        cmd: commonArguments + 'src/shell'
       },
       build_playerglobal: {
         cmd: 'node build.js -t ' + (+grunt.option('threads') || 9) +
@@ -748,9 +748,9 @@ module.exports = function(grunt) {
     'copy_relooper',
     'parallel:natives',
     'exec:build_player_ts',
-    //'exec:build_shell_ts',
-    //'bundles',
-    //'merge-modules'
+    'exec:build_shell_ts',
+    'bundles',
+    'merge-modules'
   ]);
   grunt.registerTask('shu', [
     'build',
@@ -996,8 +996,8 @@ module.exports = function(grunt) {
         JSON.stringify({version: version, sha: sha}));
       grunt.file.write(outputDir + '/version.txt', version + '\n' + sha + '\n');
       grunt.file.write(outputDir + '/version.ts',
-        'module Shumway {\n  export var version = \'' + version + '\';\n' +
-        '  export var build = \'' + sha + '\';\n}\n');
+        'module Shumway {\n  version = \'' + version + '\';\n' +
+        '  build = \'' + sha + '\';\n}\n');
       grunt.file.write(outputDir + '/version.js',
           'var Shumway;\n(function (Shumway) {\n' +
           '  Shumway.version = \'' + version + '\';\n' +

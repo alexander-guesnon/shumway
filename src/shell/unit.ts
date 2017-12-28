@@ -21,12 +21,12 @@ module Shumway.Unit {
 
 	export let writer: IndentingWriter;
 
-	export function fail(message) {
+	export function fail(message: any) {
 		everFailed = true;
 		writer.errorLn(message);
 	}
 
-	export function eqFloat(a, b, test, tolerance) {
+	export function eqFloat(a: number, b: number, test: string, tolerance: number) {
 		tolerance = typeof tolerance === "undefined" ? 0.1 : tolerance;
 		test = description(test);
 		let d = Math.abs(a - b);
@@ -36,7 +36,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function neq(a, b, test) {
+	export function neq(a: number, b: number, test: string) {
 		test = description(test);
 		if (a === b) {
 			return fail("FAIL " + test + ". Got " + a + ", expected different (!==) value" +
@@ -45,7 +45,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function eq(a, b, test) {
+	export function eq(a: any, b: any, test: string) {
 		test = description(test);
 		if (a !== b) {
 			return fail("FAIL" + test + ". Got " + a + ", expected " + b + failedLocation());
@@ -53,7 +53,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function eqArray(a, b, test) {
+	export function eqArray(a: Array<any>, b: Array<any>, test: string) {
 		test = description(test);
 		if (a == undefined && b) {
 			return fail("FAIL" + test + " Null Array: a" + failedLocation());
@@ -76,7 +76,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function structEq(a, b, test) {
+	export function structEq(a: any, b: any, test: any) {
 		test = description(test);
 		if (a == undefined && b) {
 			return fail("FAIL" + test + " Expected neither or both objects to be null/undefined, " +
@@ -95,8 +95,8 @@ module Shumway.Unit {
 					", b." + key + " = " + b[key] + failedLocation());
 			}
 		}
-		for (i = 0; i < bKeys.length; i++) {
-			key = bKeys[i];
+		for (let i = 0; i < bKeys.length; i++) {
+			let key = bKeys[i];
 			if (a[key] !== b[key]) {
 				return fail("FAIL" + test + " properties differ. a." + key + " = " + a[key] +
 					", b." + key + " = " + b[key] + failedLocation());
@@ -105,7 +105,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function matrixEq(a, b, test) {
+	export function matrixEq(a: any, b: any, test: string) {
 		test = description(test);
 		if (a == undefined && b) {
 			return fail("FAIL" + test + " Expected neither or both objects to be null/undefined, " +
@@ -123,7 +123,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function check(condition, test) {
+	export function check(condition: boolean, test: string) {
 		test = description(test);
 		if (!condition) {
 			return fail("FAIL" + test + ". Got " + condition + ", expected truthy value" +
@@ -132,7 +132,7 @@ module Shumway.Unit {
 		writer.debugLn("PASS" + test);
 	}
 
-	export function assertThrowsInstanceOf(f, ctor, test) {
+	export function assertThrowsInstanceOf(f: any, ctor: any, test: string) {
 		test = description(test);
 		let msg;
 		try {
@@ -149,7 +149,7 @@ module Shumway.Unit {
 		return fail("FAIL " + test + ". " + msg + failedLocation());
 	}
 
-	export function description(test) {
+	export function description(test: string) {
 		testNumber++;
 		return test ? ": " + test : " #" + testNumber;
 	}

@@ -45,27 +45,26 @@ this.console = {
 	}
 };
 
-declare let putstr;
-this.dump = function (message) {
+this.dump = function (message: any) {
 	putstr(Shumway.argumentsToString(arguments));
 };
 
-this.addEventListener = function (type) {
+this.addEventListener = function (type: any) {
 	// console.log('Add listener: ' + type);
 };
 
-let defaultTimerArgs = [];
-this.setTimeout = function (fn, interval) {
+let defaultTimerArgs: Array<any> = [];
+this.setTimeout = function (fn: any, interval: number) {
 	let args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : defaultTimerArgs;
 	let task = microTaskQueue.scheduleInterval(fn, args, interval, false);
 	return task.id;
 };
-this.setInterval = function (fn, interval) {
+this.setInterval = function (fn: any, interval: number) {
 	let args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : defaultTimerArgs;
 	let task = microTaskQueue.scheduleInterval(fn, args, interval, true);
 	return task.id;
 };
-this.clearTimeout = function (id) {
+this.clearTimeout = function (id: any) {
 	microTaskQueue.remove(id);
 };
 this.clearInterval = clearTimeout;
@@ -76,7 +75,7 @@ this.navigator = {
 
 // TODO remove document stub
 this.document = {
-	createElementNS: function (ns, qname) {
+	createElementNS: function (ns: any, qname: any) {
 		if (qname !== 'svg') {
 			throw new Error('only supports svg and create SVGMatrix');
 		}
@@ -86,12 +85,12 @@ this.document = {
 			}
 		};
 	},
-	createElement: function (name) {
+	createElement: function (name: any) {
 		if (name !== 'canvas') {
 			throw new Error('only supports canvas');
 		}
 		return {
-			getContext: function (type) {
+			getContext: function (type: any) {
 				if (type !== '2d') {
 					throw new Error('only supports canvas 2d');
 				}
@@ -110,7 +109,7 @@ this.Image = function () {
 };
 this.Image.prototype = {};
 
-this.URL = function (url, baseURL = '') {
+this.URL = function (url: any, baseURL = '') {
 	url = url + '';
 	baseURL = baseURL + '';
 	if (url.indexOf('://') >= 0 || baseURL === url) {
@@ -119,7 +118,7 @@ this.URL = function (url, baseURL = '') {
 	}
 
 	let base = baseURL || '';
-	let base = base.lastIndexOf('/') >= 0 ? base.substring(0, base.lastIndexOf('/') + 1) : '';
+	base = base.lastIndexOf('/') >= 0 ? base.substring(0, base.lastIndexOf('/') + 1) : '';
 	if (url.indexOf('/') === 0) {
 		let m = /^[^:]+:\/\/[^\/]+/.exec(base);
 		if (m) base = m[0];
@@ -127,7 +126,7 @@ this.URL = function (url, baseURL = '') {
 	this._setURL(base + url);
 };
 this.URL.prototype = {
-	_setURL: function (url) {
+	_setURL: function (url: any) {
 		this.href = url + '';
 		// Simple parsing to extract protocol, hostname and port.
 		let m = /^(\w+:)\/\/([^:/]+)(:([0-9]+))?/.exec(url.toLowerCase());
@@ -156,13 +155,13 @@ this.Blob.prototype = {};
 this.XMLHttpRequest = function () {
 };
 this.XMLHttpRequest.prototype = {
-	open: function (method, url, async) {
+	open: function (method: any, url: any, async: any) {
 		this.url = url;
 		if (async === false) {
 			throw new Error('Unsupported sync');
 		}
 	},
-	send: function (data) {
+	send: function (data: any) {
 		setTimeout(function () {
 			try {
 				console.log('XHR: ' + this.url);
@@ -195,7 +194,7 @@ this.window.screen = {
 /**
  * sessionStorage polyfill.
  */
-let sessionStorageObject = {};
+let sessionStorageObject: { [key: string]: string } = {};
 this.window.sessionStorage = {
 	getItem: function (key: string): string {
 		return sessionStorageObject[key];
@@ -212,7 +211,7 @@ this.window.sessionStorage = {
  * Promise polyfill.
  */
 this.window.Promise = (function () {
-	function getDeferred(C) {
+	function getDeferred(C: any) {
 		if (typeof C !== 'function') {
 			throw new TypeError('Invalid deferred constructor');
 		}
@@ -229,7 +228,7 @@ this.window.Promise = (function () {
 		return {promise: promise, resolve: resolve, reject: reject};
 	}
 
-	function updateDeferredFromPotentialThenable(x, deferred) {
+	function updateDeferredFromPotentialThenable(x: any, deferred: any) {
 		if (typeof x !== 'object' || x === null) {
 			return false;
 		}
@@ -246,12 +245,12 @@ this.window.Promise = (function () {
 		return true;
 	}
 
-	function isPromise(x) {
+	function isPromise(x: any) {
 		return typeof x === 'object' && x !== null &&
 			typeof x.promiseStatus !== 'undefined';
 	}
 
-	function rejectPromise(promise, reason) {
+	function rejectPromise(promise: any, reason: any) {
 		if (promise.promiseStatus !== 'unresolved') {
 			return;
 		}
@@ -263,7 +262,7 @@ this.window.Promise = (function () {
 		triggerPromiseReactions(reactions, reason);
 	}
 
-	function resolvePromise(promise, resolution) {
+	function resolvePromise(promise: any, resolution: any) {
 		if (promise.promiseStatus !== 'unresolved') {
 			return;
 		}
@@ -275,20 +274,20 @@ this.window.Promise = (function () {
 		triggerPromiseReactions(reactions, resolution);
 	}
 
-	function triggerPromiseReactions(reactions, argument) {
+	function triggerPromiseReactions(reactions: any, argument: any) {
 		for (let i = 0; i < reactions.length; i++) {
 			queueMicrotask({reaction: reactions[i], argument: argument});
 		}
 	}
 
-	function queueMicrotask(task) {
+	function queueMicrotask(task: any) {
 		if (microtasksQueue.length === 0) {
 			setTimeout(handleMicrotasksQueue, 0);
 		}
 		microtasksQueue.push(task);
 	}
 
-	function executePromiseReaction(reaction, argument) {
+	function executePromiseReaction(reaction: any, argument: any) {
 		let deferred = reaction.deferred;
 		let handler = reaction.handler;
 		let handlerResult, updateResult;
@@ -317,7 +316,7 @@ this.window.Promise = (function () {
 		}
 	}
 
-	let microtasksQueue = [];
+	let microtasksQueue: Array<any> = [];
 
 	function handleMicrotasksQueue() {
 		while (microtasksQueue.length > 0) {
@@ -334,37 +333,37 @@ this.window.Promise = (function () {
 		}
 	}
 
-	function throwerFunction(e) {
+	function throwerFunction(e: any) {
 		throw e;
 	}
 
-	function identityFunction(x) {
+	function identityFunction(x: any) {
 		return x;
 	}
 
-	function createRejectPromiseFunction(promise) {
-		return function (reason) {
+	function createRejectPromiseFunction(promise: any) {
+		return function (reason: any) {
 			rejectPromise(promise, reason);
 		};
 	}
 
-	function createResolvePromiseFunction(promise) {
-		return function (resolution) {
+	function createResolvePromiseFunction(promise: any) {
+		return function (resolution: any) {
 			resolvePromise(promise, resolution);
 		};
 	}
 
 	function createDeferredConstructionFunctions(): any {
-		let fn: any = function (resolve, reject) {
+		let fn: any = function (resolve: any, reject: any) {
 			fn.resolve = resolve;
 			fn.reject = reject;
 		};
 		return fn;
 	}
 
-	function createPromiseResolutionHandlerFunctions(promise,
-	                                                 fulfillmentHandler, rejectionHandler) {
-		return function (x) {
+	function createPromiseResolutionHandlerFunctions(promise: any,
+	                                                 fulfillmentHandler: any, rejectionHandler: any) {
+		return function (x: any) {
 			if (x === promise) {
 				return rejectionHandler(new TypeError('Self resolution'));
 			}
@@ -385,9 +384,9 @@ this.window.Promise = (function () {
 		};
 	}
 
-	function createPromiseAllCountdownFunction(index, values, deferred,
-	                                           countdownHolder) {
-		return function (x) {
+	function createPromiseAllCountdownFunction(index: number, values: Array<any>, deferred: any,
+	                                           countdownHolder: any) {
+		return function (x: any) {
 			values[index] = x;
 			countdownHolder.countdown--;
 			if (countdownHolder.countdown === 0) {
@@ -396,7 +395,7 @@ this.window.Promise = (function () {
 		};
 	}
 
-	function Promise(resolver) {
+	function Promise(resolver: any) {
 		if (typeof resolver !== 'function') {
 			throw new TypeError('resolver is not a function');
 		}
@@ -422,12 +421,12 @@ this.window.Promise = (function () {
 		return promise;
 	}
 
-	(<any>Promise).all = function (iterable) {
+	(<any>Promise).all = function (iterable: any) {
 		let deferred = getDeferred(this);
-		let values = [];
+		let values: Array<any> = [];
 		let countdownHolder = {countdown: 0};
 		let index = 0;
-		iterable.forEach(function (nextValue) {
+		iterable.forEach(function (nextValue: any) {
 			let nextPromise = this.cast(nextValue);
 			let fn = createPromiseAllCountdownFunction(index, values,
 				deferred, countdownHolder);
@@ -440,7 +439,7 @@ this.window.Promise = (function () {
 		}
 		return deferred.promise;
 	};
-	(<any>Promise).cast = function (x) {
+	(<any>Promise).cast = function (x: any) {
 		if (isPromise(x)) {
 			return x;
 		}
@@ -448,21 +447,21 @@ this.window.Promise = (function () {
 		deferred.resolve(x);
 		return deferred.promise;
 	};
-	(<any>Promise).reject = function (r) {
+	(<any>Promise).reject = function (r: any) {
 		let deferred = getDeferred(this);
 		let rejectResult = deferred.reject(r);
 		return deferred.promise;
 	};
-	(<any>Promise).resolve = function (x) {
+	(<any>Promise).resolve = function (x: any) {
 		let deferred = getDeferred(this);
 		let rejectResult = deferred.resolve(x);
 		return deferred.promise;
 	};
 	Promise.prototype = {
-		'catch': function (onRejected) {
+		'catch': function (onRejected: any) {
 			this.then(undefined, onRejected);
 		},
-		then: function (onFulfilled, onRejected) {
+		then: function (onFulfilled: any, onRejected: any) {
 			let promise = this;
 			if (!isPromise(promise)) {
 				throw new TypeError('this is not a Promises');
