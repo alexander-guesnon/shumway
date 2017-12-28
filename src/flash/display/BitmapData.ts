@@ -220,7 +220,7 @@ module Shumway.AVMX.AS.flash.display {
 		private _getPixelData(rect: flash.geom.Rectangle): Int32Array {
 			let r = this._getTemporaryRectangleFrom(this._rect).intersectInPlace(rect);
 			if (r.isEmpty()) {
-				return new Int32Array(0);
+				return null;
 			}
 			let xMin = r.x;
 			let xMax = r.x + r.width;
@@ -701,10 +701,10 @@ module Shumway.AVMX.AS.flash.display {
 
 		getVector(rect: flash.geom.Rectangle): Uint32Vector {
 			let pixelData = this._getPixelData(rect);
-			let outputVector = new this.sec.Uint32Vector(pixelData.length);
 			if (!pixelData) {
-				return outputVector;
+				return new this.sec.Uint32Vector(0);
 			}
+			let outputVector = new this.sec.Uint32Vector(pixelData.length);
 			outputVector.length = pixelData.length;
 			outputVector._view().set(pixelData);
 			return outputVector;

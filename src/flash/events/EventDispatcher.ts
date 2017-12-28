@@ -41,12 +41,7 @@ module Shumway.AVMX.AS.flash.events {
 		 */
 		private _aliasCount = 0;
 
-		preInit() {
-
-		}
-
 		constructor() {
-			this.preInit();
 			this._entries = [];
 		}
 
@@ -219,8 +214,13 @@ module Shumway.AVMX.AS.flash.events {
 
 		protected _fieldsInitialized: boolean;
 
+		preInit() {
+
+		}
+
 		constructor(target: flash.events.IEventDispatcher = null) {
 			super();
+			this.preInit();
 			if (!this._fieldsInitialized) {
 				this._initializeFields(target || this);
 			}
