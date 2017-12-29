@@ -315,7 +315,6 @@ module.exports = function(grunt) {
       natives: {
         tasks: [
           { args: ['exec:build_playerglobal'].concat(parallelArgs), grunt: true },
-          { args: ['exec:build_rtmp_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_flash_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_avm1_ts'].concat(parallelArgs), grunt: true }
         ]
@@ -745,6 +744,7 @@ module.exports = function(grunt) {
     'exec:build_tools_ts',
     'exec:build_gfx_base_ts',
     'parallel:tier2',
+	'exec:build_rtmp_ts',
     'copy_relooper',
     'parallel:natives',
     'exec:build_player_ts',
