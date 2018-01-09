@@ -277,8 +277,10 @@ module Shumway.AVMX.AS.flash.display {
 			if (!this._file) {
 				return new this.sec.flash.utils.ByteArray();
 			}
-			release || notImplemented("public flash.display.LoaderInfo::get bytes");
-			return null;
+			// @ivanpopelyshev : both SWFFile and ImageFile has `data` Uint8Array
+			// that can be used for ByteArray constructor
+			//if SWF was compressed, it'll return uncompressed version with patched header
+			return new this.sec.flash.utils.ByteArray(this._file.data);
 		}
 
 		get parameters(): Object {

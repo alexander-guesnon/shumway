@@ -221,6 +221,8 @@ module Shumway.SWF {
 			this._dataView = this._dataStream.view;
 			if (isDeflateCompressed) {
 				this.data.set(initialBytes.subarray(0, 8));
+				// @ivanpopelyshev Data will be uncompressed, so lets change the flag in case someone wants to get the bytes
+				this.data[0] = 70;
 				this._uncompressedLoadedLength = 8;
 				this._decompressor = Inflate.create(true);
 				// Parts of the header are compressed. Get those out of the way before starting tag parsing.
@@ -232,6 +234,7 @@ module Shumway.SWF {
 				this._decompressor.push(initialBytes.subarray(8));
 			} else if (isLzmaCompressed) {
 				this.data.set(initialBytes.subarray(0, 8));
+				this.data[0] = 70;
 				this._uncompressedLoadedLength = 8;
 				this._decompressor = new LzmaDecoder(true);
 				this._decompressor.onData = this.processFirstBatchOfDecompressedData.bind(this);
