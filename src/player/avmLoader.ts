@@ -28,7 +28,7 @@ module Shumway {
 	export function createSecurityDomain(libraries: AVM2LoadLibrariesFlags): Promise<AXSecurityDomain> {
 		let result = new PromiseWrapper<AXSecurityDomain>();
 		release || assert(!!(libraries & AVM2LoadLibrariesFlags.Builtin));
-		SWF.enterTimeline('Load builton.abc file');
+		SWF.enterTimeline('Load builtin.abc file');
 		SystemResourcesLoadingService.instance.load(SystemResourceId.BuiltinAbc).then(function (buffer: any) {
 			let sec = new Shumway.AVMX.AXSecurityDomain();
 			let env = {url: 'builtin.abc', app: sec.system};
@@ -68,7 +68,7 @@ module Shumway {
 
 			result.resolve(sec);
 			return null;
-		}, result.reject);
+		}, result.reject);n
 		return result.promise;
 	}
 }
