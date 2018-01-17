@@ -976,7 +976,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 			let m;
 			if (targetCoordinateSpace) {
-				m = this.sec.flash.geom.Matrix.axClass.TEMP_MATRIX;
+				m = FlashContext.get(this.sec).geom.TEMP_MATRIX;
 				let invertedTargetMatrix = targetCoordinateSpace._getInvertedConcatenatedMatrix();
 				invertedTargetMatrix.preMultiplyInto(this._getConcatenatedMatrix(), m);
 			} else {
@@ -1024,7 +1024,7 @@ module Shumway.AVMX.AS.flash.display {
 			let reset = !(placeObjectTag.flags & PlaceObjectFlags.Move) &&
 				placeObjectTag.flags & PlaceObjectFlags.HasCharacter;
 
-			let matrixClass = this.sec.flash.geom.Matrix.axClass;
+			let matrixClass = FlashContext.get(this.sec).geom;
 			if (placeObjectTag.flags & PlaceObjectFlags.HasMatrix) {
 				matrixClass.TEMP_MATRIX.copyFromUntyped(placeObjectTag.matrix);
 				this._setMatrix(matrixClass.TEMP_MATRIX, false);

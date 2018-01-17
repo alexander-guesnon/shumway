@@ -12,18 +12,14 @@ module Shumway {
 		display = new FlashDisplay(this);
 		loader = new FlashLoader(this);
 		mouse = new FlashMouse(this);
+		geom = new FlashGeom(this);
 		sec: ISecurityDomain;
 
 		init(sec: ISecurityDomain) {
 			this.sec = sec;
-			this._temporaryRectangle = new sec.flash.geom.Rectangle();
 			this.mouse.init();
+			this.geom.init();
 		}
-
-		/**
-		 * Temporary rectangle that is used to prevent allocation.
-		 */
-		_temporaryRectangle : flash.geom.Rectangle;
 
 		static get(sec: ISecurityDomain) {
 			if (!sec) {

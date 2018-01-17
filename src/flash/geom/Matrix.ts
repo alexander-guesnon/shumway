@@ -61,10 +61,7 @@ module Shumway.AVMX.AS.flash.geom {
 
 		static axClass: typeof Matrix;
 
-		static classInitializer() {
-			this.FROZEN_IDENTITY_MATRIX = Object.freeze(this.axConstruct([]));
-			this.TEMP_MATRIX = this.axConstruct([]);
-		}
+		static classInitializer: any = null;
 
 		static classSymbols: string [] = null; // [];
 		static instanceSymbols: string [] = null; // ["a", "b", "c", "d", "tx", "ty", "concat",
@@ -98,11 +95,6 @@ module Shumway.AVMX.AS.flash.geom {
 				input.readFloat(), input.readFloat(),
 				input.readFloat(), input.readFloat());
 		}
-
-		public static FROZEN_IDENTITY_MATRIX: Matrix;
-
-		// Must only be used in cases where the members are fully initialized and then directly used.
-		public static TEMP_MATRIX: Matrix;
 
 		// Matrix data is stored in a typed array, this has proven to be about 60% faster in Firefox
 		// and

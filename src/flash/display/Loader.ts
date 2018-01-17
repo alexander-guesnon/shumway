@@ -55,10 +55,12 @@ module Shumway.AVMX.AS.flash.display {
 		constructor() {
 			super();
 
-			let displayObjectClass = FlashContext.get(this.sec).display;
+			const context = FlashContext.get(this.sec);
+			const displayObjectClass = context.display;
+
 			displayObjectClass._advancableInstances.push(this);
 			this._content = null;
-			if (this.axClass._rootLoader) {
+			if (context.loader._rootLoader) {
 				// Loader reserves the next instance ID to use for the loaded content.
 				// This isn't needed for the first, root, loader, because that uses "root1" as the name.
 				this._contentID = displayObjectClass._instanceID++;
@@ -67,8 +69,7 @@ module Shumway.AVMX.AS.flash.display {
 				// the instance id must not be used up.
 				displayObjectClass._instanceID--;
 			}
-			let loaderInfoCtor = this.sec.flash.display.LoaderInfo;
-			this._contentLoaderInfo = new loaderInfoCtor(loaderInfoCtor.axClass.CtorToken);
+			this._contentLoaderInfo = new this.sec.flash.display.LoaderInfo(context.loader.CtorToken);
 			this._contentLoaderInfo._loader = this;
 
 			let currentAbc = AVMX.getCurrentABC();

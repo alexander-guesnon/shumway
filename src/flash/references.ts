@@ -411,3 +411,4 @@
 ///<reference path='_static_gameloop/FlashLoader.ts'/>
 ///<reference path='_static_gameloop/FlashEvents.ts'/>
 ///<reference path='_static_gameloop/FlashMouse.ts'/>
+///<reference path='_static_gameloop/FlashGeom.ts'/>

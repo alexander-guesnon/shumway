@@ -234,6 +234,8 @@ module Shumway.AVMX.AS.flash.ui {
 			if (MouseCursor.toNumber(value) < 0) {
 				this.sec.throwError("ArgumentError", Errors.InvalidParamError, "cursor");
 			}
+
+			// @ivanpopelyshev: TODO: find sec reference in axClass
 			FlashContext.current().mouse._cursor = value;
 		}
 

@@ -180,5 +180,9 @@ module Shumway {
 				}
 			}
 		}
+
+		// LoaderInfo
+
+		CtorToken = {};
 	}
 }
