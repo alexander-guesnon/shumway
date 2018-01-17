@@ -607,7 +607,7 @@ module Shumway.Player {
 				return;
 			}
 			// The stage is required for frame event cycle processing.
-			let displayObjectClass = this.sec.flash.display.DisplayObject.axClass;
+			let displayObjectClass = FlashContext.get(this.sec).display;
 			displayObjectClass._stage = this._stage;
 			// Until the root SWF is initialized, only process Loader events.
 			// Once the root loader's content is created, directly process all events again to avoid
@@ -647,6 +647,7 @@ module Shumway.Player {
 			let loader = this._loader;
 			let loaderInfo = this._loaderInfo;
 			let self = this;
+			let display = FlashContext.get(this.sec).display;
 
 			loaderInfo.addEventListener(flash.events.ProgressEvent.PROGRESS, function onProgress() {
 				let root = loader.content;
@@ -669,8 +670,8 @@ module Shumway.Player {
 				});
 
 				function show(symbol: Shumway.Timeline.DisplaySymbol) {
-					flash.display.DisplayObject.reset();
-					flash.display.MovieClip.reset();
+					display.displayObjectReset();
+					display.movieClipReset();
 					let symbolInstance = symbol.symbolClass.initializeFrom(symbol);
 					symbol.symbolClass.instanceConstructorNoInitialize.call(symbolInstance);
 					if (symbol instanceof flash.display.BitmapSymbol) {

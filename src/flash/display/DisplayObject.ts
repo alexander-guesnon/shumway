@@ -357,23 +357,10 @@ module Shumway.AVMX.AS.flash.display {
 			return displayObjectSyncID++;
 		}
 
-		/**
-		 * DisplayObject#name is set to an initial value of 'instanceN', where N is auto-incremented.
-		 * This is true for all DisplayObjects except for Stage, so it happens in an overrideable
-		 * method.
-		 */
 		static _instanceID = 1;
 
-		static _advancableInstances: WeakList<IAdvancable>;
-
 		// Called whenever the class is initialized.
-		static classInitializer() {
-			this.reset();
-		}
-
-		static reset() {
-			this._advancableInstances = new WeakList<IAdvancable>();
-		}
+		static classInitializer: any = null;
 
 		// List of static symbols to link.
 		static classSymbols: string [] = null; // [];
@@ -406,102 +393,6 @@ module Shumway.AVMX.AS.flash.display {
 				(<AXObject><any>instance).axInitializer();
 			}
 			return instance;
-		}
-
-		private static _runScripts: boolean = true;
-		static _stage: Stage;
-
-		/**
-		 * Runs one full turn of the frame events cycle.
-		 *
-		 * Frame navigation methods on MovieClip can trigger nested frame events cycles. These nested
-		 * cycles do everything the outermost cycle does, except for broadcasting the ENTER_FRAME
-		 * event.
-		 *
-		 * If runScripts is true, no events are dispatched and Movieclip frame scripts are run. This
-		 * is true for nested cycles, too. (We keep static state for that.)
-		 */
-		static performFrameNavigation(mainLoop: boolean, runScripts: boolean) {
-			const thisContext = FlashContext.current();
-
-			if (mainLoop) {
-				this._runScripts = runScripts;
-			} else {
-				runScripts = this._runScripts;
-			}
-
-			release || assert(this._advancableInstances.length < 1024 * 16,
-				"Too many advancable instances.");
-
-			// Step 1: Remove timeline objects that don't exist on new frame, update existing ones with
-			// new properties, and declare, but not create, new ones, update numChildren.
-			// NOTE: the Order Of Operations senocular article is wrong on this: timeline objects are
-			// removed from stage at the beginning of a frame, just as new objects are declared at that
-			// point.
-			// Also, changed properties of existing objects are updated here instead of during frame
-			// construction after ENTER_FRAME.
-			// Thus, all these can be done together.
-			enterTimeline("DisplayObject.InitFrame");
-			this._advancableInstances.forEach(function (value) {
-				value._initFrame(mainLoop);
-			});
-			leaveTimeline();
-			// Step 2: Dispatch ENTER_FRAME, only called in outermost invocation.
-			enterTimeline("DisplayObject.EnterFrame");
-			if (mainLoop && runScripts) {
-				thisContext._broadcastFrameEvent(events.Event.ENTER_FRAME);
-			}
-			leaveTimeline();
-			// Step 3: Create new timeline objects.
-			enterTimeline("DisplayObject.ConstructFrame");
-			this._advancableInstances.forEach(function (value) {
-				value._constructFrame();
-			});
-			leaveTimeline();
-			// Step 4: Dispatch FRAME_CONSTRUCTED.
-			if (runScripts) {
-				enterTimeline("DisplayObject.FrameConstructed");
-				thisContext._broadcastFrameEvent(events.Event.FRAME_CONSTRUCTED);
-				leaveTimeline();
-				// Step 5: Run frame scripts
-				// Flash seems to enqueue all frame scripts recursively, starting at the root of each
-				// independent object graph. That can be the stage or a container that isn't itself on
-				// stage, but has (grand-)children.
-				// The order in which these independent graphs are processed seems not to follow a
-				// specific system: in some testing scenarios all independent graphs are processes before
-				// the stage, in others the first-created such graph is processes *after* the stage, all
-				// others before the stage. There might be other permutations of this, but it seems
-				// doubtful anybody could reasonably rely on the exact details of all this.
-				// Of course, nothing guarantees that there isn't content that accidentally does, so it'd
-				// be nice to eventually get this right.
-				enterTimeline("DisplayObject.EnqueueFrameScripts");
-				let displayObjectContainerClass = this.sec.flash.display.DisplayObjectContainer.axClass;
-				this._advancableInstances.forEach(function (value) {
-					let container: any = value;
-					if (displayObjectContainerClass.axIsType(container) && !container.parent) {
-						container._enqueueFrameScripts();
-					}
-				});
-				this._stage._enqueueFrameScripts();
-				leaveTimeline();
-				enterTimeline("DisplayObject.RunFrameScript");
-				let movieClipClass = this.sec.flash.display.MovieClip.axClass;
-				if (movieClipClass.frameNavigationModel === FrameNavigationModel.SWF1) {
-					movieClipClass.runAvm1FrameScripts();
-				} else {
-					movieClipClass.runFrameScripts();
-				}
-				leaveTimeline();
-				// Step 6: Dispatch EXIT_FRAME.
-				enterTimeline("DisplayObject.ExitFrame");
-				thisContext._broadcastFrameEvent(events.Event.EXIT_FRAME);
-				leaveTimeline();
-			} else {
-				MovieClip.reset();
-			}
-			if (mainLoop) {
-				this._runScripts = true;
-			}
 		}
 
 		constructor() {

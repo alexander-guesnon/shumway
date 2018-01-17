@@ -53,7 +53,7 @@ module Shumway.AVMX.AS.flash.display {
 			this._content._setParent(<any>this, 0);
 			this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyChildren);
 			this._invalidateFillAndLineBounds(true, true);
-			this.sec.flash.display.DisplayObject.axClass._advancableInstances.push(this);
+			FlashContext.get(this.sec).display._advancableInstances.push(this);
 			this._constructed = false;
 
 			// Setting _level0 root.

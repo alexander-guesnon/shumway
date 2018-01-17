@@ -407,4 +407,5 @@
 ///<reference path='link.ts' />
 
 ///<reference path='FlashContext.ts'/>
+///<reference path='FlashDisplay.ts'/>
 ///<reference path='FlashEvents.ts'/>

@@ -122,41 +122,10 @@ module Shumway.AVMX.AS.flash.display {
 		context?: MovieClip;
 	}
 
-	function compareFrameScripts(a: FrameScript, b: FrameScript): number {
-		if (!a.precedence) {
-			return !b.precedence ? 0 : -1;
-		} else if (!b.precedence) {
-			return 1;
-		}
-		let i = 0;
-		while (i < a.precedence.length && i < b.precedence.length &&
-		a.precedence[i] === b.precedence[i]) {
-			i++;
-		}
-		if (i >= a.precedence.length) {
-			return a.precedence.length === b.precedence.length ? 0 : -1;
-		} else {
-			return i >= b.precedence.length ? 1 : a.precedence[i] - b.precedence[i];
-		}
-	}
-
 	export class MovieClip extends flash.display.Sprite implements IAdvancable {
-
-		static frameNavigationModel: FrameNavigationModel;
-
 		static axClass: typeof MovieClip;
 
-		private static _callQueue: MovieClip [];
-
-		// Called whenever the class is initialized.
-		static classInitializer() {
-			this.reset();
-		}
-
-		static reset() {
-			this.frameNavigationModel = FrameNavigationModel.SWF10;
-			this._callQueue = [];
-		}
+		static classInitializer: any = null;
 
 		// List of static symbols to link.
 		static classSymbols: string [] = null; // [];
@@ -164,82 +133,9 @@ module Shumway.AVMX.AS.flash.display {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null; // ["currentLabels"];
 
-		static runFrameScripts() {
-			enterTimeline("MovieClip.executeFrame");
-			let movieClipClass = this.sec.flash.display.MovieClip.axClass;
-			let displayObjectClass = this.sec.flash.display.DisplayObject.axClass;
-			let queue: MovieClip[] = movieClipClass._callQueue;
-			movieClipClass._callQueue = [];
-
-			for (let i = 0; i < queue.length; i++) {
-				let instance = queue[i];
-
-				instance._allowFrameNavigation = false;
-				instance.callFrame(instance._currentFrame);
-				instance._allowFrameNavigation = true;
-
-				// If the destination frame isn't the same as before the `callFrame` operation, a frame
-				// navigation has happened inside the frame script. In that case, we didn't immediately
-				// run frame navigation as described in `_gotoFrameAbs`. Instead, we have to do it here.
-				if (instance._nextFrame !== instance._currentFrame) {
-					if (movieClipClass.frameNavigationModel === FrameNavigationModel.SWF9) {
-						instance._advanceFrame();
-						instance._constructFrame();
-						instance._removeFlags(DisplayObjectFlags.HasFrameScriptPending);
-						instance.callFrame(instance._currentFrame);
-					} else {
-						displayObjectClass.performFrameNavigation(false, true);
-					}
-				}
-			}
-
-			leaveTimeline();
-		}
-
-		static runAvm1FrameScripts() {
-			enterTimeline("MovieClip.runAvm1FrameScripts");
-			let movieClipClass = this.sec.flash.display.MovieClip.axClass;
-			let displayObjectClass = this.sec.flash.display.DisplayObject.axClass;
-			let queue: MovieClip[] = movieClipClass._callQueue;
-			movieClipClass._callQueue = [];
-			let unsortedScripts: FrameScript [] = [];
-
-			for (let i = 0; i < queue.length; i++) {
-				let instance = queue[i];
-				instance.queueAvm1FrameScripts(instance._currentFrame, unsortedScripts);
-			}
-
-			if (unsortedScripts.length) {
-				unsortedScripts.sort(compareFrameScripts);
-
-				for (let i = 0; i < queue.length; i++) {
-					let instance = queue[i];
-					instance._allowFrameNavigation = false;
-				}
-
-				let frameScripts = unsortedScripts;
-				for (let i = 0; i < frameScripts.length; i++) {
-					let script = frameScripts[i];
-					let mc = script.context;
-					release || assert(mc);
-					script.call(mc);
-				}
-
-				for (let i = 0; i < queue.length; i++) {
-					let instance = queue[i];
-					instance._allowFrameNavigation = true;
-					if (instance._nextFrame !== instance._currentFrame) {
-						displayObjectClass.performFrameNavigation(false, true);
-					}
-				}
-			}
-
-			leaveTimeline();
-		}
-
 		applySymbol() {
 			super.applySymbol();
-			this.sec.flash.display.DisplayObject.axClass._advancableInstances.push(this);
+			FlashContext.get(this.sec).display._advancableInstances.push(this);
 			let symbol = this._symbol;
 			this._totalFrames = symbol.numFrames;
 			this._currentFrame = 1;
@@ -459,7 +355,7 @@ module Shumway.AVMX.AS.flash.display {
 				addToCallQueue = true;
 			}
 			if (addToCallQueue) {
-				this.sec.flash.display.MovieClip.axClass._callQueue.push(this);
+				FlashContext.get(this.sec).display._callQueue.push(this);
 			}
 			super._enqueueFrameScripts();
 		}
@@ -469,8 +365,8 @@ module Shumway.AVMX.AS.flash.display {
 
 		// AS -> JS Bindings
 
-		private _currentFrame: number;
-		private _nextFrame: number;
+		_currentFrame: number;
+		_nextFrame: number;
 		private _totalFrames: number;
 		private _frames: Shumway.SWF.SWFFrame[];
 		private _frameScripts: any;
@@ -481,7 +377,7 @@ module Shumway.AVMX.AS.flash.display {
 		private _stopped: boolean;
 
 		private _trackAsMenu: boolean;
-		private _allowFrameNavigation: boolean;
+		_allowFrameNavigation: boolean;
 
 		private _sounds: MovieClipSoundsManager;
 
@@ -491,7 +387,7 @@ module Shumway.AVMX.AS.flash.display {
 		get currentFrame(): number /*int*/ {
 			let frame = this._currentFrame;
 			if (!this._allowFrameNavigation &&
-				this.sec.flash.display.MovieClip.axClass.frameNavigationModel === FrameNavigationModel.SWF1) {
+				FlashContext.get(this.sec).display.frameNavigationModel === FrameNavigationModel.SWF1) {
 				// AVM1 needs to return a frame we already navigated during scripts execution.
 				frame = this._nextFrame;
 			}
@@ -571,7 +467,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * was not found.
 		 */
 		_getAbsFrameNumber(frame: string, sceneName: string): number {
-			let navigationModel = this.sec.flash.display.MovieClip.axClass.frameNavigationModel;
+			let navigationModel = FlashContext.get(this.sec).display.frameNavigationModel;
 			let legacyMode = navigationModel !== FrameNavigationModel.SWF10;
 			let scene: Scene;
 			if (sceneName !== null) {
@@ -643,7 +539,8 @@ module Shumway.AVMX.AS.flash.display {
 
 			// Frame navigation only happens immediately if not triggered from under a frame script.
 			if (this._allowFrameNavigation) {
-				if (this.sec.flash.display.MovieClip.axClass.frameNavigationModel === FrameNavigationModel.SWF9) {
+				const display = FlashContext.get(this.sec).display;
+				if (display.frameNavigationModel === FrameNavigationModel.SWF9) {
 					// In FP 9, the only thing that happens on inter-frame navigation is advancing the frame
 					// and constructing new timeline objects.
 					this._advanceFrame();
@@ -652,12 +549,12 @@ module Shumway.AVMX.AS.flash.display {
 					// Frame navigation in an individual timeline triggers an iteration of the whole
 					// frame navigation cycle in FP 10+. This includes broadcasting frame events to *all*
 					// display objects.
-					this.sec.flash.display.DisplayObject.axClass.performFrameNavigation(false, true);
+					display.performFrameNavigation(false, true);
 				}
 			}
 		}
 
-		private _advanceFrame(): void {
+		_advanceFrame(): void {
 			let currentFrame = this._currentFrame;
 			let nextFrame = this._nextFrame;
 

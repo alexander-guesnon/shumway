@@ -9,6 +9,7 @@ module Shumway {
 		}
 
 		events = new FlashEvents(this);
+		display = new FlashDisplay(this);
 		sec: ISecurityDomain;
 
 		static get(sec: ISecurityDomain) {

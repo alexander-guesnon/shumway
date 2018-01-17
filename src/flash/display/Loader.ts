@@ -222,7 +222,7 @@ module Shumway.AVMX.AS.flash.display {
 		constructor() {
 			super();
 
-			let displayObjectClass = this.sec.flash.display.DisplayObject.axClass;
+			let displayObjectClass = FlashContext.get(this.sec).display;
 			displayObjectClass._advancableInstances.push(this);
 			this._content = null;
 			if (this.axClass._rootLoader) {
@@ -257,8 +257,10 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_constructFrame() {
+			const context = FlashContext.get(this.sec);
+
 			if (this === this.sec.flash.display.Loader.axClass.getRootLoader() && this._content) {
-				this.sec.flash.display.DisplayObject.axClass._advancableInstances.remove(this);
+				context.display._advancableInstances.remove(this);
 				this._children[0] = this._content;
 				this._constructChildren();
 				this._children.length = 0;
