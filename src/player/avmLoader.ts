@@ -68,7 +68,7 @@ module Shumway {
 
 			result.resolve(sec);
 			return null;
-		}, result.reject);n
+		}, result.reject);
 		return result.promise;
 	}
 }

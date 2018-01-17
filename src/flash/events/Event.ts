@@ -20,40 +20,15 @@ module Shumway.AVMX.AS.flash.events {
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class Event extends ASObject {
-
 		static axClass: typeof Event;
 
-		static _instances: Shumway.MapObject<Event>;
+		static classInitializer: any = null;
 
-		static classInitializer: any = function () {
-			let self: typeof Event = this;
-			self._instances = Shumway.ObjectUtilities.createMap<Event>();
-		};
+		_flashContext: FlashContext;
 
-		static getInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
-			let instance = this._instances[type];
-			if (!instance) {
-				instance = new this.sec.flash.events.Event(type, bubbles, cancelable);
-				this._instances[type] = instance;
-			}
-			instance._bubbles = bubbles;
-			instance._cancelable = cancelable;
-			return instance;
-		}
-
-		static getBroadcastInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
-			let instance = this._instances[type];
-			if (!instance) {
-				instance = new this.sec.flash.events.Event(type, bubbles, cancelable);
-				this._instances[type] = instance;
-				// Some events are documented as broadcast event in the AS3 docs. We can't set |_isBroadcastEvent| flag in the
-				// constructor because if you create custom events with these types they do capture and bubble.
-				release || assert(Event.isBroadcastEventType(type));
-			}
-			instance._isBroadcastEvent = true;
-			instance._bubbles = bubbles;
-			instance._cancelable = cancelable;
-			return instance;
+		setContext(context: FlashContext): this {
+			this._flashContext = context;
+			return this;
 		}
 
 		/**
@@ -75,6 +50,8 @@ module Shumway.AVMX.AS.flash.events {
 
 		constructor(type: string, bubbles: boolean, cancelable: boolean) {
 			super();
+			this._flashContext = FlashContext.get(this.sec);
+
 			this._type = axCoerceString(type);
 			this._bubbles = !!bubbles;
 			this._cancelable = !!cancelable;
@@ -154,7 +131,7 @@ module Shumway.AVMX.AS.flash.events {
 		/**
 		 * Some events don't participate in the normal capturing and bubbling phase.
 		 */
-		private _isBroadcastEvent: boolean;
+		_isBroadcastEvent: boolean;
 
 		get type(): string {
 			return this._type;
@@ -203,8 +180,10 @@ module Shumway.AVMX.AS.flash.events {
 		}
 
 		clone(): Event {
-			return new this.sec.flash.events.Event(this._type, this._bubbles,
-				this._cancelable);
+			// if (!this._flashContext) {
+			// 	this._flashContext = FlashContext.get(this.sec);
+			// }
+			return this._flashContext.events.clone(this);
 		}
 
 		toString(): string {

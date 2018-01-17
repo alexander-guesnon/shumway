@@ -189,9 +189,8 @@ module Shumway.Player {
 					this._player._hasFocus = false;
 					break;
 				case FocusEventType.WindowFocus:
-					let eventDispatcherClass = this._player.sec.flash.events.EventDispatcher.axClass;
-					let eventClass = this._player.sec.flash.events.Event.axClass;
-					eventDispatcherClass.broadcastEventDispatchQueue.dispatchEvent(eventClass.getBroadcastInstance(Event.ACTIVATE));
+					let events = FlashContext.get(this._player.sec).events;
+					events.broadcastEventDispatchQueue.dispatchEvent(events.getBroadcastInstance(Event.ACTIVATE));
 					this._player._hasFocus = true;
 					break;
 			}

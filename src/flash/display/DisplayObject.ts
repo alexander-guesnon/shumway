@@ -422,6 +422,8 @@ module Shumway.AVMX.AS.flash.display {
 		 * is true for nested cycles, too. (We keep static state for that.)
 		 */
 		static performFrameNavigation(mainLoop: boolean, runScripts: boolean) {
+			const thisContext = FlashContext.current();
+
 			if (mainLoop) {
 				this._runScripts = runScripts;
 			} else {
@@ -447,7 +449,7 @@ module Shumway.AVMX.AS.flash.display {
 			// Step 2: Dispatch ENTER_FRAME, only called in outermost invocation.
 			enterTimeline("DisplayObject.EnterFrame");
 			if (mainLoop && runScripts) {
-				this._broadcastFrameEvent(events.Event.ENTER_FRAME);
+				thisContext._broadcastFrameEvent(events.Event.ENTER_FRAME);
 			}
 			leaveTimeline();
 			// Step 3: Create new timeline objects.
@@ -459,7 +461,7 @@ module Shumway.AVMX.AS.flash.display {
 			// Step 4: Dispatch FRAME_CONSTRUCTED.
 			if (runScripts) {
 				enterTimeline("DisplayObject.FrameConstructed");
-				this._broadcastFrameEvent(events.Event.FRAME_CONSTRUCTED);
+				thisContext._broadcastFrameEvent(events.Event.FRAME_CONSTRUCTED);
 				leaveTimeline();
 				// Step 5: Run frame scripts
 				// Flash seems to enqueue all frame scripts recursively, starting at the root of each
@@ -492,7 +494,7 @@ module Shumway.AVMX.AS.flash.display {
 				leaveTimeline();
 				// Step 6: Dispatch EXIT_FRAME.
 				enterTimeline("DisplayObject.ExitFrame");
-				this._broadcastFrameEvent(events.Event.EXIT_FRAME);
+				thisContext._broadcastFrameEvent(events.Event.EXIT_FRAME);
 				leaveTimeline();
 			} else {
 				MovieClip.reset();
@@ -500,15 +502,6 @@ module Shumway.AVMX.AS.flash.display {
 			if (mainLoop) {
 				this._runScripts = true;
 			}
-		}
-
-		/**
-		 * Dispatches a frame event on all instances of DisplayObjects.
-		 */
-		static _broadcastFrameEvent(type: string): void {
-			let eventsPackage = this.sec.flash.events;
-			let event = eventsPackage.Event.axClass.getBroadcastInstance(type);
-			eventsPackage.EventDispatcher.axClass.broadcastEventDispatchQueue.dispatchEvent(event);
 		}
 
 		constructor() {

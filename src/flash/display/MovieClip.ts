@@ -871,7 +871,7 @@ module Shumway.AVMX.AS.flash.display {
 				this._removeFlags(DisplayObjectFlags.NeedsLoadEvent);
 				release || assert(this._symbol);
 				let handler = function () {
-					let eventClass = this.sec.flash.events.Event.axClass;
+					let eventClass = FlashContext.get(this.sec).events;
 					this.dispatchEvent(eventClass.getInstance(events.Event.AVM1_LOAD));
 				}.bind(this);
 				handler.precedence = this._getScriptPrecedence();

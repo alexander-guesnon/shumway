@@ -198,11 +198,7 @@ module Shumway.AVMX.AS.flash.events {
 
 		static axClass: typeof EventDispatcher;
 
-		public static broadcastEventDispatchQueue: BroadcastEventDispatchQueue;
-
-		static classInitializer() {
-			this.broadcastEventDispatchQueue = new BroadcastEventDispatchQueue();
-		}
+		static classInitializer: any = null;
 
 		private _target: flash.events.IEventDispatcher;
 
@@ -290,7 +286,7 @@ module Shumway.AVMX.AS.flash.events {
 			// Notify the broadcast event queue. If |useCapture| is set then the Flash player
 			// doesn't seem to register this target.
 			if (!useCapture && Event.isBroadcastEventType(type)) {
-				this.sec.flash.events.EventDispatcher.axClass.broadcastEventDispatchQueue.add(type, this);
+				FlashContext.get(this.sec).events.broadcastEventDispatchQueue.add(type, this);
 			}
 		}
 
@@ -318,7 +314,7 @@ module Shumway.AVMX.AS.flash.events {
 				if (list.isEmpty()) {
 					// Notify the broadcast event queue of the removal.
 					if (!useCapture && Event.isBroadcastEventType(type)) {
-						this.sec.flash.events.EventDispatcher.axClass.broadcastEventDispatchQueue.remove(type, this);
+						FlashContext.get(this.sec).events.broadcastEventDispatchQueue.remove(type, this);
 					}
 					listeners[type] = null;
 				}
@@ -444,7 +440,7 @@ module Shumway.AVMX.AS.flash.events {
 					}
 					let list = ancestor._getListenersForType(true, type);
 					release || assert(list);
-					keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
+					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, ancestor,
 						EventPhase.CAPTURING_PHASE);
 				}
 			}
@@ -455,7 +451,7 @@ module Shumway.AVMX.AS.flash.events {
 			if (keepPropagating) {
 				let list = this._getListenersForType(false, type);
 				if (list) {
-					keepPropagating = EventDispatcher.callListeners(list, event, target, target,
+					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, target,
 						EventPhase.AT_TARGET);
 				}
 			}
@@ -470,7 +466,7 @@ module Shumway.AVMX.AS.flash.events {
 						continue;
 					}
 					let list = ancestor._getListenersForType(false, type);
-					keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
+					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, ancestor,
 						EventPhase.BUBBLING_PHASE);
 				}
 			}
@@ -478,7 +474,7 @@ module Shumway.AVMX.AS.flash.events {
 			return !event._isDefaultPrevented;
 		}
 
-		private static callListeners(list: EventListenerList, event: Event, target: IEventDispatcher,
+		private static callListeners(sec: ISecurityDomain, list: EventListenerList, event: Event, target: IEventDispatcher,
 		                             currentTarget: IEventDispatcher, eventPhase: number): boolean {
 			if (list.isEmpty()) {
 				return true;
@@ -488,7 +484,7 @@ module Shumway.AVMX.AS.flash.events {
 			 * for all listener callbacks but not when bubbling.
 			 */
 			if (event._target) {
-				event = event.axCallPublicProperty('clone', null);
+				event = event.axCallPublicProperty('clone', null).setContext(FlashContext.get(sec));
 			}
 			let snapshot = list.snapshot();
 			try {

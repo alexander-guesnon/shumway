@@ -105,7 +105,7 @@ module Shumway.AVMX.AS.flash.display {
 				}
 				child._setFlags(DisplayObjectFlags.Constructed);
 
-				let eventClass = this.sec.flash.events.Event.axClass;
+				let eventClass = FlashContext.get(this.sec).events;
 				if (child._hasFlags(DisplayObjectFlags.HasPlaceObjectInitPending)) {
 					child._removeFlags(DisplayObjectFlags.HasPlaceObjectInitPending);
 
@@ -192,7 +192,7 @@ module Shumway.AVMX.AS.flash.display {
 			let old = this._tabChildren;
 			this._tabChildren = enable;
 			if (old !== enable) {
-				this.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.TAB_CHILDREN_CHANGE, true));
+				this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.TAB_CHILDREN_CHANGE, true));
 			}
 		}
 
@@ -265,11 +265,11 @@ module Shumway.AVMX.AS.flash.display {
 			child._invalidatePosition();
 			this._invalidateChildren();
 			child._addReference();
-			child.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.ADDED, true));
+			child.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.ADDED, true));
 			// ADDED event handlers may remove the child from the stage, in such cases
 			// we should not dispatch the ADDED_TO_STAGE event.
 			if (child.stage) {
-				child._propagateEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.ADDED_TO_STAGE));
+				child._propagateEvent(FlashContext.get(this.sec).events.getInstance(events.Event.ADDED_TO_STAGE));
 			}
 			return child;
 		}
@@ -333,9 +333,9 @@ module Shumway.AVMX.AS.flash.display {
 
 			let child = children[index];
 			if (child._hasFlags(DisplayObjectFlags.Constructed)) {
-				child.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.REMOVED, true));
+				child.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.REMOVED, true));
 				if (this.stage) {
-					child._propagateEvent(this.sec.flash.events.Event.axClass.getInstance(events.Event.REMOVED_FROM_STAGE));
+					child._propagateEvent(FlashContext.get(this.sec).events.getInstance(events.Event.REMOVED_FROM_STAGE));
 				}
 				// Children list might have been mutated by the REMOVED or REMOVED_FROM_STAGE event,
 				// we may need to operate on the new index of the child.

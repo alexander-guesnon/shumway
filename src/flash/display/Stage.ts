@@ -238,7 +238,7 @@ module Shumway.AVMX.AS.flash.display {
 				this._stageContainerWidth = width;
 				this._stageContainerHeight = height;
 				if (this.scaleMode === StageScaleMode.NO_SCALE) {
-					this.dispatchEvent(this.sec.flash.events.Event.axClass.getInstance(flash.events.Event.RESIZE));
+					this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(flash.events.Event.RESIZE));
 				}
 			}
 		}
@@ -501,7 +501,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (!this._invalidated) {
 				return;
 			}
-			this.sec.flash.display.DisplayObject.axClass._broadcastFrameEvent(flash.events.Event.RENDER);
+			FlashContext.get(this.sec)._broadcastFrameEvent(flash.events.Event.RENDER);
 			this._invalidated = false;
 		}
 

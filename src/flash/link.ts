@@ -17,6 +17,7 @@
 import flashPackage = Shumway.AVMX.AS.flash;
 
 interface ISecurityDomain {
+	context: Shumway.FlashContext;
 	player: Shumway.Player.SWFPlayer;
 	flash?: {
 		display: {
