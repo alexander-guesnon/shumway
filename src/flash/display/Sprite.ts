@@ -302,7 +302,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * Returns the current mouse position relative to this object.
 		 */
 		_getDragMousePosition(): flash.geom.Point {
-			let position = this.sec.flash.ui.Mouse.axClass._currentPosition;
+			let position = FlashContext.get(this.sec).mouse._currentPosition;
 			if (this._parent) {
 				position = this._parent.globalToLocal(position);
 			}
@@ -322,12 +322,13 @@ module Shumway.AVMX.AS.flash.display {
 			this._dragBounds = bounds;
 			// TODO: Our mouse handling logic looks up draggableObject on stage.sec.flash.ui.Mouse.axClass
 			// to update its position. Could there be a case where stage.sec !== this.sec?
-			this.sec.flash.ui.Mouse.axClass.draggableObject = this;
+			FlashContext.get(this.sec).mouse.draggableObject = this;
 		}
 
 		stopDrag(): void {
-			if (this.sec.flash.ui.Mouse.axClass.draggableObject === this) {
-				this.sec.flash.ui.Mouse.axClass.draggableObject = null;
+			const mouse = FlashContext.get(this.sec).mouse;
+			if (mouse.draggableObject === this) {
+				mouse.draggableObject = null;
 				this._dragMode = DragMode.Inactive;
 				this._dragDeltaX = 0;
 				this._dragDeltaY = 0;

@@ -37,9 +37,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		static axClass: typeof BitmapData;
 
-		static classInitializer() {
-			this._temporaryRectangle = new this.sec.flash.geom.Rectangle();
-		}
+		static classInitializer: any = null;
 
 		_symbol: BitmapSymbol;
 
@@ -195,13 +193,8 @@ module Shumway.AVMX.AS.flash.display {
 		 */
 		_solidFillColorPBGRA: any; // any | number;
 
-		/**
-		 * Temporary rectangle that is used to prevent allocation.
-		 */
-		private static _temporaryRectangle: flash.geom.Rectangle;
-
 		private _getTemporaryRectangleFrom(rect: flash.geom.Rectangle): flash.geom.Rectangle {
-			let r = this.sec.flash.display.BitmapData.axClass._temporaryRectangle;
+			let r = FlashContext.get(this.sec)._temporaryRectangle;
 			r.copyFrom(rect);
 			return r;
 		}
@@ -434,7 +427,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (sourceRect) {
 				sRect = this._getTemporaryRectangleFrom(sourceRect).roundInPlace();
 			} else {
-				sRect = this.sec.flash.display.BitmapData.axClass._temporaryRectangle.setEmpty();
+				sRect = FlashContext.get(this.sec)._temporaryRectangle.setEmpty();
 			}
 
 			let tBRect = this._rect;

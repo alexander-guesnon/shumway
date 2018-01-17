@@ -10,7 +10,20 @@ module Shumway {
 
 		events = new FlashEvents(this);
 		display = new FlashDisplay(this);
+		loader = new FlashLoader(this);
+		mouse = new FlashMouse(this);
 		sec: ISecurityDomain;
+
+		init(sec: ISecurityDomain) {
+			this.sec = sec;
+			this._temporaryRectangle = new sec.flash.geom.Rectangle();
+			this.mouse.init();
+		}
+
+		/**
+		 * Temporary rectangle that is used to prevent allocation.
+		 */
+		_temporaryRectangle : flash.geom.Rectangle;
 
 		static get(sec: ISecurityDomain) {
 			if (!sec) {
@@ -18,7 +31,7 @@ module Shumway {
 			}
 			if (!sec.context) {
 				sec.context = new FlashContext();
-				sec.context.sec = sec;
+				sec.context.init(sec);
 
 				FlashContext._current = sec.context;
 			}

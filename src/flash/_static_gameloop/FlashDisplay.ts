@@ -22,6 +22,8 @@ module Shumway {
 
 		context: FlashContext;
 
+		// DisplayObject statics
+
 		_broadcastFrameEvent(type: string): void {
 			const events = this.context.events;
 			let event = events.getBroadcastInstance(type);
@@ -134,6 +136,8 @@ module Shumway {
 				this._runScripts = true;
 			}
 		}
+
+		// MOVIE CLIP STATICS
 
 		_callQueue: MovieClip [];
 		frameNavigationModel: FrameNavigationModel;

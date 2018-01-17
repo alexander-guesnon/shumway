@@ -30,17 +30,14 @@ module Shumway.AVMX.AS.flash.display {
 	import ILoadListener = Shumway.ILoadListener;
 	import SWFFile = Shumway.SWF.SWFFile;
 
-	import enterTimeline = Shumway.AVMX.enterTimeline;
-	import leaveTimeline = Shumway.AVMX.leaveTimeline;
-
-	enum LoadStatus {
+	export enum LoadStatus {
 		Unloaded = 0,
 		Opened = 1,
 		Initialized = 2,
 		Complete = 3
 	}
 
-	enum LoadingType {
+	export enum LoadingType {
 		External = 0,
 		Bytes = 1
 	}
@@ -50,174 +47,10 @@ module Shumway.AVMX.AS.flash.display {
 
 		static axClass: typeof Loader;
 
-		static runtimeStartTime: number;
-		private static _rootLoader: Loader;
-		private static _loadQueue: Loader [];
-		private static _embeddedContentLoadCount: number;
-
-		/**
-		 * Creates or returns the root Loader instance. The loader property of that instance's
-		 * LoaderInfo object is always null. Also, no OPEN event ever gets dispatched.
-		 */
-		static getRootLoader(): Loader {
-			if (this._rootLoader) {
-				return this._rootLoader;
-			}
-			let loader = new this.sec.flash.display.Loader();
-			// The root loaderInfo's `loader` property is always null.
-			loader._contentLoaderInfo._loader = null;
-			this._rootLoader = loader;
-			return loader;
-		}
-
-		static reset() {
-			this.sec.flash.display.Loader.axClass._loadQueue.forEach(loader => loader.unload());
-			Loader.classInitializer();
-		}
-
-		static classInitializer() {
-			this._rootLoader = null;
-			this._loadQueue = [];
-			this.runtimeStartTime = 0;
-			this._embeddedContentLoadCount = 0;
-		}
+		static classInitializer: any = null;
 
 		static classSymbols: string [] = null;
 		static instanceSymbols: string [] = null;
-
-		/**
-		 * In each turn of the event loop, Loader events are processed in two batches:
-		 * first INIT and COMPLETE events are dispatched for all active Loaders, then
-		 * OPEN and PROGRESS.
-		 *
-		 * A slightly weird result of this is that INIT and COMPLETE are dispatched at
-		 * least one turn later than the other events: INIT is dispatched after the
-		 * content has been created. That, in turn, happens under
-		 * `DisplayObject.performFrameNavigation` in reaction to enough data being
-		 * marked as available - which happens in the second batch of Loader event
-		 * processing.
-		 */
-		static processEvents() {
-			let loaderClass = this.sec.flash.display.Loader.axClass;
-			loaderClass.processEarlyEvents();
-			loaderClass.processLateEvents();
-		}
-
-		private static processEarlyEvents() {
-			let loaderClass = this.sec.flash.display.Loader.axClass;
-			let queue = loaderClass._loadQueue;
-			for (let i = 0; i < queue.length; i++) {
-				let instance = queue[i];
-				release || assert(instance._loadStatus !== LoadStatus.Complete);
-				let loaderInfo = instance._contentLoaderInfo;
-				let imageSymbol = instance._imageSymbol;
-
-				// For images, only dispatch INIT and COMPLETE once the image has been decoded.
-				if (loaderInfo._file instanceof ImageFile) {
-					if (!imageSymbol || !imageSymbol.ready || instance._queuedLoadUpdate) {
-						continue;
-					}
-					release || assert(loaderInfo.bytesLoaded === loaderInfo.bytesTotal);
-					instance._applyDecodedImage(imageSymbol);
-					release || assert(instance._content);
-				}
-
-				if (instance._loadStatus === LoadStatus.Opened && instance._content) {
-					enterTimeline("Loader.INIT");
-					try {
-						loaderInfo.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.INIT));
-					} catch (e) {
-						Debug.warning('caught error under loaderInfo INIT event:', e);
-					}
-					leaveTimeline();
-					instance._loadStatus = LoadStatus.Initialized;
-					// Only for the root loader, progress events for the data loaded up until now are
-					// dispatched here.
-					if (instance === this.sec.flash.display.Loader.axClass._rootLoader) {
-						enterTimeline("Loader.Progress", 'rootLoader');
-						try {
-							loaderInfo.dispatchEvent(new this.sec.flash.events.ProgressEvent(
-								events.ProgressEvent.PROGRESS,
-								false, false,
-								loaderInfo.bytesLoaded,
-								loaderInfo.bytesTotal));
-						} catch (e) {
-							Debug.warning('caught error under loaderInfo PROGRESS event:', e);
-						}
-						leaveTimeline();
-					}
-				}
-
-				if (instance._loadStatus === LoadStatus.Initialized &&
-					loaderInfo.bytesLoaded === loaderInfo.bytesTotal) {
-					queue.splice(i--, 1);
-					release || assert(queue.indexOf(instance) === -1);
-					instance._loadStatus = LoadStatus.Complete;
-					enterTimeline("Loader.Complete");
-					try {
-						loaderInfo.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.COMPLETE));
-					} catch (e) {
-						Debug.warning('caught error under loaderInfo COMPLETE event: ', e);
-					}
-					leaveTimeline();
-				}
-			}
-		}
-
-		private static processLateEvents() {
-			let queue = this.sec.flash.display.Loader.axClass._loadQueue;
-			for (let i = 0; i < queue.length; i++) {
-				let instance = queue[i];
-				release || assert(instance._loadStatus !== LoadStatus.Complete);
-
-				let loaderInfo = instance._contentLoaderInfo;
-				let update = instance._queuedLoadUpdate;
-				let bytesTotal = loaderInfo._bytesTotal;
-				if ((!update || !bytesTotal) && instance._loadStatus !== LoadStatus.Opened) {
-					continue;
-				}
-				instance._queuedLoadUpdate = null;
-
-				let progressEventCtor = this.sec.flash.events.ProgressEvent;
-				if (instance._loadStatus === LoadStatus.Unloaded) {
-					// OPEN is only dispatched when loading external resources, not for loadBytes.
-					if (instance._loadingType === LoadingType.External) {
-						enterTimeline("Loader.Open");
-						try {
-							loaderInfo.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.OPEN));
-						} catch (e) {
-							Debug.warning('caught error under loaderInfo OPEN event: ', e);
-						}
-						leaveTimeline();
-					}
-					// The first time any progress is made at all, a progress event with bytesLoaded = 0
-					// is dispatched.
-					enterTimeline("Loader.Progress");
-					try {
-						loaderInfo.dispatchEvent(new progressEventCtor(events.ProgressEvent.PROGRESS,
-							false, false, 0, bytesTotal));
-					} catch (e) {
-						Debug.warning('caught error under loaderInfo PROGRESS event: ', e);
-					}
-					leaveTimeline();
-					instance._loadStatus = LoadStatus.Opened;
-				}
-
-				// TODO: The Flash player reports progress in 16kb chunks, in a tight loop right here.
-				if (update) {
-					instance._applyLoadUpdate(update);
-					enterTimeline("Loader.Progress");
-					try {
-						loaderInfo.dispatchEvent(new progressEventCtor(events.ProgressEvent.PROGRESS,
-							false, false, update.bytesLoaded,
-							bytesTotal));
-					} catch (e) {
-						Debug.warning('caught error under loaderInfo PROGRESS event: ', e);
-					}
-					leaveTimeline();
-				}
-			}
-		}
 
 		constructor() {
 			super();
@@ -248,7 +81,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_setStage(stage: Stage) {
-			release || assert(this === this.sec.flash.display.Loader.axClass.getRootLoader());
+			release || assert(this === FlashContext.get(this.sec).loader.getRootLoader());
 			this._stage = stage;
 		}
 
@@ -259,7 +92,7 @@ module Shumway.AVMX.AS.flash.display {
 		_constructFrame() {
 			const context = FlashContext.get(this.sec);
 
-			if (this === this.sec.flash.display.Loader.axClass.getRootLoader() && this._content) {
+			if (this === context.loader.getRootLoader() && this._content) {
 				context.display._advancableInstances.remove(this);
 				this._children[0] = this._content;
 				this._constructChildren();
@@ -295,16 +128,16 @@ module Shumway.AVMX.AS.flash.display {
 
 		// AS -> JS Bindings
 
-		private _content: flash.display.DisplayObject;
+		_content: flash.display.DisplayObject;
 		private _contentID: number;
-		private _contentLoaderInfo: flash.display.LoaderInfo;
+		_contentLoaderInfo: flash.display.LoaderInfo;
 		private _uncaughtErrorEvents: flash.events.UncaughtErrorEvents;
 
 		private _fileLoader: FileLoader;
-		private _imageSymbol: BitmapSymbol;
-		private _loadStatus: LoadStatus;
-		private _loadingType: LoadingType;
-		private _queuedLoadUpdate: LoadProgressUpdate;
+		_imageSymbol: BitmapSymbol;
+		_loadStatus: LoadStatus;
+		_loadingType: LoadingType;
+		_queuedLoadUpdate: LoadProgressUpdate;
 
 		/**
 		 * No way of knowing what's in |data|, so do a best effort to print out some meaninfgul debug
@@ -364,7 +197,7 @@ module Shumway.AVMX.AS.flash.display {
 			fileLoader.loadFile(request._toFileRequest());
 
 			this._queuedLoadUpdate = null;
-			let loaderClass = this.sec.flash.display.Loader.axClass;
+			let loaderClass = FlashContext.get(this.sec).loader;
 			release || assert(loaderClass._loadQueue.indexOf(this) === -1);
 			loaderClass._loadQueue.push(this);
 		}
@@ -372,7 +205,7 @@ module Shumway.AVMX.AS.flash.display {
 		loadBytes(data: flash.utils.ByteArray, context?: LoaderContext) {
 			this.close();
 			// TODO: properly coerce object arguments to their types.
-			let loaderClass = this.sec.flash.display.Loader.axClass;
+			let loaderClass = FlashContext.get(this.sec).loader;
 			// In case this is the initial root loader, we won't have a loaderInfo object. That should
 			// only happen in the inspector when a file is loaded from a Blob, though.
 			this._contentLoaderInfo._url = (this.loaderInfo ? this.loaderInfo._url : '') +
@@ -392,9 +225,10 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		close(): void {
-			let queueIndex = this.sec.flash.display.Loader.axClass._loadQueue.indexOf(this);
+			let loaderClass = FlashContext.get(this.sec).loader;
+			let queueIndex = loaderClass._loadQueue.indexOf(this);
 			if (queueIndex > -1) {
-				this.sec.flash.display.Loader.axClass._loadQueue.splice(queueIndex, 1);
+				loaderClass._loadQueue.splice(queueIndex, 1);
 			}
 			this._contentLoaderInfo.reset();
 			if (!this._fileLoader) {
@@ -563,7 +397,7 @@ module Shumway.AVMX.AS.flash.display {
 			release || assert(symbol.resolveAssetPromise);
 		}
 
-		private _applyDecodedImage(symbol: BitmapSymbol) {
+		_applyDecodedImage(symbol: BitmapSymbol) {
 			let bitmapData = symbol.createSharedInstance();
 			this._content = new this.sec.flash.display.Bitmap(bitmapData);
 			this._contentLoaderInfo._width = this._content.width * 20;
@@ -571,7 +405,7 @@ module Shumway.AVMX.AS.flash.display {
 			this.addTimelineObjectAtDepth(this._content, 0);
 		}
 
-		private _applyLoadUpdate(update: LoadProgressUpdate) {
+		_applyLoadUpdate(update: LoadProgressUpdate) {
 			let loaderInfo = this._contentLoaderInfo;
 			loaderInfo._bytesLoaded = update.bytesLoaded;
 			let file = loaderInfo._file;
@@ -711,11 +545,12 @@ module Shumway.AVMX.AS.flash.display {
 			}
 
 			let root = constructClassFromSymbol(symbol, symbol.symbolClass);
+			const context = FlashContext.get(this.sec);
 			// The initial SWF's root object gets a default of 'root1', which doesn't use up a
 			// DisplayObject instance ID. For the others, we have reserved one in `_contentID`.
-			this.sec.flash.display.DisplayObject.axClass._instanceID--;
 
-			let loaderClass = this.sec.flash.display.Loader.axClass;
+			context.display._instanceID--;
+			let loaderClass = context.loader;
 			if (this === loaderClass._rootLoader) {
 				root._name = 'root1';
 			} else {
@@ -733,7 +568,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (isAS2LoadedFromAS3) {
 				root = this._createAVM1Movie(root);
 			} else if (isTopLevelMovie) {
-				let movieClipClass = this.sec.flash.display.MovieClip.axClass;
+				let movieClipClass = FlashContext.get(this.sec).display;
 				movieClipClass.frameNavigationModel = loaderInfo.swfVersion < 10 ?
 					flash.display.FrameNavigationModel.SWF9 :
 					flash.display.FrameNavigationModel.SWF10;
@@ -743,7 +578,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 			this._content = root;
 			if (isTopLevelMovie) {
-				this.sec.flash.display.Loader.runtimeStartTime = Date.now();
+				loaderClass.runtimeStartTime = Date.now();
 				this._stage.setRoot(root);
 			} else {
 				this.addTimelineObjectAtDepth(root, 0);
@@ -755,13 +590,13 @@ module Shumway.AVMX.AS.flash.display {
 		private _createAVM1Context(): void {
 			let contentLoaderInfo: LoaderInfo = this._contentLoaderInfo;
 			let avm1Context = Shumway.AVM1.AVM1Context.create(contentLoaderInfo);
-			let display = this.sec.flash.display;
-			let rootLoader = display.Loader.axClass.getRootLoader();
+			const context = FlashContext.get(this.sec);
+			let rootLoader = context.loader.getRootLoader();
 			avm1Context.setStage(rootLoader._stage);
 
 			// FIXME make frameNavigationModel non-global
 			if (this === rootLoader) {
-				display.MovieClip.axClass.frameNavigationModel = flash.display.FrameNavigationModel.SWF1;
+				context.display.frameNavigationModel = flash.display.FrameNavigationModel.SWF1;
 			}
 
 			contentLoaderInfo._avm1Context = avm1Context;

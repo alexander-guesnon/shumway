@@ -82,7 +82,7 @@ module Shumway.AVMX.AS.flash.ui {
 			}
 
 			let globalPoint = data.point;
-			let mouseClass = this.stage.sec.flash.ui.Mouse.axClass;
+			let mouseClass = FlashContext.get(this.stage.sec).mouse;
 			mouseClass.updateCurrentPosition(globalPoint);
 
 			let currentTarget = this.currentTarget;
@@ -210,11 +210,7 @@ module Shumway.AVMX.AS.flash.ui {
 		static axClass: typeof Mouse;
 
 		// Called whenever the class is initialized.
-		static classInitializer() {
-			this._currentPosition = new this.sec.flash.geom.Point();
-			this._cursor = MouseCursor.AUTO;
-			this.draggableObject = null;
-		}
+		static classInitializer: any = null;
 
 		constructor() {
 			super();
@@ -224,17 +220,13 @@ module Shumway.AVMX.AS.flash.ui {
 
 
 		// AS -> JS Bindings
-		//static _supportsCursor: boolean;
-		static _cursor: string;
-
-		//static _supportsNativeCursor: boolean;
 
 		static get supportsCursor(): boolean {
 			return true;
 		}
 
 		static get cursor(): string {
-			return this._cursor;
+			return FlashContext.current().mouse._cursor;
 		}
 
 		static set cursor(value: string) {
@@ -242,7 +234,7 @@ module Shumway.AVMX.AS.flash.ui {
 			if (MouseCursor.toNumber(value) < 0) {
 				this.sec.throwError("ArgumentError", Errors.InvalidParamError, "cursor");
 			}
-			this._cursor = value;
+			FlashContext.current().mouse._cursor = value;
 		}
 
 		static get supportsNativeCursor(): boolean {
@@ -271,16 +263,5 @@ module Shumway.AVMX.AS.flash.ui {
 			release || notImplemented("public flash.ui.Mouse::static unregisterCursor");
 			return;
 		}
-
-		static _currentPosition: flash.geom.Point;
-
-		/**
-		 * Remembers the current mouse position.
-		 */
-		public static updateCurrentPosition(value: flash.geom.Point) {
-			this._currentPosition.copyFrom(value);
-		}
-
-		static draggableObject: flash.display.Sprite;
 	}
 }

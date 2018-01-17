@@ -406,6 +406,8 @@
 // ///<reference path='linker.ts' />
 ///<reference path='link.ts' />
 
-///<reference path='FlashContext.ts'/>
-///<reference path='FlashDisplay.ts'/>
-///<reference path='FlashEvents.ts'/>
+///<reference path='_static_gameloop/FlashContext.ts'/>
+///<reference path='_static_gameloop/FlashDisplay.ts'/>
+///<reference path='_static_gameloop/FlashLoader.ts'/>
+///<reference path='_static_gameloop/FlashEvents.ts'/>
+///<reference path='_static_gameloop/FlashMouse.ts'/>

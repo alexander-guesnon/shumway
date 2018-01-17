@@ -385,7 +385,7 @@ module Shumway.Player {
 			release || assert(!this._loader, "Can't load twice.");
 			this._swfUrl = url;
 			this._stage = new this.sec.flash.display.Stage();
-			let loader = this._loader = this.sec.flash.display.Loader.axClass.getRootLoader();
+			let loader = this._loader = FlashContext.get(this.sec).loader.getRootLoader();
 			let loaderInfo = this._loaderInfo = loader.contentLoaderInfo;
 			if (playAllSymbolsOption.value) {
 				this._playAllSymbols();
@@ -558,7 +558,7 @@ module Shumway.Player {
 
 		private _enterRootLoadingLoop(): void {
 			let self = this;
-			let rootLoader = this.sec.flash.display.Loader.axClass.getRootLoader();
+			let rootLoader = FlashContext.get(this.sec).loader.getRootLoader();
 			rootLoader._setStage(this._stage);
 
 			function rootLoadingLoop() {
@@ -612,7 +612,7 @@ module Shumway.Player {
 			// Until the root SWF is initialized, only process Loader events.
 			// Once the root loader's content is created, directly process all events again to avoid
 			// further delay in initialization.
-			let loaderClass = this.sec.flash.display.Loader.axClass;
+			let loaderClass = FlashContext.get(this.sec).loader;
 			if (!loaderClass.getRootLoader().content) {
 				loaderClass.processEvents();
 				if (!loaderClass.getRootLoader().content) {
