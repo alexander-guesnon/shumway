@@ -16,6 +16,9 @@ module Shumway {
 			this._temporaryRectangle = new sec.flash.geom.Rectangle();
 			this.FROZEN_IDENTITY_MATRIX = Object.freeze(sec.flash.geom.Matrix.axClass.axConstruct([]));
 			this.TEMP_MATRIX = sec.flash.geom.Matrix.axClass.axConstruct([]);
+
+			this.FROZEN_IDENTITY_COLOR_TRANSFORM = Object.freeze(sec.flash.geom.ColorTransform.axClass.axConstruct([]));
+			this.TEMP_COLOR_TRANSFORM = sec.flash.geom.ColorTransform.axClass.axConstruct([]);
 		}
 
 		/**
@@ -27,6 +30,12 @@ module Shumway {
 
 		// Must only be used in cases where the members are fully initialized and then directly used.
 		TEMP_MATRIX: flash.geom.Matrix;
+
+		FROZEN_IDENTITY_COLOR_TRANSFORM: flash.geom.ColorTransform;
+
+		// Must only be used in cases where the members are fully initialized and then directly used.
+		TEMP_COLOR_TRANSFORM: flash.geom.ColorTransform;
+
 
 	}
 }

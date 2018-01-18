@@ -25,10 +25,7 @@ module Shumway.AVMX.AS.flash.geom {
 
 		static axClass: typeof ColorTransform;
 
-		static classInitializer() {
-			this.FROZEN_IDENTITY_COLOR_TRANSFORM = Object.freeze(this.axConstruct([]));
-			this.TEMP_COLOR_TRANSFORM = this.axConstruct([]);
-		}
+		static classInitializer: any = null;
 
 		static classSymbols: string [] = null; // [];
 		static instanceSymbols: string [] = null; // ["redMultiplier", "greenMultiplier",
@@ -49,11 +46,6 @@ module Shumway.AVMX.AS.flash.geom {
 			this.blueOffset = +blueOffset;
 			this.alphaOffset = +alphaOffset;
 		}
-
-		public static FROZEN_IDENTITY_COLOR_TRANSFORM: ColorTransform;
-
-		// Must only be used in cases where the members are fully initialized and then directly used.
-		public static TEMP_COLOR_TRANSFORM: ColorTransform;
 
 		public redMultiplier: number;
 		public greenMultiplier: number;

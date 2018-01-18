@@ -357,8 +357,6 @@ module Shumway.AVMX.AS.flash.display {
 			return displayObjectSyncID++;
 		}
 
-		static _instanceID = 1;
-
 		// Called whenever the class is initialized.
 		static classInitializer: any = null;
 
@@ -408,7 +406,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		protected _initializeFields() {
 			super._initializeFields(this);
-			this._id = this.sec.flash.display.DisplayObject.axClass.getNextSyncID();
+			this._id = DisplayObject.getNextSyncID();
 			this._flags = DisplayObjectFlags.Visible |
 				DisplayObjectFlags.InvalidLineBounds |
 				DisplayObjectFlags.InvalidFillBounds |
@@ -485,7 +483,7 @@ module Shumway.AVMX.AS.flash.display {
 		 */
 		_setInitialName() {
 			this._name = 'instance' +
-				(this.sec.flash.display.DisplayObject.axClass._instanceID++);
+				(FlashContext.get(this.sec).display._instanceID++);
 		}
 
 		_setParent(parent: DisplayObjectContainer, depth: number) {
@@ -1032,7 +1030,7 @@ module Shumway.AVMX.AS.flash.display {
 				this._setMatrix(matrixClass.FROZEN_IDENTITY_MATRIX, false);
 			}
 
-			let colorTransformClass = this.sec.flash.geom.ColorTransform.axClass;
+			let colorTransformClass = matrixClass;
 			if (placeObjectTag.flags & PlaceObjectFlags.HasColorTransform) {
 				colorTransformClass.TEMP_COLOR_TRANSFORM.copyFromUntyped(placeObjectTag.cxform);
 				this._setColorTransform(colorTransformClass.TEMP_COLOR_TRANSFORM);
