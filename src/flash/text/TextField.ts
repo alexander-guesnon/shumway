@@ -125,7 +125,7 @@ module Shumway.AVMX.AS.flash.text {
 			this._lineMetricsData = null;
 
 			let defaultTextFormat = new this.sec.flash.text.TextFormat(
-				this.sec.flash.text.Font.axClass.DEFAULT_FONT_SERIF,
+				Flash.get(this.sec).text.DEFAULT_FONT_SERIF,
 				12,
 				0,
 				false,
@@ -193,10 +193,11 @@ module Shumway.AVMX.AS.flash.text {
 		// string) => boolean;
 
 		// AS -> JS Bindings
+
 		static isFontCompatible(fontName: string, fontStyle: string): boolean {
 			fontName = axCoerceString(fontName);
 			fontStyle = axCoerceString(fontStyle);
-			let font = Font.getByNameAndStyle(fontName, fontStyle);
+			let font = Flash.current().text.getByNameAndStyle(fontName, fontStyle);
 			if (!font) {
 				return false;
 			}

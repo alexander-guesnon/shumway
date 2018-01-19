@@ -464,7 +464,7 @@ module Shumway.AVMX.AS.flash.display {
 				let fontsLoadedDelta = fontsLoaded - loaderInfo._fontsLoaded;
 				if (fontsLoadedDelta > 0) {
 					for (let i = loaderInfo._fontsLoaded; i < fontsLoaded; i++) {
-						this.sec.flash.text.Font.axClass.registerFontSymbol(file.fonts[i], loaderInfo);
+						Flash.get(this.sec).text.registerFontSymbol(file.fonts[i], loaderInfo);
 					}
 					loaderInfo._fontsLoaded = fontsLoaded;
 				}

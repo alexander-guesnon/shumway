@@ -460,7 +460,7 @@ module Shumway {
 			let size = +textFormat.size;
 			textRunData.writeInt(size);
 
-			let fontClass = this.sec.flash.text.Font.axClass;
+			let fontClass = Flash.get(this.sec).text;
 			let font = fontClass.getByNameAndStyle(textFormat.font, textFormat.style) ||
 				fontClass.getDefaultFont();
 			if (font.fontType === flash.text.FontType.EMBEDDED) {
