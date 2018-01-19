@@ -139,7 +139,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_addRoot(level: number, root: DisplayObject): void {
-			release || Debug.assert(this.sec.flash.display.MovieClip.axClass.axIsType(root));
+			release || Debug.assert(FlashContext.get(this.sec).display.MovieClip.axIsType(root));
 			this._removeRoot(level);
 			release || Debug.assert(!this._content.getTimelineObjectAtDepth(level));
 			this._content.addTimelineObjectAtDepth(root, level);

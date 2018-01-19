@@ -90,7 +90,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		set matrix3D(m: flash.geom.Matrix3D) {
-			if (!(this.sec.flash.geom.Matrix3D.axIsType(m))) {
+			if (!(FlashContext.get(this.sec).geom.Matrix3D.axIsType(m))) {
 				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, m, 'flash.geom.Matrix3D');
 			}
 

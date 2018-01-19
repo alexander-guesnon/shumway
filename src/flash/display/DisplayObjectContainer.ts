@@ -149,8 +149,8 @@ module Shumway.AVMX.AS.flash.display {
 				let children = this._children;
 				for (let i = 0; i < children.length; i++) {
 					let child = children[i];
-					if (this.sec.flash.display.DisplayObjectContainer.axIsType(child) ||
-						this.sec.flash.display.AVM1Movie.axIsType(child)) {
+					if (FlashContext.get(this.sec).display.DisplayObjectContainer.axIsType(child) ||
+						FlashContext.get(this.sec).display.AVM1Movie.axIsType(child)) {
 						(<DisplayObjectContainer>child)._enqueueFrameScripts();
 					}
 				}
@@ -232,7 +232,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (child === this) {
 				this.sec.throwError('ArgumentError', Errors.CantAddSelfError);
 			}
-			if (this.sec.flash.display.DisplayObjectContainer.axIsType(child) &&
+			if (FlashContext.get(this.sec).display.DisplayObjectContainer.axIsType(child) &&
 				(<DisplayObjectContainer>child).contains(this)) {
 				this.sec.throwError('ArgumentError', Errors.CantAddParentError);
 			}
@@ -572,7 +572,7 @@ module Shumway.AVMX.AS.flash.display {
 					objects[0] = this;
 				}
 				if (objects.length !== 0) {
-					release || assert(this.sec.flash.display.InteractiveObject.axIsType(objects[0]));
+					release || assert(FlashContext.get(this.sec).display.InteractiveObject.axIsType(objects[0]));
 					return HitTestingResult.Shape;
 				}
 			}

@@ -876,7 +876,7 @@ module Shumway.AVMX.AS.flash.display {
 				let ancestor = this._findNearestAncestor(DisplayObjectFlags.InvalidConcatenatedColorTransform, false);
 				let path = DisplayObject._getAncestors(this, ancestor);
 				let i = path.length - 1;
-				let stageClass = this.sec.flash.display.Stage;
+				let stageClass = FlashContext.get(this.sec).display.Stage;
 				if (stageClass.axIsType(path[i])) {
 					i--;
 				}
@@ -1448,7 +1448,7 @@ module Shumway.AVMX.AS.flash.display {
 			let node: DisplayObject = this;
 			do {
 				if (node._stage === node) {
-					release || assert(this.sec.flash.display.Stage.axIsType(node));
+					release || assert(FlashContext.get(this.sec).display.Stage.axIsType(node));
 					return <flash.display.Stage>node;
 				}
 				node = node._parent;
@@ -1569,7 +1569,7 @@ module Shumway.AVMX.AS.flash.display {
 				changed = this._filters.length > 0;
 				this._filters.length = 0;
 			} else {
-				let bitmapFilterClass = this.sec.flash.filters.BitmapFilter.axClass;
+				let bitmapFilterClass = FlashContext.get(this.sec).filters.BitmapFilter;
 				this._filters = value.map(function (x: flash.filters.BitmapFilter) {
 					if (!bitmapFilterClass.axIsType(x)) {
 						this.sec.throwError('TypeError', Errors.ParamTypeError, '0', 'Filter');
@@ -1757,7 +1757,7 @@ module Shumway.AVMX.AS.flash.display {
 				this._graphics = newGraphics;
 				this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyGraphics);
 			} else if (symbol instanceof flash.text.TextSymbol) {
-				release || assert(this.sec.flash.text.StaticText.axIsType(this));
+				release || assert(FlashContext.get(this.sec).text.StaticText.axIsType(this));
 				let newTextContent = (<flash.text.TextSymbol>symbol).textContent;
 				if ((this as any)._textContent === newTextContent) {
 					return;
@@ -1777,7 +1777,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * in the global coordinate space overlap.
 		 */
 		hitTestObject(other: DisplayObject): boolean {
-			release || assert(other && this.sec.flash.display.DisplayObject.axIsType(other));
+			release || assert(other && FlashContext.get(this.sec).display.DisplayObject.axIsType(other));
 			let a = this, b = other;
 			let aBounds = a._getContentBounds(false).clone();
 			let bBounds = b._getContentBounds(false).clone();
@@ -1836,7 +1836,7 @@ module Shumway.AVMX.AS.flash.display {
 					// For Drop, replace previous hit with current one.
 					objects[0] = this;
 				} else if (testingType === HitTestingType.ObjectsUnderPoint ||
-					this.sec.flash.display.InteractiveObject.axIsType(this) &&
+					FlashContext.get(this.sec).display.InteractiveObject.axIsType(this) &&
 					(this as any)._mouseEnabled) {
 					// For getObjectsUnderPoint, push all direct hits, for mouse target finding
 					// InteractiveObjects only.

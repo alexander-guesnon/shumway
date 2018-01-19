@@ -164,7 +164,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_getJPEGLoaderContextdeblockingfilter(context: flash.system.LoaderContext): number {
-			if (this.sec.flash.system.JPEGLoaderContext.axClass.axIsType(context)) {
+			if (FlashContext.get(this.sec).system.JPEGLoaderContext.axIsType(context)) {
 				return (<flash.system.JPEGLoaderContext>context).deblockingFilter;
 			}
 			return 0.0;
@@ -558,7 +558,7 @@ module Shumway.AVMX.AS.flash.display {
 				root._name = 'instance' + this._contentID;
 			}
 
-			if (this.sec.flash.display.MovieClip.axClass.axIsType(root)) {
+			if (context.display.MovieClip.axIsType(root)) {
 				this._addScenesToMovieClip(<MovieClip>root, sceneData, symbol.numFrames);
 			}
 

@@ -13,12 +13,19 @@ module Shumway {
 		loader = new FlashLoader(this);
 		mouse = new FlashMouse(this);
 		geom = new FlashGeom(this);
+		filters = new FlashFilters(this);
+		text = new FlashText(this);
+		system = new FlashSystem(this);
 		sec: ISecurityDomain;
 
 		init(sec: ISecurityDomain) {
 			this.sec = sec;
+			this.display.init();
 			this.mouse.init();
 			this.geom.init();
+			this.filters.init();
+			this.text.init();
+			this.system.init();
 		}
 
 		static get(sec: ISecurityDomain) {

@@ -362,7 +362,7 @@ module Shumway.AVMX.AS.flash.events {
 			if (this._hasEventListener(type)) {
 				return true;
 			}
-			if (this.sec.flash.display.DisplayObject.axIsType(this)) {
+			if (FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 				do {
 					if (node._hasEventListener(type)) {
@@ -384,7 +384,7 @@ module Shumway.AVMX.AS.flash.events {
 			// Broadcast events don't have capturing or bubbling phases so it's a simple check.
 			if (event.isBroadcastEvent()) {
 				return true;
-			} else if (event._bubbles && this.sec.flash.display.DisplayObject.axIsType(this)) {
+			} else if (event._bubbles && FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
 				// Check to see if there are any event listeners on the path to the root.
 				for (let node = (this as any)._parent; node; node = node._parent) {
 					if (node._hasEventListener(event.type)) {
@@ -422,7 +422,7 @@ module Shumway.AVMX.AS.flash.events {
 			let keepPropagating = true;
 			let ancestors: flash.display.DisplayObject [] = [];
 
-			if (!event.isBroadcastEvent() && this.sec.flash.display.DisplayObject.axIsType(this)) {
+			if (!event.isBroadcastEvent() && FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 
 				// Gather all parent display objects that have event listeners for this event type.

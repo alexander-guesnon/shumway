@@ -20,7 +20,30 @@ module Shumway {
 			this.movieClipReset();
 		}
 
+		init() {
+			const flash = this.context.sec.flash;
+
+			this.DisplayObject = new FlashClass(flash.display.DisplayObject);
+			this.DisplayObjectContainer = new FlashClass(flash.display.DisplayObjectContainer);
+			this.InteractiveObject = new FlashClass(flash.display.InteractiveObject);
+			this.MovieClip = new FlashClass(flash.display.MovieClip);
+			this.BitmapData = new FlashClass(flash.display.BitmapData);
+			this.AVM1Movie = new FlashClass(flash.display.AVM1Movie);
+			this.Stage = new FlashClass(flash.display.Stage);
+		}
+
 		context: FlashContext;
+
+		// classes
+		DisplayObject: FlashClass<flash.display.DisplayObject>;
+		DisplayObjectContainer: FlashClass<flash.display.DisplayObjectContainer>;
+		InteractiveObject: FlashClass<flash.display.InteractiveObject>;
+		MovieClip: FlashClass<flash.display.MovieClip>;
+		AVM1Movie: FlashClass<flash.display.AVM1Movie>;
+		Stage: FlashClass<flash.display.Stage>;
+		BitmapData: FlashClass<flash.display.BitmapData>;
+
+		//Statics
 
 		// DisplayObject statics
 
