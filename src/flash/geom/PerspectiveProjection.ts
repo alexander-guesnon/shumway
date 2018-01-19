@@ -39,15 +39,7 @@ module Shumway.AVMX.AS.flash.geom {
 			this._centerY = DefaultPerspectiveProjection.CenterY;
 		}
 
-
-		static FromDisplayObject(displayObject: flash.display.DisplayObject) {
-			release || Debug.assert(displayObject);
-			let projection: PerspectiveProjection = this.axConstruct();
-			projection._displayObject = displayObject;
-			return projection;
-		}
-
-		private _displayObject: flash.display.DisplayObject;
+		_displayObject: flash.display.DisplayObject;
 		_fieldOfView: number;
 		_centerX: number;
 		_centerY: number;

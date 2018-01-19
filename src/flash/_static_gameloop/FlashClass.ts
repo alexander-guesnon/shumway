@@ -1,18 +1,26 @@
 module Shumway.AVMX.AS.flash.statics {
 	export class FlashClass<T> {
-		axConstruct: (args: any[]) => T = null;
-		axIsType: (x: any) => boolean = null;
-		axClass: AVMX.AXClass;
+		cl: AXClass;
 
-		constructor(cl?: any) {
-			if (cl) {
-				this.axConstruct = (args: any[]) => {
-					return cl.axConstruct(args) as any;
-				};
-				this.axIsType = (x: any) => {
-					return cl.axIsType(x) as any;
-				}
-			}
+		constructor(cl: any) {
+			this.cl = cl;
+		}
+
+		axConstruct(args?: any[]): T {
+			return this.cl.axConstruct(args) as any;
+		}
+
+		axIsType(x: any) {
+			return this.cl.axIsType(x);
+		}
+
+		isSymbol(symbolClass: any)
+		{
+			return this.cl.axClass === symbolClass;
+		}
+
+		isSymbolPrototype(symbolClass: any) {
+			return this.cl.axClass.dPrototype.isPrototypeOf(symbolClass.dPrototype);
 		}
 	}
 }

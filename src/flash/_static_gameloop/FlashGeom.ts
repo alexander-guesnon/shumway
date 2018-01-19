@@ -1,4 +1,23 @@
 module Shumway.AVMX.AS.flash.statics {
+
+	// static fabric
+	export class PerspectiveProjectionClass extends FlashClass<geom.PerspectiveProjection> {
+		FromDisplayObject(displayObject: display.DisplayObject) {
+			release || Debug.assert(displayObject);
+			let projection: geom.PerspectiveProjection = this.axConstruct();
+			projection._displayObject = displayObject;
+			return projection;
+		}
+	}
+
+	export class Matrix3DClass extends FlashClass<geom.Matrix3D> {
+		FromArray(matrix: any) {
+			let result = Object.create(this.cl.tPrototype);
+			result._matrix = new Float32Array(matrix);
+			return result;
+		}
+	}
+
 	export class FlashGeom {
 		constructor(context: FlashContext) {
 			this.context = context;
@@ -9,7 +28,8 @@ module Shumway.AVMX.AS.flash.statics {
 		init() {
 			const sec = this.context.sec;
 
-			this.Matrix3D = new FlashClass(sec.flash.geom.Matrix3D);
+			this.Matrix3D = new Matrix3DClass(sec.flash.geom.Matrix3D);
+			this.PerspectiveProjection = new PerspectiveProjectionClass(sec.flash.geom.PerspectiveProjection);
 
 			this._temporaryRectangle = new sec.flash.geom.Rectangle();
 			this.FROZEN_IDENTITY_MATRIX = Object.freeze(sec.flash.geom.Matrix.axClass.axConstruct([]));
@@ -19,7 +39,8 @@ module Shumway.AVMX.AS.flash.statics {
 			this.TEMP_COLOR_TRANSFORM = sec.flash.geom.ColorTransform.axClass.axConstruct([]);
 		}
 
-		Matrix3D: FlashClass<geom.Matrix3D>;
+		Matrix3D: Matrix3DClass;
+		PerspectiveProjection: PerspectiveProjectionClass;
 
 		/**
 		 * Temporary rectangle that is used to prevent allocation.

@@ -943,7 +943,7 @@ module Shumway.AVMX.AS.flash.text {
 			let tag = <TextTag>data.tag;
 			if (data.static) {
 				symbol.dynamic = false;
-				symbol.symbolClass = sec.flash.text.StaticText.axClass;
+				symbol.symbolClass = sec.flash.text .StaticText.axClass;
 				if (tag.initialText) {
 					let textContent = new Shumway.TextContent(sec);
 					textContent.bounds = symbol.lineBounds;

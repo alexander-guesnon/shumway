@@ -45,7 +45,7 @@ module Shumway.AVMX.AS.flash.geom {
 		w2 /= L2;
 		let cos = Math.cos(theta), sin = Math.sin(theta);
 
-		return sec.flash.geom.Matrix3D.axClass.FromArray([
+		return Flash.get(this.sec).geom.Matrix3D.FromArray([
 			u2 + (v2 + w2) * cos,
 			u * v * (1 - cos) + w * sin,
 			u * w * (1 - cos) - v * sin,
@@ -71,13 +71,7 @@ module Shumway.AVMX.AS.flash.geom {
 
 		static axClass: typeof Matrix3D;
 
-		static FromArray(matrix: any) {
-			let result = Object.create(this.tPrototype);
-			result._matrix = new Float32Array(matrix);
-			return result;
-		}
-
-		private _matrix: Float32Array;
+		_matrix: Float32Array;
 		private _displayObject: flash.display.DisplayObject;
 
 		constructor(v: any = null) {
@@ -147,7 +141,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		clone(): flash.geom.Matrix3D {
-			return this.sec.flash.geom.Matrix3D.axClass.FromArray(this._matrix);
+			return Flash.get(this.sec).geom.Matrix3D.FromArray(this._matrix);
 		}
 
 		copyToMatrix3D(dest: flash.geom.Matrix3D): void {

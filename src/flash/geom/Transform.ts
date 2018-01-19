@@ -114,7 +114,7 @@ module Shumway.AVMX.AS.flash.geom {
 			if (!this._displayObject._hasFlags(display.DisplayObjectFlags.HasPerspectiveProjection)) {
 				return null;
 			}
-			let PerspectiveProjectionClass = this.sec.flash.geom.PerspectiveProjection.axClass;
+			let PerspectiveProjectionClass = Flash.get(this.sec).geom.PerspectiveProjection;
 			return PerspectiveProjectionClass.FromDisplayObject(this._displayObject);
 		}
 
