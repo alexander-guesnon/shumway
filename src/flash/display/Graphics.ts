@@ -1250,7 +1250,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (isNullOrUndefined(bitmap)) {
 				this.sec.throwError('TypeError', Errors.NullPointerError, 'bitmap');
 			}
-			const context = FlashContext.get(this.sec);
+			const context = Flash.get(this.sec);
 
 			if (!(context.display.BitmapData.axIsType(bitmap))) {
 				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'bitmap',
@@ -1342,7 +1342,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 
 			if (isNullOrUndefined(matrix)) {
-				matrix = FlashContext.get(this.sec).geom.FROZEN_IDENTITY_MATRIX;
+				matrix = Flash.get(this.sec).geom.FROZEN_IDENTITY_MATRIX;
 			} else if (!(this.sec.flash.geom.Matrix.axIsType(matrix))) {
 				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
 					'flash.geom.Matrix');

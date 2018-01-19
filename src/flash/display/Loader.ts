@@ -55,7 +55,7 @@ module Shumway.AVMX.AS.flash.display {
 		constructor() {
 			super();
 
-			const context = FlashContext.get(this.sec);
+			const context = Flash.get(this.sec);
 			const displayObjectClass = context.display;
 
 			displayObjectClass._advancableInstances.push(this);
@@ -82,7 +82,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_setStage(stage: Stage) {
-			release || assert(this === FlashContext.get(this.sec).loader.getRootLoader());
+			release || assert(this === Flash.get(this.sec).loader.getRootLoader());
 			this._stage = stage;
 		}
 
@@ -91,7 +91,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_constructFrame() {
-			const context = FlashContext.get(this.sec);
+			const context = Flash.get(this.sec);
 
 			if (this === context.loader.getRootLoader() && this._content) {
 				context.display._advancableInstances.remove(this);
@@ -164,7 +164,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_getJPEGLoaderContextdeblockingfilter(context: flash.system.LoaderContext): number {
-			if (FlashContext.get(this.sec).system.JPEGLoaderContext.axIsType(context)) {
+			if (Flash.get(this.sec).system.JPEGLoaderContext.axIsType(context)) {
 				return (<flash.system.JPEGLoaderContext>context).deblockingFilter;
 			}
 			return 0.0;
@@ -198,7 +198,7 @@ module Shumway.AVMX.AS.flash.display {
 			fileLoader.loadFile(request._toFileRequest());
 
 			this._queuedLoadUpdate = null;
-			let loaderClass = FlashContext.get(this.sec).loader;
+			let loaderClass = Flash.get(this.sec).loader;
 			release || assert(loaderClass._loadQueue.indexOf(this) === -1);
 			loaderClass._loadQueue.push(this);
 		}
@@ -206,7 +206,7 @@ module Shumway.AVMX.AS.flash.display {
 		loadBytes(data: flash.utils.ByteArray, context?: LoaderContext) {
 			this.close();
 			// TODO: properly coerce object arguments to their types.
-			let loaderClass = FlashContext.get(this.sec).loader;
+			let loaderClass = Flash.get(this.sec).loader;
 			// In case this is the initial root loader, we won't have a loaderInfo object. That should
 			// only happen in the inspector when a file is loaded from a Blob, though.
 			this._contentLoaderInfo._url = (this.loaderInfo ? this.loaderInfo._url : '') +
@@ -226,7 +226,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		close(): void {
-			let loaderClass = FlashContext.get(this.sec).loader;
+			let loaderClass = Flash.get(this.sec).loader;
 			let queueIndex = loaderClass._loadQueue.indexOf(this);
 			if (queueIndex > -1) {
 				loaderClass._loadQueue.splice(queueIndex, 1);
@@ -248,7 +248,7 @@ module Shumway.AVMX.AS.flash.display {
 			this._content = null;
 			this._contentLoaderInfo._loader = null;
 			this._loadStatus = LoadStatus.Unloaded;
-			this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.UNLOAD));
+			this.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.UNLOAD));
 		}
 
 		unload() {
@@ -546,7 +546,7 @@ module Shumway.AVMX.AS.flash.display {
 			}
 
 			let root = constructClassFromSymbol(symbol, symbol.symbolClass);
-			const context = FlashContext.get(this.sec);
+			const context = Flash.get(this.sec);
 			// The initial SWF's root object gets a default of 'root1', which doesn't use up a
 			// DisplayObject instance ID. For the others, we have reserved one in `_contentID`.
 
@@ -569,7 +569,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (isAS2LoadedFromAS3) {
 				root = this._createAVM1Movie(root);
 			} else if (isTopLevelMovie) {
-				let movieClipClass = FlashContext.get(this.sec).display;
+				let movieClipClass = Flash.get(this.sec).display;
 				movieClipClass.frameNavigationModel = loaderInfo.swfVersion < 10 ?
 					flash.display.FrameNavigationModel.SWF9 :
 					flash.display.FrameNavigationModel.SWF10;
@@ -591,7 +591,7 @@ module Shumway.AVMX.AS.flash.display {
 		private _createAVM1Context(): void {
 			let contentLoaderInfo: LoaderInfo = this._contentLoaderInfo;
 			let avm1Context = Shumway.AVM1.AVM1Context.create(contentLoaderInfo);
-			const context = FlashContext.get(this.sec);
+			const context = Flash.get(this.sec);
 			let rootLoader = context.loader.getRootLoader();
 			avm1Context.setStage(rootLoader._stage);
 

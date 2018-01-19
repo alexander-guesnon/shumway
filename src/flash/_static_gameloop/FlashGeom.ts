@@ -1,12 +1,7 @@
-module Shumway {
-	import flash = AVMX.AS.flash;
-	import geom = flash.geom;
-
+module Shumway.AVMX.AS.flash.statics {
 	export class FlashGeom {
 		constructor(context: FlashContext) {
 			this.context = context;
-
-
 		}
 
 		context: FlashContext;

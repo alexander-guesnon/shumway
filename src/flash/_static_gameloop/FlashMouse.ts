@@ -1,7 +1,5 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	import assert = Shumway.Debug.assert;
-	import flash = AVMX.AS.flash;
-	import Event = flash.events.Event;
 	import MouseCursor = flash.ui.MouseCursor;
 
 	export class FlashMouse {

@@ -135,7 +135,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		applySymbol() {
 			super.applySymbol();
-			FlashContext.get(this.sec).display._advancableInstances.push(this);
+			Flash.get(this.sec).display._advancableInstances.push(this);
 			let symbol = this._symbol;
 			this._totalFrames = symbol.numFrames;
 			this._currentFrame = 1;
@@ -355,7 +355,7 @@ module Shumway.AVMX.AS.flash.display {
 				addToCallQueue = true;
 			}
 			if (addToCallQueue) {
-				FlashContext.get(this.sec).display._callQueue.push(this);
+				Flash.get(this.sec).display._callQueue.push(this);
 			}
 			super._enqueueFrameScripts();
 		}
@@ -387,7 +387,7 @@ module Shumway.AVMX.AS.flash.display {
 		get currentFrame(): number /*int*/ {
 			let frame = this._currentFrame;
 			if (!this._allowFrameNavigation &&
-				FlashContext.get(this.sec).display.frameNavigationModel === FrameNavigationModel.SWF1) {
+				Flash.get(this.sec).display.frameNavigationModel === FrameNavigationModel.SWF1) {
 				// AVM1 needs to return a frame we already navigated during scripts execution.
 				frame = this._nextFrame;
 			}
@@ -467,7 +467,7 @@ module Shumway.AVMX.AS.flash.display {
 		 * was not found.
 		 */
 		_getAbsFrameNumber(frame: string, sceneName: string): number {
-			let navigationModel = FlashContext.get(this.sec).display.frameNavigationModel;
+			let navigationModel = Flash.get(this.sec).display.frameNavigationModel;
 			let legacyMode = navigationModel !== FrameNavigationModel.SWF10;
 			let scene: Scene;
 			if (sceneName !== null) {
@@ -539,7 +539,7 @@ module Shumway.AVMX.AS.flash.display {
 
 			// Frame navigation only happens immediately if not triggered from under a frame script.
 			if (this._allowFrameNavigation) {
-				const display = FlashContext.get(this.sec).display;
+				const display = Flash.get(this.sec).display;
 				if (display.frameNavigationModel === FrameNavigationModel.SWF9) {
 					// In FP 9, the only thing that happens on inter-frame navigation is advancing the frame
 					// and constructing new timeline objects.
@@ -768,7 +768,7 @@ module Shumway.AVMX.AS.flash.display {
 				this._removeFlags(DisplayObjectFlags.NeedsLoadEvent);
 				release || assert(this._symbol);
 				let handler = function () {
-					let eventClass = FlashContext.get(this.sec).events;
+					let eventClass = Flash.get(this.sec).events;
 					this.dispatchEvent(eventClass.getInstance(events.Event.AVM1_LOAD));
 				}.bind(this);
 				handler.precedence = this._getScriptPrecedence();

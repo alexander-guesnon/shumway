@@ -63,7 +63,7 @@ module Shumway.AVMX.AS.flash.display {
 			let old = this._tabEnabled;
 			this._tabEnabled = enabled;
 			if (old !== enabled) {
-				this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.TAB_ENABLED_CHANGE, true));
+				this.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.TAB_ENABLED_CHANGE, true));
 			}
 		}
 
@@ -76,7 +76,7 @@ module Shumway.AVMX.AS.flash.display {
 			let old = this._tabIndex;
 			this._tabIndex = index;
 			if (old !== index) {
-				this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.TAB_INDEX_CHANGE, true));
+				this.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.TAB_INDEX_CHANGE, true));
 			}
 		}
 

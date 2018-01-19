@@ -1,12 +1,10 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	import assert = Shumway.Debug.assert;
-	import flash = AVMX.AS.flash;
-	import events = flash.events;
-	import Stage = flash.display.Stage;
-	import MovieClip = flash.display.MovieClip;
-	import IAdvancable = flash.display.IAdvancable;
-	import DisplayObjectFlags = flash.display.DisplayObjectFlags;
-	import FrameNavigationModel = flash.display.FrameNavigationModel;
+	import Stage = display.Stage;
+	import MovieClip = display.MovieClip;
+	import IAdvancable = display.IAdvancable;
+	import DisplayObjectFlags = display.DisplayObjectFlags;
+	import FrameNavigationModel = display.FrameNavigationModel;
 
 	import enterTimeline = Shumway.AVMX.enterTimeline;
 	import leaveTimeline = Shumway.AVMX.leaveTimeline;

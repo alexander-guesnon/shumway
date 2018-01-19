@@ -189,7 +189,7 @@ module Shumway.Player {
 					this._player._hasFocus = false;
 					break;
 				case FocusEventType.WindowFocus:
-					let events = FlashContext.get(this._player.sec).events;
+					let events = Flash.get(this._player.sec).events;
 					events.broadcastEventDispatchQueue.dispatchEvent(events.getBroadcastInstance(Event.ACTIVATE));
 					this._player._hasFocus = true;
 					break;
@@ -385,7 +385,7 @@ module Shumway.Player {
 			release || assert(!this._loader, "Can't load twice.");
 			this._swfUrl = url;
 			this._stage = new this.sec.flash.display.Stage();
-			let loader = this._loader = FlashContext.get(this.sec).loader.getRootLoader();
+			let loader = this._loader = Flash.get(this.sec).loader.getRootLoader();
 			let loaderInfo = this._loaderInfo = loader.contentLoaderInfo;
 			if (playAllSymbolsOption.value) {
 				this._playAllSymbols();
@@ -558,7 +558,7 @@ module Shumway.Player {
 
 		private _enterRootLoadingLoop(): void {
 			let self = this;
-			let rootLoader = FlashContext.get(this.sec).loader.getRootLoader();
+			let rootLoader = Flash.get(this.sec).loader.getRootLoader();
 			rootLoader._setStage(this._stage);
 
 			function rootLoadingLoop() {
@@ -607,12 +607,12 @@ module Shumway.Player {
 				return;
 			}
 			// The stage is required for frame event cycle processing.
-			let displayObjectClass = FlashContext.get(this.sec).display;
+			let displayObjectClass = Flash.get(this.sec).display;
 			displayObjectClass._stage = this._stage;
 			// Until the root SWF is initialized, only process Loader events.
 			// Once the root loader's content is created, directly process all events again to avoid
 			// further delay in initialization.
-			let loaderClass = FlashContext.get(this.sec).loader;
+			let loaderClass = Flash.get(this.sec).loader;
 			if (!loaderClass.getRootLoader().content) {
 				loaderClass.processEvents();
 				if (!loaderClass.getRootLoader().content) {
@@ -647,7 +647,7 @@ module Shumway.Player {
 			let loader = this._loader;
 			let loaderInfo = this._loaderInfo;
 			let self = this;
-			let display = FlashContext.get(this.sec).display;
+			let display = Flash.get(this.sec).display;
 
 			loaderInfo.addEventListener(flash.events.ProgressEvent.PROGRESS, function onProgress() {
 				let root = loader.content;

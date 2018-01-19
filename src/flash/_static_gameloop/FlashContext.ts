@@ -1,8 +1,6 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	import MapObject = Shumway.MapObject;
 	import assert = Shumway.Debug.assert;
-	import flash = AVMX.AS.flash;
-
 	export class FlashContext {
 		constructor() {
 
@@ -28,30 +26,33 @@ module Shumway {
 			this.system.init();
 		}
 
-		static get(sec: ISecurityDomain) {
-			if (!sec) {
-				return FlashContext._current;
-			}
-			if (!sec.context) {
-				sec.context = new FlashContext();
-				sec.context.init(sec);
-
-				FlashContext._current = sec.context;
-			}
-			return sec.context;
-		}
-
-		static _current: FlashContext = null;
-		static _stack: Array<FlashContext> = [];
-
-		static current() {
-			return FlashContext._current;
-		}
-
-
 		_broadcastFrameEvent(type: string): void {
 			let event = this.events.getBroadcastInstance(type);
 			this.events.broadcastEventDispatchQueue.dispatchEvent(event);
 		}
+	}
+}
+
+module Shumway.Flash {
+	import FlashContext = AVMX.AS.flash.statics.FlashContext;
+
+	export function get(sec: ISecurityDomain) {
+		if (!sec) {
+			return _current;
+		}
+		if (!sec.context) {
+			sec.context = new FlashContext();
+			sec.context.init(sec);
+
+			_current = sec.context;
+		}
+		return sec.context;
+	}
+
+	let _current: FlashContext = null;
+	let _stack: Array<FlashContext> = [];
+
+	export function current() {
+		return _current;
 	}
 }

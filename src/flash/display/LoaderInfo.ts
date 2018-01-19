@@ -34,7 +34,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		constructor(token: Object) {
 			super();
-			if (token !== FlashContext.get(this.sec).loader.CtorToken) {
+			if (token !== Flash.get(this.sec).loader.CtorToken) {
 				this.sec.throwError('ArgumentError', Errors.CantInstantiateError, 'LoaderInfo$');
 			}
 			this._loader = null;

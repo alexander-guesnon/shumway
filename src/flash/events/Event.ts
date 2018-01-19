@@ -24,9 +24,9 @@ module Shumway.AVMX.AS.flash.events {
 
 		static classInitializer: any = null;
 
-		_flashContext: FlashContext;
+		_flashContext: statics.FlashContext;
 
-		setContext(context: FlashContext): this {
+		setContext(context: statics.FlashContext): this {
 			this._flashContext = context;
 			return this;
 		}
@@ -50,7 +50,7 @@ module Shumway.AVMX.AS.flash.events {
 
 		constructor(type: string, bubbles: boolean, cancelable: boolean) {
 			super();
-			this._flashContext = FlashContext.get(this.sec);
+			this._flashContext = Flash.get(this.sec);
 
 			this._type = axCoerceString(type);
 			this._bubbles = !!bubbles;
@@ -181,7 +181,7 @@ module Shumway.AVMX.AS.flash.events {
 
 		clone(): Event {
 			// if (!this._flashContext) {
-			// 	this._flashContext = FlashContext.get(this.sec);
+			// 	this._flashContext = Flash.get(this.sec);
 			// }
 			return this._flashContext.events.clone(this);
 		}

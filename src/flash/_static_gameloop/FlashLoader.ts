@@ -1,6 +1,5 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	import assert = Shumway.Debug.assert;
-	import flash = AVMX.AS.flash;
 	import Loader = flash.display.Loader;
 	import LoadStatus = flash.display.LoadStatus;
 	import LoadingType= flash.display.LoadingType;

@@ -1,8 +1,5 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	import assert = Shumway.Debug.assert;
-	import flash = AVMX.AS.flash;
-	import text = flash.text;
-
 	export class FlashText {
 		constructor(context: FlashContext) {
 			this.context = context;

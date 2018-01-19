@@ -219,7 +219,7 @@ module Shumway.Remoting.Player {
 			this.output.writeInt(textContent._id);
 			this.output.writeInt(-1);
 			this._writeRectangle(textContent.bounds);
-			let identity = FlashContext.get(textContent.sec).geom.FROZEN_IDENTITY_MATRIX;
+			let identity = Flash.get(textContent.sec).geom.FROZEN_IDENTITY_MATRIX;
 			this._writeMatrix(textContent.matrix || identity);
 			this.output.writeInt(textContent.backgroundColor);
 			this.output.writeInt(textContent.borderColor);

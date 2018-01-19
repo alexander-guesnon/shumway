@@ -31,7 +31,7 @@ module Shumway.AVMX.AS.flash.system {
 				return;
 			}
 			let parentRuntimeDomain: AXApplicationDomain = null;
-			if (FlashContext.get(this.sec).system.ApplicationDomain.axIsType(parentDomainOrAXDomain)) {
+			if (Flash.get(this.sec).system.ApplicationDomain.axIsType(parentDomainOrAXDomain)) {
 				parentRuntimeDomain = (<ApplicationDomain>parentDomainOrAXDomain).axDomain;
 			} else {
 				parentRuntimeDomain = this.sec.application;

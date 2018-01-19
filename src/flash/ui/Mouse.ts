@@ -82,7 +82,7 @@ module Shumway.AVMX.AS.flash.ui {
 			}
 
 			let globalPoint = data.point;
-			let mouseClass = FlashContext.get(this.stage.sec).mouse;
+			let mouseClass = Flash.get(this.stage.sec).mouse;
 			mouseClass.updateCurrentPosition(globalPoint);
 
 			let currentTarget = this.currentTarget;
@@ -226,7 +226,7 @@ module Shumway.AVMX.AS.flash.ui {
 		}
 
 		static get cursor(): string {
-			return FlashContext.current().mouse._cursor;
+			return Flash.current().mouse._cursor;
 		}
 
 		static set cursor(value: string) {
@@ -236,7 +236,7 @@ module Shumway.AVMX.AS.flash.ui {
 			}
 
 			// @ivanpopelyshev: TODO: find sec reference in axClass
-			FlashContext.current().mouse._cursor = value;
+			Flash.current().mouse._cursor = value;
 		}
 
 		static get supportsNativeCursor(): boolean {

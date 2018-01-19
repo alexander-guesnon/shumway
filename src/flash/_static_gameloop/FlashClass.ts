@@ -1,4 +1,4 @@
-module Shumway {
+module Shumway.AVMX.AS.flash.statics {
 	export class FlashClass<T> {
 		axConstruct: (args: any[]) => T = null;
 		axIsType: (x: any) => boolean = null;
@@ -8,7 +8,7 @@ module Shumway {
 			if (cl) {
 				this.axConstruct = (args: any[]) => {
 					return cl.axConstruct(args) as any;
-				}
+				};
 				this.axIsType = (x: any) => {
 					return cl.axIsType(x) as any;
 				}

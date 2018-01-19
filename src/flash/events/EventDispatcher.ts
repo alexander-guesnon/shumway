@@ -286,7 +286,7 @@ module Shumway.AVMX.AS.flash.events {
 			// Notify the broadcast event queue. If |useCapture| is set then the Flash player
 			// doesn't seem to register this target.
 			if (!useCapture && Event.isBroadcastEventType(type)) {
-				FlashContext.get(this.sec).events.broadcastEventDispatchQueue.add(type, this);
+				Flash.get(this.sec).events.broadcastEventDispatchQueue.add(type, this);
 			}
 		}
 
@@ -314,7 +314,7 @@ module Shumway.AVMX.AS.flash.events {
 				if (list.isEmpty()) {
 					// Notify the broadcast event queue of the removal.
 					if (!useCapture && Event.isBroadcastEventType(type)) {
-						FlashContext.get(this.sec).events.broadcastEventDispatchQueue.remove(type, this);
+						Flash.get(this.sec).events.broadcastEventDispatchQueue.remove(type, this);
 					}
 					listeners[type] = null;
 				}
@@ -362,7 +362,7 @@ module Shumway.AVMX.AS.flash.events {
 			if (this._hasEventListener(type)) {
 				return true;
 			}
-			if (FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
+			if (Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 				do {
 					if (node._hasEventListener(type)) {
@@ -384,7 +384,7 @@ module Shumway.AVMX.AS.flash.events {
 			// Broadcast events don't have capturing or bubbling phases so it's a simple check.
 			if (event.isBroadcastEvent()) {
 				return true;
-			} else if (event._bubbles && FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
+			} else if (event._bubbles && Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
 				// Check to see if there are any event listeners on the path to the root.
 				for (let node = (this as any)._parent; node; node = node._parent) {
 					if (node._hasEventListener(event.type)) {
@@ -422,7 +422,7 @@ module Shumway.AVMX.AS.flash.events {
 			let keepPropagating = true;
 			let ancestors: flash.display.DisplayObject [] = [];
 
-			if (!event.isBroadcastEvent() && FlashContext.get(this.sec).display.DisplayObject.axIsType(this)) {
+			if (!event.isBroadcastEvent() && Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 
 				// Gather all parent display objects that have event listeners for this event type.
@@ -484,7 +484,7 @@ module Shumway.AVMX.AS.flash.events {
 			 * for all listener callbacks but not when bubbling.
 			 */
 			if (event._target) {
-				event = event.axCallPublicProperty('clone', null).setContext(FlashContext.get(sec));
+				event = event.axCallPublicProperty('clone', null).setContext(Flash.get(sec));
 			}
 			let snapshot = list.snapshot();
 			try {

@@ -53,7 +53,7 @@ module Shumway.AVMX.AS.flash.display {
 			this._content._setParent(<any>this, 0);
 			this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyChildren);
 			this._invalidateFillAndLineBounds(true, true);
-			FlashContext.get(this.sec).display._advancableInstances.push(this);
+			Flash.get(this.sec).display._advancableInstances.push(this);
 			this._constructed = false;
 
 			// Setting _level0 root.
@@ -139,7 +139,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_addRoot(level: number, root: DisplayObject): void {
-			release || Debug.assert(FlashContext.get(this.sec).display.MovieClip.axIsType(root));
+			release || Debug.assert(Flash.get(this.sec).display.MovieClip.axIsType(root));
 			this._removeRoot(level);
 			release || Debug.assert(!this._content.getTimelineObjectAtDepth(level));
 			this._content.addTimelineObjectAtDepth(root, level);

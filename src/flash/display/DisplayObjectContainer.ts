@@ -105,7 +105,7 @@ module Shumway.AVMX.AS.flash.display {
 				}
 				child._setFlags(DisplayObjectFlags.Constructed);
 
-				let eventClass = FlashContext.get(this.sec).events;
+				let eventClass = Flash.get(this.sec).events;
 				if (child._hasFlags(DisplayObjectFlags.HasPlaceObjectInitPending)) {
 					child._removeFlags(DisplayObjectFlags.HasPlaceObjectInitPending);
 
@@ -149,8 +149,8 @@ module Shumway.AVMX.AS.flash.display {
 				let children = this._children;
 				for (let i = 0; i < children.length; i++) {
 					let child = children[i];
-					if (FlashContext.get(this.sec).display.DisplayObjectContainer.axIsType(child) ||
-						FlashContext.get(this.sec).display.AVM1Movie.axIsType(child)) {
+					if (Flash.get(this.sec).display.DisplayObjectContainer.axIsType(child) ||
+						Flash.get(this.sec).display.AVM1Movie.axIsType(child)) {
 						(<DisplayObjectContainer>child)._enqueueFrameScripts();
 					}
 				}
@@ -192,7 +192,7 @@ module Shumway.AVMX.AS.flash.display {
 			let old = this._tabChildren;
 			this._tabChildren = enable;
 			if (old !== enable) {
-				this.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.TAB_CHILDREN_CHANGE, true));
+				this.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.TAB_CHILDREN_CHANGE, true));
 			}
 		}
 
@@ -232,7 +232,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (child === this) {
 				this.sec.throwError('ArgumentError', Errors.CantAddSelfError);
 			}
-			if (FlashContext.get(this.sec).display.DisplayObjectContainer.axIsType(child) &&
+			if (Flash.get(this.sec).display.DisplayObjectContainer.axIsType(child) &&
 				(<DisplayObjectContainer>child).contains(this)) {
 				this.sec.throwError('ArgumentError', Errors.CantAddParentError);
 			}
@@ -265,11 +265,11 @@ module Shumway.AVMX.AS.flash.display {
 			child._invalidatePosition();
 			this._invalidateChildren();
 			child._addReference();
-			child.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.ADDED, true));
+			child.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.ADDED, true));
 			// ADDED event handlers may remove the child from the stage, in such cases
 			// we should not dispatch the ADDED_TO_STAGE event.
 			if (child.stage) {
-				child._propagateEvent(FlashContext.get(this.sec).events.getInstance(events.Event.ADDED_TO_STAGE));
+				child._propagateEvent(Flash.get(this.sec).events.getInstance(events.Event.ADDED_TO_STAGE));
 			}
 			return child;
 		}
@@ -333,9 +333,9 @@ module Shumway.AVMX.AS.flash.display {
 
 			let child = children[index];
 			if (child._hasFlags(DisplayObjectFlags.Constructed)) {
-				child.dispatchEvent(FlashContext.get(this.sec).events.getInstance(events.Event.REMOVED, true));
+				child.dispatchEvent(Flash.get(this.sec).events.getInstance(events.Event.REMOVED, true));
 				if (this.stage) {
-					child._propagateEvent(FlashContext.get(this.sec).events.getInstance(events.Event.REMOVED_FROM_STAGE));
+					child._propagateEvent(Flash.get(this.sec).events.getInstance(events.Event.REMOVED_FROM_STAGE));
 				}
 				// Children list might have been mutated by the REMOVED or REMOVED_FROM_STAGE event,
 				// we may need to operate on the new index of the child.
@@ -572,7 +572,7 @@ module Shumway.AVMX.AS.flash.display {
 					objects[0] = this;
 				}
 				if (objects.length !== 0) {
-					release || assert(FlashContext.get(this.sec).display.InteractiveObject.axIsType(objects[0]));
+					release || assert(Flash.get(this.sec).display.InteractiveObject.axIsType(objects[0]));
 					return HitTestingResult.Shape;
 				}
 			}

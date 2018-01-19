@@ -194,7 +194,7 @@ module Shumway.AVMX.AS.flash.display {
 		_solidFillColorPBGRA: any; // any | number;
 
 		private _getTemporaryRectangleFrom(rect: flash.geom.Rectangle): flash.geom.Rectangle {
-			let r = FlashContext.get(this.sec).geom._temporaryRectangle;
+			let r = Flash.get(this.sec).geom._temporaryRectangle;
 			r.copyFrom(rect);
 			return r;
 		}
@@ -427,7 +427,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (sourceRect) {
 				sRect = this._getTemporaryRectangleFrom(sourceRect).roundInPlace();
 			} else {
-				sRect = FlashContext.get(this.sec).geom._temporaryRectangle.setEmpty();
+				sRect = Flash.get(this.sec).geom._temporaryRectangle.setEmpty();
 			}
 
 			let tBRect = this._rect;
