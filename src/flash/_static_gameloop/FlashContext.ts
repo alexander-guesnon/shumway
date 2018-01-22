@@ -14,6 +14,7 @@ module Shumway.AVMX.AS.flash.statics {
 		filters = new FlashFilters(this);
 		text = new FlashText(this);
 		system = new FlashSystem(this);
+		utils = new FlashUtils(this);
 		sec: ISecurityDomain;
 
 		init(sec: ISecurityDomain) {
@@ -24,6 +25,7 @@ module Shumway.AVMX.AS.flash.statics {
 			this.filters.init();
 			this.text.init();
 			this.system.init();
+			this.utils.init();
 		}
 
 		_broadcastFrameEvent(type: string): void {

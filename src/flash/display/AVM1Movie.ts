@@ -46,7 +46,7 @@ module Shumway.AVMX.AS.flash.display {
 
 		constructor(level0: DisplayObject) {
 			super();
-			this._content = this.sec.flash.display.Sprite.axClass.axConstruct();
+			this._content = Flash.get(this.sec).display.Sprite.axConstruct();
 			this._children = [];
 			this._children[0] = this._content;
 			// Pretend we're a DisplayObjectContainer and can have children. See comment at the top.

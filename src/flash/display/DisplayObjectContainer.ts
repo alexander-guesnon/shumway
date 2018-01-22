@@ -20,12 +20,9 @@ module Shumway.AVMX.AS.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import mixHash = Shumway.HashUtilities.mixHash;
-	import checkParameterType = Shumway.AVMX.checkParameterType;
 	import clamp = Shumway.NumberUtilities.clamp;
-	import Multiname = Shumway.AVMX.Multiname;
 
 	import events = flash.events;
-	import VisitorFlags = flash.display.VisitorFlags;
 
 	export const enum LookupChildOptions {
 		DEFAULT = 0,
@@ -355,7 +352,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		getChildIndex(child: DisplayObject): number /*int*/ {
-			checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child, "child");
 			if (child._parent !== this) {
 				this.sec.throwError('ArgumentError', Errors.NotAChildError);
 			}
@@ -367,7 +364,7 @@ module Shumway.AVMX.AS.flash.display {
 		 */
 		setChildIndex(child: DisplayObject, index: number /*int*/): void {
 			index = index | 0;
-			checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child, "child");
 			let children = this._children;
 			if (index < 0 || index >= children.length) {
 				this.sec.throwError('RangeError', Errors.ParamRangeError);

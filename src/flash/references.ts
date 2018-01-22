@@ -416,3 +416,4 @@
 ///<reference path='_static_gameloop/FlashFilters.ts'/>
 ///<reference path='_static_gameloop/FlashText.ts'/>
 ///<reference path='_static_gameloop/FlashSystem.ts'/>
+///<reference path='_static_gameloop/FlashUtils.ts'/>

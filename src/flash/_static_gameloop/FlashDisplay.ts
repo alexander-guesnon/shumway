@@ -23,6 +23,7 @@ module Shumway.AVMX.AS.flash.statics {
 
 			this.DisplayObject = new FlashClass(flash.display.DisplayObject);
 			this.DisplayObjectContainer = new FlashClass(flash.display.DisplayObjectContainer);
+			this.Sprite = new FlashClass(flash.display.Sprite);
 			this.InteractiveObject = new FlashClass(flash.display.InteractiveObject);
 			this.MovieClip = new FlashClass(flash.display.MovieClip);
 			this.BitmapData = new FlashClass(flash.display.BitmapData);
@@ -42,6 +43,7 @@ module Shumway.AVMX.AS.flash.statics {
 		Stage: FlashClass<flash.display.Stage>;
 		BitmapData: FlashClass<flash.display.BitmapData>;
 		Bitmap: FlashClass<flash.display.Bitmap>;
+		Sprite: FlashClass<flash.display.Sprite>;
 
 		//Statics
 

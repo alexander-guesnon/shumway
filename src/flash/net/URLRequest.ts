@@ -120,7 +120,7 @@ module Shumway.AVMX.AS.flash.net {
 			let data = this._data;
 			if (data) {
 				obj.mimeType = this._contentType;
-				if (this.sec.flash.utils.ByteArray.axClass.axIsType(data)) {
+				if (Flash.get(this.sec).utils.ByteArray.axIsType(data)) {
 					obj.data = <ASObject><any>
 						new Uint8Array((<any> data)._buffer, 0, (<any> data).length);
 				} else {
