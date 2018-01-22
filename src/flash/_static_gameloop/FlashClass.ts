@@ -1,4 +1,5 @@
 module Shumway.AVMX.AS.flash.statics {
+
 	export class FlashClass<T> {
 		cl: any;
 		context: FlashContext;
@@ -8,6 +9,10 @@ module Shumway.AVMX.AS.flash.statics {
 			this.cl = cl;
 			this.context = context || null;
 			this.sec = context ? context.sec: null;
+		}
+
+		objectCreate(): T {
+			return Object.create(this.cl.axClass.tPrototype);
 		}
 
 		axConstruct(args?: any[]): T {
@@ -29,6 +34,10 @@ module Shumway.AVMX.AS.flash.statics {
 
 		FromUntyped(obj: any): T {
 			return null;
+		}
+
+		checkParameterType(argument: any, name: string) {
+			checkParameterType(argument, name, this.cl.axClass);
 		}
 	}
 }

@@ -8,6 +8,15 @@ module Shumway.AVMX.AS.flash.statics {
 			projection._displayObject = displayObject;
 			return projection;
 		}
+
+		clone(this_: geom.PerspectiveProjection): geom.PerspectiveProjection {
+			let clone: geom.PerspectiveProjection = Object.create(this.cl.axClass.tPrototype);
+			clone._fieldOfView = this_._fieldOfView;
+			clone._centerX = this_._centerX;
+			clone._centerY = this_._centerY;
+			clone._displayObject = this_._displayObject;
+			return clone;
+		}
 	}
 
 	export class Matrix3DClass extends FlashClass<geom.Matrix3D> {

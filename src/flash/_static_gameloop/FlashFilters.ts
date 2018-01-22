@@ -208,8 +208,9 @@ module Shumway.AVMX.AS.flash.statics {
 		init() {
 			const sec = this.context.sec;
 			const context = this.context;
+			const filters = sec.flash.filters;
 
-			this.BitmapFilter = new FlashClass(sec.flash.filters.BitmapFilter);
+			this.BitmapFilter = new FlashClass(filters.BitmapFilter);
 			this.DropShadowFilter = new DropShadowFilterClass(filters.DropShadowFilter);
 			this.BlurFilter = new BlurFilterClass(filters.BlurFilter);
 			this.GlowFilter = new GlowFilterClass(filters.GlowFilter);

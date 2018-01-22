@@ -285,7 +285,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		clone(): flash.display.BitmapData {
-			let bd: BitmapData = Object.create(this.sec.flash.display.BitmapData.axClass.tPrototype);
+			let bd: BitmapData = Flash.get(this.sec).display.BitmapData.objectCreate();
 			bd._rect = this._rect.clone();
 			bd._transparent = this._transparent;
 			bd._solidFillColorPBGRA = this._solidFillColorPBGRA;
@@ -898,7 +898,7 @@ module Shumway.AVMX.AS.flash.display {
 			// For non-decoded images, we don't yet have dimensions.
 			symbol.width = data.width || -1;
 			symbol.height = data.height || -1;
-			symbol.syncId = loaderInfo.sec.flash.display.DisplayObject.axClass.getNextSyncID();
+			symbol.syncId = flash.display.DisplayObject.getNextSyncID();
 			symbol.data = data.data;
 			switch (data.mimeType) {
 				case "application/octet-stream":

@@ -121,12 +121,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		clone(): PerspectiveProjection {
-			let clone: PerspectiveProjection = Object.create(this.axClass.tPrototype);
-			clone._fieldOfView = this._fieldOfView;
-			clone._centerX = this._centerX;
-			clone._centerY = this._centerY;
-			clone._displayObject = this._displayObject;
-			return clone;
+			return Flash.get(this.sec).geom.PerspectiveProjection.clone(this);
 		}
 	}
 }

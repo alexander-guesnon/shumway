@@ -223,7 +223,8 @@ module Shumway.AVMX.AS.flash.display {
 		 * Note that this is different than the range setChildIndex expects.
 		 */
 		addChildAt(child: DisplayObject, index: number /*int*/): DisplayObject {
-			checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
+			const flashContext = Flash.get(this.sec);
+			flashContext.display.DisplayObject.checkParameterType(child, "child");
 			release || counter.count("DisplayObjectContainer::addChildAt");
 
 			index = index | 0;
@@ -232,7 +233,7 @@ module Shumway.AVMX.AS.flash.display {
 			if (child === this) {
 				this.sec.throwError('ArgumentError', Errors.CantAddSelfError);
 			}
-			if (Flash.get(this.sec).display.DisplayObjectContainer.axIsType(child) &&
+			if (flashContext.display.DisplayObjectContainer.axIsType(child) &&
 				(<DisplayObjectContainer>child).contains(this)) {
 				this.sec.throwError('ArgumentError', Errors.CantAddParentError);
 			}
@@ -317,7 +318,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		removeChild(child: DisplayObject): DisplayObject {
-			checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child, "child");
 			return this.removeChildAt(this.getChildIndex(child));
 		}
 
@@ -676,7 +677,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		contains(child: DisplayObject): boolean {
-			checkParameterType(child, "child", this.sec.flash.display.DisplayObject.axClass);
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child, "child");
 			return this._isAncestor(child);
 		}
 
@@ -712,8 +713,8 @@ module Shumway.AVMX.AS.flash.display {
 
 		swapChildren(child1: DisplayObject, child2: DisplayObject): void {
 			// Flash prints out 'child' for both non-null |child1| and |child2|.
-			checkParameterType(child1, "child", this.sec.flash.display.DisplayObject.axClass);
-			checkParameterType(child2, "child", this.sec.flash.display.DisplayObject.axClass);
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child1, "child");
+			Flash.get(this.sec).display.DisplayObject.checkParameterType(child2, "child");
 			this.swapChildrenAt(this.getChildIndex(child1), this.getChildIndex(child2));
 		}
 
