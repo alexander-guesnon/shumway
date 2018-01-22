@@ -31,10 +31,6 @@ module Shumway.AVMX.AS.flash.filters {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null;
 
-		public static FromUntyped(obj: any) {
-			return new this.sec.flash.filters.BlurFilter(obj.blurX, obj.blurY, obj.quality);
-		}
-
 		constructor(blurX: number = 4, blurY: number = 4, quality: number /*int*/ = 1) {
 			super();
 			this.blurX = blurX;

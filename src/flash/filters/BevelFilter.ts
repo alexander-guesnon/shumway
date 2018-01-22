@@ -33,44 +33,6 @@ module Shumway.AVMX.AS.flash.filters {
 		// List of instance symbols to link.
 		static instanceSymbols: string [] = null;
 
-		public static FromUntyped(obj: any) {
-			// obj.colors is an array of RGBA colors.
-			// Here it contains exactly two color objects (spec might state it differently):
-			//  - first maps to highlightColor and highlightAlpha;
-			//  - second maps to shadowColor and shadowAlpha;
-			release || assert(obj.colors && obj.colors.length === 2, "colors must be Array of length 2");
-			let highlightColor: number = obj.colors[0] >>> 8;
-			let highlightAlpha: number = (obj.colors[0] & 0xff) / 0xff;
-			let shadowColor: number = obj.colors[1] >>> 8;
-			let shadowAlpha: number = (obj.colors[1] & 0xff) / 0xff;
-			// type is derived from obj.onTop and obj.innerShadow
-			// obj.onTop true: type is FULL
-			// obj.inner true: type is INNER
-			// neither true: type is OUTER
-			let type: string = flash.filters.BitmapFilterType.OUTER;
-			if (!!obj.onTop) {
-				type = flash.filters.BitmapFilterType.FULL;
-			} else if (!!obj.inner) {
-				type = flash.filters.BitmapFilterType.INNER;
-			}
-			// obj.angle is represented in radians, the api needs degrees
-			let angle: number = obj.angle * 180 / Math.PI;
-			return new this.sec.flash.filters.BevelFilter(
-				obj.distance,
-				angle,
-				highlightColor,
-				highlightAlpha,
-				shadowColor,
-				shadowAlpha,
-				obj.blurX,
-				obj.blurY,
-				obj.strength,
-				obj.quality,
-				type,
-				obj.knockout
-			);
-		}
-
 		constructor(distance: number = 4, angle: number = 45,
 		            highlightColor: number /*uint*/ = 16777215, highlightAlpha: number = 1,
 		            shadowColor: number /*uint*/ = 0, shadowAlpha: number = 1, blurX: number = 4,

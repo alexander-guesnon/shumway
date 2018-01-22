@@ -22,12 +22,6 @@ module Shumway.AVMX.AS.flash.filters {
 
 		static classInitializer: any = null;
 
-		public static FromUntyped(obj: { matrix: number[] }) {
-			let filter = Object.create(this.sec.flash.filters.ColorMatrixFilter.axClass.tPrototype);
-			filter._matrix = obj.matrix;
-			return filter;
-		}
-
 		constructor(matrix: ASArray = null) {
 			super();
 			if (matrix) {

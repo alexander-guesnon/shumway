@@ -22,21 +22,6 @@ module Shumway.AVMX.AS.flash.filters {
 
 		static classInitializer: any = null;
 
-		public static FromUntyped(obj: any) {
-			return new this.sec.flash.filters.ConvolutionFilter(
-				obj.matrixX,
-				obj.matrixY,
-				obj.matrix,
-				obj.divisor,
-				obj.bias,
-				obj.preserveAlpha,
-				obj.clamp,
-				// obj.color is an RGBA color.
-				obj.color >>> 8,
-				(obj.color & 0xff) / 0xff
-			);
-		}
-
 		constructor(matrixX: number = 0, matrixY: number = 0, matrix: ASArray = null,
 		            divisor: number = 1, bias: number = 0, preserveAlpha: boolean = true,
 		            clamp: boolean = true, color: number /*uint*/ = 0, alpha: number = 0) {

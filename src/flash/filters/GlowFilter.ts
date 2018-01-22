@@ -32,24 +32,6 @@ module Shumway.AVMX.AS.flash.filters {
     // List of instance symbols to link.
     static instanceSymbols: string [] = null;
 
-    public static FromUntyped(obj: any) {
-      // obj.colors is an array of RGBA colors.
-      // Here it contains exactly one color object, which maps to color and alpha.
-      release || assert(obj.colors && obj.colors.length === 1, "colors must be Array of length 1");
-      let color: number = obj.colors[0] >>> 8;
-      let alpha: number = (obj.colors[0] & 0xff) / 0xff;
-      return new this.sec.flash.filters.GlowFilter(
-        color,
-        alpha,
-        obj.blurX,
-        obj.blurY,
-        obj.strength,
-        obj.quality,
-        obj.inner,
-        obj.knockout
-      );
-    }
-
     constructor(color: number /*uint*/ = 16711680, alpha: number = 1, blurX: number = 6,
                 blurY: number = 6, strength: number = 2, quality: number /*int*/ = 1,
                 inner: boolean = false, knockout: boolean = false)

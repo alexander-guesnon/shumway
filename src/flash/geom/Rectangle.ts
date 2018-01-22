@@ -49,14 +49,6 @@ module Shumway.AVMX.AS.flash.geom {
 			this.height = height;
 		}
 
-		public static FromBounds(bounds: Bounds): Rectangle {
-			let xMin = bounds.xMin;
-			let yMin = bounds.yMin;
-			return new this.sec.flash.geom.Rectangle(xMin / 20, yMin / 20,
-				(bounds.xMax - xMin) / 20,
-				(bounds.yMax - yMin) / 20);
-		}
-
 		public set native_x(x: number) {
 			this.x = x;
 		}

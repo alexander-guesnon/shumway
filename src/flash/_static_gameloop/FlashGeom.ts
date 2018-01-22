@@ -18,6 +18,16 @@ module Shumway.AVMX.AS.flash.statics {
 		}
 	}
 
+	export class RectangleClass extends FlashClass<geom.Rectangle> {
+		FromBounds(bounds: Bounds) {
+			let xMin = bounds.xMin;
+			let yMin = bounds.yMin;
+			return new (this.cl)(xMin / 20, yMin / 20,
+				(bounds.xMax - xMin) / 20,
+				(bounds.yMax - yMin) / 20);
+		}
+	}
+
 	export class FlashGeom {
 		constructor(context: FlashContext) {
 			this.context = context;
@@ -30,6 +40,7 @@ module Shumway.AVMX.AS.flash.statics {
 
 			this.Matrix3D = new Matrix3DClass(sec.flash.geom.Matrix3D);
 			this.PerspectiveProjection = new PerspectiveProjectionClass(sec.flash.geom.PerspectiveProjection);
+			this.Rectangle = new RectangleClass(sec.flash.geom.Rectangle);
 
 			this._temporaryRectangle = new sec.flash.geom.Rectangle();
 			this.FROZEN_IDENTITY_MATRIX = Object.freeze(sec.flash.geom.Matrix.axClass.axConstruct([]));
@@ -41,6 +52,7 @@ module Shumway.AVMX.AS.flash.statics {
 
 		Matrix3D: Matrix3DClass;
 		PerspectiveProjection: PerspectiveProjectionClass;
+		Rectangle: RectangleClass;
 
 		/**
 		 * Temporary rectangle that is used to prevent allocation.

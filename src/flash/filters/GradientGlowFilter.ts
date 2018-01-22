@@ -25,44 +25,6 @@ module Shumway.AVMX.AS.flash.filters {
 
     static classInitializer: any = null;
 
-    public static FromUntyped(obj: any) {
-      // obj.colors is an array of RGBA colors.
-      // The RGB and alpha parts must be separated into colors and alphas arrays.
-      let colors: number[] = [];
-      let alphas: number[] = [];
-      for (let i = 0; i < obj.colors.length; i++) {
-        let color = obj.colors[i];
-        colors.push(color >>> 8);
-        alphas.push(color & 0xff) / 0xff;
-      }
-      // type is derived from obj.onTop and obj.innerShadow
-      // obj.onTop true: type is FULL
-      // obj.inner true: type is INNER
-      // neither true: type is OUTER
-      let type: string = flash.filters.BitmapFilterType.OUTER;
-      if (!!obj.onTop) {
-        type = flash.filters.BitmapFilterType.FULL;
-      } else if (!!obj.inner) {
-        type = flash.filters.BitmapFilterType.INNER;
-      }
-      // obj.angle is represented in radians, the api needs degrees
-      let angle: number = obj.angle * 180 / Math.PI;
-      return new this.sec.flash.filters.GradientGlowFilter(
-        obj.distance,
-        angle,
-        // Boxing these is obviously not ideal, but everything else is just annoying.
-        this.sec.createArrayUnsafe(colors),
-        this.sec.createArrayUnsafe(alphas),
-        this.sec.createArrayUnsafe(obj.ratios),
-        obj.blurX,
-        obj.blurY,
-        obj.strength,
-        obj.quality,
-        type,
-        obj.knockout
-      );
-    }
-
     constructor(distance: number = 4, angle: number = 45, colors: ASArray = null,
                 alphas: ASArray = null, ratios: ASArray = null, blurX: number = 4, blurY: number = 4,
                 strength: number = 1, quality: number /*int*/ = 1, type: string = "inner",

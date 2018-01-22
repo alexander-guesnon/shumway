@@ -1056,39 +1056,17 @@ module Shumway.AVMX.AS.flash.display {
 			}
 
 			if (placeObjectTag.flags & PlaceObjectFlags.HasFilterList) {
-				let filtersPackage = this.sec.flash.filters;
+				let filtersPackage = Flash.get(this.sec).filters;
 				let filters: filters.BitmapFilter[] = [];
 				let swfFilters = placeObjectTag.filters;
 				for (let i = 0; i < swfFilters.length; i++) {
 					let obj = swfFilters[i];
+					let filterClass = filtersPackage.swfFilterTypes[obj.type];
 					let filter: filters.BitmapFilter;
-					switch (obj.type) {
-						case 0:
-							filter = filtersPackage.DropShadowFilter.axClass.FromUntyped(obj);
-							break;
-						case 1:
-							filter = filtersPackage.BlurFilter.axClass.FromUntyped(obj);
-							break;
-						case 2:
-							filter = filtersPackage.GlowFilter.axClass.FromUntyped(obj);
-							break;
-						case 3:
-							filter = filtersPackage.BevelFilter.axClass.FromUntyped(obj);
-							break;
-						case 4:
-							filter = filtersPackage.GradientGlowFilter.axClass.FromUntyped(obj);
-							break;
-						case 5:
-							filter = filtersPackage.ConvolutionFilter.axClass.FromUntyped(obj);
-							break;
-						case 6:
-							filter = filtersPackage.ColorMatrixFilter.axClass.FromUntyped(obj);
-							break;
-						case 7:
-							filter = filtersPackage.GradientBevelFilter.axClass.FromUntyped(obj);
-							break;
-						default:
-							release || assert(filter, "Unknown filter type.");
+					if (!filterClass) {
+						release || assert(filterClass, "Unknown filter type.");
+					} else {
+						filter = filterClass.FromUntyped(obj);
 					}
 					filters.push(filter);
 				}
@@ -1514,7 +1492,7 @@ module Shumway.AVMX.AS.flash.display {
 		}
 
 		_getScale9Grid() {
-			let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+			let rectangleClass = Flash.get(this.sec).geom.Rectangle;
 			return this._scale9Grid ? rectangleClass.FromBounds(this._scale9Grid) : null;
 		}
 
@@ -1611,13 +1589,13 @@ module Shumway.AVMX.AS.flash.display {
 
 		getBounds(targetCoordinateSpace: DisplayObject): flash.geom.Rectangle {
 			targetCoordinateSpace = targetCoordinateSpace || this;
-			let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+			let rectangleClass = Flash.get(this.sec).geom.Rectangle;
 			return rectangleClass.FromBounds(this._getTransformedBounds(targetCoordinateSpace, true));
 		}
 
 		getRect(targetCoordinateSpace: DisplayObject): flash.geom.Rectangle {
 			targetCoordinateSpace = targetCoordinateSpace || this;
-			let rectangleClass = this.sec.flash.geom.Rectangle.axClass;
+			let rectangleClass = Flash.get(this.sec).geom.Rectangle;
 			return rectangleClass.FromBounds(this._getTransformedBounds(targetCoordinateSpace, false));
 		}
 

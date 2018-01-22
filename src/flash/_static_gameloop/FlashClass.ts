@@ -1,9 +1,13 @@
 module Shumway.AVMX.AS.flash.statics {
 	export class FlashClass<T> {
-		cl: AXClass;
+		cl: any;
+		context: FlashContext;
+		sec: ISecurityDomain;
 
-		constructor(cl: any) {
+		constructor(cl: any, context?: FlashContext) {
 			this.cl = cl;
+			this.context = context || null;
+			this.sec = context ? context.sec: null;
 		}
 
 		axConstruct(args?: any[]): T {
@@ -21,6 +25,10 @@ module Shumway.AVMX.AS.flash.statics {
 
 		isSymbolPrototype(symbolClass: any) {
 			return this.cl.axClass.dPrototype.isPrototypeOf(symbolClass.dPrototype);
+		}
+
+		FromUntyped(obj: any): T {
+			return null;
 		}
 	}
 }
