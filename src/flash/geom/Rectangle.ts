@@ -151,7 +151,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		public clone(): Rectangle {
-			return new this.sec.flash.geom.Rectangle(this.x, this.y, this.width, this.height);
+			return Flash.get(this.sec).geom.Rectangle.clone(this);
 		}
 
 		public isEmpty(): boolean {

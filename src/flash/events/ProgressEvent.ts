@@ -55,9 +55,7 @@ module Shumway.AVMX.AS.flash.events {
 		}
 
 		public clone(): Event {
-			return new this.sec.flash.events.ProgressEvent(this._type, this._bubbles,
-				this._cancelable, this._bytesLoaded,
-				this._bytesTotal);
+			return Flash.get(this.sec).events.cloneProgressEvent(this);
 		}
 
 		public toString(): string {

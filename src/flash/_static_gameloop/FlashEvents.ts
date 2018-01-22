@@ -16,6 +16,12 @@ module Shumway.AVMX.AS.flash.statics {
 				event._cancelable).setContext(this.context);
 		}
 
+		cloneProgressEvent(event: Event) {
+			return new this.context.sec.flash.events.ProgressEvent(event._type, event._bubbles,
+				event._cancelable, event._bytesLoaded,
+				event._bytesTotal);
+		}
+
 		getInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
 			let instance = this._instances[type];
 			if (!instance) {

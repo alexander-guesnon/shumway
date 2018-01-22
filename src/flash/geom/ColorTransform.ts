@@ -200,16 +200,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		public clone(): ColorTransform {
-			return new this.sec.flash.geom.ColorTransform(
-				this.redMultiplier,
-				this.greenMultiplier,
-				this.blueMultiplier,
-				this.alphaMultiplier,
-				this.redOffset,
-				this.greenOffset,
-				this.blueOffset,
-				this.alphaOffset
-			);
+			return Flash.get(this.sec).geom.ColorTransform.clone(this);
 		}
 
 		public convertToFixedPoint(): ColorTransform {

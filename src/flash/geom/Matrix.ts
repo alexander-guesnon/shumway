@@ -595,8 +595,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		public clone(): Matrix {
-			let m = this._data;
-			return new this.sec.flash.geom.Matrix(m[0], m[1], m[2], m[3], m[4], m[5]);
+			return Flash.get(this.sec).geom.Matrix.clone(this);
 		}
 
 		public equals(other: Matrix): boolean {

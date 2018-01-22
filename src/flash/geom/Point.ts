@@ -82,7 +82,7 @@ module Shumway.AVMX.AS.flash.geom {
 		}
 
 		public clone(): Point {
-			return new this.sec.flash.geom.Point(this.x, this.y);
+			return Flash.get(this.sec).geom.Point.clone(this);
 		}
 
 		public offset(dx: number, dy: number): void {
