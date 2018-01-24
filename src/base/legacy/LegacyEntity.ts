@@ -1,14 +1,9 @@
 module Shumway.flash {
 	export class LegacyEntity {
-		_sec: statics.ISecurityDomain = null;
+		_sec: statics.ISecurityDomain;
 
-		_flashSetSecurityDomain(sec: statics.ISecurityDomain) {
-			this._sec = sec;
-			this._legacyInit();
-		}
-
-		_legacyInit() {
-
+		constructor() {
+			this._sec = statics._currentDomain;
 		}
 	}
 }
@@ -18,16 +13,6 @@ module Shumway.flash.statics {
 		key: string = null;
 
 		classMap: MapObject<LegacyEntity>;
-
-		_flashSetSecurityDomain(sec: ISecurityDomain) {
-			this._sec = sec;
-			this._legacyInit();
-
-			let classMap = this.classMap;
-			for (let key in classMap) {
-				classMap[key]._flashSetSecurityDomain(sec);
-			}
-		}
 
 		_registerClass(cl: LegacyClass) {
 			this.classMap[cl.key] = cl;
@@ -45,12 +30,20 @@ module Shumway.flash.statics {
 		}
 
 		create(): T {
-			// args.unshift(cls);
-			// let inst:T = new (Function.prototype.bind.apply(cls, args));
+			// new (Function.prototype.bind.apply(cls, [cls].concat(args)));
+			const oldDomain = statics._currentDomain;
+			if (oldDomain !== this._sec) {
+				statics._currentDomain = this._sec;
+				try {
+					return new (this.jsClass as any)();
+				} catch (e) {
+					throwError("LegacyEntity.create", e);
+				} finally {
+					statics._currentDomain = oldDomain;
+				}
+			}
 
-			let instance: T = new (this.jsClass as any)();
-			instance._flashSetSecurityDomain(this._sec);
-			return instance;
+			return new (this.jsClass as any)();
 		}
 	}
 }
