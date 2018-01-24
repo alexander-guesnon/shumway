@@ -52,7 +52,7 @@ module Shumway {
 				// }
 			}
 
-			writeObject(arr: utils.ByteArray, object: any) {
+			writeObject(arr: utils.ByteArray, obj: any) {
 				throwError(this.key, "Not implemented");
 
 				// switch (this._objectEncoding) {
@@ -117,7 +117,7 @@ module Shumway {
 			writeMultiByte: (value: string, charSet: string) => void;
 			writeUTF: (value: string) => void;
 			writeUTFBytes: (value: string) => void;
-			writeObject: (object: any) => void;
+			writeObject: (obj: any) => void;
 			objectEncoding: number
 			/*uint*/
 			;
@@ -230,8 +230,8 @@ module Shumway {
 			writeUTF: (value: string) => void;
 			writeUTFBytes: (value: string) => void;
 
-			writeObject(object: any) {
-				this._sec.utils.ByteArray.writeObject(this, object);
+			writeObject(obj: any) {
+				this._sec.utils.ByteArray.writeObject(this, obj);
 			}
 
 			getBytes: () => Uint8Array;
