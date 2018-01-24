@@ -45,6 +45,9 @@ module Shumway.flash.statics {
 		}
 
 		create(): T {
+			// args.unshift(cls);
+			// let inst:T = new (Function.prototype.bind.apply(cls, args));
+
 			let instance: T = new (this.jsClass as any)();
 			instance._flashSetSecurityDomain(this._sec);
 			return instance;
