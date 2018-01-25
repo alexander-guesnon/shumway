@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: EventDispatcher
-module Shumway.AVMX.AS.flash.events {
+module Shumway.flash.events {
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import isNullOrUndefined = Shumway.isNullOrUndefined;
 	import assert = Shumway.Debug.assert;
@@ -123,7 +123,7 @@ module Shumway.AVMX.AS.flash.events {
 		 * The queues start off compact but can have null values if event targets are removed.
 		 * Periodically we compact them if too many null values exist.
 		 */
-		private _queues: Shumway.MapObject<EventDispatcher []>;
+		private _queues: MapObject<EventDispatcher []>;
 
 		constructor() {
 			this.reset();
@@ -194,19 +194,15 @@ module Shumway.AVMX.AS.flash.events {
 	 * the DisplayObject class. The EventDispatcher class allows any object on the display list to be
 	 * an event target and as such, to use the methods of the IEventDispatcher interface.
 	 */
-	export class EventDispatcher extends ASObject implements IEventDispatcher {
-
-		static axClass: typeof EventDispatcher;
-
-		static classInitializer: any = null;
+	export class EventDispatcher extends LegacyEntity implements IEventDispatcher {
 
 		private _target: flash.events.IEventDispatcher;
 
 		/*
 		 * Keep two lists of listeners, one for capture events and one for all others.
 		 */
-		private _captureListeners: Shumway.MapObject<EventListenerList>;
-		private _targetOrBubblingListeners: Shumway.MapObject<EventListenerList>;
+		private _captureListeners: MapObject<EventListenerList>;
+		private _targetOrBubblingListeners: MapObject<EventListenerList>;
 
 		protected _fieldsInitialized: boolean;
 
@@ -233,7 +229,10 @@ module Shumway.AVMX.AS.flash.events {
 		toString(): string {
 			// EventDispatcher's toString doesn't actually do anything. It just introduces a trait that
 			// forwards to Object.prototype's toString method.
-			return this.sec.AXObject.dPrototype.$BgtoString.axCall(this);
+
+			// @ivanpopelyshev: fix it
+			// return this.sec.AXObject.dPrototype.$BgtoString.axCall(this);
+			return "EventDispatcher";
 		}
 
 		/**
@@ -251,7 +250,7 @@ module Shumway.AVMX.AS.flash.events {
 		/**
 		 * Lazily construct listeners lists to avoid object allocation.
 		 */
-		private _getListeners(useCapture: boolean): Shumway.MapObject<EventListenerList> {
+		private _getListeners(useCapture: boolean): MapObject<EventListenerList> {
 			if (useCapture) {
 				return this._captureListeners || (this._captureListeners = Object.create(null));
 			}
@@ -262,20 +261,13 @@ module Shumway.AVMX.AS.flash.events {
 		                 priority: number /*int*/ = 0, useWeakReference: boolean = false): void {
 			// The error message always says "2", even though up to five arguments are valid.
 			if (arguments.length < 2 || arguments.length > 5) {
-				this.sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
+				this._sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
 					"flash.events::EventDispatcher/addEventListener()", 2,
 					arguments.length);
 			}
-			// The type of `listener` is checked before that of `type`.
-			if (!axIsCallable(listener)) {
-				// TODO: The Player unevals the `listener`. To some extend, we could, too.
-				this.sec.throwError("TypeError", Errors.CheckTypeFailedError, listener,
-					"Function");
-			}
 			if (isNullOrUndefined(type)) {
-				this.sec.throwError("TypeError", Errors.NullPointerError, "type");
+				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
-			type = axCoerceString(type);
 			useCapture = !!useCapture;
 			priority |= 0;
 			useWeakReference = !!useWeakReference;
@@ -286,25 +278,19 @@ module Shumway.AVMX.AS.flash.events {
 			// Notify the broadcast event queue. If |useCapture| is set then the Flash player
 			// doesn't seem to register this target.
 			if (!useCapture && Event.isBroadcastEventType(type)) {
-				Flash.get(this.sec).events.broadcastEventDispatchQueue.add(type, this);
+				this._sec.events.broadcastEventDispatchQueue.add(type, this);
 			}
 		}
 
 		removeEventListener(type: string, listener: EventHandler, useCapture: boolean = false): void {
 			// The error message always says "2", even though 3 arguments are valid.
 			if (arguments.length < 2 || arguments.length > 3) {
-				this.sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
+				this._sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
 					"flash.events::EventDispatcher/removeEventListener()", 2,
 					arguments.length);
 			}
-			// The type of `listener` is checked before that of `type`.
-			if (!axIsCallable(listener)) {
-				// TODO: The Player unevals the `listener`. To some extend, we could, too.
-				this.sec.throwError("TypeError", Errors.CheckTypeFailedError, listener,
-					"Function");
-			}
 			if (isNullOrUndefined(type)) {
-				this.sec.throwError("TypeError", Errors.NullPointerError, "type");
+				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
 			type = axCoerceString(type);
 			let listeners = this._getListeners(!!useCapture);
@@ -314,7 +300,7 @@ module Shumway.AVMX.AS.flash.events {
 				if (list.isEmpty()) {
 					// Notify the broadcast event queue of the removal.
 					if (!useCapture && Event.isBroadcastEventType(type)) {
-						Flash.get(this.sec).events.broadcastEventDispatchQueue.remove(type, this);
+						this._sec.events.broadcastEventDispatchQueue.remove(type, this);
 					}
 					listeners[type] = null;
 				}
@@ -338,12 +324,12 @@ module Shumway.AVMX.AS.flash.events {
 
 		hasEventListener(type: string): boolean {
 			if (arguments.length !== 1) {
-				this.sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
+				this._sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
 					"flash.events::EventDispatcher/hasEventListener()", 1,
 					arguments.length);
 			}
 			if (isNullOrUndefined(type)) {
-				this.sec.throwError("TypeError", Errors.NullPointerError, "type");
+				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
 			type = axCoerceString(type);
 			return this._hasEventListener(type);
@@ -351,18 +337,18 @@ module Shumway.AVMX.AS.flash.events {
 
 		willTrigger(type: string): boolean {
 			if (arguments.length !== 1) {
-				this.sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
+				this._sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
 					"flash.events::EventDispatcher/hasEventListener()", 1,
 					arguments.length);
 			}
 			if (isNullOrUndefined(type)) {
-				this.sec.throwError("TypeError", Errors.NullPointerError, "type");
+				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
 			type = axCoerceString(type);
 			if (this._hasEventListener(type)) {
 				return true;
 			}
-			if (Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
+			if (this._sec.display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 				do {
 					if (node._hasEventListener(type)) {
@@ -384,7 +370,7 @@ module Shumway.AVMX.AS.flash.events {
 			// Broadcast events don't have capturing or bubbling phases so it's a simple check.
 			if (event.isBroadcastEvent()) {
 				return true;
-			} else if (event._bubbles && Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
+			} else if (event._bubbles && this._sec.display.DisplayObject.axIsType(this)) {
 				// Check to see if there are any event listeners on the path to the root.
 				for (let node = (this as any)._parent; node; node = node._parent) {
 					if (node._hasEventListener(event.type)) {
@@ -397,7 +383,7 @@ module Shumway.AVMX.AS.flash.events {
 
 		public dispatchEvent(event: Event): boolean {
 			if (arguments.length !== 1) {
-				this.sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
+				this._sec.throwError("ArgumentError", Errors.WrongArgumentCountError,
 					"flash.events::EventDispatcher/dispatchEvent()", 1,
 					arguments.length);
 			}
@@ -422,7 +408,7 @@ module Shumway.AVMX.AS.flash.events {
 			let keepPropagating = true;
 			let ancestors: flash.display.DisplayObject [] = [];
 
-			if (!event.isBroadcastEvent() && Flash.get(this.sec).display.DisplayObject.axIsType(this)) {
+			if (!event.isBroadcastEvent() && this._sec.display.DisplayObject.axIsType(this)) {
 				let node: flash.display.DisplayObject = (this as any)._parent;
 
 				// Gather all parent display objects that have event listeners for this event type.
@@ -440,7 +426,7 @@ module Shumway.AVMX.AS.flash.events {
 					}
 					let list = ancestor._getListenersForType(true, type);
 					release || assert(list);
-					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, ancestor,
+					keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
 						EventPhase.CAPTURING_PHASE);
 				}
 			}
@@ -451,7 +437,7 @@ module Shumway.AVMX.AS.flash.events {
 			if (keepPropagating) {
 				let list = this._getListenersForType(false, type);
 				if (list) {
-					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, target,
+					keepPropagating = EventDispatcher.callListeners(list, event, target, target,
 						EventPhase.AT_TARGET);
 				}
 			}
@@ -466,7 +452,7 @@ module Shumway.AVMX.AS.flash.events {
 						continue;
 					}
 					let list = ancestor._getListenersForType(false, type);
-					keepPropagating = EventDispatcher.callListeners(this.sec, list, event, target, ancestor,
+					keepPropagating = EventDispatcher.callListeners(list, event, target, ancestor,
 						EventPhase.BUBBLING_PHASE);
 				}
 			}
@@ -474,7 +460,7 @@ module Shumway.AVMX.AS.flash.events {
 			return !event._isDefaultPrevented;
 		}
 
-		private static callListeners(sec: ISecurityDomain, list: EventListenerList, event: Event, target: IEventDispatcher,
+		private static callListeners(list: EventListenerList, event: Event, target: IEventDispatcher,
 		                             currentTarget: IEventDispatcher, eventPhase: number): boolean {
 			if (list.isEmpty()) {
 				return true;
@@ -484,7 +470,7 @@ module Shumway.AVMX.AS.flash.events {
 			 * for all listener callbacks but not when bubbling.
 			 */
 			if (event._target) {
-				event = event.axCallPublicProperty('clone', null).setContext(Flash.get(sec));
+				event = event.clone();
 			}
 			let snapshot = list.snapshot();
 			try {

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 // Class: IEventDispatcher
-module Shumway.AVMX.AS.flash.events {
+module Shumway.flash.events {
 
 	export interface EventHandler {
-		(event: flash.events.Event): void;
+		(event: Event): void;
 	}
 
 	export interface IEventDispatcher {
@@ -26,6 +26,6 @@ module Shumway.AVMX.AS.flash.events {
 		removeEventListener: (type: string, listener: EventHandler, useCapture?: boolean) => void;
 		hasEventListener: (type: string) => boolean;
 		willTrigger: (type: string) => boolean;
-		dispatchEvent: (event: flash.events.Event) => boolean;
+		dispatchEvent: (event: Event) => boolean;
 	}
 }

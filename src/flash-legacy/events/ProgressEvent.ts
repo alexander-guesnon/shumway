@@ -52,13 +52,6 @@ module Shumway.flash.events {
 				this._bytesTotal]);
 		}
 
-		public clone(): Event {
-			// (this._type, this._bubbles,
-			// 	this._cancelable, this._bytesLoaded,
-			// 	this._bytesTotal);
-			return Flash.get(this.sec).events.cloneProgressEvent(this);
-		}
-
 		public toString(): string {
 			return this.formatToString('ProgressEvent', 'bubbles', 'cancelable', 'eventPhase',
 				'bytesLoaded', 'bytesTotal');
