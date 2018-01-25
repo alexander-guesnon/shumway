@@ -89,6 +89,9 @@ module.exports = function(grunt) {
       build_rtmp_ts: {
         cmd: commonArguments + 'src/rtmp'
       },
+      build_flash_legacy_ts: {
+        cmd: commonArguments + 'src/flash-legacy'
+      },
       build_flash_ts: {
         cmd: commonArguments + 'src/flash'
       },
@@ -314,6 +317,7 @@ module.exports = function(grunt) {
       },
       natives: {
         tasks: [
+          { args: ['exec:build_flash_legacy_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_playerglobal'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_flash_ts'].concat(parallelArgs), grunt: true },
           { args: ['exec:build_avm1_ts'].concat(parallelArgs), grunt: true }

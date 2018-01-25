@@ -4,6 +4,7 @@ module Shumway.flash.statics {
 			super();
 		}
 
-		Event = new LegacyClass<flash.events.Event>(flash.events.Event);
+		Event = new LegacyClass<events.Event>(events.Event);
+		ProgressEvent = new LegacyClass<events.ProgressEvent>(events.ProgressEvent);
 	}
 }
