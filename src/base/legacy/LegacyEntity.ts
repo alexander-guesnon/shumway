@@ -29,21 +29,29 @@ module Shumway.flash.statics {
 			this.jsClass = jsClass;
 		}
 
-		create(): T {
+		create(args?: Array<any>): T {
 			// new (Function.prototype.bind.apply(cls, [cls].concat(args)));
 			const oldDomain = statics._currentDomain;
-			if (oldDomain !== this._sec) {
-				statics._currentDomain = this._sec;
-				try {
-					return new (this.jsClass as any)();
-				} catch (e) {
-					throwError("LegacyEntity.create", e);
-				} finally {
-					statics._currentDomain = oldDomain;
-				}
-			}
+			const cls = this.jsClass as any;
 
-			return new (this.jsClass as any)();
+			if (oldDomain === this._sec) {
+				if (args) {
+					return new (Function.prototype.bind.apply(cls, [cls].concat(args))) as any
+				}
+				return new cls();
+			}
+			statics._currentDomain = this._sec;
+			try {
+				if (args) {
+					return new (Function.prototype.bind.apply(cls, [cls].concat(args))) as any
+				}
+				return new cls();
+			} catch (e) {
+				throwError("LegacyEntity.create", e);
+				return null;
+			} finally {
+				statics._currentDomain = oldDomain;
+			}
 		}
 	}
 }

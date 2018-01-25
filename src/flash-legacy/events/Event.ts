@@ -32,7 +32,6 @@ module Shumway.flash.events {
 			return false;
 		}
 
-
 		constructor(type: string, bubbles: boolean, cancelable: boolean) {
 			super();
 
@@ -160,12 +159,12 @@ module Shumway.flash.events {
 		}
 
 		isBroadcastEvent(): boolean {
-			return !!this._isBroadcastEvent;
+			return this._isBroadcastEvent;
 		}
 
 		clone(): Event {
-			// return Flash.get(this.sec).events.clone(this);
-			return null;
+			return this._sec.events.Event.create([this._type, this._bubbles,
+				this._cancelable]);
 		}
 
 		toString(): string {

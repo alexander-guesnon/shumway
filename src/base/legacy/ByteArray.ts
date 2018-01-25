@@ -39,6 +39,10 @@ module Shumway {
 		export class ByteArrayClass extends LegacyClass<utils.ByteArray> {
 			key = "flash.utils.ByteArray";
 
+			constructor() {
+				super(utils.ByteArray);
+			}
+
 			readObject(arr: utils.ByteArray): any {
 				throwError(this.key, "Not implemented");
 
