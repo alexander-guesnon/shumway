@@ -677,6 +677,12 @@ module Shumway.flash {
   export function sliceArguments(args: ArrayLike<number>, offset: number) {
     return Array.prototype.slice.call(args, offset);
   }
+
+	export function checkNullParameter(argument: any, name: string, sec: statics.ISecurityDomain) {
+		if (argument == undefined) {
+			sec.throwError('TypeError', Errors.NullPointerError, name);
+		}
+	}
 }
 
 // Errors is used in dataBuffer.ts, which is compiled way before this. Gotta break the cycle.

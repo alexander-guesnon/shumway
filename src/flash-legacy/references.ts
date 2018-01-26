@@ -17,11 +17,25 @@
 ///<reference path='module.ts' />
 ///<reference path='settings.ts' />
 
+///<reference path='geom/Matrix.ts' />
+///<reference path='geom/Matrix3D.ts' />
+///<reference path='geom/Orientation3D.ts' />
+///<reference path='geom/PerspectiveProjection.ts' />
+///<reference path='geom/Point.ts' />
+///<reference path='geom/Rectangle.ts' />
+///<reference path='geom/Transform.ts' />
+///<reference path='geom/Utils3D.ts' />
+///<reference path='geom/Vector3D.ts' />
+///<reference path='geom/ColorTransform.ts' />
+
 ///<reference path='events/Event.ts' />
 ///<reference path='events/EventDispatcher.ts' />
 ///<reference path='events/EventPhase.ts' />
 ///<reference path='events/IEventDispatcher.ts' />
 ///<reference path='events/ProgressEvent.ts' />
+
+///<reference path='display/DisplayObject.ts' />
+///<reference path='display/DisplayObjectContainer.ts' />
 
 ///<reference path='utils/Endian.ts' />
 ///<reference path='utils/IExternalizable.ts' />
@@ -29,4 +43,6 @@
 ///<reference path='statics/SecurityDomain.ts'/>>
 ///<reference path='statics/EventsNamespace.ts'/>>
 ///<reference path='statics/UtilsNamespace.ts'/>>
+///<reference path='statics/GeomNamespace.ts'/>>
+///<reference path='statics/DisplayNamespace.ts'/>>
 ///<reference path='statics/errors.ts'/>>

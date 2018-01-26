@@ -15,7 +15,6 @@
  */
 // Class: EventDispatcher
 module Shumway.flash.events {
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import isNullOrUndefined = Shumway.isNullOrUndefined;
 	import assert = Shumway.Debug.assert;
 
@@ -292,7 +291,6 @@ module Shumway.flash.events {
 			if (isNullOrUndefined(type)) {
 				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
-			type = axCoerceString(type);
 			let listeners = this._getListeners(!!useCapture);
 			let list = listeners[type];
 			if (list) {
@@ -331,7 +329,6 @@ module Shumway.flash.events {
 			if (isNullOrUndefined(type)) {
 				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
-			type = axCoerceString(type);
 			return this._hasEventListener(type);
 		}
 
@@ -344,7 +341,6 @@ module Shumway.flash.events {
 			if (isNullOrUndefined(type)) {
 				this._sec.throwError("TypeError", Errors.NullPointerError, "type");
 			}
-			type = axCoerceString(type);
 			if (this._hasEventListener(type)) {
 				return true;
 			}

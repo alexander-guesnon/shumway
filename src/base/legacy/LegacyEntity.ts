@@ -53,5 +53,9 @@ module Shumway.flash.statics {
 				statics._currentDomain = oldDomain;
 			}
 		}
+
+		axIsType(obj: any): obj is T {
+			return obj instanceof (this.jsClass) && obj._sec === this._sec;
+		}
 	}
 }

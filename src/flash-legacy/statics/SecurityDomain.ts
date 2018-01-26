@@ -1,6 +1,8 @@
 module Shumway.flash.statics {
 	export interface ISecurityDomain {
 		events: EventsNamespace
+		display: DisplayNamespace
+		geom: GeomNamespace
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any): void;
@@ -21,6 +23,8 @@ module Shumway.flash.statics {
 
 			this.events = new EventsNamespace();
 			this.utils = new UtilsNamespace();
+			this.display = new DisplayNamespace();
+			this.geom = new GeomNamespace();
 
 			if (oldDomain) {
 				statics._currentDomain = oldDomain;
@@ -29,6 +33,8 @@ module Shumway.flash.statics {
 
 		events: EventsNamespace;
 		utils: UtilsNamespace;
+		display: DisplayNamespace;
+		geom: GeomNamespace;
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any) {
