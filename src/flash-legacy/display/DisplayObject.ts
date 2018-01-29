@@ -2045,5 +2045,13 @@ module Shumway.flash.display {
 		set blendShader(value: any /* flash.display.Shader */) {
 			release || somewhatImplemented("public DisplayObject::set blendShader");
 		}
+
+		axSetPublicProperty(name: string, value: any): void {
+
+		}
+
+		axGetPublicProperty(name: string): any {
+
+		}
 	}
 }

@@ -18,7 +18,6 @@
 module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import mixHash = Shumway.HashUtilities.mixHash;
 	import clamp = Shumway.NumberUtilities.clamp;
 
@@ -31,11 +30,6 @@ module Shumway.flash.display {
 	}
 
 	export class DisplayObjectContainer extends flash.display.InteractiveObject {
-		static bindings: string [] = null;
-		static classSymbols: string [] = null;
-		static classInitializer: any = null;
-
-
 		constructor() {
 			super();
 			if (!this._fieldsInitialized) {

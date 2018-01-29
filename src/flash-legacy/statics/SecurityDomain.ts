@@ -3,9 +3,6 @@ module Shumway.flash.statics {
 		events: EventsNamespace
 		display: DisplayNamespace
 		geom: GeomNamespace
-
-		throwError(className: string, error: any, replacement1?: any,
-		           replacement2?: any, replacement3?: any, replacement4?: any): void;
 	}
 
 	export class LegacyError extends Error {

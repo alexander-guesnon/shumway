@@ -27,6 +27,7 @@
 ///<reference path='flashlog.ts' />
 ///<reference path='remoting.ts' />
 ///<reference path='external.ts' />
+///<reference path='legacy/errors.ts' />
 ///<reference path='legacy/LegacyEntity.ts' />
 ///<reference path='legacy/ISecurityDomain.ts' />
 ///<reference path='legacy/ByteArray.ts' />

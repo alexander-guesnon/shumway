@@ -7,7 +7,9 @@ module Shumway.flash.statics {
 	}
 
 	export interface ISecurityDomain {
-		utils: IUtilsNamespace
+		utils: IUtilsNamespace;
+		throwError(className: string, error: any, replacement1?: any,
+		           replacement2?: any, replacement3?: any, replacement4?: any): void;
 	}
 
 	export interface IUtilsNamespace {

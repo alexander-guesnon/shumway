@@ -19,6 +19,16 @@ module Shumway.flash.statics {
 		}
 	}
 
+	export function checkParameterType(argument: any, name: string, type: LegacyClass) {
+		if (argument == null) {
+			type._sec.throwError('TypeError', Errors.NullPointerError, name);
+		}
+		if (!type.axIsType(argument)) {
+			type._sec.throwError('TypeError', Errors.CheckTypeFailedError, argument,
+				type.key);
+		}
+	}
+
 	export class LegacyClass<T extends LegacyEntity = any> extends LegacyEntity {
 		key: string = null;
 
@@ -62,6 +72,23 @@ module Shumway.flash.statics {
 
 		axIsType(obj: any): obj is T {
 			return obj instanceof (this.jsClass) && obj._sec === this._sec;
+		}
+
+		isSymbol(symbolClass: any)
+		{
+			return this === symbolClass;
+		}
+
+		isSymbolPrototype(symbolClass: any) {
+			return this.jsClass.prototype.isPrototypeOf(symbolClass.jsClass.jsClass);
+		}
+
+		FromUntyped(obj: any): T {
+			return null;
+		}
+
+		checkParameterType(argument: any, name: string) {
+			checkParameterType(argument, name, this.jsClass);
 		}
 	}
 }

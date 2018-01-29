@@ -111,6 +111,6 @@
 ///<reference path='statics/UtilsNamespace.ts'/>>
 ///<reference path='statics/GeomNamespace.ts'/>>
 ///<reference path='statics/DisplayNamespace.ts'/>>
-///<reference path='statics/errors.ts'/>>
+///<reference path='../base/legacy/errors.ts'/>>
 
 ///<reference path='link.ts' />
