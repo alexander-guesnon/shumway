@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module Shumway.flash {
+module Shumway {
   export interface ErrorInfo {
     code: number;
     message: string;
@@ -678,12 +678,9 @@ module Shumway.flash {
     return Array.prototype.slice.call(args, offset);
   }
 
-	export function checkNullParameter(argument: any, name: string, sec: statics.ISecurityDomain) {
+	export function checkNullParameter(argument: any, name: string, sec: flash.statics.ISecurityDomain) {
 		if (argument == undefined) {
 			sec.throwError('TypeError', Errors.NullPointerError, name);
 		}
 	}
 }
-
-// Errors is used in dataBuffer.ts, which is compiled way before this. Gotta break the cycle.
-Errors = Shumway.flash.Errors;

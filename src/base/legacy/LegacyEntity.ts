@@ -44,6 +44,7 @@ module Shumway.flash.statics {
 			const oldDomain = statics._currentDomain;
 			const cls = this.jsClass as any;
 
+
 			if (oldDomain === this._sec) {
 				if (args) {
 					return new (Function.prototype.bind.apply(cls, [cls].concat(args))) as any
@@ -57,7 +58,7 @@ module Shumway.flash.statics {
 				}
 				return new cls();
 			} catch (e) {
-				throwError("LegacyEntity.create", e);
+				this._sec.throwError("LegacyEntity.create", e);
 				return null;
 			} finally {
 				statics._currentDomain = oldDomain;
@@ -88,7 +89,7 @@ module Shumway.flash.statics {
 		}
 
 		checkParameterType(argument: any, name: string) {
-			checkParameterType(argument, name, this.jsClass);
+			checkParameterType(argument, name, this);
 		}
 	}
 }

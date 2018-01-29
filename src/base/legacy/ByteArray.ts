@@ -44,7 +44,7 @@ module Shumway {
 			}
 
 			readObject(arr: utils.ByteArray): any {
-				throwError(this.key, "Not implemented");
+				this._sec.throwError(this.key, "Not implemented");
 
 				// switch (this._objectEncoding) {
 				// 	case flash.net.ObjectEncoding.AMF0:
@@ -57,7 +57,7 @@ module Shumway {
 			}
 
 			writeObject(arr: utils.ByteArray, obj: any) {
-				throwError(this.key, "Not implemented");
+				this._sec.throwError(this.key, "Not implemented");
 
 				// switch (this._objectEncoding) {
 				// 	case flash.net.ObjectEncoding.AMF0:
