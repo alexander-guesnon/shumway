@@ -103,7 +103,7 @@
 ///<reference path='display/JointStyle.ts' />
 ///<reference path='display/CapsStyle.ts' />
 ///<reference path='display/LineScaleMode.ts' />
-///<reference path='display/GradientType.ts' />
+///<reference path='display/enums/GradientType.ts' />
 ///<reference path='display/SpreadMethod.ts' />
 ///<reference path='display/InterpolationMethod.ts' />
 ///<reference path='display/GraphicsBitmapFill.ts' />
@@ -127,15 +127,15 @@
 ///<reference path='display/MovieClipSoundStream.ts' />
 ///<reference path='display/Stage.ts' />
 
-///<reference path='display/ActionScriptVersion.ts' />
-///<reference path='display/BlendMode.ts' />
-///<reference path='display/ColorCorrection.ts' />
-///<reference path='display/ColorCorrectionSupport.ts' />
-///<reference path='display/FocusDirection.ts' />
+///<reference path='display/enums/ActionScriptVersion.ts' />
+///<reference path='display/enums/BlendMode.ts' />
+///<reference path='display/enums/ColorCorrection.ts' />
+///<reference path='display/enums/ColorCorrectionSupport.ts' />
+///<reference path='display/enums/FocusDirection.ts' />
 ///<reference path='display/FrameLabel.ts' />
 ///<reference path='display/BitmapData.ts' />
-///<reference path='display/BitmapDataChannel.ts' />
-///<reference path='display/BitmapEncodingColorSpace.ts' />
+///<reference path='display/enums/BitmapDataChannel.ts' />
+///<reference path='display/enums/BitmapEncodingColorSpace.ts' />
 ///<reference path='display/IBitmapDrawable.ts' />
 ///<reference path='display/JPEGEncoderOptions.ts' />
 // ///<reference path='display/JPEGXREncoderOptions.ts' />
