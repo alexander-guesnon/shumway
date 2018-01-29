@@ -15,30 +15,23 @@
  */
 // Class: GraphicsGradientFill
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class GraphicsGradientFill extends ASObject implements IGraphicsFill, IGraphicsData {
-
-		static classInitializer: any = null;
-
-		constructor(type: string = "linear", colors: ASArray = null, alphas: ASArray = null,
-		            ratios: ASArray = null, matrix: any = null, spreadMethod: any = "pad",
-		            interpolationMethod: string = "rgb", focalPointRatio: number = 0) {
+	export class GraphicsGradientFill extends LegacyEntity implements IGraphicsFill, IGraphicsData {
+		constructor(type = GradientType.LINEAR, colors: Array<number> = null, alphas: Array<number> = null,
+		            ratios: Array<number> = null, matrix: any = null, spreadMethod = SpreadMethod.PAD,
+		            interpolationMethod = InterpolationMethod.RGB, focalPointRatio: number = 0) {
 			super();
-			this.type = axCoerceString(type);
+			this.type = type;
 			this.colors = colors;
 			this.alphas = alphas;
 			this.ratios = ratios;
 			this.matrix = matrix;
 			this.spreadMethod = spreadMethod;
-			this.interpolationMethod = axCoerceString(interpolationMethod);
+			this.interpolationMethod = interpolationMethod;
 			this.focalPointRatio = +focalPointRatio;
 		}
-
-		colors: ASArray;
-		alphas: ASArray;
-		ratios: ASArray;
+		colors: Array<number>;
+		alphas: Array<number>
+		ratios: Array<number>
 		matrix: flash.geom.Matrix;
 		focalPointRatio: number;
 		type: string;

@@ -54,6 +54,12 @@ module Shumway.flash.statics {
 			}
 		}
 
+		createObject(): T {
+			let obj: any = Object.create(this.jsClass.prototype);
+			obj._sec = this._sec;
+			return obj;
+		}
+
 		axIsType(obj: any): obj is T {
 			return obj instanceof (this.jsClass) && obj._sec === this._sec;
 		}

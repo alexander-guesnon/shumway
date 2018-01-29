@@ -18,12 +18,6 @@ module Shumway.flash.display {
 	import assert = Debug.assert;
 
 	export class MorphShape extends flash.display.DisplayObject {
-		static classSymbols: string [] = null; // [];
-		static instanceSymbols: string [] = null; // [];
-
-		static axClass: typeof MorphShape;
-
-		static classInitializer: any = null;
 		_symbol: MorphShapeSymbol;
 
 		applySymbol() {
@@ -70,12 +64,12 @@ module Shumway.flash.display {
 		morphFillBounds: Bounds;
 		morphLineBounds: Bounds;
 
-		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
+		constructor(data: Timeline.SymbolData, sec: statics.ISecurityDomain) {
 			super(data, sec.flash.display.MorphShape.axClass);
 		}
 
 		static FromData(data: any, loaderInfo: flash.display.LoaderInfo): MorphShapeSymbol {
-			let symbol = new MorphShapeSymbol(data, loaderInfo.sec);
+			let symbol = new MorphShapeSymbol(data, loaderInfo._sec);
 			symbol._setBoundsFromData(data);
 			symbol.graphics = flash.display.Graphics.FromData(data, loaderInfo);
 			symbol.processRequires(data.require, loaderInfo);

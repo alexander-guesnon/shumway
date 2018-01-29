@@ -15,20 +15,7 @@
  */
 // Class: GraphicsShaderFill
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class GraphicsShaderFill extends ASObject implements IGraphicsFill, IGraphicsData {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["shader", "matrix"];
-
+	export class GraphicsShaderFill extends LegacyEntity implements IGraphicsFill, IGraphicsData {
 		constructor(shader: flash.display.Shader = null, matrix: flash.geom.Matrix = null) {
 			super();
 			this.shader = shader;

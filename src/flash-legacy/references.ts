@@ -36,7 +36,7 @@
 
 ///<reference path='display/DisplayObject.ts' />
 ///<reference path='display/Bitmap.ts' />
-///<reference path='display/Shape.ts' />
+///<reference path='display/graphics/Shape.ts' />
 ///<reference path='display/InteractiveObject.ts' />
 ///<reference path='display/SimpleButton.ts' />
 ///<reference path='display/DisplayObjectContainer.ts' />
@@ -46,22 +46,22 @@
 ///<reference path='display/enums/GradientType.ts' />
 ///<reference path='display/enums/SpreadMethod.ts' />
 ///<reference path='display/enums/InterpolationMethod.ts' />
-///<reference path='display/GraphicsBitmapFill.ts' />
-///<reference path='display/GraphicsEndFill.ts' />
-///<reference path='display/GraphicsGradientFill.ts' />
-///<reference path='display/GraphicsPath.ts' />
+///<reference path='display/graphics/GraphicsBitmapFill.ts' />
+///<reference path='display/graphics/GraphicsEndFill.ts' />
+///<reference path='display/graphics/GraphicsGradientFill.ts' />
+///<reference path='display/graphics/GraphicsPath.ts' />
 ///<reference path='display/enums/GraphicsPathCommand.ts' />
 ///<reference path='display/enums/GraphicsPathWinding.ts' />
 // ///<reference path='display/GraphicsShaderFill.ts' />
-///<reference path='display/GraphicsSolidFill.ts' />
-///<reference path='display/GraphicsStroke.ts' />
-///<reference path='display/GraphicsTrianglePath.ts' />
-///<reference path='display/IDrawCommand.ts' />
-///<reference path='display/IGraphicsData.ts' />
-///<reference path='display/IGraphicsFill.ts' />
-///<reference path='display/IGraphicsPath.ts' />
-///<reference path='display/IGraphicsStroke.ts' />
-///<reference path='display/Graphics.ts' />
+///<reference path='display/graphics/GraphicsSolidFill.ts' />
+///<reference path='display/graphics/GraphicsStroke.ts' />
+///<reference path='display/graphics/GraphicsTrianglePath.ts' />
+///<reference path='display/graphics/IDrawCommand.ts' />
+///<reference path='display/graphics/IGraphicsData.ts' />
+///<reference path='display/graphics/IGraphicsFill.ts' />
+///<reference path='display/graphics/IGraphicsPath.ts' />
+///<reference path='display/graphics/IGraphicsStroke.ts' />
+///<reference path='display/graphics/Graphics.ts' />
 ///<reference path='display/Sprite.ts' />
 ///<reference path='display/MovieClip.ts' />
 ///<reference path='display/MovieClipSoundStream.ts' />
@@ -81,7 +81,7 @@
 // ///<reference path='display/JPEGXREncoderOptions.ts' />
 ///<reference path='display/Loader.ts' />
 ///<reference path='display/LoaderInfo.ts' />
-///<reference path='display/MorphShape.ts' />
+///<reference path='display/graphics/MorphShape.ts' />
 ///<reference path='display/NativeMenu.ts' />
 ///<reference path='display/NativeMenuItem.ts' />
 ///<reference path='display/PNGEncoderOptions.ts' />
@@ -100,7 +100,7 @@
 ///<reference path='display/enums/StageDisplayState.ts' />
 ///<reference path='display/enums/StageQuality.ts' />
 ///<reference path='display/enums/StageScaleMode.ts' />
-///<reference path='display/TriangleCulling.ts' />
+///<reference path='display/enums/TriangleCulling.ts' />
 ///<reference path='display/AVM1Movie.ts' />
 
 ///<reference path='utils/Endian.ts' />
@@ -112,3 +112,5 @@
 ///<reference path='statics/GeomNamespace.ts'/>>
 ///<reference path='statics/DisplayNamespace.ts'/>>
 ///<reference path='statics/errors.ts'/>>
+
+///<reference path='link.ts' />

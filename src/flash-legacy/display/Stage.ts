@@ -136,7 +136,7 @@ module Shumway.flash.display {
 		set scaleMode(value: string) {
 			value = axCoerceString(value);
 			if (flash.display.StageScaleMode.toNumber(value) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "scaleMode");
+				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "scaleMode");
 			}
 			if (this._scaleMode !== value) {
 				this._isDirty = true;
@@ -354,7 +354,7 @@ module Shumway.flash.display {
 		}
 
 		set alpha(alpha: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get alpha(): number {
@@ -510,7 +510,7 @@ module Shumway.flash.display {
 		}
 
 		set name(value: string) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get mask(): DisplayObject {
@@ -518,7 +518,7 @@ module Shumway.flash.display {
 		}
 
 		set mask(value: DisplayObject) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get visible(): boolean {
@@ -526,7 +526,7 @@ module Shumway.flash.display {
 		}
 
 		set visible(value: boolean) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get x(): number {
@@ -534,7 +534,7 @@ module Shumway.flash.display {
 		}
 
 		set x(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get y(): number {
@@ -542,7 +542,7 @@ module Shumway.flash.display {
 		}
 
 		set y(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get z(): number {
@@ -550,7 +550,7 @@ module Shumway.flash.display {
 		}
 
 		set z(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get scaleX(): number {
@@ -558,7 +558,7 @@ module Shumway.flash.display {
 		}
 
 		set scaleX(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get scaleY(): number {
@@ -566,7 +566,7 @@ module Shumway.flash.display {
 		}
 
 		set scaleY(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get scaleZ(): number {
@@ -574,7 +574,7 @@ module Shumway.flash.display {
 		}
 
 		set scaleZ(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get rotation(): number {
@@ -582,7 +582,7 @@ module Shumway.flash.display {
 		}
 
 		set rotation(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get rotationX(): number {
@@ -590,7 +590,7 @@ module Shumway.flash.display {
 		}
 
 		set rotationX(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get rotationY(): number {
@@ -598,7 +598,7 @@ module Shumway.flash.display {
 		}
 
 		set rotationY(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get rotationZ(): number {
@@ -606,7 +606,7 @@ module Shumway.flash.display {
 		}
 
 		set rotationZ(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get cacheAsBitmap(): boolean {
@@ -614,7 +614,7 @@ module Shumway.flash.display {
 		}
 
 		set cacheAsBitmap(value: boolean) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get opaqueBackground(): any {
@@ -622,7 +622,7 @@ module Shumway.flash.display {
 		}
 
 		set opaqueBackground(value: any) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get scrollRect(): flash.geom.Rectangle {
@@ -630,7 +630,7 @@ module Shumway.flash.display {
 		}
 
 		set scrollRect(value: geom.Rectangle) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get filters() {
@@ -638,7 +638,7 @@ module Shumway.flash.display {
 		}
 
 		set filters(value: ASArray) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get blendMode(): string {
@@ -646,7 +646,7 @@ module Shumway.flash.display {
 		}
 
 		set blendMode(value: string) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get transform(): flash.geom.Transform {
@@ -654,7 +654,7 @@ module Shumway.flash.display {
 		}
 
 		set transform(value: geom.Transform) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get accessibilityProperties(): flash.accessibility.AccessibilityProperties {
@@ -662,7 +662,7 @@ module Shumway.flash.display {
 		}
 
 		set accessibilityProperties(value: accessibility.AccessibilityProperties) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get scale9Grid(): flash.geom.Rectangle {
@@ -670,7 +670,7 @@ module Shumway.flash.display {
 		}
 
 		set scale9Grid(value: geom.Rectangle) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get tabEnabled(): boolean {
@@ -678,7 +678,7 @@ module Shumway.flash.display {
 		}
 
 		set tabEnabled(value: boolean) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get tabIndex(): number /*int*/ {
@@ -686,7 +686,7 @@ module Shumway.flash.display {
 		}
 
 		set tabIndex(value: number) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get focusRect(): any {
@@ -694,7 +694,7 @@ module Shumway.flash.display {
 		}
 
 		set focusRect(value: any) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get mouseEnabled(): boolean {
@@ -702,7 +702,7 @@ module Shumway.flash.display {
 		}
 
 		set mouseEnabled(value: boolean) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get accessibilityImplementation(): flash.accessibility.AccessibilityImplementation {
@@ -710,11 +710,11 @@ module Shumway.flash.display {
 		}
 
 		set accessibilityImplementation(value: accessibility.AccessibilityImplementation) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 
 		get textSnapshot(): text.TextSnapshot {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 			return null;
 		}
 
@@ -723,7 +723,7 @@ module Shumway.flash.display {
 		}
 
 		set contextMenu(value: ui.ContextMenu) {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 	}
 }

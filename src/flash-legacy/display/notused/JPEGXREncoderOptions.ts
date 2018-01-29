@@ -15,24 +15,11 @@
  */
 // Class: JPEGXREncoderOptions
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class JPEGXREncoderOptions extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["quantization", "colorSpace", "trimFlexBits"];
-
+	export class JPEGXREncoderOptions extends LegacyEntity {
 		constructor(quantization: number /*uint*/ = 20, colorSpace: string = "auto", trimFlexBits: number /*uint*/ = 0) {
 			super();
 			this.quantization = quantization >>> 0;
-			this.colorSpace = axCoerceString(colorSpace);
+			this.colorSpace = colorSpace;
 			this.trimFlexBits = trimFlexBits >>> 0;
 		}
 

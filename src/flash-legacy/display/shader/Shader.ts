@@ -15,20 +15,7 @@
  */
 // Class: Shader
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class Shader extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["byteCode"];
-
+	export class Shader extends LegacyEntity {
 		constructor(code: flash.utils.ByteArray = null) {
 			super();
 			// TODO: coerce
@@ -38,8 +25,6 @@ module Shumway.flash.display {
 		// JS -> AS Bindings
 
 		byteCode: flash.utils.ByteArray;
-
-		// AS -> JS Bindings
 
 		// _byteCode: flash.utils.ByteArray;
 		// _data: flash.display.ShaderData;

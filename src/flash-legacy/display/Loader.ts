@@ -104,27 +104,27 @@ module Shumway.flash.display {
 		}
 
 		addChild(child: DisplayObject): DisplayObject {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 			return null;
 		}
 
 		addChildAt(child: DisplayObject, index: number): DisplayObject {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 			return null;
 		}
 
 		removeChild(child: DisplayObject): DisplayObject {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 			return null;
 		}
 
 		removeChildAt(index: number): DisplayObject {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 			return null;
 		}
 
 		setChildIndex(child: DisplayObject, index: number): void {
-			this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
+			this._sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 		}
 
 		// AS -> JS Bindings

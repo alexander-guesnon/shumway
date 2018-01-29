@@ -228,15 +228,15 @@ module Shumway.flash.display {
 
 			release || assert(child._hasFlags(DisplayObjectFlags.Constructed), "Child is not fully constructed.");
 			if (child === this) {
-				this.sec.throwError('ArgumentError', Errors.CantAddSelfError);
+				this._sec.throwError('ArgumentError', Errors.CantAddSelfError);
 			}
 			if (flashContext.display.DisplayObjectContainer.axIsType(child) &&
 				(<DisplayObjectContainer>child).contains(this)) {
-				this.sec.throwError('ArgumentError', Errors.CantAddParentError);
+				this._sec.throwError('ArgumentError', Errors.CantAddParentError);
 			}
 			let children = this._children;
 			if (index < 0 || index > children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 
 			if (child._parent === this) {
@@ -326,7 +326,7 @@ module Shumway.flash.display {
 
 			let children = this._children;
 			if (index < 0 || index >= children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 
 			let child = children[index];
@@ -354,7 +354,7 @@ module Shumway.flash.display {
 		getChildIndex(child: DisplayObject): number /*int*/ {
 			this._sec.display.DisplayObject.checkParameterType(child, "child");
 			if (child._parent !== this) {
-				this.sec.throwError('ArgumentError', Errors.NotAChildError);
+				this._sec.throwError('ArgumentError', Errors.NotAChildError);
 			}
 			return child._index;
 		}
@@ -367,10 +367,10 @@ module Shumway.flash.display {
 			this._sec.display.DisplayObject.checkParameterType(child, "child");
 			let children = this._children;
 			if (index < 0 || index >= children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			if (child._parent !== this) {
-				this.sec.throwError('ArgumentError', Errors.NotAChildError);
+				this._sec.throwError('ArgumentError', Errors.NotAChildError);
 			}
 			child._setDepth(-1);
 			let currentIndex = this.getChildIndex(child);
@@ -396,7 +396,7 @@ module Shumway.flash.display {
 
 			let children = this._children;
 			if (index < 0 || index >= children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 
 			let child = this._lookupChildByIndex(index, LookupChildOptions.DEFAULT);
@@ -685,7 +685,7 @@ module Shumway.flash.display {
 			let children = this._children;
 			if (index1 < 0 || index1 >= children.length ||
 				index2 < 0 || index2 >= children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 
 			// Always call _swapChildrenAt to make sure _setDepth(-1) is called on both children.
@@ -720,7 +720,7 @@ module Shumway.flash.display {
 			endIndex = endIndex | 0;
 
 			if (beginIndex < 0 || endIndex < 0 || endIndex < beginIndex || endIndex >= this._children.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 
 			let count = endIndex - beginIndex + 1;

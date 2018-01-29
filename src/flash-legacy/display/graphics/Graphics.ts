@@ -1248,18 +1248,18 @@ module Shumway.flash.display {
 		                          matrix: flash.geom.Matrix, repeat: boolean, smooth: boolean,
 		                          skipWrite: boolean): void {
 			if (isNullOrUndefined(bitmap)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'bitmap');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'bitmap');
 			}
 			const context = this._sec;
 
 			if (!(context.display.BitmapData.axIsType(bitmap))) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'bitmap',
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'bitmap',
 					'flash.display.BitmapData');
 			}
 			if (isNullOrUndefined(matrix)) {
 				matrix = context.geom.FROZEN_IDENTITY_MATRIX;;
 			} else if (!(this.sec.flash.geom.Matrix.axIsType(matrix))) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
 					'flash.geom.Matrix');
 			}
 			repeat = !!repeat;
@@ -1288,35 +1288,35 @@ module Shumway.flash.display {
 		                            interpolationMethod: string, focalPointRatio: number,
 		                            skipWrite: boolean): void {
 			if (isNullOrUndefined(type)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'type');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'type');
 			}
 			let gradientType = GradientType.toNumber(axCoerceString(type));
 			if (gradientType < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "type");
+				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "type");
 			}
 
 			if (isNullOrUndefined(colors_)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'colors');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'colors');
 			}
 			let arrayClass = this.sec.AXArray;
 			if (!arrayClass.axIsInstanceOf(colors_)) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'colors', 'Array');
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'colors', 'Array');
 			}
 			let colors: number[] = colors_.value;
 
 			if (isNullOrUndefined(alphas_)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'alphas');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'alphas');
 			}
 			if (!arrayClass.axIsInstanceOf(alphas_)) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'alphas', 'Array');
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'alphas', 'Array');
 			}
 			let alphas: number[] = alphas_.value;
 
 			if (isNullOrUndefined(ratios_)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'ratios');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'ratios');
 			}
 			if (!arrayClass.axIsInstanceOf(ratios_)) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'ratios', 'Array');
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'ratios', 'Array');
 			}
 			let ratios: number[] = ratios_.value;
 
@@ -1344,7 +1344,7 @@ module Shumway.flash.display {
 			if (isNullOrUndefined(matrix)) {
 				matrix = this._sec.geom.FROZEN_IDENTITY_MATRIX;
 			} else if (!(this.sec.flash.geom.Matrix.axIsType(matrix))) {
-				this.sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
+				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
 					'flash.geom.Matrix');
 			}
 

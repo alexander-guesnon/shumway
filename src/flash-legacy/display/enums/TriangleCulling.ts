@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Class: IDrawCommand
+// Class: TriangleCulling
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export interface IDrawCommand {
-
-		// JS -> AS Bindings
-
-
-		// AS -> JS Bindings
-
+	export enum TriangleCulling {
+		NONE = "none",
+		POSITIVE = "positive",
+		NEGATIVE = "negative",
 	}
 }

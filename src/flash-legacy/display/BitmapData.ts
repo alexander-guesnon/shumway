@@ -19,7 +19,6 @@ module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import swap32 = Shumway.IntegerUtilities.swap32;
 	import premultiplyARGB = Shumway.ColorUtilities.premultiplyARGB;
 	import unpremultiplyARGB = Shumway.ColorUtilities.unpremultiplyARGB;
@@ -33,7 +32,7 @@ module Shumway.flash.display {
 	 * data is unpacked, it is stored as premultiplied ARGB since it's what the SWF encodes bitmaps
 	 * as.  This way we don't have to do unecessary byte conversions.
 	 */
-	export class BitmapData extends ASObject implements IBitmapDrawable, Shumway.Remoting.IRemotable {
+	export class BitmapData extends LegacyEntity implements IBitmapDrawable, Shumway.Remoting.IRemotable {
 
 		static axClass: typeof BitmapData;
 
@@ -79,9 +78,9 @@ module Shumway.flash.display {
 			if (width > BitmapData.MAXIMUM_WIDTH || width <= 0 ||
 				height > BitmapData.MAXIMUM_HEIGHT || height <= 0 ||
 				width * height > BitmapData.MAXIMUM_DIMENSION) {
-				this.sec.throwError('ArgumentError', Errors.InvalidBitmapData);
+				this._sec.throwError('ArgumentError', Errors.InvalidBitmapData);
 			}
-			this._rect = new this.sec.flash.geom.Rectangle(0, 0, width, height);
+			this._rect = this._sec.flash.geom.Rectangle.create([0, 0, width, height]);
 			this._transparent = transparent;
 			this._id = flash.display.DisplayObject.getNextSyncID();
 			this._setData(new Uint8Array(width * height * 4), ImageType.PremultipliedAlphaARGB);
@@ -285,7 +284,7 @@ module Shumway.flash.display {
 		}
 
 		clone(): flash.display.BitmapData {
-			let bd: BitmapData = this._sec.display.BitmapData.objectCreate();
+			let bd: BitmapData = this._sec.display.BitmapData.createObject();
 			bd._rect = this._rect.clone();
 			bd._transparent = this._transparent;
 			bd._solidFillColorPBGRA = this._solidFillColorPBGRA;
@@ -577,12 +576,11 @@ module Shumway.flash.display {
 		}
 
 		draw(source: flash.display.IBitmapDrawable, matrix: flash.geom.Matrix = null,
-		     colorTransform: flash.geom.ColorTransform = null, blendMode: string = null,
+		     colorTransform: flash.geom.ColorTransform = null, blendMode: BlendMode = null,
 		     clipRect: flash.geom.Rectangle = null, smoothing: boolean = false): void {
-			blendMode = axCoerceString(blendMode);
 			smoothing = !!smoothing;
 			release || somewhatImplemented("public flash.display.BitmapData::draw");
-			let serializer: IBitmapDataSerializer = this.sec.player;
+			let serializer: IBitmapDataSerializer = this._sec.player;
 			if (matrix) {
 				matrix = matrix.clone().toTwipsInPlace();
 			}
@@ -591,10 +589,9 @@ module Shumway.flash.display {
 		}
 
 		drawWithQuality(source: flash.display.IBitmapDrawable, matrix: flash.geom.Matrix = null,
-		                colorTransform: flash.geom.ColorTransform = null, blendMode: string = null,
+		                colorTransform: flash.geom.ColorTransform = null, blendMode: BlendMode = null,
 		                clipRect: flash.geom.Rectangle = null, smoothing: boolean = false,
-		                quality: string = null): void {
-			quality = axCoerceString(quality);
+		                quality: StageQuality = null): void {
 			release || somewhatImplemented("public flash.display.BitmapData::drawWithQuality");
 			this.draw(source, matrix, colorTransform, blendMode, clipRect, smoothing);
 		}

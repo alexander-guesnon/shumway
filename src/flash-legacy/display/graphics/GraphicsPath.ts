@@ -15,31 +15,19 @@
  */
 // Class: GraphicsPath
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class GraphicsPath extends ASObject implements IGraphicsPath, IGraphicsData {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["commands", "data", "_winding", "winding", "winding", "moveTo", "lineTo", "curveTo", "cubicCurveTo", "wideLineTo", "wideMoveTo", "ensureLists"];
-
-		constructor(commands: Int32Vector = null, data: Int32Vector = null, winding: string = "evenOdd") {
+	export class GraphicsPath extends LegacyEntity implements IGraphicsPath, IGraphicsData {
+		// @ivanpopelyshev: Int32Vector
+		constructor(commands: ArrayLike<number> = null, data: ArrayLike<number> = null, winding: string = "evenOdd") {
 			super();
 			this.commands = commands;
 			this.data = data;
-			this.winding = axCoerceString(winding);
+			this.winding = winding;
 		}
 
 		// JS -> AS Bindings
 
-		commands: Int32Vector;
-		data: Int32Vector;
+		commands: ArrayLike<number>;
+		data: ArrayLike<number>;
 		_winding: string;
 		winding: string;
 		moveTo: (x: number, y: number) => void;

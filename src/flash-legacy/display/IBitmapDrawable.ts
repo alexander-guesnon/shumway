@@ -15,15 +15,7 @@
  */
 // Class: IBitmapDrawable
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
 	export interface IBitmapDrawable {
-
-		// JS -> AS Bindings
-
-
-		// AS -> JS Bindings
 
 	}
 }

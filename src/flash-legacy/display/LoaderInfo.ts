@@ -35,7 +35,7 @@ module Shumway.flash.display {
 		constructor(token: Object) {
 			super();
 			if (token !== this._sec.loader.CtorToken) {
-				this.sec.throwError('ArgumentError', Errors.CantInstantiateError, 'LoaderInfo$');
+				this._sec.throwError('ArgumentError', Errors.CantInstantiateError, 'LoaderInfo$');
 			}
 			this._loader = null;
 			this._loaderUrl = '';
@@ -160,20 +160,20 @@ module Shumway.flash.display {
 
 		get swfVersion(): number /*uint*/ {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			if (!(this._file instanceof SWFFile)) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotSWFError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotSWFError);
 			}
 			return this._file.swfVersion;
 		}
 
 		get actionScriptVersion(): number /*uint*/ {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			if (!(this._file instanceof SWFFile)) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotSWFError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotSWFError);
 			}
 			return this._file.useAVM1 ?
 				ActionScriptVersion.ACTIONSCRIPT2 :
@@ -182,24 +182,24 @@ module Shumway.flash.display {
 
 		get frameRate(): number {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			if (!(this._file instanceof SWFFile)) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotSWFError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotSWFError);
 			}
 			return this._file.frameRate;
 		}
 
 		get width(): number /*int*/ {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			return (this._width / 20) | 0;
 		}
 
 		get height(): number /*int*/ {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			return (this._height / 20) | 0;
 		}
@@ -243,7 +243,7 @@ module Shumway.flash.display {
 
 		get sameDomain(): boolean {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			release || somewhatImplemented("public flash.display.LoaderInfo::get sameDomain");
 			return true;
@@ -251,7 +251,7 @@ module Shumway.flash.display {
 
 		get childAllowsParent(): boolean {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			release || somewhatImplemented("public flash.display.LoaderInfo::get childAllowsParent");
 			return true;
@@ -259,7 +259,7 @@ module Shumway.flash.display {
 
 		get parentAllowsChild(): boolean {
 			if (!this._file) {
-				this.sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
+				this._sec.throwError('Error', Errors.LoadingObjectNotInitializedError);
 			}
 			release || somewhatImplemented("public flash.display.LoaderInfo::get parentAllowsChild");
 			return true;
@@ -302,7 +302,7 @@ module Shumway.flash.display {
 		// TODO: activate this override while keeping the ability to dispatch events from TS.
 		//dispatchEvent(event: events.Event): boolean {
 		//  // TODO: this should be `IllegalOperationError`, but we don't include that class.
-		//  this.sec.throwError('Error', Errors.InvalidLoaderInfoMethodError);
+		//  this._sec.throwError('Error', Errors.InvalidLoaderInfoMethodError);
 		//  return false;
 		//}
 

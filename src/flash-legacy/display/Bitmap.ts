@@ -79,7 +79,7 @@ module Shumway.flash.display {
 
 		set pixelSnapping(value: string) {
 			if (PixelSnapping.toNumber(value) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "pixelSnapping");
+				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "pixelSnapping");
 			}
 			this._pixelSnapping = axCoerceString(value);
 		}

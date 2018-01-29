@@ -1443,7 +1443,7 @@ module Shumway.flash.display {
 			if (this._hasFlags(DisplayObjectFlags.OwnedByTimeline)) {
 				// In AVM2, setting the name of a timline-placed DisplayObject throws.
 				if (this._symbol && !this._symbol.isAVM1Object) { // fail only in AVM2
-					this.sec.throwError('IllegalOperationError', Errors.TimelineObjectNameSealedError);
+					this._sec.throwError('IllegalOperationError', Errors.TimelineObjectNameSealedError);
 				}
 				return;
 			}
@@ -1481,7 +1481,7 @@ module Shumway.flash.display {
 				return;
 			}
 			if (BlendMode.toNumber(value) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "blendMode");
+				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "blendMode");
 			}
 			this._blendMode = value;
 			this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyMiscellaneousProperties);
@@ -1550,7 +1550,7 @@ module Shumway.flash.display {
 				let bitmapFilterClass = this._sec.filters.BitmapFilter;
 				this._filters = value.map(function (x: flash.filters.BitmapFilter) {
 					if (!bitmapFilterClass.axIsType(x)) {
-						this.sec.throwError('TypeError', Errors.ParamTypeError, '0', 'Filter');
+						this._sec.throwError('TypeError', Errors.ParamTypeError, '0', 'Filter');
 					}
 					return x.clone();
 				});

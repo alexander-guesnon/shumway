@@ -485,7 +485,7 @@ module Shumway.flash.display {
 					if (legacyMode) {
 						return undefined; // noop for SWF9 and below
 					}
-					this.sec.throwError('ArgumentError', Errors.SceneNotFoundError, sceneName);
+					this._sec.throwError('ArgumentError', Errors.SceneNotFoundError, sceneName);
 				}
 			} else {
 				scene = this._sceneForFrameIndex(this._currentFrame);
@@ -501,7 +501,7 @@ module Shumway.flash.display {
 					if (legacyMode) {
 						return undefined; // noop for SWF9 and below
 					}
-					this.sec.throwError('ArgumentError', Errors.FrameLabelNotFoundError, frame,
+					this._sec.throwError('ArgumentError', Errors.FrameLabelNotFoundError, frame,
 						sceneName);
 				}
 				frameNum = label.frame;
@@ -799,7 +799,7 @@ module Shumway.flash.display {
 			// - the `sceneName` argument is coerced first
 			// - the `frame` argument is coerced to string, but `undefined` results in `"null"`
 			if (arguments.length === 0 || arguments.length > 2) {
-				this.sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
+				this._sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
 					'flash.display::MovieClip/gotoAndPlay()', 1,
 					arguments.length);
 			}
@@ -812,7 +812,7 @@ module Shumway.flash.display {
 		gotoAndStop(frame: any, scene: string = null): void {
 			// See comment in gotoAndPlay for an explanation of the arguments handling stuff.
 			if (arguments.length === 0 || arguments.length > 2) {
-				this.sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
+				this._sec.throwError('ArgumentError', Errors.WrongArgumentCountError,
 					'flash.display::MovieClip/gotoAndPlay()', 1,
 					arguments.length);
 			}
@@ -836,7 +836,7 @@ module Shumway.flash.display {
 			// frameIndex is in range 0..totalFrames-1
 			let numArgs = arguments.length;
 			if (numArgs & 1) {
-				this.sec.throwError('ArgumentError', Errors.TooFewArgumentsError, numArgs,
+				this._sec.throwError('ArgumentError', Errors.TooFewArgumentsError, numArgs,
 					numArgs + 1);
 			}
 			let frameScripts = this._frameScripts;

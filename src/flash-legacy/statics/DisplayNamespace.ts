@@ -130,7 +130,7 @@ module Shumway.flash.statics {
 				// Of course, nothing guarantees that there isn't content that accidentally does, so it'd
 				// be nice to eventually get this right.
 				enterTimeline("DisplayObject.EnqueueFrameScripts");
-				let displayObjectContainerClass = this.context.sec.flash.display.DisplayObjectContainer.axClass;
+				let displayObjectContainerClass = this.DisplayObjectContainer;
 				this._advancableInstances.forEach(function (value) {
 					let container: any = value;
 					if (displayObjectContainerClass.axIsType(container) && !container.parent) {
@@ -255,5 +255,4 @@ module Shumway.flash.statics {
 			return i >= b.precedence.length ? 1 : a.precedence[i] - b.precedence[i];
 		}
 	}
-}
 }
