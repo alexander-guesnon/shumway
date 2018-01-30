@@ -15,16 +15,10 @@
  */
 // Class: TextFormat
 module Shumway.flash.text {
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import roundHalfEven = Shumway.NumberUtilities.roundHalfEven;
 	import notImplemented = Shumway.Debug.notImplemented;
 
-	export class TextFormat extends ASObject {
-
-		static classInitializer: any = null;
-		static classSymbols: string [] = null; // [];
-		static instanceSymbols: string [] = null; // [];
-
+	export class TextFormat extends LegacyEntity {
 		constructor(font: string = null, size: Object = null, color: Object = null,
 		            bold: Object = null, italic: Object = null, underline: Object = null,
 		            url: string = null, target: string = null, align: string = null,
@@ -70,7 +64,7 @@ module Shumway.flash.text {
 		private _letterSpacing: Object;
 		private _rightMargin: Object;
 		private _size: Object;
-		private _tabStops: any [];
+		private _tabStops: ArrayLike<number>;
 		private _target: string;
 		private _underline: Object;
 		private _url: string;
@@ -81,7 +75,6 @@ module Shumway.flash.text {
 		}
 
 		set align(value: string) {
-			value = axCoerceString(value);
 			//if (TextFormatAlign.toNumber(value) < 0) {
 			//  this.sec.throwError("ArgumentError", Errors.InvalidEnumError, "align");
 			//}
@@ -125,7 +118,7 @@ module Shumway.flash.text {
 		}
 
 		set display(value: string) {
-			this._display = axCoerceString(value);
+			this._display = value;
 		}
 
 		get font(): string {
@@ -133,7 +126,7 @@ module Shumway.flash.text {
 		}
 
 		set font(value: string) {
-			this._font = axCoerceString(value);
+			this._font = value;
 		}
 
 		get style(): string {
@@ -212,19 +205,19 @@ module Shumway.flash.text {
 			this._size = TextFormat.coerceNumber(value);
 		}
 
-		get tabStops(): ASArray {
-			return this.sec.createArrayUnsafe(this._tabStops);
+		get tabStops(): ArrayLike<number> {
+			return this._tabStops;
 		}
 
-		set tabStops(value: ASArray) {
+		set tabStops(value: ArrayLike<number>) {
 			if (value == null) {
 				this._tabStops = null;
 				return;
 			}
-			if (!this.sec.AXArray.axIsType(value)) {
-				this.sec.throwError("ArgumentError", Errors.CheckTypeFailedError, value, 'Array');
+			if (!(value instanceof Array)) {
+				this._sec.throwError("ArgumentError", Errors.CheckTypeFailedError, value, 'Array');
 			}
-			this._tabStops = value.value;
+			this._tabStops = value;
 		}
 
 		get target(): string {
@@ -232,7 +225,7 @@ module Shumway.flash.text {
 		}
 
 		set target(value: string) {
-			this._target = axCoerceString(value);
+			this._target = value;
 		}
 
 		get underline(): Object {
@@ -248,7 +241,7 @@ module Shumway.flash.text {
 		}
 
 		set url(value: string) {
-			this._url = axCoerceString(value);
+			this._url = value;
 		}
 
 		/**
@@ -282,7 +275,7 @@ module Shumway.flash.text {
 		}
 
 		clone(): TextFormat {
-			let tf = new this.sec.flash.text.TextFormat(
+			let tf = this._sec.text.TextFormat.create([
 				this._font,
 				this._size,
 				this._color,
@@ -296,7 +289,7 @@ module Shumway.flash.text {
 				this._rightMargin,
 				this._indent,
 				this._leading
-			);
+			]);
 			tf._blockIndent = this._blockIndent;
 			tf._bullet = this._bullet;
 			tf._display = this._display;
@@ -464,7 +457,7 @@ module Shumway.flash.text {
 				// When parsing colors, whitespace is trimmed away, and all numbers are accepted, as long
 				// as they make up the full string after the "#", without any non-numeric pre- or suffix.
 				// This implementation is somewhat atrocious, but it should be reasonably fast and works.
-				let colorStr = axCoerceString(v).trim().toLowerCase();
+				let colorStr = v.trim().toLowerCase();
 				if (colorStr[0] === '#') {
 					let numericPart = colorStr.substr(1);
 					while (numericPart[0] === '0') {

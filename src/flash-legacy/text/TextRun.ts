@@ -15,10 +15,7 @@
  */
 // Class: TextRun
 module Shumway.flash.text {
-	export class TextRun extends ASObject {
-
-		static classInitializer: any = null;
-
+	export class TextRun extends LegacyEntity {
 		constructor(beginIndex: number /*int*/, endIndex: number /*int*/,
 		            textFormat: flash.text.TextFormat) {
 			super();
@@ -56,8 +53,8 @@ module Shumway.flash.text {
 		}
 
 		clone(): TextRun {
-			return new this.sec.flash.text.TextRun(this.beginIndex, this.endIndex,
-				this.textFormat.clone());
+			return this._sec.text.TextRun.create([this.beginIndex, this.endIndex,
+				this.textFormat.clone()]);
 		}
 
 		containsIndex(index: number): boolean {

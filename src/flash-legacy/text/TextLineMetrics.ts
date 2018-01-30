@@ -15,12 +15,7 @@
  */
 // Class: TextLineMetrics
 module Shumway.flash.text {
-	export class TextLineMetrics extends ASObject {
-
-		static classInitializer: any = null;
-		static classSymbols: string [] = null;
-		static instanceSymbols: string [] = null; // ["x", "width", "height", "ascent", "descent", "leading"];
-
+	export class TextLineMetrics extends LegacyEntity {
 		constructor(x: number, width: number, height: number, ascent: number, descent: number,
 		            leading: number) {
 			super();

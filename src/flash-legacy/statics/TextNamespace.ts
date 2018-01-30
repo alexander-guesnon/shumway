@@ -11,6 +11,8 @@ module Shumway.flash.statics {
 
 			this.StaticText = new LegacyClass(text.StaticText);
 			this.Font = new LegacyClass(text.Font);
+			this.TextRun = new LegacyClass(text.TextRun);
+			this.TextFormat = new LegacyClass(text.TextFormat);
 
 			this._fonts = [];
 			this._fontsBySymbolId = Shumway.ObjectUtilities.createMap<Font>();
@@ -41,6 +43,8 @@ module Shumway.flash.statics {
 
 		Font: LegacyClass<text.Font>;
 		StaticText: LegacyClass<text.StaticText>;
+		TextRun: LegacyClass<text.TextRun>;
+		TextFormat: LegacyClass<text.TextFormat>;
 
 		// Font statics
 
