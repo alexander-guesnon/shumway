@@ -3,6 +3,7 @@ module Shumway.flash.statics {
 		events: EventsNamespace
 		display: DisplayNamespace
 		geom: GeomNamespace
+		text: TextNamespace
 	}
 
 	export class LegacyError extends Error {
@@ -22,6 +23,7 @@ module Shumway.flash.statics {
 			this.utils = new UtilsNamespace();
 			this.display = new DisplayNamespace();
 			this.geom = new GeomNamespace();
+			this.text = new TextNamespace();
 
 			if (oldDomain) {
 				statics._currentDomain = oldDomain;
@@ -32,6 +34,7 @@ module Shumway.flash.statics {
 		utils: UtilsNamespace;
 		display: DisplayNamespace;
 		geom: GeomNamespace;
+		text: TextNamespace;
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any) {

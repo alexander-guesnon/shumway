@@ -103,6 +103,29 @@
 ///<reference path='display/enums/TriangleCulling.ts' />
 ///<reference path='display/AVM1Movie.ts' />
 
+///<reference path='text/AntiAliasType.ts' />
+// ///<reference path='text/CSMSettings.ts' />
+///<reference path='text/FontStyle.ts' />
+///<reference path='text/FontType.ts' />
+///<reference path='text/Font.ts' />
+///<reference path='text/GridFitType.ts' />
+///<reference path='text/StaticText.ts' />
+///<reference path='text/StyleSheet.ts' />
+// ///<reference path='text/TextColorType.ts' />
+///<reference path='text/TextDisplayMode.ts' />
+// ///<reference path='text/TextExtent.ts' />
+///<reference path='text/TextField.ts' />
+///<reference path='text/TextFieldAutoSize.ts' />
+///<reference path='text/TextFieldType.ts' />
+///<reference path='text/TextFormat.ts' />
+///<reference path='text/TextFormatAlign.ts' />
+///<reference path='text/TextFormatDisplay.ts' />
+///<reference path='text/TextInteractionMode.ts' />
+///<reference path='text/TextLineMetrics.ts' />
+// ///<reference path='text/TextRenderer.ts' />
+///<reference path='text/TextRun.ts' />
+///<reference path='text/TextSnapshot.ts' />
+
 ///<reference path='utils/Endian.ts' />
 ///<reference path='utils/IExternalizable.ts' />
 
@@ -111,6 +134,7 @@
 ///<reference path='statics/UtilsNamespace.ts'/>>
 ///<reference path='statics/GeomNamespace.ts'/>>
 ///<reference path='statics/DisplayNamespace.ts'/>>
+///<reference path='statics/TextNamespace.ts'/>>
 ///<reference path='../base/legacy/errors.ts'/>>
 
 ///<reference path='link.ts' />
