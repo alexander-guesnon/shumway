@@ -381,14 +381,14 @@ module Shumway.flash.display {
 				bitmapDataClass.isSymbolPrototype(symbolClass)) {
 				symbolClass = this.sec.flash.display.Bitmap.axClass;
 			}
-			let instance: DisplayObject = constructClassFromSymbol(symbol, symbolClass);
+			let instance: DisplayObject = system.constructClassFromSymbol(symbol, symbolClass);
 			if (placeObjectTag.flags & PlaceObjectFlags.HasName) {
 				instance._name = placeObjectTag.name;
 			}
 			instance._setFlags(DisplayObjectFlags.AnimatedByTimeline);
 			instance._animate(placeObjectTag);
 			if (callConstructor) {
-				(<AXObject><any>instance).axInitializer();
+				instance.constructor();
 			}
 			return instance;
 		}
@@ -451,18 +451,18 @@ module Shumway.flash.display {
 			this._lineBounds = new Bounds(0, 0, 0, 0);
 			this._clipDepth = -1;
 
-			let matrixClass = this.sec.flash.geom.Matrix;
-			this._concatenatedMatrix = new matrixClass();
-			this._invertedConcatenatedMatrix = new matrixClass();
-			this._matrix = new matrixClass();
-			this._invertedMatrix = new matrixClass();
+			let matrixClass = this._sec.geom.Matrix;
+			this._concatenatedMatrix = matrixClass.create();
+			this._invertedConcatenatedMatrix = matrixClass.create();
+			this._matrix = matrixClass.create();
+			this._invertedMatrix = matrixClass.create();
 			this._matrix3D = null;
 			this._perspectiveProjectionFOV = geom.DefaultPerspectiveProjection.FOV;
 			this._perspectiveProjectionCenterX = geom.DefaultPerspectiveProjection.CenterX;
 			this._perspectiveProjectionCenterY = geom.DefaultPerspectiveProjection.CenterY;
-			let colorTransformClass = this.sec.flash.geom.ColorTransform;
-			this._colorTransform = new colorTransformClass();
-			this._concatenatedColorTransform = new colorTransformClass();
+			let colorTransformClass = this._sec.geom.ColorTransform;
+			this._colorTransform = colorTransformClass.create();
+			this._concatenatedColorTransform = colorTransformClass.create();
 
 			this._depth = -1;
 			this._ratio = 0;
@@ -648,7 +648,7 @@ module Shumway.flash.display {
 
 		_width: number;
 		_height: number;
-		_opaqueBackground: ASObject;
+		_opaqueBackground: any;
 		_scrollRect: flash.geom.Rectangle;
 		_filters: any [];
 		_blendMode: string;
@@ -882,7 +882,7 @@ module Shumway.flash.display {
 				}
 				let m = ancestor && !stageClass.axIsType(ancestor) ?
 					ancestor._concatenatedColorTransform.clone() :
-					new this.sec.flash.geom.ColorTransform();
+					new this._sec.geom.ColorTransform();
 				while (i >= 0) {
 					ancestor = path[i--];
 					release || assert(ancestor._hasFlags(DisplayObjectFlags.InvalidConcatenatedColorTransform));
