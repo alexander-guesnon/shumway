@@ -35,7 +35,7 @@ module Shumway {
 		}
 	}
 
-	export module flash.statics {
+	export module flash.system {
 		export class ByteArrayClass extends LegacyClass<utils.ByteArray> {
 			key = "flash.utils.ByteArray";
 

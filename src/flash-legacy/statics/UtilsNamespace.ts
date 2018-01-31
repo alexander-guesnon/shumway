@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	export class UtilsNamespace extends LegacyNamespace implements UtilsNamespace {
 		constructor() {
 			super();

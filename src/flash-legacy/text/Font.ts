@@ -133,7 +133,7 @@ module Shumway.flash.text {
 		metrics: any;
 		syncId: number;
 
-		constructor(data: Timeline.SymbolData, sec: statics.ISecurityDomain) {
+		constructor(data: Timeline.SymbolData, sec: system.ISecurityDomain) {
 			super(data, sec.text.Font);
 		}
 

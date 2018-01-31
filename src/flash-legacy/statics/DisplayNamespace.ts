@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	import assert = Shumway.Debug.assert;
 
 	import Stage = display.Stage;
@@ -41,9 +41,9 @@ module Shumway.flash.statics {
 		Bitmap: LegacyClass<display.Bitmap>;
 		Sprite: LegacyClass<display.Sprite>;
 
-		//Statics
+		//system
 
-		// DisplayObject statics
+		// DisplayObject system
 
 		_broadcastFrameEvent(type: string): void {
 			const events = this._sec.events;
@@ -158,7 +158,7 @@ module Shumway.flash.statics {
 			}
 		}
 
-		// MOVIE CLIP STATICS
+		// MOVIE CLIP system
 
 		_callQueue: MovieClip [];
 		frameNavigationModel: FrameNavigationModel;

@@ -16,6 +16,7 @@
 
 ///<reference path='module.ts' />
 ///<reference path='settings.ts' />
+///<reference path='symbol.ts' />
 
 ///<reference path='geom/Matrix.ts' />
 ///<reference path='geom/Matrix3D.ts' />
@@ -103,6 +104,12 @@
 ///<reference path='display/enums/TriangleCulling.ts' />
 ///<reference path='display/AVM1Movie.ts' />
 
+///<reference path='system/ILoaderInfo.ts' />
+///<reference path='system/ApplicationDomain.ts' />
+///<reference path='system/ImageDecodingPolicy.ts' />
+///<reference path='system/LoaderContext.ts' />
+///<reference path='system/JPEGLoaderContext.ts' />
+
 ///<reference path='text/AntiAliasType.ts' />
 // ///<reference path='text/CSMSettings.ts' />
 ///<reference path='text/FontStyle.ts' />
@@ -129,12 +136,12 @@
 ///<reference path='utils/Endian.ts' />
 ///<reference path='utils/IExternalizable.ts' />
 
-///<reference path='statics/SecurityDomain.ts'/>>
+///<reference path='system/SecurityDomain.ts'/>>
 ///<reference path='statics/EventsNamespace.ts'/>>
 ///<reference path='statics/UtilsNamespace.ts'/>>
 ///<reference path='statics/GeomNamespace.ts'/>>
 ///<reference path='statics/DisplayNamespace.ts'/>>
+///<reference path='statics/SystemNamespace.ts'/>>
 ///<reference path='statics/TextNamespace.ts'/>>
-///<reference path='../base/legacy/errors.ts'/>>
 
 ///<reference path='link.ts' />

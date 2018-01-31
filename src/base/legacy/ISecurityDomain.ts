@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 
 	export let _currentDomain: ISecurityDomain = null;
 

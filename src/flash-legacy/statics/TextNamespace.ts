@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	import assert = Shumway.Debug.assert;
 	import Font = text.Font;
 	import FontSymbol = text.FontSymbol;
@@ -46,7 +46,7 @@ module Shumway.flash.statics {
 		TextRun: LegacyClass<text.TextRun>;
 		TextFormat: LegacyClass<text.TextFormat>;
 
-		// Font statics
+		// Font system
 
 		_fonts: Font[];
 		_fontsBySymbolId: Shumway.MapObject<Font>;

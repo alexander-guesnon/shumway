@@ -32,7 +32,7 @@ module Shumway.flash.geom {
 	]);
 
 	function getRotationMatrix(theta: number, u: number, v: number, w: number,
-	                           a: number, b: number, c: number, sec: statics.ISecurityDomain) {
+	                           a: number, b: number, c: number, sec: system.ISecurityDomain) {
 		// http://inside.mines.edu/~gmurray/ArbitraryAxisRotation/
 		let u2 = u * u, v2 = v * v, w2 = w * w;
 		let L2 = u2 + v2 + w2, L = Math.sqrt(L2);

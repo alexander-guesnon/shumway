@@ -16,10 +16,10 @@
 
 import flashPackage = Shumway.AVMX.AS.flash;
 
-namespace Shumway.flash.statics  {
+namespace Shumway.flash.system  {
 
 	interface ISecurityDomain {
-		context: flashPackage.statics.FlashContext;
+		context: flashPackage.system.FlashContext;
 		player: any;//Shumway.Player.SWFPlayer;
 	}
 

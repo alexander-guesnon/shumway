@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 
 	// static fabric
 	export class PerspectiveProjectionClass extends LegacyClass<geom.PerspectiveProjection> {

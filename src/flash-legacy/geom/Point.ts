@@ -51,7 +51,7 @@ module Shumway.flash.geom {
 		}
 
 		public static interpolate(p1: Point, p2: Point, f: number): Point {
-			return statics._currentDomain.geom.Point.interpolate(p1, p2, f);
+			return system._currentDomain.geom.Point.interpolate(p1, p2, f);
 		}
 
 		public static distance(p1: Point, p2: Point): number {
@@ -61,7 +61,7 @@ module Shumway.flash.geom {
 		}
 
 		public static polar(length: number, angle: number): Point {
-			return statics._currentDomain.geom.Point.polar(length, angle);
+			return system._currentDomain.geom.Point.polar(length, angle);
 		}
 
 		public clone(): Point {

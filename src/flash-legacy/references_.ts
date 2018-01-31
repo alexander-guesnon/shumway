@@ -406,6 +406,6 @@
 // ///<reference path='linker.ts' />
 ///<reference path='link.ts' />
 
-///<reference path='statics/SecurityDomain.ts'/>>
-///<reference path='statics/EventsNamespace.ts'/>>
-///<reference path='statics/UtilsNamespace.ts'/>>
+///<reference path='system/SecurityDomain.ts'/>>
+///<reference path='system/EventsNamespace.ts'/>>
+///<reference path='system/UtilsNamespace.ts'/>>

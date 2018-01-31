@@ -1,14 +1,14 @@
 module Shumway.flash {
 	export class LegacyEntity {
-		_sec: statics.ISecurityDomain;
+		_sec: system.ISecurityDomain;
 
 		constructor() {
-			this._sec = statics._currentDomain;
+			this._sec = system._currentDomain;
 		}
 	}
 }
 
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	export class LegacyNamespace extends LegacyEntity {
 		key: string = null;
 
@@ -41,7 +41,7 @@ module Shumway.flash.statics {
 
 		create(args?: Array<any>): T {
 			// new (Function.prototype.bind.apply(cls, [cls].concat(args)));
-			const oldDomain = statics._currentDomain;
+			const oldDomain = system._currentDomain;
 			const cls = this.jsClass as any;
 
 
@@ -51,7 +51,7 @@ module Shumway.flash.statics {
 				}
 				return new cls();
 			}
-			statics._currentDomain = this._sec;
+			system._currentDomain = this._sec;
 			try {
 				if (args) {
 					return new (Function.prototype.bind.apply(cls, [cls].concat(args))) as any
@@ -61,7 +61,7 @@ module Shumway.flash.statics {
 				this._sec.throwError("LegacyEntity.create", e);
 				return null;
 			} finally {
-				statics._currentDomain = oldDomain;
+				system._currentDomain = oldDomain;
 			}
 		}
 

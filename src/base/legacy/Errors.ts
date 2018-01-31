@@ -678,7 +678,7 @@ module Shumway {
     return Array.prototype.slice.call(args, offset);
   }
 
-	export function checkNullParameter(argument: any, name: string, sec: flash.statics.ISecurityDomain) {
+	export function checkNullParameter(argument: any, name: string, sec: flash.system.ISecurityDomain) {
 		if (argument == undefined) {
 			sec.throwError('TypeError', Errors.NullPointerError, name);
 		}

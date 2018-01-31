@@ -1,9 +1,10 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	export interface ISecurityDomain {
 		events: EventsNamespace
 		display: DisplayNamespace
 		geom: GeomNamespace
 		text: TextNamespace
+		system: SystemNamespace
 	}
 
 	export class LegacyError extends Error {
@@ -14,19 +15,20 @@ module Shumway.flash.statics {
 		}
 	}
 
-	export class LegacySecurityDomain implements ISecurityDomain {
+	export class SecurityDomain implements ISecurityDomain {
 		constructor() {
-			const oldDomain = statics._currentDomain;
-			statics._currentDomain = this;
+			const oldDomain = system._currentDomain;
+			system._currentDomain = this;
 
 			this.events = new EventsNamespace();
 			this.utils = new UtilsNamespace();
 			this.display = new DisplayNamespace();
 			this.geom = new GeomNamespace();
 			this.text = new TextNamespace();
+			this.system = new SystemNamespace();
 
 			if (oldDomain) {
-				statics._currentDomain = oldDomain;
+				system._currentDomain = oldDomain;
 			}
 		}
 
@@ -35,6 +37,7 @@ module Shumway.flash.statics {
 		display: DisplayNamespace;
 		geom: GeomNamespace;
 		text: TextNamespace;
+		system: SystemNamespace;
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any) {

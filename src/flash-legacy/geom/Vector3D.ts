@@ -24,7 +24,7 @@ module Shumway.flash.geom {
 		}
 
 		static Create(x: number, y: number, z: number, w: number) {
-			let v: Vector3D = statics._currentDomain.geom.Vector3D.create();
+			let v: Vector3D = system._currentDomain.geom.Vector3D.create();
 			v.x = x;
 			v.y = y;
 			v.z = z;

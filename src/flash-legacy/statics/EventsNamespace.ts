@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	import assert = Shumway.Debug.assert;
 	import Event = events.Event;
 
