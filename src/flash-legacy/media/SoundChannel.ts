@@ -16,8 +16,6 @@
 // Class: SoundChannel
 module Shumway.flash.media {
 	import assert = Shumway.Debug.assert;
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import error = Shumway.Debug.error;
 
@@ -183,13 +181,13 @@ module Shumway.flash.media {
 			this._leftPeak = 0;
 			this._rightPeak = 0;
 			this._pcmData = null;
-			this._soundTransform = new this.sec.flash.media.SoundTransform();
+			this._soundTransform = this._sec.media.SoundTransform.create();
 			this._playing = false;
 			this._element = null;
 		}
 
-		static initializeFromAudioElement(sec: ISecurityDomain, element: HTMLAudioElement): SoundChannel {
-			let channel = new sec.flash.media.SoundChannel();
+		static initializeFromAudioElement(sec: system.ISecurityDomain, element: HTMLAudioElement): SoundChannel {
+			let channel = sec.media.SoundChannel.create();
 			channel._element = element;
 			SoundMixer._registerSoundSource(channel);
 			return channel;

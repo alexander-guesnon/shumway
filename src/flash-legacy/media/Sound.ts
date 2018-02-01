@@ -15,7 +15,6 @@
  */
 // Class: Sound
 module Shumway.flash.media {
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import notImplemented = Shumway.Debug.notImplemented;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import assert = Debug.assert;
@@ -68,7 +67,7 @@ module Shumway.flash.media {
 			this._length = 0;
 			this._bytesTotal = 0;
 			this._bytesLoaded = 0;
-			this._id3 = new this.sec.flash.media.ID3Info();
+			this._id3 = this._sec.media.ID3Info.create();
 
 			this._isURLInaccessible = false;
 			this._isBuffering = false;
@@ -95,8 +94,8 @@ module Shumway.flash.media {
 			}
 		}
 
-		static initializeFromPCMData(sec: ISecurityDomain, data: any): Sound {
-			let sound = new sec.flash.media.Sound();
+		static initializeFromPCMData(sec: system.ISecurityDomain, data: any): Sound {
+			let sound = sec.media.Sound.create();
 			sound._symbol = data;
 			sound.applySymbol();
 			return sound;
@@ -183,7 +182,7 @@ module Shumway.flash.media {
 		loadPCMFromByteArray(bytes: flash.utils.ByteArray, samples: number /*uint*/, format: string = "float", stereo: boolean = true, sampleRate: number = 44100): void {
 			bytes = bytes;
 			samples = samples >>> 0;
-			format = axCoerceString(format);
+			format = format;
 			stereo = !!stereo;
 			sampleRate = +sampleRate;
 			release || notImplemented("public flash.media.Sound::loadPCMFromByteArray");
@@ -193,10 +192,10 @@ module Shumway.flash.media {
 		play(startTime: number = 0, loops: number /*int*/ = 0, sndTransform: flash.media.SoundTransform = null): flash.media.SoundChannel {
 			startTime = +startTime;
 			loops = loops | 0;
-			let channel = new this.sec.flash.media.SoundChannel();
+			let channel = this._sec.media.SoundChannel.create();
 			channel._sound = this;
 			channel._soundTransform = isNullOrUndefined(sndTransform) ?
-				new this.sec.flash.media.SoundTransform() :
+				this._sec.media.SoundTransform.create() :
 				sndTransform;
 			this._playQueue.push({
 				channel: channel,
@@ -248,15 +247,15 @@ module Shumway.flash.media {
 			let bufferTime: number = context ? context.bufferTime : 1000;
 
 			let self = this;
-			let stream = this._stream = new this.sec.flash.net.URLStream();
-			let data = new this.sec.flash.utils.ByteArray();
+			let stream = this._stream = this._sec.net.URLStream.create();
+			let data = this._sec.utils.ByteArray.create();
 			let dataPosition = 0;
 			let playUsingWebAudio = webAudioOption.value;
 			let mp3DecodingSession: any = null;
 			let soundData = new SoundData();
 			soundData.completed = false;
 
-			stream.addEventListener("progress", function (event) {
+			stream.addEventListener("progress", function (event: any) {
 				self._bytesLoaded = event.axGetPublicProperty("bytesLoaded");
 				self._bytesTotal = event.axGetPublicProperty("bytesTotal");
 
@@ -287,7 +286,7 @@ module Shumway.flash.media {
 				self.dispatchEvent(event);
 			});
 
-			stream.addEventListener("complete", function (event) {
+			stream.addEventListener("complete", function (event: any) {
 				self.dispatchEvent(event);
 				soundData.data = (<any> data)._buffer;
 				soundData.mimeType = 'audio/mpeg';
@@ -320,12 +319,12 @@ module Shumway.flash.media {
 		pcm: Float32Array;
 		packaged: any;
 
-		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
-			super(data, sec.flash.media.Sound.axClass);
+		constructor(data: Timeline.SymbolData, sec: system.ISecurityDomain) {
+			super(data, sec.media.Sound);
 		}
 
 		static FromData(data: any, loaderInfo: display.LoaderInfo): SoundSymbol {
-			let symbol = new SoundSymbol(data, loaderInfo.sec);
+			let symbol = new SoundSymbol(data, loaderInfo._sec);
 			symbol.channels = data.channels;
 			symbol.sampleRate = data.sampleRate;
 			symbol.pcm = data.pcm;

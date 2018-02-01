@@ -16,19 +16,15 @@
 // Class: Camera
 module Shumway.flash.media {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class Camera extends flash.events.EventDispatcher {
-
-		static classInitializer: any = null;
 
 		constructor() {
 			super();
 		}
-
-		static get names(): ASArray {
+		static get names(): Array<string> {
 			release || somewhatImplemented("public flash.media.Camera::get names");
-			return this.sec.createArrayUnsafe([]);
+			return [];
 		}
 
 		static get isSupported(): boolean {
@@ -36,7 +32,7 @@ module Shumway.flash.media {
 		}
 
 		static getCamera(name: string = null): flash.media.Camera {
-			name = axCoerceString(name);
+			name = name;
 			release || somewhatImplemented("public flash.media.Camera::static getCamera");
 			return null;
 		}
@@ -161,7 +157,7 @@ module Shumway.flash.media {
 			release || somewhatImplemented("public flash.media.Camera::copyToByteArray");
 		}
 
-		copyToVector(rect: flash.geom.Rectangle, destination: Float64Vector): void {
+		copyToVector(rect: flash.geom.Rectangle, destination: Float64Array): void {
 			rect = rect;
 			destination = destination;
 			release || somewhatImplemented("public flash.media.Camera::copyToVector");

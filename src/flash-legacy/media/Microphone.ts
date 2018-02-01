@@ -17,7 +17,6 @@
 module Shumway.flash.media {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class Microphone extends flash.events.EventDispatcher {
 
@@ -27,9 +26,9 @@ module Shumway.flash.media {
 			super();
 		}
 
-		static get names(): ASArray {
+		static get names(): Array<string> {
 			release || somewhatImplemented("public flash.media.Microphone::get names");
-			return this.sec.createArrayUnsafe([]);
+			return [];
 			// return this._names;
 		}
 
@@ -87,7 +86,7 @@ module Shumway.flash.media {
 		}
 
 		set codec(codec: string) {
-			codec = axCoerceString(codec);
+			codec = codec;
 			release || notImplemented("public flash.media.Microphone::set codec");
 			return;
 			// this._codec = codec;

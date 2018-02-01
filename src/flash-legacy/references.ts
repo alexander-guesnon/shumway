@@ -175,5 +175,6 @@
 ///<reference path='statics/SystemNamespace.ts'/>>
 ///<reference path='statics/TextNamespace.ts'/>>
 ///<reference path='statics/FiltersNamespace.ts'/>>
+///<reference path='statics/MediaNamespace.ts'/>>
 
 ///<reference path='link.ts' />

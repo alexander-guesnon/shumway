@@ -15,24 +15,7 @@
  */
 // Class: ID3Info
 module Shumway.flash.media {
-
-	export class ID3Info extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = ["songName", "artist", "album", "year", "comment", "genre", "track"];
-
-		constructor() {
-			super();
-		}
-
-		// JS -> AS Bindings
-
+	export class ID3Info extends LegacyEntity {
 		songName: string;
 		artist: string;
 		album: string;
@@ -40,8 +23,5 @@ module Shumway.flash.media {
 		comment: string;
 		genre: string;
 		track: string;
-
-		// AS -> JS Bindings
-
 	}
 }
