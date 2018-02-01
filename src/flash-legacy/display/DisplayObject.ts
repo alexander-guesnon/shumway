@@ -29,8 +29,6 @@ module Shumway.flash.display {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import abstractMethod = Shumway.Debug.abstractMethod;
 	import isNullOrUndefined = Shumway.isNullOrUndefined;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-	import checkNullParameter = Shumway.AVMX.checkNullParameter;
 	import assert = Shumway.Debug.assert;
 	import unexpected = Shumway.Debug.unexpected;
 
@@ -379,7 +377,7 @@ module Shumway.flash.display {
 			let bitmapDataClass = this._sec.display.BitmapData;
 			if (bitmapDataClass.isSymbol(symbolClass) ||
 				bitmapDataClass.isSymbolPrototype(symbolClass)) {
-				symbolClass = this.sec.flash.display.Bitmap.axClass;
+				symbolClass = this._sec.display.Bitmap;
 			}
 			let instance: DisplayObject = system.constructClassFromSymbol(symbol, symbolClass);
 			if (placeObjectTag.flags & PlaceObjectFlags.HasName) {
@@ -882,7 +880,7 @@ module Shumway.flash.display {
 				}
 				let m = ancestor && !stageClass.axIsType(ancestor) ?
 					ancestor._concatenatedColorTransform.clone() :
-					new this._sec.geom.ColorTransform();
+					this._sec.geom.ColorTransform.create();
 				while (i >= 0) {
 					ancestor = path[i--];
 					release || assert(ancestor._hasFlags(DisplayObjectFlags.InvalidConcatenatedColorTransform));
@@ -1385,7 +1383,7 @@ module Shumway.flash.display {
 		}
 
 		_getTransform() {
-			return new this.sec.flash.geom.Transform(this);
+			return this._sec.geom.Transform.create([this]);
 		}
 
 		set transform(value: flash.geom.Transform) {
@@ -1439,7 +1437,7 @@ module Shumway.flash.display {
 		}
 
 		set name(value: string) {
-			checkNullParameter(value, "name", this.sec);
+			checkNullParameter(value, "name", this._sec);
 			if (this._hasFlags(DisplayObjectFlags.OwnedByTimeline)) {
 				// In AVM2, setting the name of a timline-placed DisplayObject throws.
 				if (this._symbol && !this._symbol.isAVM1Object) { // fail only in AVM2
@@ -1447,7 +1445,7 @@ module Shumway.flash.display {
 				}
 				return;
 			}
-			this._name = axCoerceString(value);
+			this._name = value;
 		}
 
 		get parent(): DisplayObjectContainer {
@@ -1476,7 +1474,6 @@ module Shumway.flash.display {
 
 		set blendMode(value: string) {
 			this._stopTimelineAnimation();
-			value = axCoerceString(value);
 			if (value === this._blendMode) {
 				return;
 			}
@@ -1526,7 +1523,7 @@ module Shumway.flash.display {
 		 * outside of this class. The get/set filters accessors always return deep clones of this
 		 * array.
 		 */
-		get filters(): ASArray /* flash.filters.BitmapFilter [] */ {
+		get filters(): Array<filters.BitmapFilter> /* flash.filters.BitmapFilter [] */ {
 			return this._getFilters();
 		}
 
@@ -1534,11 +1531,11 @@ module Shumway.flash.display {
 			let filters = this._filters ? this._filters.map(function (x: flash.filters.BitmapFilter) {
 				return x.clone();
 			}) : [];
-			return this.sec.createArray(filters);
+			return filters;
 		}
 
-		set filters(value_: ASArray) {
-			let value: flash.filters.BitmapFilter [] = value_ ? value_.value : null;
+		set filters(value_: Array<filters.BitmapFilter>) {
+			let value: flash.filters.BitmapFilter [] = value_ ? value_ : null;
 			if (!this._filters) {
 				this._filters = [];
 			}
@@ -1712,7 +1709,7 @@ module Shumway.flash.display {
 			if (this._graphics) {
 				return this._graphics;
 			}
-			this._graphics = new this.sec.flash.display.Graphics();
+			this._graphics = this._sec.display.Graphics.create();
 			this._graphics._setParent(this);
 			this._invalidateFillAndLineBounds(true, true);
 			this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyGraphics);

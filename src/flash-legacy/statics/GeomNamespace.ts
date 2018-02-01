@@ -10,7 +10,7 @@ module Shumway.flash.system {
 		}
 
 		clone(this_: geom.PerspectiveProjection): geom.PerspectiveProjection {
-			let clone: geom.PerspectiveProjection = Object.create(this.jsClass.prototype);
+			let clone: geom.PerspectiveProjection = this.createObject();
 			clone._fieldOfView = this_._fieldOfView;
 			clone._centerX = this_._centerX;
 			clone._centerY = this_._centerY;
@@ -109,6 +109,7 @@ module Shumway.flash.system {
 			this.Rectangle = new RectangleClass(geom.Rectangle);
 			this.ColorTransform = new ColorTransformClass(geom.ColorTransform);
 			this.Vector3D = new LegacyClass<geom.Vector3D>(geom.Vector3D);
+			this.Transform = new LegacyClass(geom.Transform);
 
 			this._temporaryRectangle = new geom.Rectangle();
 			this.FROZEN_IDENTITY_MATRIX = Object.freeze(this.Matrix.create());
@@ -124,6 +125,7 @@ module Shumway.flash.system {
 		PerspectiveProjection: PerspectiveProjectionClass;
 		Rectangle: RectangleClass;
 		ColorTransform: ColorTransformClass;
+		Transform: LegacyClass<geom.Transform>;
 		Vector3D: LegacyClass<geom.Vector3D>;
 
 		/**

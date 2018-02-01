@@ -26,6 +26,7 @@ module Shumway.flash.system {
 			this.MovieClip = new LegacyClass(display.MovieClip);
 			this.BitmapData = new LegacyClass(display.BitmapData);
 			this.Bitmap = new LegacyClass(display.Bitmap);
+			this.Graphics = new LegacyClass(display.Graphics);
 			this.AVM1Movie = new LegacyClass(display.AVM1Movie);
 			this.Stage = new LegacyClass(display.Stage);
 		}
@@ -38,6 +39,7 @@ module Shumway.flash.system {
 		AVM1Movie: LegacyClass<display.AVM1Movie>;
 		Stage: LegacyClass<display.Stage>;
 		BitmapData: LegacyClass<display.BitmapData>;
+		Graphics: LegacyClass<display.Graphics>;
 		Bitmap: LegacyClass<display.Bitmap>;
 		Sprite: LegacyClass<display.Sprite>;
 

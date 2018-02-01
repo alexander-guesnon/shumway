@@ -17,7 +17,6 @@
 // Class: Graphics
 module Shumway.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import clamp = Shumway.NumberUtilities.clamp;
 	import Bounds = Shumway.Bounds;
 	import assert = Shumway.Debug.assert;
@@ -335,10 +334,7 @@ module Shumway.flash.display {
 
 	// end of GFX geometry.ts
 
-	export class Graphics extends ASObject implements Shumway.Remoting.IRemotable {
-
-		static classInitializer: any = null;
-
+	export class Graphics extends LegacyEntity implements Shumway.Remoting.IRemotable {
 		constructor() {
 			super();
 			this._id = flash.display.DisplayObject.getNextSyncID();
@@ -355,7 +351,7 @@ module Shumway.flash.display {
 		}
 
 		static FromData(data: any, loaderInfo: LoaderInfo): Graphics {
-			let graphics: Graphics = new loaderInfo.sec.flash.display.Graphics();
+			let graphics: Graphics = loaderInfo._sec.display.Graphics.create();
 			graphics._graphicsData = ShapeData.FromPlainObject(data.shape);
 			if (data.lineBounds) {
 				graphics._lineBounds.copyFrom(data.lineBounds);
@@ -475,7 +471,7 @@ module Shumway.flash.display {
 			this._graphicsData.beginFill((color << 8) | alpha);
 		}
 
-		beginGradientFill(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
+		beginGradientFill(type: string, colors: Array<number>, alphas: Array<number>, ratios: Array<number>,
 		                  matrix: flash.geom.Matrix = null, spreadMethod: string = "pad",
 		                  interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
 			this._writeGradientStyle(PathCommand.BeginGradientFill, type, colors, alphas, ratios, matrix,
@@ -503,9 +499,6 @@ module Shumway.flash.display {
 			color = color >>> 0 & 0xffffff;
 			alpha = Math.round(clamp(+alpha, -1, 1) * 0xff);
 			pixelHinting = !!pixelHinting;
-			scaleMode = axCoerceString(scaleMode);
-			caps = axCoerceString(caps);
-			joints = axCoerceString(joints);
 			miterLimit = clamp(+miterLimit | 0, 0, 0xff);
 
 			// Flash stops drawing strokes whenever a thickness is supplied that can't be coerced to a
@@ -519,19 +512,19 @@ module Shumway.flash.display {
 			this._setStrokeWidth(thickness);
 
 			// If `scaleMode` is invalid, "normal" is used.
-			let lineScaleMode = LineScaleMode.toNumber(axCoerceString(scaleMode));
+			let lineScaleMode = LineScaleMode.toNumber(scaleMode);
 			if (lineScaleMode < 0) {
 				lineScaleMode = LineScaleMode.toNumber(LineScaleMode.NORMAL);
 			}
 
 			// If `caps` is invalid, "normal" is used.
-			let capsStyle = CapsStyle.toNumber(axCoerceString(caps));
+			let capsStyle = CapsStyle.toNumber(caps);
 			if (capsStyle < 0) {
 				capsStyle = CapsStyle.toNumber(CapsStyle.ROUND);
 			}
 
 			// If `joints` is invalid, "normal" is used.
-			let jointStyle = JointStyle.toNumber(axCoerceString(joints));
+			let jointStyle = JointStyle.toNumber(joints);
 			if (jointStyle < 0) {
 				jointStyle = JointStyle.toNumber(JointStyle.ROUND);
 			}
@@ -540,7 +533,7 @@ module Shumway.flash.display {
 				lineScaleMode, capsStyle, jointStyle, miterLimit);
 		}
 
-		lineGradientStyle(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
+		lineGradientStyle(type: string, colors: Array<number>, alphas: Array<number>, ratios: Array<number>,
 		                  matrix: flash.geom.Matrix = null, spreadMethod: string = "pad",
 		                  interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
 			this._writeGradientStyle(PathCommand.LineStyleGradient, type, colors, alphas, ratios, matrix,
@@ -815,25 +808,25 @@ module Shumway.flash.display {
 //      //shader = shader; matrix = matrix;
 //      release || notImplemented("public flash.display.Graphics::lineShaderStyle"); return;
 //    }
-		drawPath(commands: GenericVector, data: GenericVector, winding: string = "evenOdd"): void {
+		drawPath(commands: Array<any>, data: Array<any>, winding: string = "evenOdd"): void {
 			commands = commands;
 			data = data;
-			winding = axCoerceString(winding);
+			winding = winding;
 			release || notImplemented("public flash.display.Graphics::drawPath");
 			return;
 		}
 
-		drawTriangles(vertices: GenericVector, indices: GenericVector = null,
-		              uvtData: GenericVector = null, culling: string = "none"): void {
+		drawTriangles(vertices: Array<any>, indices: Array<any> = null,
+		              uvtData: Array<any> = null, culling: string = "none"): void {
 			vertices = vertices;
 			indices = indices;
 			uvtData = uvtData;
-			culling = axCoerceString(culling);
+			culling = culling;
 			release || notImplemented("public flash.display.Graphics::drawTriangles");
 			return;
 		}
 
-		drawGraphicsData(graphicsData: GenericVector): void {
+		drawGraphicsData(graphicsData: Array<any>): void {
 			graphicsData = graphicsData;
 			release || notImplemented("public flash.display.Graphics::drawGraphicsData");
 			return;
@@ -1250,15 +1243,13 @@ module Shumway.flash.display {
 			if (isNullOrUndefined(bitmap)) {
 				this._sec.throwError('TypeError', Errors.NullPointerError, 'bitmap');
 			}
-			const context = this._sec;
-
-			if (!(context.display.BitmapData.axIsType(bitmap))) {
+			if (!(this._sec.display.BitmapData.axIsType(bitmap))) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'bitmap',
 					'flash.display.BitmapData');
 			}
 			if (isNullOrUndefined(matrix)) {
-				matrix = context.geom.FROZEN_IDENTITY_MATRIX;;
-			} else if (!(this.sec.flash.geom.Matrix.axIsType(matrix))) {
+				matrix = this._sec.geom.FROZEN_IDENTITY_MATRIX;
+			} else if (!(this._sec.geom.Matrix.axIsType(matrix))) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
 					'flash.geom.Matrix');
 			}
@@ -1283,14 +1274,14 @@ module Shumway.flash.display {
 		 * case, it only does arguments checks so the right exceptions are thrown.
 		 */
 		private _writeGradientStyle(pathCommand: PathCommand, type: string,
-		                            colors_: ASArray, alphas_: ASArray, ratios_: ASArray,
+		                            colors_: Array<number>, alphas_: Array<number>, ratios_: Array<number>,
 		                            matrix: geom.Matrix, spreadMethod: string,
 		                            interpolationMethod: string, focalPointRatio: number,
 		                            skipWrite: boolean): void {
 			if (isNullOrUndefined(type)) {
 				this._sec.throwError('TypeError', Errors.NullPointerError, 'type');
 			}
-			let gradientType = GradientType.toNumber(axCoerceString(type));
+			let gradientType = GradientType.toNumber(type);
 			if (gradientType < 0) {
 				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "type");
 			}
@@ -1298,27 +1289,26 @@ module Shumway.flash.display {
 			if (isNullOrUndefined(colors_)) {
 				this._sec.throwError('TypeError', Errors.NullPointerError, 'colors');
 			}
-			let arrayClass = this.sec.AXArray;
-			if (!arrayClass.axIsInstanceOf(colors_)) {
+			if (!(colors_ instanceof Array)) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'colors', 'Array');
 			}
-			let colors: number[] = colors_.value;
+			let colors: number[] = colors_;
 
 			if (isNullOrUndefined(alphas_)) {
 				this._sec.throwError('TypeError', Errors.NullPointerError, 'alphas');
 			}
-			if (!arrayClass.axIsInstanceOf(alphas_)) {
+			if (!(alphas_ instanceof Array)) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'alphas', 'Array');
 			}
-			let alphas: number[] = alphas_.value;
+			let alphas: number[] = alphas_;
 
 			if (isNullOrUndefined(ratios_)) {
 				this._sec.throwError('TypeError', Errors.NullPointerError, 'ratios');
 			}
-			if (!arrayClass.axIsInstanceOf(ratios_)) {
+			if (!(ratios_ instanceof Array)) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'ratios', 'Array');
 			}
-			let ratios: number[] = ratios_.value;
+			let ratios: number[] = ratios_;
 
 			let colorsRGBA: number[] = [];
 			let coercedRatios: number[] = [];
@@ -1343,7 +1333,7 @@ module Shumway.flash.display {
 
 			if (isNullOrUndefined(matrix)) {
 				matrix = this._sec.geom.FROZEN_IDENTITY_MATRIX;
-			} else if (!(this.sec.flash.geom.Matrix.axIsType(matrix))) {
+			} else if (!(this._sec.geom.Matrix.axIsType(matrix))) {
 				this._sec.throwError('TypeError', Errors.CheckTypeFailedError, 'matrix',
 					'flash.geom.Matrix');
 			}
@@ -1353,13 +1343,13 @@ module Shumway.flash.display {
 			}
 
 			// If `spreadMethod` is invalid, "pad" is used.
-			let spread = SpreadMethod.toNumber(axCoerceString(spreadMethod));
+			let spread = SpreadMethod.toNumber(spreadMethod);
 			if (spread < 0) {
 				spread = SpreadMethod.toNumber(SpreadMethod.PAD);
 			}
 
 			// If `interpolationMethod` is invalid, "rgb" is used.
-			let interpolation = InterpolationMethod.toNumber(axCoerceString(interpolationMethod));
+			let interpolation = InterpolationMethod.toNumber(interpolationMethod);
 			if (interpolation < 0) {
 				interpolation = InterpolationMethod.toNumber(InterpolationMethod.RGB);
 			}

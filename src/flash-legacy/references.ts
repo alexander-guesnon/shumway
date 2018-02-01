@@ -27,6 +27,20 @@
 ///<reference path='geom/Transform.ts' />
 ///<reference path='geom/Utils3D.ts' />
 ///<reference path='geom/Vector3D.ts' />
+
+///<reference path='filters/BitmapFilterQuality.ts' />
+///<reference path='filters/BitmapFilterType.ts' />
+///<reference path='filters/BitmapFilter.ts' />
+///<reference path='filters/BevelFilter.ts' />
+///<reference path='filters/BlurFilter.ts' />
+///<reference path='filters/ColorMatrixFilter.ts' />
+///<reference path='filters/ConvolutionFilter.ts' />
+///<reference path='filters/DisplacementMapFilterMode.ts' />
+///<reference path='filters/DisplacementMapFilter.ts' />
+///<reference path='filters/DropShadowFilter.ts' />
+///<reference path='filters/GlowFilter.ts' />
+///<reference path='filters/GradientBevelFilter.ts' />
+///<reference path='filters/GradientGlowFilter.ts' />
 ///<reference path='geom/ColorTransform.ts' />
 
 ///<reference path='events/Event.ts' />
@@ -143,5 +157,6 @@
 ///<reference path='statics/DisplayNamespace.ts'/>>
 ///<reference path='statics/SystemNamespace.ts'/>>
 ///<reference path='statics/TextNamespace.ts'/>>
+///<reference path='statics/FiltersNamespace.ts'/>>
 
 ///<reference path='link.ts' />

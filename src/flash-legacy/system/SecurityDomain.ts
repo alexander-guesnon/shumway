@@ -5,6 +5,7 @@ module Shumway.flash.system {
 		geom: GeomNamespace
 		text: TextNamespace
 		system: SystemNamespace
+		filters: FiltersNamespace
 	}
 
 	export class LegacyError extends Error {
@@ -26,6 +27,7 @@ module Shumway.flash.system {
 			this.geom = new GeomNamespace();
 			this.text = new TextNamespace();
 			this.system = new SystemNamespace();
+			this.filters = new FiltersNamespace();
 
 			if (oldDomain) {
 				system._currentDomain = oldDomain;
@@ -38,6 +40,7 @@ module Shumway.flash.system {
 		geom: GeomNamespace;
 		text: TextNamespace;
 		system: SystemNamespace;
+		filters: FiltersNamespace;
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any) {
