@@ -29,6 +29,7 @@ module Shumway.flash.system {
 			this.Graphics = new LegacyClass(display.Graphics);
 			this.AVM1Movie = new LegacyClass(display.AVM1Movie);
 			this.Stage = new LegacyClass(display.Stage);
+			this.SimpleButton = new LegacyClass(display.SimpleButton);
 		}
 
 		// classes
@@ -42,6 +43,7 @@ module Shumway.flash.system {
 		Graphics: LegacyClass<display.Graphics>;
 		Bitmap: LegacyClass<display.Bitmap>;
 		Sprite: LegacyClass<display.Sprite>;
+		SimpleButton: LegacyClass<display.SimpleButton>;
 
 		//system
 

@@ -16,7 +16,6 @@
 // Class: SimpleButton
 module Shumway.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import assert = Shumway.Debug.assert;
 
 	export class SimpleButton extends flash.display.InteractiveObject {
@@ -311,7 +310,7 @@ module Shumway.flash.display {
 		loaderInfo: flash.display.LoaderInfo;
 
 		constructor(data: Timeline.SymbolData, loaderInfo: flash.display.LoaderInfo) {
-			super(data, loaderInfo.sec.flash.display.SimpleButton.axClass, true);
+			super(data, loaderInfo._sec.display.SimpleButton, true);
 			this.loaderInfo = loaderInfo;
 		}
 

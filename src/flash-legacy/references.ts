@@ -28,20 +28,9 @@
 ///<reference path='geom/Utils3D.ts' />
 ///<reference path='geom/Vector3D.ts' />
 
-///<reference path='filters/BitmapFilterQuality.ts' />
-///<reference path='filters/BitmapFilterType.ts' />
-///<reference path='filters/BitmapFilter.ts' />
-///<reference path='filters/BevelFilter.ts' />
-///<reference path='filters/BlurFilter.ts' />
-///<reference path='filters/ColorMatrixFilter.ts' />
-///<reference path='filters/ConvolutionFilter.ts' />
-///<reference path='filters/DisplacementMapFilterMode.ts' />
-///<reference path='filters/DisplacementMapFilter.ts' />
-///<reference path='filters/DropShadowFilter.ts' />
-///<reference path='filters/GlowFilter.ts' />
-///<reference path='filters/GradientBevelFilter.ts' />
-///<reference path='filters/GradientGlowFilter.ts' />
-///<reference path='geom/ColorTransform.ts' />
+///<reference path='accessibility/Accessibility.ts' />
+///<reference path='accessibility/AccessibilityImplementation.ts' />
+///<reference path='accessibility/AccessibilityProperties.ts' />
 
 ///<reference path='events/Event.ts' />
 ///<reference path='events/EventDispatcher.ts' />
@@ -117,6 +106,34 @@
 ///<reference path='display/enums/StageScaleMode.ts' />
 ///<reference path='display/enums/TriangleCulling.ts' />
 ///<reference path='display/AVM1Movie.ts' />
+
+///<reference path='filters/BitmapFilterQuality.ts' />
+///<reference path='filters/BitmapFilterType.ts' />
+///<reference path='filters/BitmapFilter.ts' />
+///<reference path='filters/BevelFilter.ts' />
+///<reference path='filters/BlurFilter.ts' />
+///<reference path='filters/ColorMatrixFilter.ts' />
+///<reference path='filters/ConvolutionFilter.ts' />
+///<reference path='filters/DisplacementMapFilterMode.ts' />
+///<reference path='filters/DisplacementMapFilter.ts' />
+///<reference path='filters/DropShadowFilter.ts' />
+///<reference path='filters/GlowFilter.ts' />
+///<reference path='filters/GradientBevelFilter.ts' />
+///<reference path='filters/GradientGlowFilter.ts' />
+///<reference path='geom/ColorTransform.ts' />
+
+///<reference path='media/Camera.ts' />
+///<reference path='media/ID3Info.ts' />
+///<reference path='media/Microphone.ts' />
+///<reference path='media/Sound.ts' />
+///<reference path='media/SoundChannel.ts' />
+///<reference path='media/SoundLoaderContext.ts' />
+///<reference path='media/SoundMixer.ts' />
+///<reference path='media/SoundTransform.ts' />
+///<reference path='media/StageVideo.ts' />
+///<reference path='media/StageVideoAvailability.ts' />
+///<reference path='media/Video.ts' />
+///<reference path='media/VideoStreamSettings.ts' />
 
 ///<reference path='system/ILoaderInfo.ts' />
 ///<reference path='system/ApplicationDomain.ts' />

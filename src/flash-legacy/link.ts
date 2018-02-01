@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import flashPackage = Shumway.AVMX.AS.flash;
+import flashPackage = Shumway.flash;
 
 namespace Shumway.flash.system  {
-
-	interface ISecurityDomain {
-		context: flashPackage.system.FlashContext;
-		player: any;//Shumway.Player.SWFPlayer;
-	}
-
 	function M(name: string, asClass: any) {
 		// registerNativeClass(name, asClass);
 	}

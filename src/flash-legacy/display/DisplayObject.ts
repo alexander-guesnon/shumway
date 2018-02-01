@@ -2029,11 +2029,11 @@ module Shumway.flash.display {
 			return result;
 		}
 
-		get accessibilityProperties(): flash.accessibility.AccessibilityProperties {
+		get accessibilityProperties(): accessibility.AccessibilityProperties {
 			return this._accessibilityProperties;
 		}
 
-		set accessibilityProperties(value: flash.accessibility.AccessibilityProperties) {
+		set accessibilityProperties(value: accessibility.AccessibilityProperties) {
 			// In Flash this does not do copying.
 			// TODO: coerce to the correct type.
 			this._accessibilityProperties = value;

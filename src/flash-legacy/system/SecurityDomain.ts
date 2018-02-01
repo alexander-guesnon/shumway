@@ -6,6 +6,7 @@ module Shumway.flash.system {
 		text: TextNamespace
 		system: SystemNamespace
 		filters: FiltersNamespace
+		player: any
 	}
 
 	export class LegacyError extends Error {
@@ -34,6 +35,7 @@ module Shumway.flash.system {
 			}
 		}
 
+		player: any;
 		events: EventsNamespace;
 		utils: UtilsNamespace;
 		display: DisplayNamespace;
