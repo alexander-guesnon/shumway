@@ -2852,7 +2852,8 @@ module Shumway {
 
 		hasEventListener(type: string): boolean;
 
-		sec: any;
+		sec?: any;
+		_sec?: any;
 	}
 
 	export interface ILocalConnectionService {

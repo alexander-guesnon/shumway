@@ -135,6 +135,24 @@
 ///<reference path='media/Video.ts' />
 ///<reference path='media/VideoStreamSettings.ts' />
 
+///<reference path='net/FileFilter.ts' />
+///<reference path='net/FileReference.ts' />
+///<reference path='net/FileReferenceList.ts' />
+///<reference path='net/LocalConnection.ts' />
+///<reference path='net/NetConnection.ts' />
+///<reference path='net/NetStream.ts' />
+///<reference path='net/NetStreamInfo.ts' />
+///<reference path='net/NetStreamMulticastInfo.ts' />
+///<reference path='net/NetStreamPlayOptions.ts' />
+///<reference path='net/Responder.ts' />
+///<reference path='net/SharedObject.ts' />
+///<reference path='net/Socket.ts' />
+///<reference path='net/URLLoader.ts' />
+///<reference path='net/URLRequest.ts' />
+///<reference path='net/URLRequestHeader.ts' />
+///<reference path='net/URLStream.ts' />
+///<reference path='net/URLVariables.ts' />
+
 ///<reference path='system/ILoaderInfo.ts' />
 ///<reference path='system/ApplicationDomain.ts' />
 ///<reference path='system/ImageDecodingPolicy.ts' />

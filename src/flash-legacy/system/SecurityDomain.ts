@@ -8,6 +8,9 @@ module Shumway.flash.system {
 		filters: FiltersNamespace
 		media: MediaNamespace
 		player: any
+
+		createError(className: string, error: any, replacement1?: any,
+		            replacement2?: any, replacement3?: any, replacement4?: any): LegacyError;
 	}
 
 	export class LegacyError extends Error {
