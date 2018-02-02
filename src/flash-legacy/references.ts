@@ -35,8 +35,24 @@
 ///<reference path='events/Event.ts' />
 ///<reference path='events/EventDispatcher.ts' />
 ///<reference path='events/EventPhase.ts' />
+///<reference path='events/TextEvent.ts' />
+///<reference path='events/ErrorEvent.ts' />
+///<reference path='events/AsyncErrorEvent.ts' />
+///<reference path='events/GameInputEvent.ts' />
+///<reference path='events/GestureEvent.ts' />
+///<reference path='events/HTTPStatusEvent.ts' />
 ///<reference path='events/IEventDispatcher.ts' />
+///<reference path='events/IOErrorEvent.ts' />
+///<reference path='events/KeyboardEvent.ts' />
+///<reference path='events/MouseEvent.ts' />
+///<reference path='events/NetStatusEvent.ts' />
 ///<reference path='events/ProgressEvent.ts' />
+///<reference path='events/SecurityErrorEvent.ts' />
+///<reference path='events/StatusEvent.ts' />
+///<reference path='events/TimerEvent.ts' />
+///<reference path='events/TouchEvent.ts' />
+///<reference path='events/UncaughtErrorEvent.ts' />
+///<reference path='events/UncaughtErrorEvents.ts' />
 
 ///<reference path='display/DisplayObject.ts' />
 ///<reference path='display/Bitmap.ts' />
@@ -194,5 +210,6 @@
 ///<reference path='statics/TextNamespace.ts'/>>
 ///<reference path='statics/FiltersNamespace.ts'/>>
 ///<reference path='statics/MediaNamespace.ts'/>>
+///<reference path='statics/NetNamespace.ts'/>>
 
 ///<reference path='link.ts' />

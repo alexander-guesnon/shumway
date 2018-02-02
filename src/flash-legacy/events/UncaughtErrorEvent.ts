@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Class: URLRequestHeader
-module Shumway.flash.net {
-	export class URLRequestHeader extends LegacyEntity {
-		constructor(name: string = "", value: string = "") {
-			super();
-			this.name = name;
-			this.value = value;
+// Class: UncaughtErrorEvent
+module Shumway.flash.events {
+	export class UncaughtErrorEvent extends flash.events.ErrorEvent {
+
+		static classInitializer: any = null;
+
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
+
+		constructor(type: string = "uncaughtError", bubbles: boolean = true, cancelable: boolean = true,
+		            error_in: any = null) {
+			super(type, bubbles, cancelable, error_in);
 		}
 
-		name: string;
-		value: string;
+		// JS -> AS Bindings
+		static UNCAUGHT_ERROR: string = "uncaughtError";
 	}
 }

@@ -15,8 +15,6 @@
  */
 // Class: URLLoader
 module Shumway.flash.net {
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
 	import Event = flash.events.Event;
 	import IOErrorEvent = flash.events.IOErrorEvent;
 	import ProgressEvent = flash.events.ProgressEvent;
@@ -24,14 +22,9 @@ module Shumway.flash.net {
 	import SecurityErrorEvent = flash.events.SecurityErrorEvent;
 
 	export class URLLoader extends flash.events.EventDispatcher {
-
-		static classInitializer: any = null;
-		static classSymbols: string [] = null; // [];
-		static instanceSymbols: string [] = null;
-
 		constructor(request?: flash.net.URLRequest) {
 			super();
-			let stream = this._stream = new this.sec.flash.net.URLStream();
+			let stream = this._stream = this._sec.net.URLStream.create();
 
 			stream.addEventListener(Event.OPEN, this.onStreamOpen.bind(this));
 			stream.addEventListener(Event.COMPLETE, this.onStreamComplete.bind(this));
@@ -43,37 +36,37 @@ module Shumway.flash.net {
 			stream.addEventListener(SecurityErrorEvent.SECURITY_ERROR,
 				this.onStreamSecurityError.bind(this));
 
-			this.$BgdataFormat = 'text';
+			this._dataFormat = 'text';
 
 			if (request) {
 				this.load(request);
 			}
 		}
 
-		$Bgdata: any;
-		$BgdataFormat: string;
-		$BgbytesLoaded: number /*uint*/;
-		$BgbytesTotal: number /*uint*/;
+		_data: any;
+		_dataFormat: string;
+		_bytesLoaded: number /*uint*/;
+		_bytesTotal: number /*uint*/;
 
 		get data() {
-			return this.$Bgdata;
+			return this._data;
 		}
 
 		get dataFormat() {
-			return this.$BgdataFormat;
+			return this._dataFormat;
 		}
 
 		set dataFormat(format: string) {
 			release || Debug.assert(typeof format === 'string');
-			this.$BgdataFormat = format;
+			this._dataFormat = format;
 		}
 
 		get bytesLoaded() {
-			return this.$BgbytesLoaded;
+			return this._bytesLoaded;
 		}
 
 		get bytesTotal() {
-			return this.$BgbytesTotal;
+			return this._bytesTotal;
 		}
 
 		private _stream: flash.net.URLStream;
@@ -89,24 +82,24 @@ module Shumway.flash.net {
 		}
 
 		complete() {
-			let response = new this.sec.flash.utils.ByteArray();
+			let response = this._sec.utils.ByteArray.create();
 			this._stream.readBytes(response);
 
-			if (this.$BgdataFormat === 'binary') {
-				this.$Bgdata = response;
+			if (this._dataFormat === 'binary') {
+				this._data = response;
 				return;
 			}
 
 			let data = response.toString();
-			if (response.length > 0 && this.$BgdataFormat === 'variables') {
-				let variable: URLVariables = new this.sec.flash.net.URLVariables();
+			if (response.length > 0 && this._dataFormat === 'variables') {
+				let variable: URLVariables = this._sec.net.URLVariables.create();
 				if (this._ignoreDecodeErrors) {
 					variable._ignoreDecodingErrors = true;
 				}
 				variable.decode(String(data));
-				this.$Bgdata = variable;
+				this._data = variable;
 			} else {
-				this.$Bgdata = data;
+				this._data = data;
 			}
 		}
 
@@ -130,8 +123,8 @@ module Shumway.flash.net {
 		}
 
 		private onStreamProgress(e: ProgressEvent) {
-			this.$BgbytesLoaded = e.bytesLoaded;
-			this.$BgbytesTotal = e.bytesTotal;
+			this._bytesLoaded = e.bytesLoaded;
+			this._bytesTotal = e.bytesTotal;
 			this.dispatchEvent(e);
 		}
 

@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Class: URLRequestHeader
-module Shumway.flash.net {
-	export class URLRequestHeader extends LegacyEntity {
-		constructor(name: string = "", value: string = "") {
-			super();
-			this.name = name;
-			this.value = value;
+// Class: SecurityErrorEvent
+module Shumway.flash.events {
+	export class SecurityErrorEvent extends flash.events.ErrorEvent {
+
+		static classInitializer: any = null;
+
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
+
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            text: string = "", id: number /*int*/ = 0) {
+			super(type, bubbles, cancelable, text, id);
 		}
 
-		name: string;
-		value: string;
+		// JS -> AS Bindings
+		static SECURITY_ERROR: string = "securityError";
 	}
 }

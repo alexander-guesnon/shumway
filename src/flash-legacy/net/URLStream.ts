@@ -21,7 +21,7 @@ module Shumway.flash.net {
 	export class URLStream extends flash.events.EventDispatcher implements flash.utils.IDataInput {
 		constructor() {
 			super();
-			this._buffer = new this.sec.flash.utils.ByteArray();
+			this._buffer = this._sec.utils.ByteArray.create();
 			this._writePosition = 0;
 			this._connected = false;
 		}
@@ -124,15 +124,14 @@ module Shumway.flash.net {
 				httpHeaders.split(/(?:\n|\r?\n)/g).forEach(function (h: any) {
 					let m = /^([^:]+): (.*)$/.exec(h);
 					if (m) {
-						headers.push(new self.sec.flash.net.URLRequestHeader(m[1], m[2]));
+						headers.push(self._sec.net.URLRequestHeader.create([m[1], m[2]]));
 						if (m[1] === 'Location') { // Headers have redirect location
 							location = m[2];
 						}
 					}
 				});
-				let boxedHeaders = self.sec.createArray(headers);
-				httpStatusEvent.axSetPublicProperty('responseHeaders', boxedHeaders);
-				httpStatusEvent.axSetPublicProperty('responseURL', location);
+				httpStatusEvent.responseHeaders = headers;
+				httpStatusEvent.responseURL = location;
 				self.dispatchEvent(httpStatusEvent);
 			};
 			session.onclose = function () {

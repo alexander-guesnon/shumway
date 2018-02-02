@@ -7,6 +7,7 @@ module Shumway.flash.system {
 		system: SystemNamespace
 		filters: FiltersNamespace
 		media: MediaNamespace
+		net: NetNamespace
 		player: any
 
 		createError(className: string, error: any, replacement1?: any,
@@ -34,6 +35,7 @@ module Shumway.flash.system {
 			this.system = new SystemNamespace();
 			this.filters = new FiltersNamespace();
 			this.media = new MediaNamespace();
+			this.net = new NetNamespace();
 
 			if (oldDomain) {
 				system._currentDomain = oldDomain;
@@ -49,6 +51,7 @@ module Shumway.flash.system {
 		system: SystemNamespace;
 		filters: FiltersNamespace;
 		media: MediaNamespace;
+		net: NetNamespace;
 
 		throwError(className: string, error: any, replacement1?: any,
 		           replacement2?: any, replacement3?: any, replacement4?: any) {
