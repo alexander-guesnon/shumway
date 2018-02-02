@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: GameInputFinger
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	export class GameInputFinger extends ASObject {
 
 		// Called whenever the class is initialized.

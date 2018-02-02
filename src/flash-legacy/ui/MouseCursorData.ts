@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: MouseCursorData
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 
 	export class MouseCursorData extends ASObject {

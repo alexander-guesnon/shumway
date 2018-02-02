@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: MultitouchInputMode
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	export class MultitouchInputMode extends ASObject {
 
 		// Called whenever the class is initialized.

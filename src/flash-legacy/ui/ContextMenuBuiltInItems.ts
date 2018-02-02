@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: ContextMenuBuiltInItems
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	export class ContextMenuBuiltInItems extends LegacyEntity {
 		constructor() {
 			super();

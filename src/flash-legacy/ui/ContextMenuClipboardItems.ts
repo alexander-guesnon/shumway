@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: ContextMenuClipboardItems
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	export class ContextMenuClipboardItems extends ASObject {

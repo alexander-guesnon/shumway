@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: MouseCursor
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	export class MouseCursor extends ASObject {
 
 		// Called whenever the class is initialized.

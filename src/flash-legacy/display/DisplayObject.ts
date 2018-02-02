@@ -1945,7 +1945,7 @@ module Shumway.flash.display {
 		 * Returns the current mouse position relative to this object.
 		 */
 		_getLocalMousePosition(): flash.geom.Point {
-			let position = this._sec.mouse._currentPosition;
+			let position = this._sec.ui.Mouse._currentPosition;
 			return this.globalToLocal(position);
 		}
 

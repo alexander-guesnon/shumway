@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: GameInputControl
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 
 	export class GameInputControl extends flash.events.EventDispatcher {

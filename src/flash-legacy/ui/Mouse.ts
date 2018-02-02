@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: Mouse
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import dummyConstructor = Shumway.Debug.dummyConstructor;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;

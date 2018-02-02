@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: ContextMenuItem
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import axCoerceString = Shumway.AVMX.axCoerceString;
 

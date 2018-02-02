@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: Multitouch
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import notImplemented = Shumway.Debug.notImplemented;
 	import axCoerceString = Shumway.AVMX.axCoerceString;

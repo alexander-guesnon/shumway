@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // Class: GameInput
-module Shumway.flash.io {
+module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	export class GameInput extends flash.events.EventDispatcher {

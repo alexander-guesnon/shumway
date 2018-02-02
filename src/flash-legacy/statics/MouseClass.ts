@@ -1,4 +1,4 @@
-module Shumway.flash.statics {
+module Shumway.flash.system {
 	import MouseCursor = ui.MouseCursor;
 
 	export class MouseClass extends LegacyClass<ui.Mouse> {
