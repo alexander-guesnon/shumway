@@ -207,6 +207,25 @@
 ///<reference path='text/TextRun.ts' />
 ///<reference path='text/TextSnapshot.ts' />
 
+///<reference path='trace/Trace.ts' />
+
+///<reference path='ui/ContextMenu.ts' />
+///<reference path='ui/ContextMenuBuiltInItems.ts' />
+///<reference path='ui/ContextMenuClipboardItems.ts' />
+///<reference path='ui/ContextMenuItem.ts' />
+///<reference path='ui/GameInput.ts' />
+///<reference path='ui/GameInputControl.ts' />
+///<reference path='ui/GameInputControlType.ts' />
+///<reference path='ui/GameInputDevice.ts' />
+///<reference path='ui/GameInputFinger.ts' />
+///<reference path='ui/GameInputHand.ts' />
+///<reference path='ui/Keyboard.ts' />
+///<reference path='ui/Mouse.ts' />
+///<reference path='ui/MouseCursor.ts' />
+///<reference path='ui/MouseCursorData.ts' />
+///<reference path='ui/Multitouch.ts' />
+///<reference path='ui/MultitouchInputMode.ts' />
+
 ///<reference path='utils/Endian.ts' />
 ///<reference path='utils/IExternalizable.ts' />
 
@@ -220,6 +239,8 @@
 ///<reference path='statics/FiltersNamespace.ts'/>>
 ///<reference path='statics/MediaNamespace.ts'/>>
 ///<reference path='statics/NetNamespace.ts'/>>
+///<reference path='statics/UINamespace.ts'/>>
 ///<reference path='statics/LoaderClass.ts'/>>
+///<reference path='statics/MouseClass.ts'/>>
 
 ///<reference path='link.ts' />
