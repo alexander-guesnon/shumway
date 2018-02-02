@@ -16,10 +16,7 @@
 module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import assertUnreachable = Shumway.Debug.assertUnreachable;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-
-	import ActionScriptVersion = flash.display.ActionScriptVersion;
 
 	import LoaderContext = flash.system.LoaderContext;
 	import events = flash.events;
@@ -45,22 +42,14 @@ module Shumway.flash.display {
 	export class Loader extends flash.display.DisplayObjectContainer
 		implements IAdvancable, ILoadListener {
 
-		static axClass: typeof Loader;
-
-		static classInitializer: any = null;
-
-		static classSymbols: string [] = null;
-		static instanceSymbols: string [] = null;
-
 		constructor() {
 			super();
 
-			const context = this._sec;
-			const displayObjectClass = context.display;
+			const displayObjectClass = this._sec.display;
 
 			displayObjectClass._advancableInstances.push(this);
 			this._content = null;
-			if (context.loader._rootLoader) {
+			if (displayObjectClass.Loader._rootLoader) {
 				// Loader reserves the next instance ID to use for the loaded content.
 				// This isn't needed for the first, root, loader, because that uses "root1" as the name.
 				this._contentID = displayObjectClass._instanceID++;
@@ -69,13 +58,15 @@ module Shumway.flash.display {
 				// the instance id must not be used up.
 				displayObjectClass._instanceID--;
 			}
-			this._contentLoaderInfo = new this.sec.flash.display.LoaderInfo(context.loader.CtorToken);
+			this._contentLoaderInfo = new this.sec.flash.display.LoaderInfo(displayObjectClass.Loader.CtorToken);
 			this._contentLoaderInfo._loader = this;
 
-			let currentAbc = AVMX.getCurrentABC();
-			if (currentAbc) {
-				this._contentLoaderInfo._loaderUrl = currentAbc.env.url;
-			}
+			// @ivanpopelyshev: That's bad. No cirrentABC for us.
+
+			// let currentAbc = AVMX.getCurrentABC();
+			// if (currentAbc) {
+			// 	this._contentLoaderInfo._loaderUrl = currentAbc.env.url;
+			// }
 
 			this._fileLoader = null;
 			this._loadStatus = LoadStatus.Unloaded;
@@ -270,7 +261,7 @@ module Shumway.flash.display {
 			} else if (this._loaderInfo && this._loaderInfo._applicationDomain) {
 				this._contentLoaderInfo._applicationDomain = this._loaderInfo._applicationDomain;
 			} else {
-				this._contentLoaderInfo._applicationDomain = new this.sec.flash.system.ApplicationDomain();
+				this._contentLoaderInfo._applicationDomain = this._sec.system.ApplicationDomain.create();
 			}
 			this._contentLoaderInfo._parameters = parameters;
 			this._contentLoaderInfo._allowCodeImport = context ? context.allowCodeImport : true;
@@ -545,7 +536,7 @@ module Shumway.flash.display {
 				symbol.avm1Context = this._contentLoaderInfo._avm1Context;
 			}
 
-			let root = constructClassFromSymbol(symbol, symbol.symbolClass);
+			let root = system.constructClassFromSymbol(symbol, symbol.symbolClass);
 			const context = this._sec;
 			// The initial SWF's root object gets a default of 'root1', which doesn't use up a
 			// DisplayObject instance ID. For the others, we have reserved one in `_contentID`.

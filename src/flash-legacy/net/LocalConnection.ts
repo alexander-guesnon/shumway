@@ -24,9 +24,6 @@ module Shumway.flash.net {
 
 	export class LocalConnection extends flash.events.EventDispatcher
 		implements ILocalConnectionReceiver {
-
-		static classInitializer: any = null;
-
 		constructor() {
 			super();
 			this._client = this;
@@ -35,7 +32,12 @@ module Shumway.flash.net {
 			this._allowedSecureDomains = [];
 
 			// tsc contains a definition for URL that's non-constructible.
-			let url = new (<any>URL)(Shumway.AVMX.getCurrentABC().env.url);
+
+			// @ivanpopelyshev: that's a problem, we dont have currentABC in legacy, only currentDomain's
+			// no url in them
+			// let url = new (<any>URL)(Shumway.AVMX.getCurrentABC().env.url);
+
+			let url = new (<any>URL)("localhost:8080");
 			this._domain = url.hostname;
 			this._secure = url.protocol === 'https:';
 		}
@@ -201,10 +203,10 @@ module Shumway.flash.net {
 				return;
 			}
 			let asyncErrorEventCtor = this._sec.events.AsyncErrorEvent;
-			let errorEvent = asyncErrorEventCtor.create('asyncError', false, false,
+			let errorEvent = asyncErrorEventCtor.create(['asyncError', false, false,
 				'Error #2095: flash.net.LocalConnection was' +
 				' unable to invoke' +
-				' callback ' + methodName + '.', error);
+				' callback ' + methodName + '.', error]);
 			if (this.hasEventListener('asyncError')) {
 				try {
 					this.dispatchEvent(errorEvent);

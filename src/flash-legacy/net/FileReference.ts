@@ -15,6 +15,7 @@
  */
 // Class: FileReference
 module Shumway.flash.net {
+	import notImplemented = Shumway.Debug.notImplemented;
 	export class FileReference extends flash.events.EventDispatcher {
 		constructor() {
 			super();
@@ -30,7 +31,7 @@ module Shumway.flash.net {
 		// _size: number;
 		// _type: string;
 		// _data: flash.utils.ByteArray;
-		get creationDate(): ASDate {
+		get creationDate(): any {
 			release || notImplemented("public flash.net.FileReference::get creationDate");
 			return null;
 			// return this._creationDate;
@@ -42,7 +43,7 @@ module Shumway.flash.net {
 			// return this._creator;
 		}
 
-		get modificationDate(): ASDate {
+		get modificationDate(): any {
 			release || notImplemented("public flash.net.FileReference::get modificationDate");
 			return null;
 			// return this._modificationDate;
@@ -73,14 +74,14 @@ module Shumway.flash.net {
 
 		download(request: flash.net.URLRequest, defaultFileName: string = null): void {
 			request = request;
-			defaultFileName = axCoerceString(defaultFileName);
+			defaultFileName = defaultFileName;
 			release || notImplemented("public flash.net.FileReference::download");
 			return;
 		}
 
 		upload(request: flash.net.URLRequest, uploadDataFieldName: string = "Filedata", testUpload: boolean = false): void {
 			request = request;
-			uploadDataFieldName = axCoerceString(uploadDataFieldName);
+			uploadDataFieldName = uploadDataFieldName;
 			testUpload = !!testUpload;
 			release || notImplemented("public flash.net.FileReference::upload");
 			return;
@@ -92,7 +93,7 @@ module Shumway.flash.net {
 			// return this._data;
 		}
 
-		browse(typeFilter: ASArray = null): boolean {
+		browse(typeFilter: Array<string> = null): boolean {
 			typeFilter = typeFilter;
 			release || notImplemented("public flash.net.FileReference::browse");
 			return false;

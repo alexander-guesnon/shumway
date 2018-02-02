@@ -16,8 +16,6 @@
 // Class: FileReferenceList
 module Shumway.flash.net {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
 	export class FileReferenceList extends flash.events.EventDispatcher {
 
 		static classInitializer: any = null;
@@ -27,13 +25,13 @@ module Shumway.flash.net {
 		}
 
 		// _fileList: any [];
-		get fileList(): ASArray {
+		get fileList(): Array<number> {
 			release || notImplemented("public flash.net.FileReferenceList::get fileList");
 			return null;
 			// return this._fileList;
 		}
 
-		browse(typeFilter: ASArray = null): boolean {
+		browse(typeFilter: Array<string> = null): boolean {
 			typeFilter = typeFilter;
 			release || notImplemented("public flash.net.FileReferenceList::browse");
 			return false;

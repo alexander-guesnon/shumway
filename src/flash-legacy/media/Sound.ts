@@ -124,7 +124,7 @@ module Shumway.flash.media {
 			this._length = 0;
 			this._bytesTotal = 0;
 			this._bytesLoaded = 0;
-			this._id3 = new this.sec.flash.media.ID3Info();
+			this._id3 = this._sec.media.ID3Info.create();
 
 			this._isURLInaccessible = false;
 			this._isBuffering = false;

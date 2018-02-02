@@ -14,8 +14,9 @@ module Shumway.flash.system {
 		StatusEvent = new LegacyClass<events.StatusEvent>(events.StatusEvent);
 		GestureEvent = new LegacyClass<events.GestureEvent>(events.GestureEvent);
 		KeyboardEvent = new LegacyClass<events.KeyboardEvent>(events.KeyboardEvent);
-		TextEvent = new LegacyClass<events.KeyboardEvent>(events.TextEvent);
-		TimerEvent = new LegacyClass<events.KeyboardEvent>(events.TimerEvent);
+		MouseEvent = new LegacyClass<events.MouseEvent>(events.MouseEvent);
+		TextEvent = new LegacyClass<events.TextEvent>(events.TextEvent);
+		TimerEvent = new LegacyClass<events.TimerEvent>(events.TimerEvent);
 		TouchEvent = new LegacyClass<events.TouchEvent>(events.TouchEvent);
 		// UncaughtErrorEvent = new LegacyClass<events.UncaughtErrorEvent>(events.UncaughtErrorEvent);
 		NetStatusEvent = new LegacyClass<events.NetStatusEvent>(events.NetStatusEvent);

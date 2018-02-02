@@ -15,6 +15,8 @@
  */
 
 ///<reference path='module.ts' />
+///<reference path='../htmlparser.ts' />
+///<reference path='TextContent.ts' />
 ///<reference path='settings.ts' />
 ///<reference path='symbol.ts' />
 
@@ -169,11 +171,18 @@
 ///<reference path='net/URLStream.ts' />
 ///<reference path='net/URLVariables.ts' />
 
-///<reference path='system/ILoaderInfo.ts' />
 ///<reference path='system/ApplicationDomain.ts' />
+///<reference path='system/Capabilities.ts' />
+///<reference path='system/FSCommand.ts' />
 ///<reference path='system/ImageDecodingPolicy.ts' />
 ///<reference path='system/LoaderContext.ts' />
 ///<reference path='system/JPEGLoaderContext.ts' />
+///<reference path='system/MessageChannel.ts' />
+///<reference path='system/MessageChannelState.ts' />
+///<reference path='system/Security.ts' />
+///<reference path='system/SecurityDomain.ts' />
+///<reference path='system/SecurityPanel.ts' />
+///<reference path='system/TouchscreenType.ts' />
 
 ///<reference path='text/AntiAliasType.ts' />
 // ///<reference path='text/CSMSettings.ts' />
@@ -211,5 +220,6 @@
 ///<reference path='statics/FiltersNamespace.ts'/>>
 ///<reference path='statics/MediaNamespace.ts'/>>
 ///<reference path='statics/NetNamespace.ts'/>>
+///<reference path='statics/LoaderClass.ts'/>>
 
 ///<reference path='link.ts' />

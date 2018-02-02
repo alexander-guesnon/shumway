@@ -18,12 +18,6 @@ module Shumway.flash.events {
 	import notImplemented = Shumway.Debug.notImplemented;
 
 	export class MouseEvent extends flash.events.Event {
-
-		static classInitializer: any = null;
-
-		static classSymbols: string [] = null;
-		static instanceSymbols: string [] = null;
-
 		constructor(type: string, bubbles: boolean = true, cancelable: boolean = false,
 		            localX: number = undefined, localY: number = undefined,
 		            relatedObject: flash.display.InteractiveObject = null, ctrlKey: boolean = false,
@@ -215,13 +209,13 @@ module Shumway.flash.events {
 		}
 
 		updateAfterEvent(): void {
-			this.sec.player.requestRendering();
+			this._sec.player.requestRendering();
 		}
 
 		private _getGlobalPoint(): flash.geom.Point {
 			let point = this._position;
 			if (!point) {
-				point = this._position = new this.sec.flash.geom.Point();
+				point = this._position = this._sec.geom.Point.create();
 			}
 			if (this.target) {
 				point.setTo(this._localX, this._localY);
@@ -234,12 +228,12 @@ module Shumway.flash.events {
 		}
 
 		clone(): Event {
-			return new this.sec.flash.events.MouseEvent(this.type, this.bubbles,
+			return this._sec.events.MouseEvent.create([this.type, this.bubbles,
 				this.cancelable,
 				this.localX, this.localY,
 				this.relatedObject, this.ctrlKey,
 				this.altKey, this.shiftKey,
-				this.buttonDown, this.delta);
+				this.buttonDown, this.delta]);
 		}
 
 		toString(): string {
