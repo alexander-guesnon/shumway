@@ -7,6 +7,8 @@ module Shumway.flash.system {
 			super();
 		}
 
+		EventDispatcher = new LegacyClass<events.EventDispatcher>(events.EventDispatcher);
+
 		Event = new LegacyClass<Event>(Event);
 		ErrorEvent = new LegacyClass<events.ErrorEvent>(events.ErrorEvent);
 		AsyncErrorEvent = new LegacyClass<events.AsyncErrorEvent>(events.AsyncErrorEvent);

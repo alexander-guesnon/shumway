@@ -63,7 +63,7 @@
 ///<reference path='display/SimpleButton.ts' />
 ///<reference path='display/DisplayObjectContainer.ts' />
 ///<reference path='display/enums/JointStyle.ts' />
-///<reference path='display/CapsStyle.ts' />
+///<reference path='display/enums/CapsStyle.ts' />
 ///<reference path='display/enums/LineScaleMode.ts' />
 ///<reference path='display/enums/GradientType.ts' />
 ///<reference path='display/enums/SpreadMethod.ts' />

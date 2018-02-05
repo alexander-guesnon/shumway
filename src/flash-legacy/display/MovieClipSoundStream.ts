@@ -17,6 +17,7 @@
 module Shumway.flash.display {
 	import MP3DecoderSession = SWF.MP3DecoderSession;
 	import DecodedSound = SWF.Parser.DecodedSound;
+	import ISecurityDomain = system.ISecurityDomain;
 
 	let MP3_MIME_TYPE = 'audio/mpeg';
 
@@ -311,7 +312,7 @@ module Shumway.flash.display {
 			this.expectedFrame = 0;
 			this.waitFor = 0;
 
-			let sec = movieClip.sec;
+			let sec = movieClip._sec;
 			let isMP3 = streamInfo.format === 'mp3';
 			if (isMP3 && !webAudioMP3Option.value) {
 				let element = document.createElement('audio');

@@ -446,8 +446,6 @@ module Shumway.flash.display {
 		}
 
 		getChildByName(name: string): DisplayObject {
-			name = axCoerceString(name);
-
 			let child = this._lookupChildByName(name, LookupChildOptions.DEFAULT);
 			if (child) {
 				child._addReference();
@@ -650,7 +648,7 @@ module Shumway.flash.display {
 		 * Note that, while the Flash documentation makes it sound like it doesn't, the result also
 		 * contains the receiver object if that matches the criteria above.
 		 */
-		getObjectsUnderPoint(globalPoint: flash.geom.Point): ASArray {
+		getObjectsUnderPoint(globalPoint: flash.geom.Point): Array<any> {
 			release || counter.count("DisplayObjectContainer::getObjectsUnderPoint");
 
 			let globalX = globalPoint.x * 20 | 0;
@@ -658,7 +656,7 @@ module Shumway.flash.display {
 			let objects: Array<DisplayObject> = [];
 			this._containsGlobalPoint(globalX, globalY, HitTestingType.ObjectsUnderPoint, objects);
 			// getObjectsUnderPoint returns results in exactly the opposite order we collect them in.
-			return this.sec.createArrayUnsafe(objects.reverse());
+			return objects.reverse();
 		}
 
 		areInaccessibleObjectsUnderPoint(point: flash.geom.Point): boolean {

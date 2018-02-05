@@ -15,33 +15,16 @@
  */
 // Class: CapsStyle
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class CapsStyle extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
-		constructor() {
-			super();
-		}
-
+	export enum CapsStyle {
 		// JS -> AS Bindings
-		static ROUND: string = "round";
-		static NONE: string = "none";
-		static SQUARE: string = "square";
-
-
+		ROUND = "round",
+		NONE = "none",
+		SQUARE = "square",
 		// AS -> JS Bindings
+	}
 
-		static fromNumber(n: number): string {
+	export namespace CapsStyle {
+		export function fromNumber(n: number): string {
 			switch (n) {
 				case 0:
 					return CapsStyle.ROUND;
@@ -54,7 +37,7 @@ module Shumway.flash.display {
 			}
 		}
 
-		static toNumber(value: string): number {
+		export function toNumber(value: string): number {
 			switch (value) {
 				case CapsStyle.ROUND:
 					return 0;

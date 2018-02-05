@@ -16,14 +16,10 @@
 // Class: InteractiveObject
 module Shumway.flash.display {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	import events = flash.events;
 
 	export class InteractiveObject extends flash.display.DisplayObject {
-
-		static classInitializer: any = null;
-
 		constructor() {
 			super();
 			if (!this._fieldsInitialized) {

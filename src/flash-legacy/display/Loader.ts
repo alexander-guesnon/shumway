@@ -58,7 +58,7 @@ module Shumway.flash.display {
 				// the instance id must not be used up.
 				displayObjectClass._instanceID--;
 			}
-			this._contentLoaderInfo = new this.sec.flash.display.LoaderInfo(displayObjectClass.Loader.CtorToken);
+			this._contentLoaderInfo = this._sec.display.LoaderInfo.create([displayObjectClass.Loader.CtorToken]);
 			this._contentLoaderInfo._loader = this;
 
 			// @ivanpopelyshev: That's bad. No cirrentABC for us.
@@ -73,7 +73,7 @@ module Shumway.flash.display {
 		}
 
 		_setStage(stage: Stage) {
-			release || assert(this === this._sec.loader.getRootLoader());
+			release || assert(this === this._sec.display.Loader.getRootLoader());
 			this._stage = stage;
 		}
 
@@ -84,7 +84,7 @@ module Shumway.flash.display {
 		_constructFrame() {
 			const context = this._sec;
 
-			if (this === context.loader.getRootLoader() && this._content) {
+			if (this === context.display.Loader.getRootLoader() && this._content) {
 				context.display._advancableInstances.remove(this);
 				this._children[0] = this._content;
 				this._constructChildren();
@@ -171,7 +171,7 @@ module Shumway.flash.display {
 
 		private _canLoadSWFFromDomain(url: string): CrossDomainSWFLoadingWhitelistResult {
 			url = FileLoadingService.instance.resolveUrl(url);
-			let whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
+			let whitelist: ICrossDomainSWFLoadingWhitelist = this._sec.player;
 			return whitelist.checkDomainForSWFLoading(url);
 		}
 
@@ -189,7 +189,7 @@ module Shumway.flash.display {
 			fileLoader.loadFile(request._toFileRequest());
 
 			this._queuedLoadUpdate = null;
-			let loaderClass = this._sec.loader;
+			let loaderClass = this._sec.display.Loader;
 			release || assert(loaderClass._loadQueue.indexOf(this) === -1);
 			loaderClass._loadQueue.push(this);
 		}
@@ -197,7 +197,7 @@ module Shumway.flash.display {
 		loadBytes(data: flash.utils.ByteArray, context?: LoaderContext) {
 			this.close();
 			// TODO: properly coerce object arguments to their types.
-			let loaderClass = this._sec.loader;
+			let loaderClass = this._sec.player.Loader;
 			// In case this is the initial root loader, we won't have a loaderInfo object. That should
 			// only happen in the inspector when a file is loaded from a Blob, though.
 			this._contentLoaderInfo._url = (this.loaderInfo ? this.loaderInfo._url : '') +
@@ -217,7 +217,7 @@ module Shumway.flash.display {
 		}
 
 		close(): void {
-			let loaderClass = this._sec.loader;
+			let loaderClass = this._sec.display.Loader;
 			let queueIndex = loaderClass._loadQueue.indexOf(this);
 			if (queueIndex > -1) {
 				loaderClass._loadQueue.splice(queueIndex, 1);
@@ -254,7 +254,7 @@ module Shumway.flash.display {
 
 		private _applyLoaderContext(context: LoaderContext) {
 			let parameters = context && context.parameters ?
-				transformASValueToJS(this.sec, context.parameters, false) :
+				context.parameters :
 				{};
 			if (context && context.applicationDomain) {
 				this._contentLoaderInfo._applicationDomain = context.applicationDomain;
@@ -272,10 +272,10 @@ module Shumway.flash.display {
 		onLoadOpen(file: any) {
 			if (!file) {
 				this._contentLoaderInfo.dispatchEvent(
-					new this.sec.flash.events.IOErrorEvent(events.IOErrorEvent.IO_ERROR, false, false,
+					this._sec.events.IOErrorEvent.create([events.IOErrorEvent.IO_ERROR, false, false,
 						Errors.UnknownFileTypeError.message,
 						Errors.UnknownFileTypeError.code
-					));
+					]));
 				return;
 			}
 			// For child SWF files, only continue loading and interpreting the loaded data if the
@@ -321,10 +321,10 @@ module Shumway.flash.display {
 						" around by calling Security.allowDomain.";
 					try {
 						this._contentLoaderInfo.dispatchEvent(
-							new this.sec.flash.events.IOErrorEvent(events.SecurityErrorEvent.SECURITY_ERROR,
+							this._sec.events.IOErrorEvent.create([events.SecurityErrorEvent.SECURITY_ERROR,
 								false, false, message,
 								Errors.SecuritySwfNotAllowedError.code
-							));
+							]));
 					} catch (_) {
 						// Ignore error during event handling.
 					}
@@ -334,11 +334,11 @@ module Shumway.flash.display {
 					this._fileLoader.abortLoad();
 					try {
 						this._contentLoaderInfo.dispatchEvent(
-							new this.sec.flash.events.IOErrorEvent(events.SecurityErrorEvent.SECURITY_ERROR,
+							this._sec.events.IOErrorEvent.create([events.SecurityErrorEvent.SECURITY_ERROR,
 								false, false,
 								Errors.AllowCodeImportError.message,
 								Errors.AllowCodeImportError.code
-							));
+							]));
 					} catch (_) {
 						// Ignore error during event handling.
 					}
@@ -385,7 +385,7 @@ module Shumway.flash.display {
 			};
 			let symbol = BitmapSymbol.FromData(data, this._contentLoaderInfo);
 			this._imageSymbol = symbol;
-			this.sec.player.registerImage(symbol, file.type, file.data, null);
+			this._sec.player.registerImage(symbol, file.type, file.data, null);
 			release || assert(symbol.resolveAssetPromise);
 		}
 
@@ -542,7 +542,7 @@ module Shumway.flash.display {
 			// DisplayObject instance ID. For the others, we have reserved one in `_contentID`.
 
 			context.display._instanceID--;
-			let loaderClass = context.loader;
+			let loaderClass = context.display.Loader;
 			if (this === loaderClass._rootLoader) {
 				root._name = 'root1';
 			} else {
@@ -583,7 +583,7 @@ module Shumway.flash.display {
 			let contentLoaderInfo: LoaderInfo = this._contentLoaderInfo;
 			let avm1Context = Shumway.AVM1.AVM1Context.create(contentLoaderInfo);
 			const context = this._sec;
-			let rootLoader = context.loader.getRootLoader();
+			let rootLoader = context.display.Loader.getRootLoader();
 			avm1Context.setStage(rootLoader._stage);
 
 			// FIXME make frameNavigationModel non-global
@@ -609,7 +609,7 @@ module Shumway.flash.display {
 			let parameters = contentLoaderInfo._parameters;
 			avm1MovieClip.setParameters(parameters);
 
-			let avm1Movie = new this.sec.flash.display.AVM1Movie(root);
+			let avm1Movie = this._sec.display.AVM1Movie.create([root]);
 			release || Debug.assert(!avm1Context.levelsContainer, "One levels container per context");
 			avm1Context.levelsContainer = avm1Movie;
 

@@ -18,7 +18,6 @@ module Shumway.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import assert = Shumway.Debug.assert;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class Stage extends flash.display.DisplayObjectContainer {
 
@@ -50,14 +49,13 @@ module Shumway.flash.display {
 			this._displayState = null;
 			this._fullScreenSourceRect = null;
 			this._mouseLock = false;
-			let objectVectorClass = this.sec.getVectorClass(this.sec.AXObject);
-			this._stageVideos = <any>objectVectorClass.axConstruct([0, true]);
-			this._stage3Ds = <any>objectVectorClass.axConstruct([0, true]);
+			this._stageVideos = [];
+			this._stage3Ds = [];
 			this._colorARGB = 0xFFFFFFFF;
 			this._fullScreenWidth = 0;
 			this._fullScreenHeight = 0;
 			this._wmodeGPU = false;
-			this._softKeyboardRect = new this.sec.flash.geom.Rectangle();
+			this._softKeyboardRect = this._sec.geom.Rectangle.create();
 			this._allowsFullScreen = false;
 			this._allowsFullScreenInteractive = false;
 			this._contentsScaleFactor = 1;
@@ -94,8 +92,8 @@ module Shumway.flash.display {
 		private _displayState: string;
 		private _fullScreenSourceRect: flash.geom.Rectangle;
 		private _mouseLock: boolean;
-		private _stageVideos: GenericVector;
-		private _stage3Ds: GenericVector;
+		private _stageVideos: Array<any>;
+		private _stage3Ds: Array<any>;
 		private _colorARGB: number /*uint*/;
 		private _fullScreenWidth: number /*uint*/;
 		private _fullScreenHeight: number /*uint*/;
@@ -134,7 +132,6 @@ module Shumway.flash.display {
 		}
 
 		set scaleMode(value: string) {
-			value = axCoerceString(value);
 			if (flash.display.StageScaleMode.toNumber(value) < 0) {
 				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "scaleMode");
 			}
@@ -149,7 +146,6 @@ module Shumway.flash.display {
 		}
 
 		set align(value: string) {
-			value = axCoerceString(value);
 			let n = flash.display.StageAlign.toNumber(value);
 			release || assert(n >= 0);
 			let newValue = flash.display.StageAlign.fromNumber(n);
@@ -288,7 +284,7 @@ module Shumway.flash.display {
 		set quality(value: string) {
 			// TODO: The *linear versions return just *, stripping the "linear" part
 			// Value is compared case-insensitively, and has default handling, so '' is ok.
-			value = (axCoerceString(value) || '').toLowerCase();
+			value = (value || '').toLowerCase();
 			if (flash.display.StageQuality.toNumber(value) < 0) {
 				value = flash.display.StageQuality.HIGH;
 			}
@@ -300,7 +296,6 @@ module Shumway.flash.display {
 		}
 
 		set displayState(value: string) {
-			value = axCoerceString(value);
 			// TODO: This should only be allowed if the embedding page allows full screen mode.
 			if (flash.display.StageDisplayState.toNumber(value) < 0) {
 				value = flash.display.StageDisplayState.NORMAL;
@@ -335,7 +330,7 @@ module Shumway.flash.display {
 			return this._stageVideos;
 		}
 
-		get stage3Ds(): GenericVector {
+		get stage3Ds(): Array<any> {
 			release || somewhatImplemented("public flash.display.Stage::get stage3Ds");
 			return this._stage3Ds;
 		}
@@ -501,7 +496,7 @@ module Shumway.flash.display {
 			if (!this._invalidated) {
 				return;
 			}
-			this._sec._broadcastFrameEvent(flash.events.Event.RENDER);
+			this._sec.display._broadcastFrameEvent(flash.events.Event.RENDER);
 			this._invalidated = false;
 		}
 
@@ -637,7 +632,7 @@ module Shumway.flash.display {
 			return this._getFilters();
 		}
 
-		set filters(value: ASArray) {
+		set filters(value: Array<any>) {
 			this._sec.throwError('IllegalOperationError', Errors.InvalidStageMethodError);
 		}
 

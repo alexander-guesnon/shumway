@@ -15,17 +15,10 @@
  */
 // Class: Scene
 module Shumway.flash.display {
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class Scene extends ASObject {
-
-		static classInitializer: any = null;
-		static classSymbols: string [] = null; // [];
-		static instanceSymbols: string [] = null;
-
+	export class Scene extends LegacyEntity {
 		constructor(name: string, labels: { value: FrameLabel[] }, offset: number, numFrames: number /*int*/) {
 			super();
-			this._name = axCoerceString(name);
+			this._name = name;
 			// Note: creating Scene objects in ActionScript, while possible, is undocumented and entirely
 			// useless. Luckily, that also means that they're not very carefully implemented.
 			// Specifically, the `labels` array isn't cloned during construction or when returned from
@@ -56,8 +49,8 @@ module Shumway.flash.display {
 			let labels_ = this._labels.value.map(function (label: FrameLabel) {
 				return label.clone();
 			});
-			return new this.sec.flash.display.Scene(this._name, this.sec.createArrayUnsafe(labels_),
-				this.offset, this._numFrames);
+			return this._sec.display.Scene.create([this._name, labels_,
+				this.offset, this._numFrames]);
 		}
 
 		getLabelByName(name: string, ignoreCase: boolean): FrameLabel {

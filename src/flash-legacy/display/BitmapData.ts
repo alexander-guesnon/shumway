@@ -44,7 +44,7 @@ module Shumway.flash.display {
 			release || assert(this._symbol);
 			let symbol = this._symbol;
 			release || assert(symbol.syncId);
-			this._rect = new this.sec.flash.geom.Rectangle(0, 0, symbol.width, symbol.height);
+			this._rect = this._sec.geom.Rectangle.create([0, 0, symbol.width, symbol.height]);
 			this._transparent = true;
 			this._id = symbol.syncId;
 			if (symbol.type === ImageType.PremultipliedAlphaARGB ||
@@ -80,7 +80,7 @@ module Shumway.flash.display {
 				width * height > BitmapData.MAXIMUM_DIMENSION) {
 				this._sec.throwError('ArgumentError', Errors.InvalidBitmapData);
 			}
-			this._rect = this._sec.flash.geom.Rectangle.create([0, 0, width, height]);
+			this._rect = this._sec.geom.Rectangle.create([0, 0, width, height]);
 			this._transparent = transparent;
 			this._id = flash.display.DisplayObject.getNextSyncID();
 			this._setData(new Uint8Array(width * height * 4), ImageType.PremultipliedAlphaARGB);
@@ -385,7 +385,7 @@ module Shumway.flash.display {
 			return;
 		}
 
-		compare(otherBitmapData: flash.display.BitmapData): ASObject {
+		compare(otherBitmapData: flash.display.BitmapData): any {
 			otherBitmapData = otherBitmapData;
 			release || notImplemented("public flash.display.BitmapData::compare");
 			return null;
@@ -672,11 +672,11 @@ module Shumway.flash.display {
 			color = color >>> 0;
 			findColor = !!findColor;
 			release || somewhatImplemented("public flash.display.BitmapData::getColorBoundsRect");
-			return new this.sec.flash.geom.Rectangle();
+			return this._sec.geom.Rectangle.create();
 		}
 
 		getPixels(rect: flash.geom.Rectangle): flash.utils.ByteArray {
-			let outputByteArray = new this.sec.flash.utils.ByteArray();
+			let outputByteArray = this._sec.utils.ByteArray.create();
 			this.copyPixelsToByteArray(rect, outputByteArray);
 			return outputByteArray;
 		}
@@ -689,19 +689,18 @@ module Shumway.flash.display {
 			data.writeRawBytes(new Uint8Array(pixelData));
 		}
 
-		getVector(rect: flash.geom.Rectangle): Uint32Vector {
+		getVector(rect: flash.geom.Rectangle): Uint32Array {
 			let pixelData = this._getPixelData(rect);
 			if (!pixelData) {
-				return new this.sec.Uint32Vector(0);
+				return new Uint32Array(0);
 			}
-			let outputVector = new this.sec.Uint32Vector(pixelData.length);
-			outputVector.length = pixelData.length;
-			outputVector._view().set(pixelData);
+			let outputVector = new Uint32Array(pixelData.length);
+			outputVector.set(pixelData);
 			return outputVector;
 		}
 
 		hitTest(firstPoint: flash.geom.Point, firstAlphaThreshold: number /*uint*/,
-		        secondObject: ASObject,
+		        secondObject: any,
 		        secondBitmapDataPoint: flash.geom.Point = null,
 		        secondAlphaThreshold: number /*uint*/ = 1): boolean {
 			firstPoint = firstPoint;
@@ -789,8 +788,8 @@ module Shumway.flash.display {
 			this._putPixelData(rect, new Int32Array(inputByteArray.readRawBytes()));
 		}
 
-		setVector(rect: flash.geom.Rectangle, inputVector: Uint32Vector): void {
-			this._putPixelData(rect, inputVector._view());
+		setVector(rect: flash.geom.Rectangle, inputVector: Uint32Array): void {
+			this._putPixelData(rect, inputVector);
 		}
 
 		threshold(sourceBitmapData: flash.display.BitmapData, sourceRect: flash.geom.Rectangle,
@@ -800,7 +799,7 @@ module Shumway.flash.display {
 			sourceBitmapData = sourceBitmapData;
 			sourceRect = sourceRect;
 			destPoint = destPoint;
-			operation = axCoerceString(operation);
+			operation = operation;
 			threshold = threshold >>> 0;
 			color = color >>> 0;
 			mask = mask >>> 0;
@@ -818,13 +817,13 @@ module Shumway.flash.display {
 			this._locked = false;
 		}
 
-		histogram(hRect: flash.geom.Rectangle = null): GenericVector {
+		histogram(hRect: flash.geom.Rectangle = null): Array<any> {
 			hRect = hRect;
 			release || notImplemented("public flash.display.BitmapData::histogram");
 			return null;
 		}
 
-		encode(rect: flash.geom.Rectangle, compressor: ASObject,
+		encode(rect: flash.geom.Rectangle, compressor: any,
 		       byteArray: flash.utils.ByteArray = null): flash.utils.ByteArray {
 			rect = rect;
 			compressor = compressor;
@@ -843,7 +842,7 @@ module Shumway.flash.display {
 		 */
 		private _ensureBitmapData() {
 			if (this._isRemoteDirty) {
-				let data = this.sec.player.requestBitmapData(this);
+				let data = this._sec.player.requestBitmapData(this);
 				this._setData(data.getBytes(), ImageType.StraightAlphaRGBA);
 				this._isRemoteDirty = false;
 				this._isDirty = false;
@@ -885,13 +884,13 @@ module Shumway.flash.display {
 
 		private sharedInstance: flash.display.BitmapData;
 
-		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
-			super(data, sec.flash.display.BitmapData.axClass, false);
+		constructor(data: Timeline.SymbolData, _sec: system.ISecurityDomain) {
+			super(data, _sec.display.BitmapData, false);
 			this.ready = false;
 		}
 
 		static FromData(data: any, loaderInfo: LoaderInfo): BitmapSymbol {
-			let symbol = new BitmapSymbol(data, loaderInfo.sec);
+			let symbol = new BitmapSymbol(data, loaderInfo._sec);
 			// For non-decoded images, we don't yet have dimensions.
 			symbol.width = data.width || -1;
 			symbol.height = data.height || -1;
@@ -923,7 +922,7 @@ module Shumway.flash.display {
 
 		createSharedInstance() {
 			release || assert(this.ready);
-			return this.sharedInstance = constructClassFromSymbol(this, this.symbolClass);
+			return this.sharedInstance = system.constructClassFromSymbol(this, this.symbolClass);
 		}
 
 		get resolveAssetCallback() {

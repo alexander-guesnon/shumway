@@ -15,17 +15,10 @@
  */
 // Class: FrameLabel
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
 	export class FrameLabel extends flash.events.EventDispatcher {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
 		constructor(name: string, frame: number /*int*/) {
 			super();
-			this._name = axCoerceString(name);
+			this._name = name;
 			this._frame = frame | 0;
 		}
 
@@ -41,7 +34,7 @@ module Shumway.flash.display {
 		}
 
 		clone() {
-			return new this.sec.flash.display.FrameLabel(this._name, this._frame);
+			return this._sec.display.FrameLabel.create([this._name, this._frame]);
 		}
 	}
 }

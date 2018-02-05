@@ -34,7 +34,7 @@ module Shumway.flash.display {
 
 		constructor(token: Object) {
 			super();
-			if (token !== this._sec.loader.CtorToken) {
+			if (token !== this._sec.display.Loader.CtorToken) {
 				this._sec.throwError('ArgumentError', Errors.CantInstantiateError, 'LoaderInfo$');
 			}
 			this._loader = null;
@@ -123,7 +123,7 @@ module Shumway.flash.display {
 				// same as the SWF file's own URL.
 
 				// The loaderURL value can be changed by player settings.
-				let service: IRootElementService = this.sec.player;
+				let service: IRootElementService = this._sec.player;
 				return (this._url === service.swfUrl && service.loaderUrl) || this._url;
 			}
 			return this._loaderUrl;
@@ -155,7 +155,7 @@ module Shumway.flash.display {
 		}
 
 		get app() {
-			return this._applicationDomain.axDomain;
+			return this._applicationDomain;
 		}
 
 		get swfVersion(): number /*uint*/ {
@@ -216,7 +216,7 @@ module Shumway.flash.display {
 		get sharedEvents(): flash.events.EventDispatcher {
 			release || somewhatImplemented("public flash.display.LoaderInfo::get sharedEvents");
 			if (!this._sharedEvents) {
-				this._sharedEvents = new this.sec.flash.events.EventDispatcher();
+				this._sharedEvents = this._sec.events.EventDispatcher.create();
 			}
 			return this._sharedEvents;
 		}
@@ -275,7 +275,7 @@ module Shumway.flash.display {
 
 		get bytes(): flash.utils.ByteArray {
 			if (!this._file) {
-				return new this.sec.flash.utils.ByteArray();
+				return this._sec.utils.ByteArray.create();
 			}
 			// @ivanpopelyshev : both SWFFile and ImageFile has `data` Uint8Array
 			// that can be used for ByteArray constructor
@@ -286,7 +286,7 @@ module Shumway.flash.display {
 		get parameters(): Object {
 			release || somewhatImplemented("public flash.display.LoaderInfo::get parameters");
 			if (this._parameters) {
-				return transformJSValueToAS(this.sec, this._parameters, false);
+				return this._parameters;
 			}
 			return {};
 		}
@@ -306,7 +306,7 @@ module Shumway.flash.display {
 		//  return false;
 		//}
 
-		getSymbolResolver(classDefinition: AXClass, symbolId: number): () => any {
+		getSymbolResolver(classDefinition: system.LegacyClass, symbolId: number): () => any {
 			return this.resolveClassSymbol.bind(this, classDefinition, symbolId);
 		}
 

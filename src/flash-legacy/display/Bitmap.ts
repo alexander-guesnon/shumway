@@ -16,7 +16,6 @@
 // Class: Bitmap
 module Shumway.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import assert = Shumway.Debug.assert;
 
 	export class Bitmap extends flash.display.DisplayObject {
@@ -36,11 +35,11 @@ module Shumway.flash.display {
 			// initializer again.
 			let bitmapClass = this._sec.display.Bitmap;
 			if (bitmapClass.isSymbolPrototype(symbolClass)) {
-				symbolClass = this.sec.flash.display.BitmapData.axClass;
+				symbolClass = this._sec.display.BitmapData;
 			}
 			// TODO: I don't think BitmapData symbol objects can change, so they don't need back
 			// references to this Bitmap.
-			this._bitmapData = constructClassFromSymbol(symbol, symbolClass);
+			this._bitmapData = system.constructClassFromSymbol(symbol, symbolClass);
 			this._pixelSnapping = null;
 			this._smoothing = null;
 			this._setFillAndLineBoundsFromWidthAndHeight(symbol.width * 20 | 0, symbol.height * 20 | 0);
@@ -64,7 +63,7 @@ module Shumway.flash.display {
 			super();
 			if (!this._symbol) {
 				this.bitmapData = bitmapData;
-				this._pixelSnapping = axCoerceString(pixelSnapping);
+				this._pixelSnapping = pixelSnapping;
 				this._smoothing = !!smoothing;
 			}
 		}
@@ -81,7 +80,7 @@ module Shumway.flash.display {
 			if (PixelSnapping.toNumber(value) < 0) {
 				this._sec.throwError("ArgumentError", Errors.InvalidEnumError, "pixelSnapping");
 			}
-			this._pixelSnapping = axCoerceString(value);
+			this._pixelSnapping = value;
 		}
 
 		get smoothing(): boolean {
