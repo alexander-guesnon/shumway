@@ -44,11 +44,11 @@ module Shumway.flash.net {
 		}
 
 		addHeader(operation: string, mustUnderstand: Boolean = false, param: Object = null): void {
-			this._invoke(3, [axCoerceString(operation), !!mustUnderstand, param]);
+			this._invoke(3, [operation, !!mustUnderstand, param]);
 		}
 
 		call(command: string, responder: Responder /* more args can be provided */): void {
-			arguments[0] = axCoerceString(command);
+			arguments[0] = command;
 			this._invoke(2, <any>arguments);
 		}
 
@@ -65,7 +65,7 @@ module Shumway.flash.net {
 
 		private _connected: boolean;
 		private _uri: string;
-		private _client: ASObject;
+		private _client: any;
 		private _objectEncoding: number /*uint*/;
 		private _proxyType: string;
 		// _connectedProxyType: string;
@@ -90,27 +90,25 @@ module Shumway.flash.net {
 		}
 
 		connect(command: string): void {
-			command = axCoerceString(command);
-
 			release || somewhatImplemented("public flash.net.NetConnection::connect");
 			this._uri = command;
-			let netStatusEventCtor = this.sec.flash.events.NetStatusEvent;
+			let netStatusEventCtor = this._sec.events.NetStatusEvent;
 			if (!command) {
 				this._connected = true;
-				this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS, false, false,
-					this.sec.createObjectFromJS({level: 'status', code: 'NetConnection.Connect.Success'})));
+				this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS, false, false,
+					{level: 'status', code: 'NetConnection.Connect.Success'}]));
 			} else {
 				let parsedURL = RtmpJs.parseConnectionString(command);
 				if (!parsedURL || !parsedURL.host ||
 					(parsedURL.protocol !== 'rtmp' && parsedURL.protocol !== 'rtmpt' && parsedURL.protocol !== 'rtmps')) {
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS, false, false,
-						this.sec.createObjectFromJS({level: 'status', code: 'NetConnection.Connect.Failed'})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS, false, false,
+						{level: 'status', code: 'NetConnection.Connect.Failed'}]));
 					return;
 				}
 
-				let service: display.IRootElementService = this.sec.player;
+				let service: display.IRootElementService = this._sec.player;
 
-				let rtmpProps = this.sec.createObjectFromJS({
+				let rtmpProps = {
 					app: parsedURL.app,
 					flashver: flash.system.Capabilities.version,
 					swfUrl: service.swfUrl,
@@ -121,7 +119,7 @@ module Shumway.flash.net {
 					videoFunction: 1,
 					pageUrl: service.pageUrl || service.swfUrl,
 					objectEncoding: 0
-				});
+				};
 
 				this._protocol = parsedURL.protocol;
 
@@ -166,11 +164,11 @@ module Shumway.flash.net {
 			this._rtmpConnection.createStream(transactionId, null);
 		}
 
-		get client(): ASObject {
+		get client(): any {
 			return this._client;
 		}
 
-		set client(object: ASObject) {
+		set client(object: any) {
 			this._client = object;
 		}
 
@@ -189,7 +187,7 @@ module Shumway.flash.net {
 		}
 
 		set proxyType(ptype: string) {
-			ptype = axCoerceString(ptype);
+			ptype = ptype;
 			release || somewhatImplemented("public flash.net.NetConnection::set proxyType");
 			this._proxyType = ptype;
 		}
@@ -245,7 +243,7 @@ module Shumway.flash.net {
 			// return this._farNonce;
 		}
 
-		get unconnectedPeerStreams(): ASArray {
+		get unconnectedPeerStreams(): Array<any> {
 			release || notImplemented("public flash.net.NetConnection::get unconnectedPeerStreams");
 			return null;
 			// return this._unconnectedPeerStreams;

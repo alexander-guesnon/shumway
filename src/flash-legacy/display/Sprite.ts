@@ -17,7 +17,6 @@
 module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	import Timeline = Shumway.Timeline;
 	import SwfTagCode = Shumway.SWF.Parser.SwfTagCode;
@@ -302,7 +301,7 @@ module Shumway.flash.display {
 		 * Returns the current mouse position relative to this object.
 		 */
 		_getDragMousePosition(): flash.geom.Point {
-			let position = this._sec.mouse._currentPosition;
+			let position = this._sec.ui.Mouse._currentPosition;
 			if (this._parent) {
 				position = this._parent.globalToLocal(position);
 			}
@@ -322,11 +321,11 @@ module Shumway.flash.display {
 			this._dragBounds = bounds;
 			// TODO: Our mouse handling logic looks up draggableObject on stage.sec.flash.ui.Mouse.axClass
 			// to update its position. Could there be a case where stage.sec !== this.sec?
-			this._sec.mouse.draggableObject = this;
+			this._sec.ui.Mouse.draggableObject = this;
 		}
 
 		stopDrag(): void {
-			const mouse = this._sec.mouse;
+			const mouse = this._sec.ui.Mouse;
 			if (mouse.draggableObject === this) {
 				mouse.draggableObject = null;
 				this._dragMode = DragMode.Inactive;
@@ -412,7 +411,7 @@ module Shumway.flash.display {
 		loaderInfo: flash.display.LoaderInfo;
 
 		constructor(data: Timeline.SymbolData, loaderInfo: flash.display.LoaderInfo) {
-			super(data, loaderInfo.app.sec.flash.display.MovieClip.axClass, true);
+			super(data, loaderInfo.app._sec.display.MovieClip, true);
 			this.loaderInfo = loaderInfo;
 		}
 
@@ -424,11 +423,11 @@ module Shumway.flash.display {
 				symbol.avm1Context = loaderInfo._avm1Context;
 			}
 			let frames = data.frames;
-			let frameLabelCtor = loaderInfo.app.sec.flash.display.FrameLabel;
+			let frameLabelCtor = loaderInfo.app._sec.display.FrameLabel;
 			for (let i = 0; i < frames.length; i++) {
 				let frame = loaderInfo.getFrame(data, i);
 				if (frame.labelName) {
-					symbol.labels.push(new frameLabelCtor(frame.labelName, i + 1));
+					symbol.labels.push(frameLabelCtor.create([frame.labelName, i + 1]));
 				}
 				symbol.frames.push(frame);
 			}

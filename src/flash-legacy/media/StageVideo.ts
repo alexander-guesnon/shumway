@@ -16,19 +16,8 @@
 // Class: StageVideo
 module Shumway.flash.media {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class StageVideo extends flash.events.EventDispatcher {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
 		constructor() {
 			super();
 		}
@@ -109,7 +98,7 @@ module Shumway.flash.media {
 			// return this._videoHeight;
 		}
 
-		get colorSpaces(): Float64Vector {
+		get colorSpaces(): Float64Array {
 			release || notImplemented("public flash.media.StageVideo::get colorSpaces");
 			return null;
 			// return this._colorSpaces;

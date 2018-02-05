@@ -16,23 +16,12 @@
 // Class: Socket
 module Shumway.flash.net {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	export class Socket extends flash.events.EventDispatcher implements flash.utils.IDataInput, flash.utils.IDataOutput {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["timeout", "timeout", "connect", "close"];
-
 		constructor(host: string = null, port: number /*int*/ = 0) {
 			super(undefined);
-			host = axCoerceString(host);
+			host = host;
 			port = port | 0;
 		}
 
@@ -82,7 +71,7 @@ module Shumway.flash.net {
 		}
 
 		set endian(type: string) {
-			type = axCoerceString(type);
+			type = type;
 			release || notImplemented("public flash.net.Socket::set endian");
 			return;
 			// this._endian = type;
@@ -153,20 +142,20 @@ module Shumway.flash.net {
 		}
 
 		writeMultiByte(value: string, charSet: string): void {
-			value = axCoerceString(value);
-			charSet = axCoerceString(charSet);
+			value = value;
+			charSet = charSet;
 			release || notImplemented("public flash.net.Socket::writeMultiByte");
 			return;
 		}
 
 		writeUTF(value: string): void {
-			value = axCoerceString(value);
+			value = value;
 			release || notImplemented("public flash.net.Socket::writeUTF");
 			return;
 		}
 
 		writeUTFBytes(value: string): void {
-			value = axCoerceString(value);
+			value = value;
 			release || notImplemented("public flash.net.Socket::writeUTFBytes");
 			return;
 		}
@@ -218,7 +207,7 @@ module Shumway.flash.net {
 
 		readMultiByte(length: number /*uint*/, charSet: string): string {
 			length = length >>> 0;
-			charSet = axCoerceString(charSet);
+			charSet = charSet;
 			release || notImplemented("public flash.net.Socket::readMultiByte");
 			return "";
 		}
@@ -251,17 +240,17 @@ module Shumway.flash.net {
 		}
 
 		internalGetSecurityErrorMessage(host: any, port: number): string {
-			host = axCoerceString(host);
+			host = host;
 			port |= 0;
 			release || somewhatImplemented("flash.net.Socket::internalGetSecurityErrorMessage");
 			return 'SecurityErrorEvent';
 		}
 
 		internalConnect(host: any, port: number) {
-			host = axCoerceString(host);
+			host = host;
 			port |= 0;
 			release || somewhatImplemented("flash.net.Socket::internalConnect");
-			this.sec.throwError('SecurityError', Errors.SocketConnectError, host, port);
+			this._sec.throwError('SecurityError', Errors.SocketConnectError, host, port);
 		}
 
 		didFailureOccur(): boolean {

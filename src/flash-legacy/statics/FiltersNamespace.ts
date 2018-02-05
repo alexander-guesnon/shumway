@@ -214,6 +214,8 @@ module Shumway.flash.system {
 			this.ColorMatrixFilter = new ColorMatrixFilterClass(filters.ColorMatrixFilter);
 			this.GradientBevelFilter = new GradientBevelFilterClass(filters.GradientBevelFilter);
 
+			this.DisplacementMapFilter = new LegacyClass(filters.DisplacementMapFilter);
+
 			this.swfFilterTypes = [this.DropShadowFilter, this.BlurFilter, this.GlowFilter, this.BevelFilter,
 				this.GradientGlowFilter, this.ConvolutionFilter, this.ColorMatrixFilter, this.GradientBevelFilter];
 		}
@@ -229,5 +231,7 @@ module Shumway.flash.system {
 		ConvolutionFilter: ConvolutionFilterClass;
 		ColorMatrixFilter: ColorMatrixFilterClass;
 		GradientBevelFilter: GradientBevelFilterClass;
+
+		DisplacementMapFilter: LegacyClass<filters.DisplacementMapFilter>;
 	}
 }

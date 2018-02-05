@@ -15,31 +15,20 @@
  */
 // Class: Responder
 module Shumway.flash.net {
-
-	export class Responder extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
-		constructor(result: ASFunction, status: ASFunction = null) {
+	export class Responder extends LegacyEntity {
+		constructor(result: Function, status: Function = null) {
 			super();
 		}
 
-		private _result: ASFunction;
-		private _status: ASFunction;
+		private _result: Function;
+		private _status: Function;
 
 		// JS -> AS Bindings
 
 
 		// AS -> JS Bindings
 
-		ctor(result: ASFunction, status: ASFunction): void {
+		ctor(result: Function, status: Function): void {
 			this._result = result;
 			this._status = status;
 		}

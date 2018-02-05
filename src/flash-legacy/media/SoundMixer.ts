@@ -16,7 +16,6 @@
 // Class: SoundMixer
 module Shumway.flash.media {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	export interface ISoundSource {
@@ -27,17 +26,7 @@ module Shumway.flash.media {
 		stopSound(): void;
 	}
 
-	export class SoundMixer extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
+	export class SoundMixer extends LegacyEntity {
 		constructor() {
 			super();
 		}
@@ -62,15 +51,15 @@ module Shumway.flash.media {
 		static get soundTransform(): flash.media.SoundTransform {
 			release || somewhatImplemented("public flash.media.SoundMixer::get soundTransform");
 			return isNullOrUndefined(SoundMixer._soundTransform) ?
-				new this.sec.flash.media.SoundTransform() :
-				new this.sec.flash.media.SoundTransform(SoundMixer._soundTransform.volume,
-					SoundMixer._soundTransform.pan);
+				system.currentDomain().media.SoundTransform.create() :
+				system.currentDomain().media.SoundTransform.create([SoundMixer._soundTransform.volume,
+					SoundMixer._soundTransform.pan]);
 		}
 
 		static set soundTransform(sndTransform: flash.media.SoundTransform) {
 			release || somewhatImplemented("public flash.media.SoundMixer::set soundTransform");
 			SoundMixer._soundTransform = isNullOrUndefined(sndTransform) ?
-				new this.sec.flash.media.SoundTransform() :
+				system.currentDomain().media.SoundTransform.create() :
 				sndTransform;
 			SoundMixer._updateAllSoundSources();
 		}
@@ -82,7 +71,7 @@ module Shumway.flash.media {
 		}
 
 		static set audioPlaybackMode(value: string) {
-			value = axCoerceString(value);
+			value = value;
 			release || notImplemented("public flash.media.SoundMixer::set audioPlaybackMode");
 			return;
 			// SoundMixer._audioPlaybackMode = value;

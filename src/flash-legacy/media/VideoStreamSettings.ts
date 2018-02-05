@@ -15,20 +15,7 @@
  */
 // Class: VideoStreamSettings
 module Shumway.flash.media {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class VideoStreamSettings extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["width", "height", "fps", "quality", "bandwidth", "keyFrameInterval", "codec", "setMode", "setQuality", "setKeyFrameInterval"];
-
+	export class VideoStreamSettings extends LegacyEntity {
 		constructor() {
 			super();
 		}

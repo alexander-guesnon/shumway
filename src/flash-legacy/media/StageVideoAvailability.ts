@@ -15,30 +15,8 @@
  */
 // Class: StageVideoAvailability
 module Shumway.flash.media {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class StageVideoAvailability extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
-		constructor() {
-			super();
-		}
-
-		// JS -> AS Bindings
-		static AVAILABLE: string = "available";
-		static UNAVAILABLE: string = "unavailable";
-
-
-		// AS -> JS Bindings
-
+	export enum StageVideoAvailability {
+		AVAILABLE = "available",
+		UNAVAILABLE = "unavailable",
 	}
 }

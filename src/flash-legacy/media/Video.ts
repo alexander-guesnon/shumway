@@ -17,7 +17,6 @@
 module Shumway.flash.media {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import assert = Shumway.Debug.assert;
 
 	export class Video extends flash.display.DisplayObject {
@@ -135,12 +134,12 @@ module Shumway.flash.media {
 		smoothing: boolean;
 		codec: number;
 
-		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
-			super(data, sec.flash.media.Video.axClass, true);
+		constructor(data: Timeline.SymbolData, sec: system.ISecurityDomain) {
+			super(data, sec.media.Video, true);
 		}
 
 		static FromData(data: any, loaderInfo: display.LoaderInfo): VideoSymbol {
-			let symbol = new VideoSymbol(data, loaderInfo.sec);
+			let symbol = new VideoSymbol(data, loaderInfo._sec);
 			symbol.width = data.width;
 			symbol.height = data.height;
 			symbol.deblocking = data.deblocking;

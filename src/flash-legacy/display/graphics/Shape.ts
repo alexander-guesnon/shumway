@@ -19,12 +19,6 @@ module Shumway.flash.display {
 	import warning = Debug.warning;
 
 	export class Shape extends flash.display.DisplayObject {
-
-		static axClass: typeof Shape;
-
-
-		static classInitializer: any = null;
-
 		_symbol: ShapeSymbol;
 
 		applySymbol() {

@@ -17,7 +17,6 @@
 module Shumway.flash.net {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import assert = Shumway.Debug.assert;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import events = Shumway.flash.events;
 	import net = Shumway.flash.net;
@@ -32,26 +31,18 @@ module Shumway.flash.net {
 	declare let URL: any;
 	declare let Promise: any;
 	declare let window: any;
+	declare let AMF0: any;
 
 	export class NetStream extends flash.events.EventDispatcher implements ISoundSource {
 		_isDirty: boolean;
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["attach", "close", "attachAudio", "attachCamera", "send", "bufferTime", "bufferTime", "maxPauseBufferTime", "maxPauseBufferTime", "backBufferTime", "backBufferTime", "backBufferLength", "step", "bufferTimeMax", "bufferTimeMax", "receiveAudio", "receiveVideo", "receiveVideoFPS", "pause", "resume", "togglePause", "seek", "publish", "time", "currentFPS", "bufferLength", "liveDelay", "bytesLoaded", "bytesTotal", "decodedFrames", "videoCodec", "audioCodec", "onPeerConnect", "call"];
-
 		constructor(connection: flash.net.NetConnection, peerID: string = "connectToFMS") {
 			super();
 			this._connection = connection;
-			this._peerID = axCoerceString(peerID);
+			this._peerID = peerID;
 			this._id = flash.display.DisplayObject.getNextSyncID();
 			this._isDirty = true;
-			this._soundTransform = new this.sec.flash.media.SoundTransform();
+			this._soundTransform = this._sec.media.SoundTransform.create();
 
 			this._contentTypeHint = null;
 			this._checkPolicyFile = true;
@@ -137,7 +128,7 @@ module Shumway.flash.net {
 		// _audioCodec: number /*uint*/;
 		private _soundTransform: flash.media.SoundTransform;
 		private _checkPolicyFile: boolean;
-		private _client: ASObject;
+		private _client: any;
 		private _objectEncoding: number /*uint*/;
 		// _multicastPushNeighborLimit: number;
 		// _multicastWindowDuration: number;
@@ -171,9 +162,7 @@ module Shumway.flash.net {
 			flash.media.SoundMixer._registerSoundSource(this);
 
 			// (void) -> void ???
-			url = axCoerceString(url);
-
-			let service: IVideoElementService = this.sec.player;
+			let service: IVideoElementService = this._sec.player;
 			service.registerEventListener(this._id, this.processVideoEvent.bind(this));
 
 			if (this._connection && this._connection.uri) {
@@ -202,7 +191,7 @@ module Shumway.flash.net {
 			let audioBytesPerSecond = 32;
 			let videoBytesPerSecond = 200;
 			let dataBytesPerSecond = 1;
-			return new this.sec.flash.net.NetStreamInfo(
+			return this._sec.net.NetStreamInfo.create([
 				audioBytesPerSecond + videoBytesPerSecond,
 				(audioBytesPerSecond + videoBytesPerSecond + dataBytesPerSecond) * (bufferSeconds + playedSeconds),
 				audioBytesPerSecond + videoBytesPerSecond,
@@ -228,7 +217,7 @@ module Shumway.flash.net {
 				this._connection.uri,
 				this._resourceName,
 				false
-			);
+			]);
 		}
 
 		get multicastInfo(): flash.net.NetStreamMulticastInfo {
@@ -255,11 +244,11 @@ module Shumway.flash.net {
 			this._checkPolicyFile = state;
 		}
 
-		get client(): ASObject {
+		get client(): any {
 			return this._client;
 		}
 
-		set client(object: ASObject) {
+		set client(object: any) {
 			release || somewhatImplemented("public flash.net.NetStream::set client");
 			this._client = object;
 		}
@@ -366,7 +355,7 @@ module Shumway.flash.net {
 			// return this._farNonce;
 		}
 
-		get peerStreams(): ASArray {
+		get peerStreams(): Array<any> {
 			release || notImplemented("public flash.net.NetStream::get peerStreams");
 			return null;
 			// return this._peerStreams;
@@ -492,10 +481,10 @@ module Shumway.flash.net {
 			return this._invoke(index, Array.prototype.slice.call(arguments, 1));
 		}
 
-		invokeWithArgsArray(index: number /*uint*/, p_arguments: ASArray): any {
+		invokeWithArgsArray(index: number /*uint*/, p_arguments: Array<any>): any {
 			index = index >>> 0;
 			p_arguments = p_arguments;
-			return this._invoke.call(this, index, p_arguments.value);
+			return this._invoke.call(this, index, p_arguments);
 		}
 
 		get inBufferSeek(): boolean {
@@ -558,69 +547,70 @@ module Shumway.flash.net {
 		}
 
 		private _notifyVideoControl(eventType: VideoControlEvent, data: any): any {
-			let service: IVideoElementService = this.sec.player;
+			let service: IVideoElementService = this._sec.player;
 			return service.notifyVideoControl(this._id, eventType, data);
 		}
 
 		processVideoEvent(eventType: VideoPlaybackEvent, data: any): void {
 			this._videoStream.processVideoPlaybackEvent(eventType, data);
 
-			let netStatusEventCtor = this.sec.flash.events.NetStatusEvent;
+			let netStatusEventCtor = this._sec.events.NetStatusEvent;
 			switch (eventType) {
 				case VideoPlaybackEvent.Initialized:
 					flash.media.SoundMixer._updateSoundSource(this);
 					break;
 				case VideoPlaybackEvent.PlayStart:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Play.Start", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Play.Start", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.PlayStop:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Buffer.Flush", level: "status"})));
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Play.Stop", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Buffer.Flush", level: "status"}]));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Play.Stop", level: "status"}]));
 
 					flash.media.SoundMixer._unregisterSoundSource(this);
 					break;
 				case VideoPlaybackEvent.BufferFull:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Buffer.Full", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Buffer.Full", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.BufferEmpty:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Buffer.Empty", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Buffer.Empty", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.Error:
 					let code = data.code === 4 ? "NetStream.Play.NoSupportedTrackFound" :
 						data.code === 3 ? "NetStream.Play.FileStructureInvalid" : "NetStream.Play.StreamNotFound";
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: code, level: "error"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: code, level: "error"}]));
 					break;
 				case VideoPlaybackEvent.Pause:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Pause.Notify", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Pause.Notify", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.Unpause:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {
 							code: "NetStream.Unpause.Notify",
 							level: "status"
-						})));
+						}]));
 					break;
 				case VideoPlaybackEvent.Seeking:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Seek.Notify", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Seek.Notify", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.Seeked:
-					this.dispatchEvent(new netStatusEventCtor(events.NetStatusEvent.NET_STATUS,
-						false, false, this.sec.createObjectFromJS({code: "NetStream.Seek.Complete", level: "status"})));
+					this.dispatchEvent(netStatusEventCtor.create([events.NetStatusEvent.NET_STATUS,
+						false, false, {code: "NetStream.Seek.Complete", level: "status"}]));
 					break;
 				case VideoPlaybackEvent.Metadata:
 					if (this._client) {
-						let metadata: ASObject = this.sec.createObject();
-						metadata.axSetPublicProperty('width', data.videoWidth);
-						metadata.axSetPublicProperty('height', data.videoHeight);
-						metadata.axSetPublicProperty('duration', data.duration);
+						let metadata = {
+							width: data.videoWidth,
+							height: data.videoHeight,
+							duration: data.duration
+						}
 						this._client.axCallPublicProperty('onMetaData', [metadata]);
 					}
 					break;
@@ -669,7 +659,7 @@ module Shumway.flash.net {
 	 * buffers data before passing to the MSE.
 	 */
 	class VideoStream {
-		private sec: ISecurityDomain;
+		private sec: system.ISecurityDomain;
 		private _domReady: PromiseWrapper<any>;
 		private _metadataReady: PromiseWrapper<any>;
 		private _started: boolean;
@@ -698,7 +688,7 @@ module Shumway.flash.net {
 		}
 
 		constructor(netStream: NetStream) {
-			this.sec = netStream.sec;
+			this.sec = netStream._sec;
 			this._domReady = new PromiseWrapper<any>();
 			this._metadataReady = new PromiseWrapper<any>();
 			this._started = false;
@@ -734,11 +724,11 @@ module Shumway.flash.net {
 					url = 'resource://shumway/web/noflv.mp4';
 				} else {
 					setTimeout(() => {
-						this._netStream.dispatchEvent(new this.sec.flash.events.NetStatusEvent(events.NetStatusEvent.NET_STATUS,
-							false, false, this.sec.createObjectFromJS({
+						this._netStream.dispatchEvent(this.sec.events.NetStatusEvent.create([events.NetStatusEvent.NET_STATUS,
+							false, false, {
 								code: "NetStream.Play.NoSupportedTrackFound",
 								level: "error"
-							})));
+							}]));
 					});
 					return;
 				}
@@ -752,9 +742,9 @@ module Shumway.flash.net {
 
 			this.openInDataGenerationMode();
 
-			let request = new this.sec.flash.net.URLRequest(url);
+			let request = this.sec.net.URLRequest.create([url]);
 			request._checkPolicyFile = checkPolicyFile;
-			let stream = new this.sec.flash.net.URLStream();
+			let stream = this.sec.net.URLStream.create();
 			stream.addEventListener('httpStatus', function (e: any) {
 				let responseHeaders = e.axGetPublicProperty('responseHeaders');
 				let contentTypeHeader = responseHeaders.filter(function (h: any) {
@@ -769,7 +759,7 @@ module Shumway.flash.net {
 			}.bind(this));
 			stream.addEventListener('progress', function (e: any) {
 				let available = stream.bytesAvailable;
-				let bytes = new request.sec.flash.utils.ByteArray();
+				let bytes = request._sec.utils.ByteArray.create();
 				stream.readBytes(bytes, 0, available);
 				let chunk = new Uint8Array((<any> bytes)._buffer, 0, bytes.length);
 				this.appendBytes(chunk);
@@ -928,7 +918,6 @@ module Shumway.flash.net {
 		appendBytesAction(netStreamAppendBytesAction: string) {
 			release || assert(this._state === VideoStreamState.OPENED_DATA_GENERATION ||
 				this._state === VideoStreamState.OPENED);
-			netStreamAppendBytesAction = axCoerceString(netStreamAppendBytesAction);
 			// TODO Ignoring reset actions for now.
 			if (netStreamAppendBytesAction === 'endSequence') {
 				if (!this._decoder) { // Probably pushed not enough data.
@@ -1036,7 +1025,7 @@ module Shumway.flash.net {
 		private _flvParser: RtmpJs.FLV.FLVParser;
 		private _mp4Mux: RtmpJs.MP4.MP4Mux;
 
-		constructor(private sec: ISecurityDomain) {
+		constructor(private sec: system.ISecurityDomain) {
 			this._flvParser = new RtmpJs.FLV.FLVParser();
 			this._flvParser.onHeader = this._onFlvHeader.bind(this);
 			this._flvParser.onTag = this._onFlvTag.bind(this);
@@ -1051,9 +1040,10 @@ module Shumway.flash.net {
 
 		private _onFlvTag(tag: RtmpJs.FLV.FLVTag) {
 			if (tag.type === 18) {
-				let ba = new this.sec.flash.utils.ByteArray();
+				let ba = this.sec.utils.ByteArray.create();
 				ba.writeRawBytes(tag.data);
 				ba.position = 0;
+				// @ivanpopelyshev don't know what to do with this dependency
 				let name = AMF0.read(ba);
 				let value = AMF0.read(ba);
 				if (name === 'onMetaData') {
