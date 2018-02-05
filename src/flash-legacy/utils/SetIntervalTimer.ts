@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Class: UncaughtErrorEvents
-module Shumway.flash.events {
-	export class UncaughtErrorEvents extends flash.events.EventDispatcher {
-		constructor() {
-			super();
+// Class: SetIntervalTimer
+module Shumway.flash.utils {
+	export class SetIntervalTimer extends flash.utils.Timer {
+		constructor(closure: Function, delay: number, repeats: boolean, rest: Array<any>) {
+			super(+delay, !!repeats ? 0 : 1);
+			closure = closure;
+			rest = rest;
 		}
+
+		// JS -> AS Bindings
+		static intervalArray: Array<any>;
+		static _clearInterval: (id: number /*uint*/) => void;
+
+		reference: number /*uint*/;
+		closure: Function;
+		rest: Array<any>;
+		onTimer: (event: flash.events.Event) => void;
 	}
 }

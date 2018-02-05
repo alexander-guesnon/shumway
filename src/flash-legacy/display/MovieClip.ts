@@ -410,11 +410,11 @@ module Shumway.flash.display {
 			this._trackAsMenu = !!value;
 		}
 
-		get scenes(): ASArray /* flash.display [] */ {
+		get scenes(): Array<any> /* flash.display [] */ {
 			let scenes = this._scenes ? this._scenes.map(function (x: flash.display.Scene) {
 				return x.clone();
 			}) : [];
-			return this.sec.createArrayUnsafe(scenes);
+			return scenes;
 		}
 
 		get currentScene(): Scene {
@@ -896,14 +896,14 @@ module Shumway.flash.display {
 		}
 
 		addScene(name: string, labels_: FrameLabel[], offset: number, numFrames: number): void {
-			let labels = this.sec.createArrayUnsafe(labels_);
-			this._scenes.push(new this.sec.flash.display.Scene(name, labels, offset, numFrames));
+			let labels = labels_;
+			this._scenes.push(this._sec.display.Scene.create([name, labels, offset, numFrames]));
 		}
 
 		addFrameLabel(name: string, frame: number): void {
 			let scene = this._sceneForFrameIndex(frame);
 			if (!scene.getLabelByName(name, false)) {
-				scene.labels.value.push(new this.sec.flash.display.FrameLabel(name, frame - scene.offset));
+				scene.labels.value.push(this._sec.display.FrameLabel.create([name, frame - scene.offset]));
 			}
 		}
 

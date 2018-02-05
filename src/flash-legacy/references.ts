@@ -231,6 +231,8 @@
 
 ///<reference path='utils/Endian.ts' />
 ///<reference path='utils/IExternalizable.ts' />
+///<reference path='utils/Timer.ts' />
+///<reference path='utils/SetIntervalTimer.ts' />
 
 ///<reference path='system/SecurityDomain.ts'/>>
 ///<reference path='statics/EventsNamespace.ts'/>>

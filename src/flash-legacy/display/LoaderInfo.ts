@@ -18,20 +18,11 @@ module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import notImplemented = Shumway.Debug.notImplemented;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	import SWFFile = Shumway.SWF.SWFFile;
 	import SWFFrame = Shumway.SWF.SWFFrame;
 
 	export class LoaderInfo extends flash.events.EventDispatcher {
-
-		static classInitializer: any = null;
-
-		static axClass: typeof LoaderInfo;
-
-		// Constructing LoaderInfo without providing this token throws, preventing it from AS3.
-		static CtorToken = {};
-
 		constructor(token: Object) {
 			super();
 			if (token !== this._sec.display.Loader.CtorToken) {
@@ -280,7 +271,7 @@ module Shumway.flash.display {
 			// @ivanpopelyshev : both SWFFile and ImageFile has `data` Uint8Array
 			// that can be used for ByteArray constructor
 			//if SWF was compressed, it'll return uncompressed version with patched header
-			return new this.sec.flash.utils.ByteArray(this._file.data);
+			return this._sec.utils.ByteArray.create([this._file.data]);
 		}
 
 		get parameters(): Object {
@@ -294,7 +285,7 @@ module Shumway.flash.display {
 		get uncaughtErrorEvents(): flash.events.UncaughtErrorEvents {
 			release || somewhatImplemented("public flash.display.LoaderInfo::_getUncaughtErrorEvents");
 			if (!this._uncaughtErrorEvents) {
-				this._uncaughtErrorEvents = new this.sec.flash.events.UncaughtErrorEvents();
+				this._uncaughtErrorEvents = this._sec.events.UncaughtErrorEvents.create();
 			}
 			return this._uncaughtErrorEvents;
 		}
@@ -347,7 +338,7 @@ module Shumway.flash.display {
 					}
 					symbol = flash.display.BitmapSymbol.FromData(data, this);
 					if (symbol.ready === false) {
-						this.sec.player.registerImage(<Timeline.EagerlyResolvedSymbol><any>symbol,
+						this._sec.player.registerImage(<Timeline.EagerlyResolvedSymbol><any>symbol,
 							data.dataType, data.data, data.alphaData);
 					}
 					break;
@@ -371,9 +362,9 @@ module Shumway.flash.display {
 						data = data.definition;
 					}
 					symbol = flash.text.FontSymbol.FromData(data, this);
-					let font = constructClassFromSymbol(symbol, symbol.symbolClass);
+					let font = system.constructClassFromSymbol(symbol, symbol.symbolClass);
 					if (symbol.ready === false) {
-						this.sec.player.registerFont(<Timeline.EagerlyResolvedSymbol><any>symbol, data.data);
+						this._sec.player.registerFont(<Timeline.EagerlyResolvedSymbol><any>symbol, data.data);
 					}
 					break;
 				case 'sound':
@@ -430,7 +421,7 @@ module Shumway.flash.display {
 
 		// TODO: To prevent leaking LoaderInfo instances, those instances should be stored weakly,
 		// with support for retrieving the instances based on a numeric id, which would be passed here.
-		private resolveClassSymbol(classDefinition: ASClass, symbolId: number) {
+		private resolveClassSymbol(classDefinition: system.LegacyClass, symbolId: number) {
 			let symbol = this.getSymbolById(symbolId);
 			if (!symbol) {
 				Debug.warning("Attempt to resolve symbol for AVM2 class failed: Symbol " +

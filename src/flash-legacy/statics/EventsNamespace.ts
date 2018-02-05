@@ -20,7 +20,7 @@ module Shumway.flash.system {
 		TextEvent = new LegacyClass<events.TextEvent>(events.TextEvent);
 		TimerEvent = new LegacyClass<events.TimerEvent>(events.TimerEvent);
 		TouchEvent = new LegacyClass<events.TouchEvent>(events.TouchEvent);
-		// UncaughtErrorEvent = new LegacyClass<events.UncaughtErrorEvent>(events.UncaughtErrorEvent);
+		UncaughtErrorEvents = new LegacyClass<events.UncaughtErrorEvents>(events.UncaughtErrorEvents);
 		NetStatusEvent = new LegacyClass<events.NetStatusEvent>(events.NetStatusEvent);
 		HTTPStatusEvent = new LegacyClass<events.HTTPStatusEvent>(events.HTTPStatusEvent);
 		IOErrorEvent = new LegacyClass<events.IOErrorEvent>(events.IOErrorEvent);

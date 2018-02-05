@@ -120,7 +120,6 @@ module Shumway.flash.external {
 		}
 
 		static _evalJS(expression: string): string {
-			expression = axCoerceString(expression);
 			return ExternalInterfaceService.instance.eval(expression);
 		}
 
@@ -133,12 +132,11 @@ module Shumway.flash.external {
 		}
 
 		static _callOut(request: string): string {
-			request = axCoerceString(request);
 			return ExternalInterfaceService.instance.call(request);
 		}
 
 		static convertToXML(s: String): ASXML {
-			let xmlClass = <AXXMLClass>this.sec.system.getClass(Multiname.FromSimpleName('XML'));
+			let xmlClass = <AXXMLClass>system.currentDomain().system._systemDomain.getClass(Multiname.FromSimpleName('XML'));
 			let savedIgnoreWhitespace = xmlClass.ignoreWhitespace;
 			xmlClass.ignoreWhitespace = false;
 			let xml: ASXML = xmlClass.Create(s);
@@ -221,7 +219,7 @@ module Shumway.flash.external {
 					return obj;
 				case 'class':
 					let className = Multiname.FromFQNString(String(xml.children()), NamespaceType.Public);
-					return this.sec.application.getClass(className);
+					return system.currentDomain().system._applicationDomain.getClass(className);
 				default:
 					return undefined;
 			}
