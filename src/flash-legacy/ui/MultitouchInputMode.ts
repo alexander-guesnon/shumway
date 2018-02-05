@@ -15,23 +15,9 @@
  */
 // Class: MultitouchInputMode
 module Shumway.flash.ui {
-	export class MultitouchInputMode extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
-		constructor() {
-			super();
-		}
-
-		static NONE: string = "none";
-		static GESTURE: string = "gesture";
-		static TOUCH_POINT: string = "touchPoint";
+	export enum MultitouchInputMode {
+		NONE = "none",
+		GESTURE = "gesture",
+		TOUCH_POINT = "touchPoint"
 	}
 }

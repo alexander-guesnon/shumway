@@ -18,16 +18,6 @@ module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	export class GameInput extends flash.events.EventDispatcher {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
 		constructor() {
 			super(undefined);
 		}
@@ -53,7 +43,7 @@ module Shumway.flash.ui {
 			index = index | 0;
 
 			release || somewhatImplemented("public flash.ui.GameInput::static getDeviceAt");
-			this.sec.throwError("RangeError", Errors.ParamRangeError, "index");
+			system._currentDomain.throwError("RangeError", Errors.ParamRangeError, "index");
 			return null;
 		}
 

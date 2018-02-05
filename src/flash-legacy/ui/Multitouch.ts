@@ -17,19 +17,8 @@
 module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
-	export class Multitouch extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
+	export class Multitouch extends LegacyEntity {
 		constructor() {
 			super();
 		}
@@ -47,7 +36,7 @@ module Shumway.flash.ui {
 		}
 
 		static set inputMode(value: string) {
-			value = axCoerceString(value);
+			value = value;
 			release || notImplemented("public flash.ui.Multitouch::set inputMode");
 			return;
 			// this._inputMode = value;
@@ -65,7 +54,7 @@ module Shumway.flash.ui {
 			// return this._supportsGestureEvents;
 		}
 
-		static get supportedGestures(): GenericVector {
+		static get supportedGestures(): Array<any> {
 			release || somewhatImplemented("public flash.ui.Multitouch::get supportedGestures");
 			return null;
 			// return this._supportedGestures;

@@ -17,12 +17,7 @@
 module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
-	export class ContextMenuClipboardItems extends ASObject {
-
-		static classInitializer: any = null;
-		static classSymbols: string [] = null; // [];
-		static instanceSymbols: string [] = null;
-
+	export class ContextMenuClipboardItems extends LegacyEntity {
 		constructor() {
 			super();
 
@@ -91,7 +86,7 @@ module Shumway.flash.ui {
 		}
 
 		clone(): ContextMenuClipboardItems {
-			let items = new this.sec.flash.ui.ContextMenuClipboardItems();
+			let items = this._sec.ui.ContextMenuClipboardItems.create();
 			items._cut = this._cut;
 			items._copy = this._copy;
 			items._paste = this._paste;

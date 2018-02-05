@@ -16,8 +16,6 @@
 // Class: Keyboard
 module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import dummyConstructor = Shumway.Debug.dummyConstructor;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	/**
 	 * Dispatches AS3 keyboard events to the focus event dispatcher.
@@ -54,7 +52,7 @@ module Shumway.flash.ui {
 
 			if (this.target) {
 				let isKeyUp = event.type === 'keyup';
-				this.target.dispatchEvent(new this.target.sec.flash.events.KeyboardEvent(
+				this.target.dispatchEvent(this.target._sec.events.KeyboardEvent.create([
 					isKeyUp ? 'keyUp' : 'keyDown',
 					true,
 					false,
@@ -64,7 +62,7 @@ module Shumway.flash.ui {
 					event.ctrlKey,
 					event.altKey,
 					event.shiftKey
-				));
+				]));
 			}
 		}
 	}
@@ -79,7 +77,7 @@ module Shumway.flash.ui {
 		shiftKey: boolean;
 	}
 
-	export class Keyboard extends ASObject {
+	export class Keyboard extends LegacyEntity {
 
 		// Called whenever the class is initialized.
 		static classInitializer: any = null;

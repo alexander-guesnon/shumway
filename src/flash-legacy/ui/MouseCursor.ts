@@ -15,29 +15,16 @@
  */
 // Class: MouseCursor
 module Shumway.flash.ui {
-	export class MouseCursor extends ASObject {
+	export enum MouseCursor {
+		AUTO = "auto",
+		ARROW = "arrow",
+		BUTTON = "button",
+		HAND = "hand",
+		IBEAM = "ibeam"
+	}
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
-		constructor() {
-			super();
-		}
-
-		// JS -> AS Bindings
-		static AUTO: string = "auto";
-		static ARROW: string = "arrow";
-		static BUTTON: string = "button";
-		static HAND: string = "hand";
-		static IBEAM: string = "ibeam";
-
-		static fromNumber(n: number): string {
+	export namespace MouseCursor {
+		export function fromNumber(n: number): string {
 			switch (n) {
 				case 0:
 					return MouseCursor.AUTO;
@@ -54,7 +41,7 @@ module Shumway.flash.ui {
 			}
 		}
 
-		static toNumber(value: string): number {
+		export function toNumber(value: string): number {
 			switch (value) {
 				case MouseCursor.AUTO:
 					return 0;
@@ -70,6 +57,5 @@ module Shumway.flash.ui {
 					return -1;
 			}
 		}
-
 	}
 }

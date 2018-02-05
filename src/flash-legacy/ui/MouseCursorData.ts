@@ -17,17 +17,7 @@
 module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 
-	export class MouseCursorData extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
+	export class MouseCursorData extends LegacyEntity {
 		constructor() {
 			super();
 		}
@@ -35,13 +25,13 @@ module Shumway.flash.ui {
 		// _data: any /*ASVector*/;
 		// _hotSpot: flash.geom.Point;
 		// _frameRate: number;
-		get data(): GenericVector {
+		get data(): Array<any> {
 			release || notImplemented("public flash.ui.MouseCursorData::get data");
 			return null;
 			// return this._data;
 		}
 
-		set data(data: GenericVector) {
+		set data(data: Array<any>) {
 			data = data;
 			release || notImplemented("public flash.ui.MouseCursorData::set data");
 			return;

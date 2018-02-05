@@ -16,23 +16,11 @@
 // Class: ContextMenuItem
 module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class ContextMenuItem extends flash.display.NativeMenuItem {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["clone"];
-
 		constructor(caption: string, separatorBefore: boolean = false,
 		            enabled: boolean = true, visible: boolean = true) {
 			super();
-			caption = axCoerceString(caption);
 			separatorBefore = !!separatorBefore;
 			enabled = !!enabled;
 			visible = !!visible;
@@ -54,7 +42,6 @@ module Shumway.flash.ui {
 		}
 
 		set caption(value: string) {
-			value = axCoerceString(value);
 			this._caption = value;
 		}
 

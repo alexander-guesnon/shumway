@@ -30,7 +30,7 @@ module Shumway.flash.system {
 			this.AVM1Movie = new LegacyClass(display.AVM1Movie);
 			this.Stage = new LegacyClass(display.Stage);
 			this.SimpleButton = new LegacyClass(display.SimpleButton);
-			this.Loader = new statics.LoaderClass();
+			this.Loader = new LoaderClass();
 		}
 
 		// classes
@@ -45,7 +45,7 @@ module Shumway.flash.system {
 		Bitmap: LegacyClass<display.Bitmap>;
 		Sprite: LegacyClass<display.Sprite>;
 		SimpleButton: LegacyClass<display.SimpleButton>;
-		Loader: statics.LoaderClass;
+		Loader: LoaderClass;
 
 		//system
 

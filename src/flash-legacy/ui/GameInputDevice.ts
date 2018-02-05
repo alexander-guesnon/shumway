@@ -16,19 +16,8 @@
 // Class: GameInputDevice
 module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class GameInputDevice extends flash.events.EventDispatcher {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
 		constructor() {
 			super();
 		}
@@ -90,7 +79,7 @@ module Shumway.flash.ui {
 			return null;
 		}
 
-		startCachingSamples(numSamples: number /*int*/, controls: GenericVector): void {
+		startCachingSamples(numSamples: number /*int*/, controls: Array<any>): void {
 			numSamples = numSamples | 0;
 			controls = controls;
 			release || notImplemented("public flash.ui.GameInputDevice::startCachingSamples");

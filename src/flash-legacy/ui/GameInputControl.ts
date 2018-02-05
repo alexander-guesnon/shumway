@@ -18,16 +18,6 @@ module Shumway.flash.ui {
 	import notImplemented = Shumway.Debug.notImplemented;
 
 	export class GameInputControl extends flash.events.EventDispatcher {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
 		constructor() {
 			super();
 		}

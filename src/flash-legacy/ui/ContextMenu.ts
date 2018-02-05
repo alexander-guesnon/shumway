@@ -20,7 +20,7 @@ module Shumway.flash.ui {
 	export class ContextMenu extends flash.display.NativeMenu {
 		constructor() {
 			super();
-			this._builtInItems = new this.sec.flash.ui.ContextMenuBuiltInItems();
+			this._builtInItems = this._sec.ui.ContextMenuBuiltInItems.create();
 			this._customItems = [];
 		}
 
@@ -48,17 +48,17 @@ module Shumway.flash.ui {
 			this._builtInItems = value;
 		}
 
-		get customItems(): ASArray {
+		get customItems(): Array<any> {
 			// TODO: Should clone here probably.
 			release || somewhatImplemented("public flash.ui.ContextMenu::get customItems");
-			return this.sec.createArrayUnsafe(this._customItems);
+			return this._customItems;
 		}
 
-		set customItems(value: ASArray) {
+		set customItems(value: Array<any>) {
 			// TODO: Should clone here probably.
 			value = value;
 			release || somewhatImplemented("public flash.ui.ContextMenu::set customItems");
-			this._customItems = value.value;
+			this._customItems = value;
 		}
 
 		get link(): flash.net.URLRequest {
@@ -110,7 +110,7 @@ module Shumway.flash.ui {
 		}
 
 		clone(): ContextMenu {
-			let result: ContextMenu = new this.sec.flash.ui.ContextMenu();
+			let result: ContextMenu = this._sec.ui.ContextMenu.create();
 			result._builtInItems = this._builtInItems.clone();
 
 			this.cloneLinkAndClipboardProperties(result);

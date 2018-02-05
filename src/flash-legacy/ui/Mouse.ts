@@ -20,7 +20,6 @@ module Shumway.flash.ui {
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 	import assert = Shumway.Debug.assert;
 
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import InteractiveObject = flash.display.InteractiveObject;
 
 	import events = flash.events;
@@ -55,7 +54,7 @@ module Shumway.flash.ui {
 		                            data: MouseEventAndPointData,
 		                            relatedObject: flash.display.InteractiveObject = null) {
 			let localPoint = target.globalToLocal(data.point);
-			let event = new this.stage.sec.flash.events.MouseEvent(
+			let event = this.stage._sec.events.MouseEvent.create([
 				type,
 				type !== events.MouseEvent.ROLL_OVER &&
 				type !== events.MouseEvent.ROLL_OUT &&
@@ -68,7 +67,7 @@ module Shumway.flash.ui {
 				data.altKey,
 				data.shiftKey,
 				!!data.buttons
-			);
+			]);
 			target.dispatchEvent(event);
 		}
 
@@ -82,7 +81,7 @@ module Shumway.flash.ui {
 			}
 
 			let globalPoint = data.point;
-			let mouseClass = Flash.get(this.stage.sec).mouse;
+			let mouseClass = this.stage._sec.ui.Mouse;
 			mouseClass.updateCurrentPosition(globalPoint);
 
 			let currentTarget = this.currentTarget;
@@ -205,13 +204,7 @@ module Shumway.flash.ui {
 		buttons: MouseButtonFlags;
 	}
 
-	export class Mouse extends ASObject {
-
-		static axClass: typeof Mouse;
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
+	export class Mouse extends LegacyEntity {
 		constructor() {
 			super();
 		}
@@ -226,17 +219,16 @@ module Shumway.flash.ui {
 		}
 
 		static get cursor(): string {
-			return Flash.current().mouse._cursor;
+			return system._currentDomain.ui.Mouse._cursor;
 		}
 
 		static set cursor(value: string) {
-			value = axCoerceString(value);
 			if (MouseCursor.toNumber(value) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidParamError, "cursor");
+				system._currentDomain.throwError("ArgumentError", Errors.InvalidParamError, "cursor");
 			}
 
 			// @ivanpopelyshev: TODO: find sec reference in axClass
-			Flash.current().mouse._cursor = value;
+			system._currentDomain.ui.Mouse._cursor = value;
 		}
 
 		static get supportsNativeCursor(): boolean {
@@ -254,14 +246,14 @@ module Shumway.flash.ui {
 		}
 
 		static registerCursor(name: string, cursor: flash.ui.MouseCursorData): void {
-			name = axCoerceString(name);
+			name = name;
 			cursor = cursor;
 			release || notImplemented("public flash.ui.Mouse::static registerCursor");
 			return;
 		}
 
 		static unregisterCursor(name: string): void {
-			name = axCoerceString(name);
+			name = name;
 			release || notImplemented("public flash.ui.Mouse::static unregisterCursor");
 			return;
 		}
