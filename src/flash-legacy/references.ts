@@ -183,6 +183,7 @@
 ///<reference path='system/SecurityDomain.ts' />
 ///<reference path='system/SecurityPanel.ts' />
 ///<reference path='system/TouchscreenType.ts' />
+///<reference path='system/ILoaderInfo.ts' />
 
 ///<reference path='text/AntiAliasType.ts' />
 // ///<reference path='text/CSMSettings.ts' />

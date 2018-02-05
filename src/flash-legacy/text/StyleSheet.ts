@@ -17,7 +17,6 @@
 module Shumway.flash.text {
 	import notImplemented = Shumway.Debug.notImplemented;
 	import dummyConstructor = Shumway.Debug.dummyConstructor;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import assert = Debug.assert;
 
 	export interface Style {
@@ -49,7 +48,7 @@ module Shumway.flash.text {
 
 		private _rules: { [key: string]: Style; };
 
-		get styleNames(): ASArray {
+		get styleNames(): Array<string> {
 			let styles = this._rules;
 			let names = [];
 			for (let name in styles) {
@@ -57,20 +56,18 @@ module Shumway.flash.text {
 					names.push(name);
 				}
 			}
-			return this.sec.createArrayUnsafe(names);
+			return names;
 		}
 
 		getStyle(styleName: string): Style {
-			styleName = axCoerceString(styleName);
 			let style = this._rules[styleName.toLowerCase()];
 			if (!style) {
-				return this.sec.createObject(); // note that documentation is lying about `null`;
+				return {}; // note that documentation is lying about `null`;
 			}
-			return transformJSValueToAS(this.sec, style, false);
+			return style;
 		}
 
 		applyStyle(textFormat: TextFormat, styleName: string): TextFormat {
-			styleName = axCoerceString(styleName);
 			let style = this._rules[styleName.toLowerCase()];
 			if (style) {
 				return textFormat.transform(style);
@@ -82,8 +79,7 @@ module Shumway.flash.text {
 			if (typeof styleObject !== 'object') {
 				return;
 			}
-			styleName = axCoerceString(styleName);
-			this._rules[styleName.toLowerCase()] = transformASValueToJS(this.sec, styleObject, false);
+			this._rules[styleName.toLowerCase()] = styleObject;
 		}
 
 		hasStyle(styleName: string): boolean {
@@ -94,18 +90,18 @@ module Shumway.flash.text {
 			this._rules = Object.create(null);
 		}
 
-		transform(formatObject: ASObject): TextFormat {
+		transform(formatObject: any): TextFormat {
 			if (typeof formatObject !== 'object') {
 				return null;
 			}
-			let jsObject = transformASValueToJS(this.sec, formatObject, false);
-			let textFormat = new this.sec.flash.text.TextFormat();
+			let jsObject = formatObject;
+			let textFormat = this._sec.text.TextFormat.create();
 			textFormat.transform(jsObject);
 			return textFormat;
 		}
 
 		parseCSS(css: string) {
-			css = axCoerceString(css) + '';
+			css = css + '';
 			let length = css.length;
 			let index = skipWhitespace(css, 0, length);
 			// Styles are only added once parsing completed successfully. Invalid syntax anywhere discards all new styles.

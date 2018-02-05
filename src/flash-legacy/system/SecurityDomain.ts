@@ -37,7 +37,7 @@ module Shumway.flash.system {
 			this.filters = new FiltersNamespace();
 			this.media = new MediaNamespace();
 			this.net = new NetNamespace();
-			this.ui = new UiNameepsace();
+			this.ui = new UINamespace();
 
 			if (oldDomain) {
 				system._currentDomain = oldDomain;

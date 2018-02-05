@@ -391,7 +391,7 @@ module Shumway.flash.display {
 
 		_applyDecodedImage(symbol: BitmapSymbol) {
 			let bitmapData = symbol.createSharedInstance();
-			this._content = new this.sec.flash.display.Bitmap(bitmapData);
+			this._content = this._sec.display.Bitmap.create([bitmapData]);
 			this._contentLoaderInfo._width = this._content.width * 20;
 			this._contentLoaderInfo._height = this._content.height * 20;
 			this.addTimelineObjectAtDepth(this._content, 0);
