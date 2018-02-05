@@ -13,6 +13,8 @@ module Shumway.flash.system {
 			this.Font = new LegacyClass(text.Font);
 			this.TextRun = new LegacyClass(text.TextRun);
 			this.TextFormat = new LegacyClass(text.TextFormat);
+			this.TextLineMetrics = new LegacyClass(text.TextLineMetrics);
+			this.TextField = new LegacyClass(text.TextField);
 
 			this._fonts = [];
 			this._fontsBySymbolId = Shumway.ObjectUtilities.createMap<Font>();
@@ -45,6 +47,8 @@ module Shumway.flash.system {
 		StaticText: LegacyClass<text.StaticText>;
 		TextRun: LegacyClass<text.TextRun>;
 		TextFormat: LegacyClass<text.TextFormat>;
+		TextLineMetrics: LegacyClass<text.TextLineMetrics>;
+		TextField: LegacyClass<text.TextField>;
 
 		// Font system
 

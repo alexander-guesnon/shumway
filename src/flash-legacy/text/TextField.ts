@@ -19,7 +19,6 @@ module Shumway.flash.text {
 	import assert = Shumway.Debug.assert;
 	import warning = Shumway.Debug.warning;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
 	import clamp = Shumway.NumberUtilities.clamp;
 
@@ -32,12 +31,6 @@ module Shumway.flash.text {
 	import TextRecordFlags = Shumway.SWF.Parser.TextRecordFlags;
 
 	export class TextField extends flash.display.InteractiveObject {
-
-		static classSymbols: string [] = null;
-		static instanceSymbols: string [] = null;
-
-		static classInitializer: any = null;
-
 		_symbol: TextSymbol;
 
 		applySymbol() {
@@ -124,7 +117,7 @@ module Shumway.flash.text {
 			this._useRichTextClipboard = false;
 			this._lineMetricsData = null;
 
-			let defaultTextFormat = new this.sec.flash.text.TextFormat(
+			let defaultTextFormat = this._sec.text.TextFormat.create([
 				this._sec.text.DEFAULT_FONT_SERIF,
 				12,
 				0,
@@ -134,10 +127,10 @@ module Shumway.flash.text {
 				'',
 				'',
 				TextFormatAlign.LEFT
-			);
+			]);
 			defaultTextFormat.letterSpacing = 0;
 			defaultTextFormat.kerning = 0;
-			this._textContent = new Shumway.TextContent(this.sec, defaultTextFormat);
+			this._textContent = new Shumway.TextContent(this._sec, defaultTextFormat);
 		}
 
 		_setFillAndLineBoundsFromSymbol(symbol: Timeline.DisplaySymbol) {
@@ -195,9 +188,7 @@ module Shumway.flash.text {
 		// AS -> JS Bindings
 
 		static isFontCompatible(fontName: string, fontStyle: string): boolean {
-			fontName = axCoerceString(fontName);
-			fontStyle = axCoerceString(fontStyle);
-			let font = Flash.current().text.getByNameAndStyle(fontName, fontStyle);
+			let font = system.currentDomain().text.getByNameAndStyle(fontName, fontStyle);
 			if (!font) {
 				return false;
 			}
@@ -257,11 +248,10 @@ module Shumway.flash.text {
 
 		set antiAliasType(antiAliasType: string) {
 			if (isNullOrUndefined(antiAliasType)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'antiAliasType');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'antiAliasType');
 			}
-			antiAliasType = axCoerceString(antiAliasType);
 			if (AntiAliasType.toNumber(antiAliasType) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidParamError, "antiAliasType");
+				this._sec.throwError("ArgumentError", Errors.InvalidParamError, "antiAliasType");
 			}
 			this._antiAliasType = antiAliasType;
 		}
@@ -272,14 +262,13 @@ module Shumway.flash.text {
 
 		set autoSize(value: string) {
 			if (isNullOrUndefined(value)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'autoSize');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'autoSize');
 			}
-			value = axCoerceString(value);
 			if (value === this._autoSize) {
 				return;
 			}
 			if (TextFieldAutoSize.toNumber(value) < 0) {
-				this.sec.throwError("ArgumentError", Errors.InvalidParamError, "autoSize");
+				this._sec.throwError("ArgumentError", Errors.InvalidParamError, "autoSize");
 			}
 			this._autoSize = value;
 			this._textContent.autoSize = TextFieldAutoSize.toNumber(value);
@@ -372,7 +361,7 @@ module Shumway.flash.text {
 
 		set defaultTextFormat(format: flash.text.TextFormat) {
 			if (isNullOrUndefined(format)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'format');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'format');
 			}
 			let defaultTextFormat = this._textContent.defaultTextFormat;
 			defaultTextFormat.merge(format);
@@ -397,9 +386,8 @@ module Shumway.flash.text {
 
 		set gridFitType(gridFitType: string) {
 			if (isNullOrUndefined(gridFitType)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'gridFitType');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'gridFitType');
 			}
-			gridFitType = axCoerceString(gridFitType);
 			release || assert(flash.text.GridFitType.toNumber(gridFitType) >= 0);
 			this._gridFitType = gridFitType;
 		}
@@ -410,9 +398,8 @@ module Shumway.flash.text {
 
 		set htmlText(value: string) {
 			if (isNullOrUndefined(value)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'value');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'value');
 			}
-			value = axCoerceString(value);
 			// Flash resets the bold and italic flags when an html value is set on a text field created
 			// from a symbol.
 			if (this._symbol) {
@@ -489,7 +476,7 @@ module Shumway.flash.text {
 
 		set restrict(value: string) {
 			release || somewhatImplemented("public flash.text.TextField::set restrict");
-			this._restrict = axCoerceString(value);
+			this._restrict = value;
 		}
 
 		// Returns the current vertical scrolling position in lines.
@@ -558,9 +545,9 @@ module Shumway.flash.text {
 
 		set text(value: string) {
 			if (isNullOrUndefined(value)) {
-				this.sec.throwError('TypeError', Errors.NullPointerError, 'value');
+				this._sec.throwError('TypeError', Errors.NullPointerError, 'value');
 			}
-			value = axCoerceString(value) || '';
+			value = value || '';
 			if (value === this._textContent.plainText) {
 				return;
 			}
@@ -600,7 +587,7 @@ module Shumway.flash.text {
 		}
 
 		set type(value: string) {
-			this._type = axCoerceString(value);
+			this._type = value;
 		}
 
 		get wordWrap(): boolean {
@@ -634,7 +621,6 @@ module Shumway.flash.text {
 		}
 
 		pasteRichText(richText: string) {
-			richText = axCoerceString(richText);
 			release || notImplemented("public flash.text.TextField::pasteRichText");
 		}
 
@@ -648,7 +634,6 @@ module Shumway.flash.text {
 		insertXMLText(beginIndex: number, endIndex: number, richText: String, pasting: Boolean): void {
 			beginIndex = +beginIndex;
 			endIndex = +endIndex;
-			richText = axCoerceString(richText);
 			pasting = !!pasting;
 			release || notImplemented("public flash.text.TextField::insertXMLText");
 		}
@@ -657,7 +642,7 @@ module Shumway.flash.text {
 			if (!this._hasDirtyFlags(DisplayObjectDirtyFlags.DirtyTextContent)) {
 				return;
 			}
-			let serializer = this.sec.player;
+			let serializer = this._sec.player;
 			let lineMetricsData = serializer.syncDisplayObject(this, false);
 			let textWidth = lineMetricsData.readInt();
 			let textHeight = lineMetricsData.readInt();
@@ -701,15 +686,15 @@ module Shumway.flash.text {
 		}
 
 		appendText(newText: string) {
-			this._textContent.appendText(axCoerceString(newText));
+			this._textContent.appendText(newText);
 		}
 
 		getCharBoundaries(charIndex: number /*int*/): flash.geom.Rectangle {
 			charIndex = charIndex | 0;
 			release || somewhatImplemented("public flash.text.TextField::getCharBoundaries");
 			let fakeCharHeight = this.textHeight, fakeCharWidth = fakeCharHeight * 0.75;
-			return new this.sec.flash.geom.Rectangle(charIndex * fakeCharWidth, 0,
-				fakeCharWidth, fakeCharHeight);
+			return this._sec.geom.Rectangle.create([charIndex * fakeCharWidth, 0,
+				fakeCharWidth, fakeCharHeight]);
 		}
 
 		getCharIndexAtPoint(x: number, y: number): number /*int*/ {
@@ -747,7 +732,7 @@ module Shumway.flash.text {
 		getLineMetrics(lineIndex: number /*int*/): flash.text.TextLineMetrics {
 			lineIndex = lineIndex | 0;
 			if (lineIndex < 0 || lineIndex > this._numLines - 1) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			this._ensureLineMetrics();
 			let lineMetricsData = this._lineMetricsData;
@@ -760,15 +745,15 @@ module Shumway.flash.text {
 			let descent = lineMetricsData.readInt();
 			let leading = lineMetricsData.readInt();
 			let height = ascent + descent + leading;
-			return new this.sec.flash.text.TextLineMetrics(x, width, height, ascent, descent,
-				leading);
+			return this._sec.text.TextLineMetrics.create([x, width, height, ascent, descent,
+				leading]);
 		}
 
 		getLineOffset(lineIndex: number /*int*/): number /*int*/ {
 			lineIndex = lineIndex | 0;
 			let lines = this._textContent.plainText.split('\r');
 			if (lineIndex < 0 || lineIndex >= lines.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			let offset = 0;
 			for (let i = 0; i < lineIndex; i++) {
@@ -785,7 +770,7 @@ module Shumway.flash.text {
 			lineIndex = lineIndex | 0;
 			let lines = this._textContent.plainText.split('\r');
 			if (lineIndex < 0 || lineIndex >= lines.length) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			return lines[lineIndex];
 		}
@@ -816,7 +801,7 @@ module Shumway.flash.text {
 				}
 			}
 			if (endIndex <= beginIndex || endIndex > maxIndex) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			let format: TextFormat;
 			let textRuns = this._textContent.textRuns;
@@ -833,7 +818,7 @@ module Shumway.flash.text {
 			return format;
 		}
 
-		getTextRuns(beginIndex: number /*int*/ = 0, endIndex: number /*int*/ = 2147483647): ASArray {
+		getTextRuns(beginIndex: number /*int*/ = 0, endIndex: number /*int*/ = 2147483647): Array<any> {
 			let textRuns = this._textContent.textRuns;
 			let result = [];
 			for (let i = 0; i < textRuns.length; i++) {
@@ -842,7 +827,7 @@ module Shumway.flash.text {
 					result.push(textRun.clone());
 				}
 			}
-			return this.sec.createArrayUnsafe(result);
+			return result;
 		}
 
 		getRawText(): string {
@@ -889,7 +874,7 @@ module Shumway.flash.text {
 				}
 			}
 			if (beginIndex > maxIndex || endIndex > maxIndex) {
-				this.sec.throwError('RangeError', Errors.ParamRangeError);
+				this._sec.throwError('RangeError', Errors.ParamRangeError);
 			}
 			if (endIndex <= beginIndex) {
 				return;
@@ -932,23 +917,23 @@ module Shumway.flash.text {
 		variableName: string = null;
 		textContent: Shumway.TextContent = null;
 
-		constructor(data: Timeline.SymbolData, sec: ISecurityDomain) {
-			super(data, sec.flash.text.TextField.axClass, true);
+		constructor(data: Timeline.SymbolData, _sec: system.ISecurityDomain) {
+			super(data, _sec.text.TextField, true);
 		}
 
 		static FromTextData(data: any, loaderInfo: flash.display.LoaderInfo): TextSymbol {
-			let sec = loaderInfo.sec;
-			let symbol = new TextSymbol(data, sec);
+			let _sec = loaderInfo._sec;
+			let symbol = new TextSymbol(data, _sec);
 			symbol._setBoundsFromData(data);
 			let tag = <TextTag>data.tag;
 			if (data.static) {
 				symbol.dynamic = false;
-				symbol.symbolClass = sec.flash.text .StaticText.axClass;
+				symbol.symbolClass = _sec.text.StaticText;
 				if (tag.initialText) {
-					let textContent = new Shumway.TextContent(sec);
+					let textContent = new Shumway.TextContent(_sec);
 					textContent.bounds = symbol.lineBounds;
 					textContent.parseHtml(tag.initialText, null, false);
-					textContent.matrix = new sec.flash.geom.Matrix();
+					textContent.matrix = _sec.geom.Matrix.create();
 					textContent.matrix.copyFromUntyped(data.matrix);
 					textContent.coords = data.coords;
 					symbol.textContent = textContent;
