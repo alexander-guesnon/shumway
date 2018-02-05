@@ -146,7 +146,7 @@ module Shumway.flash.net {
 			offset = offset >>> 0;
 			length = length >>> 0;
 			if (length < 0) {
-				this.sec.throwError('ArgumentError', Errors.InvalidArgumentError, "length");
+				this._sec.throwError('ArgumentError', Errors.InvalidArgumentError, "length");
 			}
 
 			this._buffer.readBytes(bytes, offset, length);

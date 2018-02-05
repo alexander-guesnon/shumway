@@ -15,17 +15,7 @@
  */
 // Class: NetStreamMulticastInfo
 module Shumway.flash.net {
-	export class NetStreamMulticastInfo extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null;
-
+	export class NetStreamMulticastInfo extends LegacyEntity {
 		constructor(sendDataBytesPerSecond: number, sendControlBytesPerSecond: number,
 		            receiveDataBytesPerSecond: number, receiveControlBytesPerSecond: number,
 		            bytesPushedToPeers: number, fragmentsPushedToPeers: number,

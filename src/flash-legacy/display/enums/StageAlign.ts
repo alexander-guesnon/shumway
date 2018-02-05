@@ -15,8 +15,6 @@
  */
 // Class: StageAlign
 module Shumway.flash.display {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import StageAlignFlags = Shumway.Remoting.StageAlignFlags;
 
 	export enum StageAlign {

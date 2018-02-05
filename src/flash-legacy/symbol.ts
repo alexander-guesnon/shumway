@@ -114,7 +114,7 @@ module Shumway.Timeline {
 		}
 
 		static FromData(data: any, loaderInfo: flash.display.LoaderInfo): BinarySymbol {
-			let symbol = new BinarySymbol(data, loaderInfo.app.sec);
+			let symbol = new BinarySymbol(data, loaderInfo.app._sec);
 			symbol.buffer = data.data;
 			symbol.byteLength = data.data.byteLength;
 			return symbol;

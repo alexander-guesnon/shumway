@@ -125,6 +125,8 @@
 ///<reference path='display/enums/TriangleCulling.ts' />
 ///<reference path='display/AVM1Movie.ts' />
 
+///<reference path='external/ExternalInterface.ts' />
+
 ///<reference path='filters/BitmapFilterQuality.ts' />
 ///<reference path='filters/BitmapFilterType.ts' />
 ///<reference path='filters/BitmapFilter.ts' />

@@ -15,32 +15,14 @@
  */
 // Class: SoundLoaderContext
 module Shumway.flash.media {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class SoundLoaderContext extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // ["bufferTime", "checkPolicyFile"];
-
+	export class SoundLoaderContext extends LegacyEntity {
 		constructor(bufferTime: number = 1000, checkPolicyFile: boolean = false) {
 			super();
 			this.bufferTime = +bufferTime;
 			this.checkPolicyFile = !!checkPolicyFile;
 		}
 
-		// JS -> AS Bindings
-
 		bufferTime: number;
 		checkPolicyFile: boolean;
-
-		// AS -> JS Bindings
-
 	}
 }

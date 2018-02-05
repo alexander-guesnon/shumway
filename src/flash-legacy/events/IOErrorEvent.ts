@@ -33,9 +33,9 @@ module Shumway.flash.events {
 		static VERIFY_ERROR: string = "verifyError";
 
 		clone(): Event {
-			let event = new this.sec.flash.events.IOErrorEvent(this.type, this.bubbles,
+			let event = this._sec.events.IOErrorEvent.create([this.type, this.bubbles,
 				this.cancelable, this.text,
-				this.errorID);
+				this.errorID]);
 			//this.copyNativeData(event);
 			return event;
 		}

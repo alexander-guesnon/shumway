@@ -220,7 +220,7 @@ module Shumway.flash.media {
 		set soundTransform(sndTransform: flash.media.SoundTransform) {
 			release || somewhatImplemented("public flash.media.SoundChannel::set soundTransform");
 			this._soundTransform = isNullOrUndefined(sndTransform) ?
-				new this.sec.flash.media.SoundTransform() :
+				this._sec.media.SoundTransform.create() :
 				sndTransform;
 			SoundMixer._updateSoundSource(this);
 		}
@@ -296,8 +296,8 @@ module Shumway.flash.media {
 
 				self._element = null;
 				self._playing = false;
-				self.dispatchEvent(new self.sec.flash.events.Event("soundComplete", false,
-					false));
+				self.dispatchEvent(self._sec.events.Event.create(["soundComplete", false,
+					false]));
 			});
 			this._element = element;
 			this._playing = true;
@@ -324,8 +324,8 @@ module Shumway.flash.media {
 
 					self._audioChannel.stop();
 					self._playing = false;
-					self.dispatchEvent(new self.sec.flash.events.Event("soundComplete", false,
-						false));
+					self.dispatchEvent(self._sec.events.Event.create(["soundComplete", false,
+						false]));
 					return;
 				}
 
