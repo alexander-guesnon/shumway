@@ -17,7 +17,6 @@
 module Shumway.flash.net {
 	import assert = Shumway.Debug.assert;
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
 	interface IStorage {
@@ -49,7 +48,7 @@ module Shumway.flash.net {
 
 		constructor() {
 			super();
-			this._data = this.sec.createObject();
+			this._data = {};
 		}
 
 		static _sharedObjects: any = Object.create(null);
@@ -58,19 +57,17 @@ module Shumway.flash.net {
 		private static _defaultObjectEncoding = flash.net.ObjectEncoding.DEFAULT;
 
 		static deleteAll(url: string): number /*int*/ {
-			url = axCoerceString(url);
 			release || notImplemented("public flash.net.SharedObject::static deleteAll");
 			return 0;
 		}
 
 		static getDiskUsage(url: string): number /*int*/ {
-			url = axCoerceString(url);
 			release || somewhatImplemented("public flash.net.SharedObject::static getDiskUsage");
 			return 0;
 		}
 
 		private static _create(path: string, data: any, encoding: net.AMFEncoding): SharedObject {
-			let obj = new this.sec.flash.net.SharedObject();
+			let obj = system.currentDomain().net.SharedObject.create();
 			obj._path = path;
 			obj._data = data;
 			obj._objectEncoding = encoding;
@@ -79,41 +76,37 @@ module Shumway.flash.net {
 		}
 
 		static getLocal(name: string, localPath: string = null, secure: boolean = false): SharedObject {
-			name = axCoerceString(name);
-			localPath = axCoerceString(localPath);
 			secure = !!secure;
 			let path = (localPath || '') + '/' + name;
 			if (this._sharedObjects[path]) {
 				return this._sharedObjects[path];
 			}
 			let encodedData = getSharedObjectStorage().getItem(path);
-			let data;
+			let data: any;
 			let encoding = this._defaultObjectEncoding;
 			if (encodedData) {
 				try {
 					let bytes = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
-					let serializedData = new this.sec.flash.utils.ByteArray(bytes);
+					let serializedData = system.currentDomain().utils.ByteArray.create(bytes);
 					data = serializedData.readObject();
 					encoding = serializedData.objectEncoding;
 				} catch (e) {
 					Debug.warning('Error encountered while decoding LocalStorage entry. Resetting data.');
 				}
 				if (!data || typeof data !== 'object') {
-					data = this.sec.createObject();
+					data = {};
 				}
 			} else {
-				data = this.sec.createObject();
+				data = {};
 			}
-			let so = this._create(path, data, encoding);
-			so._objectEncoding = encoding;
+			let so = this._create(path, data, encoding as any);
+			so._objectEncoding = encoding  as any;
 			this._sharedObjects[path] = so;
 			return so;
 		}
 
 		static getRemote(name: string, remotePath: string = null, persistence: any = false,
 		                 secure: boolean = false): flash.net.SharedObject {
-			name = axCoerceString(name);
-			remotePath = axCoerceString(remotePath);
 			secure = !!secure;
 			release || notImplemented("public flash.net.SharedObject::static getRemote");
 			return null;
@@ -153,13 +146,13 @@ module Shumway.flash.net {
 			this._objectEncoding = version;
 		}
 
-		get client(): ASObject {
+		get client(): any {
 			release || notImplemented("public flash.net.SharedObject::get client");
 			return null;
 			// return this._client;
 		}
 
-		set client(object: ASObject) {
+		set client(object: any) {
 			object = object;
 			release || notImplemented("public flash.net.SharedObject::set client");
 			return;
@@ -167,7 +160,7 @@ module Shumway.flash.net {
 		}
 
 		setDirty(propertyName: string): void {
-			propertyName = axCoerceString(propertyName);
+			// propertyName = axCoerceString(propertyName);
 			this.queueFlush();
 		}
 
@@ -202,7 +195,7 @@ module Shumway.flash.net {
 			if (isEmpty && !getSharedObjectStorage().getItem(this._path)) {
 				return "";
 			}
-			let serializedData = new this.sec.flash.utils.ByteArray();
+			let serializedData = this._sec.utils.ByteArray.create();
 			serializedData.objectEncoding = this._objectEncoding;
 			serializedData.writeObject(this._data);
 			let bytes = serializedData.getBytes();
@@ -220,7 +213,7 @@ module Shumway.flash.net {
 
 		clear(): void {
 			release || somewhatImplemented("public flash.net.SharedObject::clear");
-			this._data = this.sec.createObject();
+			this._data = {};
 			getSharedObjectStorage().removeItem(this._path);
 		}
 
@@ -237,7 +230,7 @@ module Shumway.flash.net {
 		}
 
 		setProperty(propertyName: string, value: any = null): void {
-			propertyName = '$Bg' + axCoerceString(propertyName);
+			propertyName = '' + propertyName;
 			if (value === this._data[propertyName]) {
 				return;
 			}

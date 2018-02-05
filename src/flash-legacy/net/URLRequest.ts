@@ -15,23 +15,10 @@
  */
 // Class: URLRequest
 module Shumway.flash.net {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-
-	export class URLRequest extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static bindings: string [] = null;
-
+	export class URLRequest extends LegacyEntity {
 		constructor(url: string = null) {
 			super();
-			this._url = axCoerceString(url);
+			this._url = url;
 			this._method = 'GET';
 			this._data = null;
 			this._digest = null;
@@ -47,7 +34,7 @@ module Shumway.flash.net {
 		// AS -> JS Bindings
 
 		private _url: string;
-		private _data: ASObject;
+		private _data: any;
 		private _method: string;
 		private _contentType: string;
 		private _requestHeaders: any [];
@@ -58,15 +45,14 @@ module Shumway.flash.net {
 		}
 
 		set url(value: string) {
-			value = axCoerceString(value);
 			this._url = value;
 		}
 
-		get data(): ASObject {
+		get data(): any {
 			return this._data;
 		}
 
-		set data(value: ASObject) {
+		set data(value: any) {
 			this._data = value;
 		}
 
@@ -75,10 +61,9 @@ module Shumway.flash.net {
 		}
 
 		set method(value: string) {
-			value = axCoerceString(value);
 			if (value !== 'get' && value !== 'GET' &&
 				value !== 'post' && value !== 'POST') {
-				this.sec.throwError('ArgumentError', Errors.InvalidArgumentError);
+				this._sec.throwError('ArgumentError', Errors.InvalidArgumentError);
 			}
 			this._method = value;
 		}
@@ -88,19 +73,18 @@ module Shumway.flash.net {
 		}
 
 		set contentType(value: string) {
-			value = axCoerceString(value);
 			this._contentType = value;
 		}
 
-		get requestHeaders(): ASArray {
-			return this.sec.createArrayUnsafe(this._requestHeaders);
+		get requestHeaders(): Array<any> {
+			return this._requestHeaders;
 		}
 
-		set requestHeaders(value: ASArray) {
-			if (!this.sec.AXArray.axIsType(value)) {
-				this.sec.throwError('ArgumentError', Errors.InvalidArgumentError, "value");
+		set requestHeaders(value: Array<any>) {
+			if (!(value instanceof Array)) {
+				this._sec.throwError('ArgumentError', Errors.InvalidArgumentError, "value");
 			}
-			this._requestHeaders = value.value;
+			this._requestHeaders = value;
 		}
 
 		get digest(): string {
@@ -108,7 +92,6 @@ module Shumway.flash.net {
 		}
 
 		set digest(value: string) {
-			value = axCoerceString(value);
 			this._digest = value;
 		}
 
@@ -120,8 +103,8 @@ module Shumway.flash.net {
 			let data = this._data;
 			if (data) {
 				obj.mimeType = this._contentType;
-				if (Flash.get(this.sec).utils.ByteArray.axIsType(data)) {
-					obj.data = <ASObject><any>
+				if (this._sec.utils.ByteArray.axIsType(data)) {
+					obj.data = <any>
 						new Uint8Array((<any> data)._buffer, 0, (<any> data).length);
 				} else {
 					let dataStr = data.toString();

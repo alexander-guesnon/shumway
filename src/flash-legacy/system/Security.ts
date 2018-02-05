@@ -16,20 +16,9 @@
 // Class: Security
 module Shumway.flash.system {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 	import somewhatImplemented = Shumway.Debug.somewhatImplemented;
 
-	export class Security extends ASObject {
-
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
-
+	export class Security extends LegacyEntity {
 		constructor() {
 			super();
 		}
@@ -87,39 +76,37 @@ module Shumway.flash.system {
 		static allowDomain(): void {
 			release || somewhatImplemented('public flash.system.Security::static allowDomain ["' +
 				Array.prototype.join.call(arguments, '", "') + '"]');
-			let whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
+			let whitelist: ICrossDomainSWFLoadingWhitelist = system.currentDomain().player;
 			for (let i = 0; i < arguments.length; i++) {
-				whitelist.addToSWFLoadingWhitelist(axCoerceString(arguments[i]) || '', false, false);
+				whitelist.addToSWFLoadingWhitelist(arguments[i] || '', false, false);
 			}
 		}
 
 		static allowInsecureDomain(): void {
 			release || somewhatImplemented("public flash.system.Security::static allowInsecureDomain");
-			let whitelist: ICrossDomainSWFLoadingWhitelist = this.sec.player;
+			let whitelist: ICrossDomainSWFLoadingWhitelist = system.currentDomain().player;
 			for (let i = 0; i < arguments.length; i++) {
-				whitelist.addToSWFLoadingWhitelist(axCoerceString(arguments[i]) || '', true, false);
+				whitelist.addToSWFLoadingWhitelist(arguments[i]|| '', true, false);
 			}
 		}
 
 		static loadPolicyFile(url: string): void {
-			url = axCoerceString(url);
 			release || somewhatImplemented("public flash.system.Security::static loadPolicyFile");
 		}
 
 		static showSettings(panel: string = "default"): void {
-			panel = axCoerceString(panel);
 			release || notImplemented("public flash.system.Security::static showSettings");
 			return;
 		}
 
-		static duplicateSandboxBridgeInputArguments(toplevel: ASObject, args: ASArray): ASArray {
+		static duplicateSandboxBridgeInputArguments(toplevel: any, args: Array<any>): Array<any> {
 			toplevel = toplevel;
 			args = args;
 			release || notImplemented("public flash.system.Security::static duplicateSandboxBridgeInputArguments");
 			return null;
 		}
 
-		static duplicateSandboxBridgeOutputArgument(toplevel: ASObject, arg: any): any {
+		static duplicateSandboxBridgeOutputArgument(toplevel: any, arg: any): any {
 			toplevel = toplevel;
 			release || notImplemented("public flash.system.Security::static duplicateSandboxBridgeOutputArgument");
 			return;

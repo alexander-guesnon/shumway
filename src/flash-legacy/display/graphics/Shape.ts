@@ -76,12 +76,12 @@ module Shumway.flash.display {
 	export class ShapeSymbol extends Timeline.DisplaySymbol {
 		graphics: flash.display.Graphics = null;
 
-		constructor(data: Timeline.SymbolData, symbolClass: ASClass) {
+		constructor(data: Timeline.SymbolData, symbolClass: system.LegacyClass) {
 			super(data, symbolClass, false);
 		}
 
 		static FromData(data: Timeline.SymbolData, loaderInfo: flash.display.LoaderInfo): ShapeSymbol {
-			let symbol = new ShapeSymbol(data, loaderInfo.sec.flash.display.Shape.axClass);
+			let symbol = new ShapeSymbol(data, loaderInfo._sec.display.Shape);
 			symbol._setBoundsFromData(data);
 			symbol.graphics = flash.display.Graphics.FromData(data, loaderInfo);
 			symbol.processRequires((<any>data).require, loaderInfo);

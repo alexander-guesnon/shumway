@@ -34,6 +34,8 @@ module Shumway.flash.system {
 			this.FrameLabel = new LegacyClass(display.FrameLabel);
 			this.LoaderInfo = new LegacyClass(display.LoaderInfo);
 			this.Scene = new LegacyClass(display.Scene);
+			this.MorphShape = new LegacyClass(display.MorphShape);
+			this.Shape = new LegacyClass(display.Shape);
 		}
 
 		// classes
@@ -52,6 +54,8 @@ module Shumway.flash.system {
 		FrameLabel: LegacyClass<display.FrameLabel>;
 		LoaderInfo: LegacyClass<display.LoaderInfo>;
 		Scene: LegacyClass<display.Scene>;
+		MorphShape: LegacyClass<display.MorphShape>;
+		Shape: LegacyClass<display.Shape>;
 
 		//system
 

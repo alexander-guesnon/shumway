@@ -65,7 +65,7 @@ module Shumway.flash.display {
 		morphLineBounds: Bounds;
 
 		constructor(data: Timeline.SymbolData, sec: system.ISecurityDomain) {
-			super(data, sec.flash.display.MorphShape.axClass);
+			super(data, sec.display.MorphShape);
 		}
 
 		static FromData(data: any, loaderInfo: flash.display.LoaderInfo): MorphShapeSymbol {
