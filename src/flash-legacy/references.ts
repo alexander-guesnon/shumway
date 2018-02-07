@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+///<reference path='lang/lazy.ts'/>
 ///<reference path='module.ts' />
 ///<reference path='../htmlparser.ts' />
 ///<reference path='TextContent.ts' />
@@ -185,7 +186,6 @@
 ///<reference path='system/SecurityDomain.ts' />
 ///<reference path='system/SecurityPanel.ts' />
 ///<reference path='system/TouchscreenType.ts' />
-///<reference path='system/ILoaderInfo.ts' />
 
 ///<reference path='text/AntiAliasType.ts' />
 // ///<reference path='text/CSMSettings.ts' />
@@ -234,18 +234,18 @@
 ///<reference path='utils/Timer.ts' />
 ///<reference path='utils/SetIntervalTimer.ts' />
 
-///<reference path='system/SecurityDomain.ts'/>>
-///<reference path='statics/EventsNamespace.ts'/>>
-///<reference path='statics/UtilsNamespace.ts'/>>
-///<reference path='statics/GeomNamespace.ts'/>>
-///<reference path='statics/DisplayNamespace.ts'/>>
-///<reference path='statics/SystemNamespace.ts'/>>
-///<reference path='statics/TextNamespace.ts'/>>
-///<reference path='statics/FiltersNamespace.ts'/>>
-///<reference path='statics/MediaNamespace.ts'/>>
-///<reference path='statics/NetNamespace.ts'/>>
-///<reference path='statics/UINamespace.ts'/>>
-///<reference path='statics/LoaderClass.ts'/>>
-///<reference path='statics/MouseClass.ts'/>>
+///<reference path='system/SecurityDomain.ts'/>
+///<reference path='statics/EventsNamespace.ts'/>
+///<reference path='statics/UtilsNamespace.ts'/>
+///<reference path='statics/GeomNamespace.ts'/>
+///<reference path='statics/DisplayNamespace.ts'/>
+///<reference path='statics/SystemNamespace.ts'/>
+///<reference path='statics/TextNamespace.ts'/>
+///<reference path='statics/FiltersNamespace.ts'/>
+///<reference path='statics/MediaNamespace.ts'/>
+///<reference path='statics/NetNamespace.ts'/>
+///<reference path='statics/UINamespace.ts'/>
+///<reference path='statics/LoaderClass.ts'/>
+///<reference path='statics/MouseClass.ts'/>
 
 ///<reference path='link.ts' />

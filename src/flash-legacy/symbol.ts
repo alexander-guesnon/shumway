@@ -38,7 +38,7 @@ module Shumway.Timeline {
 	export interface SymbolData {
 		id: number;
 		className: string;
-		env: flash.system.ILoaderInfo;
+		env: flash.lang.ILoaderInfo;
 	}
 
 	/**

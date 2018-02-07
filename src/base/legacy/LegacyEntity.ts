@@ -75,6 +75,10 @@ module Shumway.flash.system {
 			return obj instanceof (this.jsClass) && obj._sec === this._sec;
 		}
 
+		addSymbol(symbol: any) {
+			Object.defineProperty(this.jsClass.prototype, "_symbol", {value : symbol});
+		}
+
 		isSymbol(symbolClass: any)
 		{
 			return this === symbolClass;

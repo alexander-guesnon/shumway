@@ -17,6 +17,8 @@
 module Shumway.flash.external {
 	import Telemetry = Shumway.Telemetry;
 	import ExternalInterfaceService = Shumway.ExternalInterfaceService;
+	import Multiname = lang.Multiname;
+	import NamespaceType = lang.NamespaceType;
 
 	export class ExternalInterface extends LegacyEntity {
 		constructor() {
@@ -135,11 +137,12 @@ module Shumway.flash.external {
 			return ExternalInterfaceService.instance.call(request);
 		}
 
-		static convertToXML(s: String): ASXML {
-			let xmlClass = <AXXMLClass>system.currentDomain().system._systemDomain.getClass(Multiname.FromSimpleName('XML'));
+		// @ivanpopelyshev: XML
+		static convertToXML(s: String): any /*ASXML*/ {
+			let xmlClass = <any> /*<AXXMLClass>*/ system.currentDomain().system._systemDomain.getClass(Multiname.FromSimpleName('XML'));
 			let savedIgnoreWhitespace = xmlClass.ignoreWhitespace;
 			xmlClass.ignoreWhitespace = false;
-			let xml: ASXML = xmlClass.Create(s);
+			let xml: any /*ASXML*/ = xmlClass.Create(s);
 			xmlClass.ignoreWhitespace = savedIgnoreWhitespace;
 			return xml;
 		}
@@ -156,16 +159,19 @@ module Shumway.flash.external {
 					if (obj === null) {
 						return '<null/>';
 					}
-					if (this.sec.AXDate.axIsInstanceOf(obj)) {
-						return '<date>' + obj.time + '</date>';
-					}
-					if (this.sec.AXError.axIsInstanceOf(obj)) {
-						if (this.$BgmarshallExceptions) {
-							return '<exception>' + obj + '</exception>';
-						} else {
-							return '<null/>'; // not sure?
-						}
-					}
+					// @ivanpopelyshev : Date here
+					// if (this.sec.AXDate.axIsInstanceOf(obj)) {
+					// 	return '<date>' + obj.time + '</date>';
+					// }
+
+					// @ivanpopelyshev Marshall exceptions
+					// if (system.currentDomain().AXError.axIsInstanceOf(obj)) {
+					// 	if (this.$BgmarshallExceptions) {
+					// 		return '<exception>' + obj + '</exception>';
+					// 	} else {
+					// 		return '<null/>'; // not sure?
+					// 	}
+					// }
 					let result: string[] = [];
 					// Looks like length is used to detect array. (obj is Array) is better?
 					if (obj.hasOwnProperty('$Bglength')) {
@@ -200,13 +206,14 @@ module Shumway.flash.external {
 					return String(xml.children());
 				case 'null':
 					return null;
-				case 'date':
-					return this.sec.AXDate.axConstruct([Number(String(xml.children()))]);
-				case 'exception':
-					if (this.$BgmarshallExceptions) {
-						throw this.sec.AXError.axConstruct([String(xml.children())]);
-					}
-					return undefined;
+					//@ivanpopelyshev dates and exception
+				// case 'date':
+				// 	return this.sec.AXDate.axConstruct([Number(String(xml.children()))]);
+				// case 'exception':
+				// 	if (this.$BgmarshallExceptions) {
+				// 		throw this.sec.AXError.axConstruct([String(xml.children())]);
+				// 	}
+				// 	return undefined;
 				case 'array':
 				case 'object':
 					let obj: any = xml._name.name === 'object' ?
@@ -241,6 +248,8 @@ module Shumway.flash.external {
 			// if (this.sec.AXDate.axIsInstanceOf(obj)) {
 			// 	return 'new Date(' + obj.value + ')';
 			// }
+
+			// @ivanpopelyshev: error: AXError.axIsInstanceOf(obj)
 			if (this.$BgmarshallExceptions && (obj instanceof system.LegacyError)) {
 				return 'throw "' + obj + '"';
 			}
@@ -257,7 +266,8 @@ module Shumway.flash.external {
 		}
 	}
 
-	function extractId(node: ASXML) {
+	//@ivanpopelyshev: ASXML
+	function extractId(node: any /*ASXML*/) {
 		for (let i = 0; i < node._attributes.length; i++) {
 			let attribute = node._attributes[i];
 			if (attribute._name.name === 'id') {

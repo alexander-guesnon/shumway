@@ -35,8 +35,6 @@
 
 module Shumway.flash.display {
 	import notImplemented = Shumway.Debug.notImplemented;
-	import assert = Shumway.Debug.assert;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
 
 	export class AVM1Movie extends flash.display.DisplayObject implements IAdvancable {
 
@@ -46,7 +44,7 @@ module Shumway.flash.display {
 
 		constructor(level0: DisplayObject) {
 			super();
-			this._content = this._sec.display.Sprite.axConstruct();
+			this._content = this._sec.display.Sprite.create();
 			this._children = [];
 			this._children[0] = this._content;
 			// Pretend we're a DisplayObjectContainer and can have children. See comment at the top.
@@ -67,7 +65,7 @@ module Shumway.flash.display {
 			notImplemented('AVM1Movie#call');
 		}
 
-		addCallback(functionName: string, closure: ASFunction): void {
+		addCallback(functionName: string, closure: any): void {
 			notImplemented('AVM1Movie#call');
 		}
 

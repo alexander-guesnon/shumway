@@ -106,7 +106,8 @@ module Shumway.flash.display {
 		_allowCodeExecution: boolean;
 
 		_dictionary: Shumway.Timeline.Symbol [];
-		_avm1Context: Shumway.AVM1.AVM1Context;
+		// @ivanpopelyshev: AVM1
+		_avm1Context: any /*Shumway.AVM1.AVM1Context*/;
 
 		get loaderURL(): string {
 			if (!this._loader) {
@@ -428,7 +429,7 @@ module Shumway.flash.display {
 					symbolId + " not found.");
 				return null;
 			} else {
-				Object.defineProperty(classDefinition.tPrototype, "_symbol", {value: symbol});
+				classDefinition.addSymbol(symbol);
 				return symbol;
 			}
 		}

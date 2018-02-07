@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import flashPackage = Shumway.flash;
-
 namespace Shumway.flash.system  {
 	function M(name: string, asClass: any) {
 		// registerNativeClass(name, asClass);
@@ -143,7 +141,8 @@ namespace Shumway.flash.system  {
 
 	M("flash.system.Capabilities", flash.system.Capabilities);
 	M("flash.system.Security", flash.system.Security);
-	M("flash.system.System", flash.system.System);
+	// @ivanpopelyshev: System
+	// M("flash.system.System", flash.system.System);
 	M("flash.system.SecurityDomain", flash.system.SecurityDomain);
 	M("flash.system.ApplicationDomain", flash.system.ApplicationDomain);
 	M("flash.system.JPEGLoaderContext", flash.system.JPEGLoaderContext);
@@ -155,8 +154,9 @@ namespace Shumway.flash.system  {
 	M("flash.utils.Timer", flash.utils.Timer);
 	M("flash.utils.ByteArray", flash.utils.ByteArray);
 
-	M("flash.xml.XMLNode", flash.xml.XMLNode);
-	M("flash.xml.XMLDocument", flash.xml.XMLDocument);
+	// @ivanpopelyshev: XML
+	// M("flash.xml.XMLNode", flash.xml.XMLNode);
+	// M("flash.xml.XMLDocument", flash.xml.XMLDocument);
 
 	// registerNativeFunction('flash.system.fscommand', flash.system.fscommand);
 

@@ -303,7 +303,7 @@ module Shumway.Player {
 	 */
 	function createErrorFromUnknownObject(sec: ISecurityDomain, obj: any,
 	                                      defaultErrorClassName: string,
-	                                      defaultErrorInfo: AVMX.ErrorInfo): AVMX.AXObject {
+	                                      defaultErrorInfo: ErrorInfo): AVMX.AXObject {
 		if (!obj || typeof obj !== 'object') {
 			return sec.createError(defaultErrorClassName, defaultErrorInfo, obj);
 		}

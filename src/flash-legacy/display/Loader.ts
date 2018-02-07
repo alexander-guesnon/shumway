@@ -27,6 +27,10 @@ module Shumway.flash.display {
 	import ILoadListener = Shumway.ILoadListener;
 	import SWFFile = Shumway.SWF.SWFFile;
 
+	import ABCFile = lang.ABCFile;
+	import Multiname = lang.Multiname;
+	import NamespaceType = lang.NamespaceType;
+
 	export enum LoadStatus {
 		Unloaded = 0,
 		Opened = 1,
@@ -581,7 +585,8 @@ module Shumway.flash.display {
 
 		private _createAVM1Context(): void {
 			let contentLoaderInfo: LoaderInfo = this._contentLoaderInfo;
-			let avm1Context = Shumway.AVM1.AVM1Context.create(contentLoaderInfo);
+			//@ivanpopelyshev: AVM1
+			let avm1Context = (Shumway as any).AVM1.AVM1Context.create(contentLoaderInfo);
 			const context = this._sec;
 			let rootLoader = context.display.Loader.getRootLoader();
 			avm1Context.setStage(rootLoader._stage);
@@ -604,7 +609,10 @@ module Shumway.flash.display {
 			release || Debug.assert(contentLoaderInfo);
 
 			let avm1Context = this._contentLoaderInfo._avm1Context;
-			let avm1MovieClip = <AVM1.Lib.AVM1MovieClip>AVM1.Lib.getAVM1Object(root, avm1Context);
+
+			//@ivanpopelyshev: AVM1
+			let avm1MovieClip : any = {};
+			//let avm1MovieClip = <AVM1.Lib.AVM1MovieClip>AVM1.Lib.getAVM1Object(root, avm1Context);
 
 			let parameters = contentLoaderInfo._parameters;
 			avm1MovieClip.setParameters(parameters);

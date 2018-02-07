@@ -101,7 +101,8 @@ module Shumway.flash.display {
 					child._removeFlags(DisplayObjectFlags.HasPlaceObjectInitPending);
 
 					let avm1Context = child._symbol.avm1Context;
-					Shumway.AVM1.Lib.initializeAVM1Object(child, avm1Context, child._placeObjectTag);
+					// @ivanpopelyshev: AVM1
+					(Shumway as any).AVM1.Lib.initializeAVM1Object(child, avm1Context, child._placeObjectTag);
 
 					try {
 						child.dispatchEvent(eventClass.getInstance(events.Event.AVM1_INIT));

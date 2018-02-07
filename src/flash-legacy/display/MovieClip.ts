@@ -17,16 +17,14 @@
 module Shumway.flash.display {
 	import assert = Shumway.Debug.assert;
 	import assertUnreachable = Shumway.Debug.assertUnreachable;
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-	import isNullOrUndefined = Shumway.isNullOrUndefined;
-	import clamp = Shumway.NumberUtilities.clamp;
 	import Telemetry = Shumway.Telemetry;
 	import events = flash.events;
-	import Multiname = Shumway.AVMX.Multiname;
 
 	import SwfTagCode = Shumway.SWF.Parser.SwfTagCode;
 	import SoundInfoFlags = Shumway.SWF.Parser.SoundInfoFlags;
+
+	//@ivanpopelyshev: AVM1
+	let AVM1 : any = null;
 
 	/**
 	 * Controls how to behave on inter-frame navigation.
@@ -88,7 +86,7 @@ module Shumway.flash.display {
 						}
 
 						let symbolClass = symbolInfo.symbolClass;
-						let soundObj = constructClassFromSymbol(symbolInfo, symbolClass);
+						let soundObj = system.constructClassFromSymbol(symbolInfo, symbolClass);
 						sounds[symbolId] = sound = {object: soundObj};
 					}
 					let stop = info.flags & SoundInfoFlags.Stop;
@@ -244,7 +242,8 @@ module Shumway.flash.display {
 		 * This field is only ever populated by the AVM1 runtime, so can only be used for MovieClips
 		 * used in the implementation of an AVM1 display list.
 		 */
-		private _as2Object: AVM1.Lib.AVM1MovieClip;
+			//@ivanpopelyshev: AVM1
+		private _as2Object: any /*AVM1.Lib.AVM1MovieClip*/;
 
 		removeChildAt(index: number): DisplayObject {
 			let child = super.removeChildAt(index);
@@ -471,7 +470,6 @@ module Shumway.flash.display {
 			let legacyMode = navigationModel !== FrameNavigationModel.SWF10;
 			let scene: Scene;
 			if (sceneName !== null) {
-				sceneName = axCoerceString(sceneName);
 				let scenes = this._scenes;
 				release || assert(scenes.length, "There should be at least one scene defined.");
 				let i;
@@ -803,8 +801,7 @@ module Shumway.flash.display {
 					'flash.display::MovieClip/gotoAndPlay()', 1,
 					arguments.length);
 			}
-			scene = axCoerceString(scene);
-			frame = axCoerceString(frame) + ''; // The axCoerceString returns `null` for `undefined`.
+			frame = frame + '';
 			this.play();
 			this._gotoFrame(frame, scene);
 		}
@@ -816,8 +813,7 @@ module Shumway.flash.display {
 					'flash.display::MovieClip/gotoAndPlay()', 1,
 					arguments.length);
 			}
-			scene = axCoerceString(scene);
-			frame = axCoerceString(frame) + ''; // The axCoerceString returns `null` for `undefined`.
+			frame = frame + ''; // The axCoerceString returns `null` for `undefined`.
 			this.stop();
 			this._gotoFrame(frame, scene);
 		}
