@@ -442,11 +442,7 @@ module Shumway.flash.display {
 						let symbolMapping = file.symbolClassesList[i];
 						let symbolClass = app.getClass(Multiname.FromFQNString(symbolMapping.className,
 							NamespaceType.Public));
-						Object.defineProperty(symbolClass.tPrototype, "_symbol",
-							{
-								get: loaderInfo.getSymbolResolver(symbolClass, symbolMapping.id),
-								configurable: true
-							});
+						symbolClass.setSymbolResolver(loaderInfo.getSymbolResolver(symbolClass, symbolMapping.id));
 					}
 					loaderInfo._mappedSymbolsLoaded = mappedSymbolsLoaded;
 				}

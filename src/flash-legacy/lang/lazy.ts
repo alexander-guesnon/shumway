@@ -1,4 +1,3 @@
-
 // this is taken from AVM2 only for name parsing
 module Shumway.flash.lang {
 	import assert = Shumway.Debug.assert;
@@ -143,8 +142,14 @@ module Shumway.flash.lang {
 	}
 
 	export interface ILoaderInfo {
-		app: system.ApplicationDomain;
+		app: IApplicationDomain;
 		url: string;
+	}
+
+	export interface IApplicationDomain {
+		loadABC(file: ABCFile): void;
+
+		loadAndExecuteABC(file: ABCFile): void;
 	}
 
 	export class ABCFile {

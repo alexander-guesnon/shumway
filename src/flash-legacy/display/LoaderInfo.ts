@@ -429,7 +429,7 @@ module Shumway.flash.display {
 					symbolId + " not found.");
 				return null;
 			} else {
-				classDefinition.addSymbol(symbol);
+				classDefinition.setSymbol(symbol);
 				return symbol;
 			}
 		}

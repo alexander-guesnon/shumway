@@ -17,7 +17,19 @@
 module Shumway.flash.system {
 	import notImplemented = Shumway.Debug.notImplemented;
 
-	export class ApplicationDomain extends LegacyEntity {
+	export class ApplicationDomain extends LegacyEntity implements lang.IApplicationDomain {
+		loadABC(file: Shumway.flash.lang.ABCFile): void {
+			// nothing
+		}
+
+		loadAndExecuteABC(file: Shumway.flash.lang.ABCFile): void {
+			// nothing
+		}
+
+		getClass(name: lang.Multiname): LegacyClass {
+			//@ivanpopelyshev: we need it to work or we're screwed
+			return null;
+		}
 
 		// axDomain: AXApplicationDomain;
 		_parentDomain: ApplicationDomain;
