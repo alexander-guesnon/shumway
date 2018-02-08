@@ -11,6 +11,7 @@ module Shumway.flash.system {
 
 			this._systemDomain = new ApplicationDomain(null);
 			this._applicationDomain = new ApplicationDomain(this._systemDomain);
+			this.LoaderContext = new LegacyClass(system.LoaderContext);
 
 			this._currentDomain = this._applicationDomain;
 		}
@@ -21,5 +22,6 @@ module Shumway.flash.system {
 
 		JPEGLoaderContext: LegacyClass<system.JPEGLoaderContext>;
 		ApplicationDomain: LegacyClass<system.ApplicationDomain>;
+		LoaderContext: LegacyClass<system.LoaderContext>;
 	}
 }

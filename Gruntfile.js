@@ -98,6 +98,9 @@ module.exports = function(grunt) {
       build_player_ts: {
         cmd: commonArguments + 'src/player'
       },
+	  build_player_legacy_ts: {
+		  cmd: commonArguments + 'src/player-legacy'
+	  },
       build_shell_ts: {
         cmd: commonArguments + 'src/shell'
       },
@@ -752,6 +755,7 @@ module.exports = function(grunt) {
     'copy_relooper',
     'parallel:natives',
     'exec:build_player_ts',
+    'exec:build_player_legacy_ts',
     'exec:build_shell_ts',
     'bundles',
     'merge-modules'

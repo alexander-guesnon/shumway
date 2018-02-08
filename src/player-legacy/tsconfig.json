@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig-parent.json",
+  "compilerOptions": {
+    "outFile": "../../build/ts/player-legacy.js"
+  },
+  "include": [
+    "./../../build/ts/base.d.ts",
+    "./../../build/ts/tools.d.ts",
+    "./../../build/ts/swf.d.ts",
+    "./../../build/ts/flash-legacy.d.ts",
+    "./references.ts"
+  ]
+}
