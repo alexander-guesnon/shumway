@@ -16,23 +16,23 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
-  export function defineLabel(tag: StaticTextTag) {
-    var label = {
-      type: 'label',
-      id: tag.id,
-      fillBounds: tag.bbox,
-      matrix: tag.matrix,
-      tag: {
-        hasText: true,
-        initialText: '',
-        html: true,
-        readonly: true
-      },
-      records: tag.records,
-      coords: null,
-      static: true,
-      require: null
-    };
-    return label;
-  }
+	export function defineLabel(tag: StaticTextTag) {
+		let label = {
+			type: 'label',
+			id: tag.id,
+			fillBounds: tag.bbox,
+			matrix: tag.matrix,
+			tag: {
+				hasText: true,
+				initialText: '',
+				html: true,
+				readonly: true
+			},
+			records: tag.records,
+			coords: null as any,
+			static: true,
+			require: null as any
+		};
+		return label;
+	}
 }

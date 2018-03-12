@@ -24,15 +24,15 @@ module Shumway.AVMX.AS {
      */
     export class Dictionary extends ASObject {
       static classInitializer: any = function() {
-        var proto: any = this.dPrototype;
-        var asProto: any = Dictionary.prototype;
+        let proto: any = this.dPrototype;
+        let asProto: any = Dictionary.prototype;
         addPrototypeFunctionAlias(proto, '$BgtoJSON', asProto.toJSON);
       }
 
       private map: WeakMap<any, any>;
       private keys: any [];
       private weakKeys: boolean;
-      private primitiveMap: Object;
+      private primitiveMap: MapObject<any>;
 
       constructor(weakKeys: boolean = false) {
         super();
@@ -61,7 +61,7 @@ module Shumway.AVMX.AS {
         if (<any>this === this.axClass.dPrototype) {
           return super.axGetProperty(mn);
         }
-        var key = Dictionary.makePrimitiveKey(mn.name);
+        let key = Dictionary.makePrimitiveKey(mn.name);
         if (key !== undefined) {
           return this.primitiveMap[<any>key];
         }
@@ -73,7 +73,7 @@ module Shumway.AVMX.AS {
           super.axSetProperty(mn, value, bc);
           return;
         }
-        var key = Dictionary.makePrimitiveKey(mn.name);
+        let key = Dictionary.makePrimitiveKey(mn.name);
         if (key !== undefined) {
           this.primitiveMap[<any>key] = value;
           return;
@@ -93,7 +93,7 @@ module Shumway.AVMX.AS {
         if (<any>this === this.axClass.dPrototype) {
           return super.axHasProperty(mn);
         }
-        var key = Dictionary.makePrimitiveKey(mn.name);
+        let key = Dictionary.makePrimitiveKey(mn.name);
         if (key !== undefined) {
           return <any>key in this.primitiveMap;
         }
@@ -104,12 +104,12 @@ module Shumway.AVMX.AS {
         if (<any>this === this.axClass.dPrototype) {
           return super.axDeleteProperty(mn);
         }
-        var key = Dictionary.makePrimitiveKey(mn.name);
+        let key = Dictionary.makePrimitiveKey(mn.name);
         if (key !== undefined) {
           delete this.primitiveMap[<any>key];
         }
         this.map.delete(Object(mn.name));
-        var i;
+        let i;
         if (!this.weakKeys && (i = this.keys.indexOf(mn.name)) >= 0) {
           this.keys.splice(i, 1);
         }
@@ -120,7 +120,7 @@ module Shumway.AVMX.AS {
         if (<any>this === this.axClass.dPrototype) {
           return super.axGetPublicProperty(nm);
         }
-        var key = Dictionary.makePrimitiveKey(nm);
+        let key = Dictionary.makePrimitiveKey(nm);
         if (key !== undefined) {
           return this.primitiveMap[<any>key];
         }
@@ -131,8 +131,8 @@ module Shumway.AVMX.AS {
         if (<any>this === this.axClass.dPrototype) {
           return super.axGetEnumerableKeys();
         }
-        var primitiveMapKeys = [];
-        for (var k in this.primitiveMap) {
+        let primitiveMapKeys = [];
+        for (let k in this.primitiveMap) {
           primitiveMapKeys.push(k);
         }
         if (this.weakKeys) {

@@ -17,26 +17,26 @@
 ///<reference path='references.ts' />
 
 module Shumway {
-  export module Settings {
-    export var ROOT: string = "Shumway Options";
-    export var shumwayOptions = new Options.OptionSet(ROOT);
+	export module Settings {
+		export let ROOT: string = "Shumway Options";
+		export let shumwayOptions = new Options.OptionSet(ROOT);
 
-    export function setSettings(settings: any) {
-      shumwayOptions.setSettings(settings);
-    }
+		export function setSettings(settings: any) {
+			shumwayOptions.setSettings(settings);
+		}
 
-    export function getSettings() {
-      return shumwayOptions.getSettings();
-    }
-  }
-  import Option = Shumway.Options.Option;
-  import OptionSet = Shumway.Options.OptionSet;
+		export function getSettings() {
+			return shumwayOptions.getSettings();
+		}
+	}
+	import Option = Shumway.Options.Option;
+	import OptionSet = Shumway.Options.OptionSet;
 
-  import shumwayOptions = Shumway.Settings.shumwayOptions;
+	import shumwayOptions = Shumway.Settings.shumwayOptions;
 
-  export var loggingOptions = shumwayOptions.register(new OptionSet("Logging Options"));
+	export let loggingOptions = shumwayOptions.register(new OptionSet("Logging Options"));
 
-  export var omitRepeatedWarnings = loggingOptions.register(new Option("wo", "warnOnce",
-                                                                       "boolean", true,
-                                                                       'Omit Repeated Warnings'));
+	export let omitRepeatedWarnings = loggingOptions.register(new Option("wo", "warnOnce",
+		"boolean", true,
+		'Omit Repeated Warnings'));
 }

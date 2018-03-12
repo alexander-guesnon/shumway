@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-/// <reference path='../../build/ts/avm2.d.ts' />
-/// <reference path='../../build/ts/swf.d.ts' />
-
 ///<reference path='module.ts' />
 ///<reference path='../htmlparser.ts' />
 ///<reference path='../TextContent.ts' />
 ///<reference path='settings.ts' />
 
 ///<reference path='symbol.ts' />
-
-///<reference path='../rtmp/references.ts' />
 
 ///<reference path='geom/Matrix.ts' />
 ///<reference path='geom/Matrix3D.ts' />
@@ -291,9 +286,9 @@
 // ///<reference path='profiler/Telemetry.ts' />
 
 // ///<reference path='sampler/ClassFactory.ts' />
+// ///<reference path='sampler/Sample.ts' />
 // ///<reference path='sampler/DeleteObjectSample.ts' />
 // ///<reference path='sampler/NewObjectSample.ts' />
-// ///<reference path='sampler/Sample.ts' />
 // ///<reference path='sampler/StackFrame.ts' />
 
 // ///<reference path='security/CertificateStatus.ts' />
@@ -344,6 +339,7 @@
 ///<reference path='text/TextRun.ts' />
 ///<reference path='text/TextSnapshot.ts' />
 
+// ///<reference path='text/engine/TextJustifier.ts' />
 // ///<reference path='text/engine/BreakOpportunity.ts' />
 // ///<reference path='text/engine/CFFHinting.ts' />
 // ///<reference path='text/engine/ContentElement.ts' />
@@ -363,7 +359,6 @@
 // ///<reference path='text/engine/LigatureLevel.ts' />
 // ///<reference path='text/engine/LineJustification.ts' />
 // ///<reference path='text/engine/RenderingMode.ts' />
-// ///<reference path='text/engine/TextJustifier.ts' />
 // ///<reference path='text/engine/SpaceJustifier.ts' />
 // ///<reference path='text/engine/TabAlignment.ts' />
 // ///<reference path='text/engine/TabStop.ts' />
@@ -407,8 +402,6 @@
 ///<reference path='utils/IExternalizable.ts' />
 ///<reference path='utils/Timer.ts' />
 ///<reference path='utils/SetIntervalTimer.ts' />
-
-///<reference path='avm1.d.ts' />
 
 // ///<reference path='linker.ts' />
 ///<reference path='link.ts' />

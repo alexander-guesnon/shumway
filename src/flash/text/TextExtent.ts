@@ -15,24 +15,24 @@
  */
 // Class: TextExtent
 module Shumway.AVMX.AS.flash.text {
-  export class TextExtent extends ASObject {
+	export class TextExtent extends ASObject {
 
-    constructor(width: number, height: number, textFieldWidth: number, textFieldHeight: number,
-                ascent: number, descent: number) {
-      super();
-      this.width = +width;
-      this.height = +height;
-      this.textFieldWidth = +textFieldWidth;
-      this.textFieldHeight = +textFieldHeight;
-      this.ascent = +ascent;
-      this.descent = +descent;
-    }
+		constructor(width: number, height: number, textFieldWidth: number, textFieldHeight: number,
+		            ascent: number, descent: number) {
+			super();
+			this.width = +width;
+			this.height = +height;
+			this.textFieldWidth = +textFieldWidth;
+			this.textFieldHeight = +textFieldHeight;
+			this.ascent = +ascent;
+			this.descent = +descent;
+		}
 
-    width: number;
-    height: number;
-    textFieldWidth: number;
-    textFieldHeight: number;
-    ascent: number;
-    descent: number;
-  }
+		width: number;
+		height: number;
+		textFieldWidth: number;
+		textFieldHeight: number;
+		ascent: number;
+		descent: number;
+	}
 }

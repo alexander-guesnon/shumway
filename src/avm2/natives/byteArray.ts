@@ -15,267 +15,289 @@
  */
 
 module Shumway.AVMX.AS {
-  import notImplemented = Shumway.Debug.notImplemented;
-  import unexpected = Shumway.Debug.unexpected;
+	import notImplemented = Shumway.Debug.notImplemented;
+	import unexpected = Shumway.Debug.unexpected;
 
-  import utf8decode = Shumway.StringUtilities.utf8decode;
-  import utf8encode = Shumway.StringUtilities.utf8encode;
-  import clamp = Shumway.NumberUtilities.clamp;
-  import swap16 = Shumway.IntegerUtilities.swap16;
-  import swap32 = Shumway.IntegerUtilities.swap32;
-  import floatToInt32 = Shumway.IntegerUtilities.floatToInt32;
-  import int32ToFloat = Shumway.IntegerUtilities.int32ToFloat;
+	import utf8decode = Shumway.StringUtilities.utf8decode;
+	import utf8encode = Shumway.StringUtilities.utf8encode;
+	import clamp = Shumway.NumberUtilities.clamp;
+	import swap16 = Shumway.IntegerUtilities.swap16;
+	import swap32 = Shumway.IntegerUtilities.swap32;
+	import floatToInt32 = Shumway.IntegerUtilities.floatToInt32;
+	import int32ToFloat = Shumway.IntegerUtilities.int32ToFloat;
 
-  import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
-  import assert = Shumway.Debug.assert;
+	import DataBuffer = Shumway.ArrayUtilities.DataBuffer;
+	import assert = Shumway.Debug.assert;
 
-  export module flash.net {
-    export enum AMFEncoding {
-      AMF0 = 0,
-      AMF3 = 3,
-      DEFAULT = 3
-    }
-    export class ObjectEncoding extends ASObject {
-      public static AMF0 = AMFEncoding.AMF0;
-      public static AMF3 = AMFEncoding.AMF3;
-      public static DEFAULT = AMFEncoding.DEFAULT;
+	export module flash.net {
+		export enum AMFEncoding {
+			AMF0 = 0,
+			AMF3 = 3,
+			DEFAULT = 3
+		}
 
-      static get dynamicPropertyWriter(): any /* flash.net.IDynamicPropertyWriter */ {
-        release || release || notImplemented("public flash.net.ObjectEncoding::get dynamicPropertyWriter");
-        return null;
-      }
-      static set dynamicPropertyWriter(value: any /* flash.net.IDynamicPropertyWriter */) {
-        release || release || notImplemented("public flash.net.ObjectEncoding::set dynamicPropertyWriter");
-      }
-    }
-  }
+		export class ObjectEncoding extends ASObject {
+			public static AMF0 = AMFEncoding.AMF0;
+			public static AMF3 = AMFEncoding.AMF3;
+			public static DEFAULT = AMFEncoding.DEFAULT;
 
-  export module flash.utils {
+			static get dynamicPropertyWriter(): any /* flash.net.IDynamicPropertyWriter */ {
+				release || release || notImplemented("public flash.net.ObjectEncoding::get dynamicPropertyWriter");
+				return null;
+			}
 
-    export interface IDataInput {
-      readBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
-      readBoolean: () => boolean;
-      readByte: () => number /*int*/;
-      readUnsignedByte: () => number /*uint*/;
-      readShort: () => number /*int*/;
-      readUnsignedShort: () => number /*uint*/;
-      readInt: () => number /*int*/;
-      readUnsignedInt: () => number /*uint*/;
-      readFloat: () => number;
-      readDouble: () => number;
-      readMultiByte: (length: number /*uint*/, charSet: string) => string;
-      readUTF: () => string;
-      readUTFBytes: (length: number /*uint*/) => string;
-      bytesAvailable: number /*uint*/;
-      readObject: () => any;
-      objectEncoding: number /*uint*/;
-      endian: string;
-    }
+			static set dynamicPropertyWriter(value: any /* flash.net.IDynamicPropertyWriter */) {
+				release || release || notImplemented("public flash.net.ObjectEncoding::set dynamicPropertyWriter");
+			}
+		}
+	}
 
-    export interface IDataOutput {
-      writeBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
-      writeBoolean: (value: boolean) => void;
-      writeByte: (value: number /*int*/) => void;
-      writeShort: (value: number /*int*/) => void;
-      writeInt: (value: number /*int*/) => void;
-      writeUnsignedInt: (value: number /*uint*/) => void;
-      writeFloat: (value: number) => void;
-      writeDouble: (value: number) => void;
-      writeMultiByte: (value: string, charSet: string) => void;
-      writeUTF: (value: string) => void;
-      writeUTFBytes: (value: string) => void;
-      writeObject: (object: any) => void;
-      objectEncoding: number /*uint*/;
-      endian: string;
-    }
+	export module flash.utils {
 
-    export class ByteArray extends ASObject implements IDataInput, IDataOutput {
+		export interface IDataInput {
+			readBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
+			readBoolean: () => boolean;
+			readByte: () => number
+			/*int*/
+			;
+			readUnsignedByte: () => number
+			/*uint*/
+			;
+			readShort: () => number
+			/*int*/
+			;
+			readUnsignedShort: () => number
+			/*uint*/
+			;
+			readInt: () => number
+			/*int*/
+			;
+			readUnsignedInt: () => number
+			/*uint*/
+			;
+			readFloat: () => number;
+			readDouble: () => number;
+			readMultiByte: (length: number /*uint*/, charSet: string) => string;
+			readUTF: () => string;
+			readUTFBytes: (length: number /*uint*/) => string;
+			bytesAvailable: number
+			/*uint*/
+			;
+			readObject: () => any;
+			objectEncoding: number
+			/*uint*/
+			;
+			endian: string;
+		}
 
-      static axClass: typeof ByteArray;
+		export interface IDataOutput {
+			writeBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
+			writeBoolean: (value: boolean) => void;
+			writeByte: (value: number /*int*/) => void;
+			writeShort: (value: number /*int*/) => void;
+			writeInt: (value: number /*int*/) => void;
+			writeUnsignedInt: (value: number /*uint*/) => void;
+			writeFloat: (value: number) => void;
+			writeDouble: (value: number) => void;
+			writeMultiByte: (value: string, charSet: string) => void;
+			writeUTF: (value: string) => void;
+			writeUTFBytes: (value: string) => void;
+			writeObject: (object: any) => void;
+			objectEncoding: number
+			/*uint*/
+			;
+			endian: string;
+		}
 
-      public static classNatives: any [] = [DataBuffer];
-      public static instanceNatives: any [] = [DataBuffer.prototype];
+		export class ByteArray extends ASObject implements IDataInput, IDataOutput {
 
-      static classInitializer() {
-        var proto: any = DataBuffer.prototype;
-        ObjectUtilities.defineNonEnumerableProperty(proto, '$BgtoJSON', proto.toJSON);
-      }
+			static axClass: typeof ByteArray;
 
-      _symbol: {
-        buffer: Uint8Array;
-        byteLength: number;
-      };
+			public static classNatives: any [] = [DataBuffer];
+			public static instanceNatives: any [] = [DataBuffer.prototype];
 
-      constructor(source?: any) {
-        super();
-        if (this._symbol) {
-          source = this._symbol;
-        }
-        var buffer: ArrayBuffer;
-        var length = 0;
-        if (source) {
-          if (source instanceof ArrayBuffer) {
-            buffer = source.slice();
-          } else if (Array.isArray(source)) {
-            buffer = new Uint8Array(source).buffer;
-          } else if ('buffer' in source) {
-            if (source.buffer instanceof ArrayBuffer) {
-              buffer = new Uint8Array(source.buffer).buffer;
-            } else if (source.buffer instanceof Uint8Array) {
-              var begin = source.buffer.byteOffset;
-              buffer = source.buffer.buffer.slice(begin, begin + source.buffer.length);
-            } else {
-              release || assert(source.buffer instanceof ArrayBuffer);
-              buffer = source.buffer.slice();
-            }
-          } else {
-            Debug.unexpected("Source type.");
-          }
-          length = buffer.byteLength;
-        } else {
-          buffer = new ArrayBuffer(ByteArray.INITIAL_SIZE);
-        }
-        this._buffer = buffer;
-        this._length = length;
-        this._position = 0;
-        this._resetViews();
-        this._objectEncoding = ByteArray.defaultObjectEncoding;
-        this._littleEndian = false; // AS3 is bigEndian by default.
-        this._bitBuffer = 0;
-        this._bitLength = 0;
-      }
+			static classInitializer() {
+				let proto: any = DataBuffer.prototype;
+				ObjectUtilities.defineNonEnumerableProperty(proto, '$BgtoJSON', proto.toJSON);
+			}
 
-      /* The initial size of the backing, in bytes. Doubled every OOM. */
-      private static INITIAL_SIZE = 128;
+			_symbol: {
+				buffer: Uint8Array;
+				byteLength: number;
+			};
 
-      private static _defaultObjectEncoding: number = flash.net.ObjectEncoding.DEFAULT;
+			constructor(source?: any) {
+				super();
+				if (this._symbol) {
+					source = this._symbol;
+				}
+				let buffer: ArrayBuffer;
+				let length = 0;
+				if (source) {
+					if (source instanceof ArrayBuffer) {
+						buffer = source.slice(0);
+					} else if (Array.isArray(source)) {
+						buffer = new Uint8Array(source).buffer;
+					} else if ('buffer' in source) {
+						if (source.buffer instanceof ArrayBuffer) {
+							buffer = new Uint8Array(source.buffer).buffer;
+						} else if (source.buffer instanceof Uint8Array) {
+							let begin = source.buffer.byteOffset;
+							buffer = source.buffer.buffer.slice(begin, begin + source.buffer.length);
+						} else {
+							release || assert(source.buffer instanceof ArrayBuffer);
+							buffer = source.buffer.slice();
+						}
+					} else {
+						Debug.unexpected("Source type.");
+					}
+					length = buffer.byteLength;
+				} else {
+					buffer = new ArrayBuffer(ByteArray.INITIAL_SIZE);
+				}
+				this._buffer = buffer;
+				this._length = length;
+				this._position = 0;
+				this._resetViews();
+				this._objectEncoding = ByteArray.defaultObjectEncoding;
+				this._littleEndian = false; // AS3 is bigEndian by default.
+				this._bitBuffer = 0;
+				this._bitLength = 0;
+			}
 
-      static get defaultObjectEncoding(): number /*uint*/ {
-        return this._defaultObjectEncoding;
-      }
+			/* The initial size of the backing, in bytes. Doubled every OOM. */
+			private static INITIAL_SIZE = 128;
 
-      static set defaultObjectEncoding(version: number /*uint*/) {
-        version = version >>> 0;
-        this._defaultObjectEncoding = version;
-      }
+			private static _defaultObjectEncoding: number = flash.net.ObjectEncoding.DEFAULT;
 
-      toJSON() {
-        return "ByteArray";
-      }
+			static get defaultObjectEncoding(): number /*uint*/ {
+				return this._defaultObjectEncoding;
+			}
 
-      private _buffer: ArrayBuffer;
-      private _length: number;
-      private _position: number;
-      private _littleEndian: boolean;
-      private _objectEncoding: number;
+			static set defaultObjectEncoding(version: number /*uint*/) {
+				version = version >>> 0;
+				this._defaultObjectEncoding = version;
+			}
 
-      private _bitBuffer: number;
-      private _bitLength: number;
+			toJSON() {
+				return "ByteArray";
+			}
 
-      private _resetViews: () => void;
+			private _buffer: ArrayBuffer;
+			private _length: number;
+			private _position: number;
+			private _littleEndian: boolean;
+			private _objectEncoding: number;
 
-      readBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
-      readBoolean: () => boolean;
-      readByte: () => number /*int*/;
-      readUnsignedByte: () => number /*uint*/;
-      readShort: () => number /*int*/;
-      readUnsignedShort: () => number /*uint*/;
-      readInt: () => number /*int*/;
-      readUnsignedInt: () => number /*uint*/;
-      readFloat: () => number;
-      readDouble: () => number;
-      readMultiByte: (length: number /*uint*/, charSet: string) => string;
-      readUTF: () => string;
-      readUTFBytes: (length: number /*uint*/) => string;
-      bytesAvailable: number /*uint*/;
-      readObject(): any {
-        switch (this._objectEncoding) {
-          case flash.net.ObjectEncoding.AMF0:
-            return AMF0.read(this);
-          case flash.net.ObjectEncoding.AMF3:
-            return AMF3.read(this);
-          default:
-            unexpected("Object Encoding");
-        }
-      }
+			private _bitBuffer: number;
+			private _bitLength: number;
 
-      writeBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
-      writeBoolean: (value: boolean) => void;
-      writeByte: (value: number /*int*/) => void;
-      writeShort: (value: number /*int*/) => void;
-      writeInt: (value: number /*int*/) => void;
-      writeUnsignedInt: (value: number /*uint*/) => void;
-      writeFloat: (value: number) => void;
-      writeDouble: (value: number) => void;
-      writeMultiByte: (value: string, charSet: string) => void;
-      writeUTF: (value: string) => void;
-      writeUTFBytes: (value: string) => void;
-      writeObject(object: any) {
-        switch (this._objectEncoding) {
-          case flash.net.ObjectEncoding.AMF0:
-            return AMF0.write(this, object);
-          case flash.net.ObjectEncoding.AMF3:
-            return AMF3.write(this, object);
-          default:
-            unexpected("Object Encoding");
-        }
-      }
+			private _resetViews: () => void;
 
-      getBytes: () => Uint8Array;
+			readBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
+			readBoolean: () => boolean;
+			readByte: () => number /*int*/;
+			readUnsignedByte: () => number /*uint*/;
+			readShort: () => number /*int*/;
+			readUnsignedShort: () => number /*uint*/;
+			readInt: () => number /*int*/;
+			readUnsignedInt: () => number /*uint*/;
+			readFloat: () => number;
+			readDouble: () => number;
+			readMultiByte: (length: number /*uint*/, charSet: string) => string;
+			readUTF: () => string;
+			readUTFBytes: (length: number /*uint*/) => string;
+			bytesAvailable: number /*uint*/;
 
-      objectEncoding: number /*uint*/;
-      endian: string;
+			readObject(): any {
+				switch (this._objectEncoding) {
+					case flash.net.ObjectEncoding.AMF0:
+						return AMF0.read(this);
+					case flash.net.ObjectEncoding.AMF3:
+						return AMF3.read(this);
+					default:
+						unexpected("Object Encoding");
+				}
+			}
 
-      readRawBytes: () => Int8Array;
-      writeRawBytes: (bytes: Uint8Array) => void;
-      position: number;
-      length: number;
+			writeBytes: (bytes: flash.utils.ByteArray, offset?: number /*uint*/, length?: number /*uint*/) => void;
+			writeBoolean: (value: boolean) => void;
+			writeByte: (value: number /*int*/) => void;
+			writeShort: (value: number /*int*/) => void;
+			writeInt: (value: number /*int*/) => void;
+			writeUnsignedInt: (value: number /*uint*/) => void;
+			writeFloat: (value: number) => void;
+			writeDouble: (value: number) => void;
+			writeMultiByte: (value: string, charSet: string) => void;
+			writeUTF: (value: string) => void;
+			writeUTFBytes: (value: string) => void;
 
-      axGetPublicProperty(nm: any): any {
-        if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
-          return this.axGetNumericProperty(nm);
-        }
-        return this['$Bg' + nm];
-      }
+			writeObject(object: any) {
+				switch (this._objectEncoding) {
+					case flash.net.ObjectEncoding.AMF0:
+						return AMF0.write(this, object);
+					case flash.net.ObjectEncoding.AMF3:
+						return AMF3.write(this, object);
+					default:
+						unexpected("Object Encoding");
+				}
+			}
 
-      axGetNumericProperty(nm: number) {
-        release || assert(typeof nm === 'number');
-        return (<any>this).getValue(nm);
-      }
+			getBytes: () => Uint8Array;
 
-      axSetPublicProperty(nm: any, value: any) {
-        release || checkValue(value);
-        if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
-          this.axSetNumericProperty(nm, value);
-          return;
-        }
-        this['$Bg' + nm] = value;
-      }
+			objectEncoding: number /*uint*/;
+			endian: string;
 
-      axSetNumericProperty(nm: number, value: any) {
-        release || assert(typeof nm === 'number');
-        (<any>this).setValue(nm, value);
-      }
+			readRawBytes: () => Int8Array;
+			writeRawBytes: (bytes: Uint8Array) => void;
+			position: number;
+			length: number;
 
-      axGetProperty(mn: Multiname): any {
-        var name = mn.name;
-        if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
-          release || assert(mn.isRuntimeName());
-          return (<any>this).getValue(+name);
-        }
-        return super.axGetProperty(mn);
-      }
+			axGetPublicProperty(nm: any): any {
+				if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
+					return this.axGetNumericProperty(nm);
+				}
+				return this['$Bg' + nm];
+			}
 
-      axSetProperty(mn: Multiname, value: any, bc: Bytecode): void {
-        release || checkValue(value);
-        var name = mn.name;
-        if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
-          release || assert(mn.isRuntimeName());
-          (<any>this).setValue(+name, value);
-          return;
-        }
-        super.axSetProperty(mn, value, bc);
-      }
-    }
-  }
+			axGetNumericProperty(nm: number) {
+				release || assert(typeof nm === 'number');
+				return (<any>this).getValue(nm);
+			}
+
+			axSetPublicProperty(nm: any, value: any) {
+				release || checkValue(value);
+				if (typeof nm === 'number' || isNumeric(nm = axCoerceName(nm))) {
+					this.axSetNumericProperty(nm, value);
+					return;
+				}
+				this['$Bg' + nm] = value;
+			}
+
+			axSetNumericProperty(nm: number, value: any) {
+				release || assert(typeof nm === 'number');
+				(<any>this).setValue(nm, value);
+			}
+
+			axGetProperty(mn: Multiname): any {
+				let name = mn.name;
+				if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
+					release || assert(mn.isRuntimeName());
+					return (<any>this).getValue(+name);
+				}
+				return super.axGetProperty(mn);
+			}
+
+			axSetProperty(mn: Multiname, value: any, bc: Bytecode): void {
+				release || checkValue(value);
+				let name = mn.name;
+				if (typeof name === 'number' || isNumeric(name = axCoerceName(name))) {
+					release || assert(mn.isRuntimeName());
+					(<any>this).setValue(+name, value);
+					return;
+				}
+				super.axSetProperty(mn, value, bc);
+			}
+		}
+	}
 }

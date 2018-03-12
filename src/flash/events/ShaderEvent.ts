@@ -15,20 +15,20 @@
  */
 // Class: ShaderEvent
 module Shumway.AVMX.AS.flash.events {
-  export class ShaderEvent extends flash.events.Event {
+	export class ShaderEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                bitmap: flash.display.BitmapData = null, array: flash.utils.ByteArray = null,
-                vector: ASVector<any> = null) {
-      super(type, bubbles, cancelable);
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            bitmap: flash.display.BitmapData = null, array: flash.utils.ByteArray = null,
+		            vector: any /*ASVector*/ = null) {
+			super(type, bubbles, cancelable);
+		}
 
-    // JS -> AS Bindings
-    static COMPLETE: string = "complete";
-  }
+		// JS -> AS Bindings
+		static COMPLETE: string = "complete";
+	}
 }

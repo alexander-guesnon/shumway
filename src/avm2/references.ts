@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/// <reference path='../../build/ts/base.d.ts' />
-/// <reference path='../../build/ts/tools.d.ts' />
+// /// <reference path='../../build/ts/base.d.ts' />
+// /// <reference path='../../build/ts/tools.d.ts' />
 
 ///<reference path='module.ts' />
 ///<reference path='errors.ts' />
@@ -35,6 +35,8 @@
 ///<reference path='natives/int32Vector.ts' />
 ///<reference path='natives/uint32Vector.ts' />
 ///<reference path='natives/float64Vector.ts' />
+
+///<reference path='nat_native.ts' />
 
 ///<reference path='natives/xml.ts' />
 ///<reference path='natives/xml-document.ts' />

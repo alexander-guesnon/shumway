@@ -15,24 +15,24 @@
  */
 // Class: ThrottleEvent
 module Shumway.AVMX.AS.flash.events {
-  export class ThrottleEvent extends flash.events.Event {
+	export class ThrottleEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    state: string;
-    targetFrameRate: number;
+		state: string;
+		targetFrameRate: number;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                state: string = null, targetFrameRate: number = 0) {
-      super(type, bubbles, cancelable);
-      this.state = axCoerceString(state);
-      this.targetFrameRate = +targetFrameRate;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            state: string = null, targetFrameRate: number = 0) {
+			super(type, bubbles, cancelable);
+			this.state = axCoerceString(state);
+			this.targetFrameRate = +targetFrameRate;
+		}
 
-    // JS -> AS Bindings
-    static THROTTLE: string = "throttle";
-  }
+		// JS -> AS Bindings
+		static THROTTLE: string = "throttle";
+	}
 }

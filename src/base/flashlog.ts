@@ -15,32 +15,32 @@
  */
 
 module Shumway {
-  // Produces similar output as flashlog.txt It can be produced by the
-  // debug builds of Flash Player.
-  // See https://github.com/mozilla/shumway/wiki/Trace-Output-with-Flash-Player-Debugger
-  export class FlashLog {
-    public isAS3TraceOn: boolean = true;
+	// Produces similar output as flashlog.txt It can be produced by the
+	// debug builds of Flash Player.
+	// See https://github.com/mozilla/shumway/wiki/Trace-Output-with-Flash-Player-Debugger
+	export class FlashLog {
+		public isAS3TraceOn: boolean = true;
 
-    private _startTime: number;
+		private _startTime: number;
 
-    public constructor() {
-      this._startTime = Date.now();
-    }
+		public constructor() {
+			this._startTime = Date.now();
+		}
 
-    public get currentTimestamp(): number {
-      return Date.now() - this._startTime;
-    }
+		public get currentTimestamp(): number {
+			return Date.now() - this._startTime;
+		}
 
-    _writeLine(line: string): void {
-      Debug.abstractMethod('FlashLog._writeLine');
-    }
+		_writeLine(line: string): void {
+			Debug.abstractMethod('FlashLog._writeLine');
+		}
 
-    public writeAS3Trace(msg: string): void {
-      if (this.isAS3TraceOn) {
-        this._writeLine(this.currentTimestamp + ' AVMINF: ' + msg);
-      }
-    }
-  }
+		public writeAS3Trace(msg: string): void {
+			if (this.isAS3TraceOn) {
+				this._writeLine(this.currentTimestamp + ' AVMINF: ' + msg);
+			}
+		}
+	}
 
-  export var flashlog: FlashLog = null;
+	export let flashlog: FlashLog = null;
 }

@@ -17,31 +17,43 @@
 import ASClass = Shumway.AVMX.AS.ASClass;
 
 declare module Shumway.AVM1 {
-  import flash = Shumway.AVMX.AS.flash;
+	import flash = Shumway.AVMX.AS.flash;
 
-  export class ActionsDataFactory {
-    public createActionsData(bytes: Uint8Array, id: string, parent?: AVM1ActionsData): AVM1ActionsData;
-  }
-  export class AVM1ActionsData {
-  }
-  export class AVM1Context {
-    actionsDataFactory: ActionsDataFactory;
-    levelsContainer: flash.display.AVM1Movie;
-    static create(loaderInfo: flash.display.LoaderInfo): AVM1Context;
-    addAsset(className: string, symbolId: number, symbolProps): void;
-    executeActions(actionsData: AVM1ActionsData, scopeObj): void;
-    setStage(stage: flash.display.Stage): void;
-  }
-  export class AVM1Object {
-  }
-  export module Lib {
-    function getAVM1Object(as3Object:flash.display.DisplayObject, context: AVM1Context): AVM1Object;
-    function initializeAVM1Object(as3Object: flash.display.DisplayObject, context: AVM1Context,
-                                  placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag): void;
-    class AVM1MovieClip extends AVM1Object {
-      setParameters(parameters: any): void;
-      _removeChildName(child: AVM1Object, name: string): void;
-      context: AVM1Context;
-    }
-  }
+	export class ActionsDataFactory {
+		public createActionsData(bytes: Uint8Array, id: string, parent?: AVM1ActionsData): AVM1ActionsData;
+	}
+
+	export class AVM1ActionsData {
+	}
+
+	export class AVM1Context {
+		actionsDataFactory: ActionsDataFactory;
+		levelsContainer: flash.display.AVM1Movie;
+
+		static create(loaderInfo: flash.display.LoaderInfo): AVM1Context;
+
+		addAsset(className: string, symbolId: number, symbolProps: any): void;
+
+		executeActions(actionsData: AVM1ActionsData, scopeObj: any): void;
+
+		setStage(stage: flash.display.Stage): void;
+	}
+
+	export class AVM1Object {
+	}
+
+	export module Lib {
+		function getAVM1Object(as3Object: flash.display.DisplayObject, context: AVM1Context): AVM1Object;
+
+		function initializeAVM1Object(as3Object: flash.display.DisplayObject, context: AVM1Context,
+		                              placeObjectTag: Shumway.SWF.Parser.PlaceObjectTag): void;
+
+		class AVM1MovieClip extends AVM1Object {
+			setParameters(parameters: any): void;
+
+			_removeChildName(child: AVM1Object, name: string): void;
+
+			context: AVM1Context;
+		}
+	}
 }

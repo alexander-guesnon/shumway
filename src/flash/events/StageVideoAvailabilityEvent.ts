@@ -15,21 +15,21 @@
  */
 // Class: StageVideoAvailabilityEvent
 module Shumway.AVMX.AS.flash.events {
-  export class StageVideoAvailabilityEvent extends flash.events.Event {
+	export class StageVideoAvailabilityEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
-    availability: string;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
+		availability: string;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                availability: string = null) {
-      super(type, bubbles, cancelable);
-      this.availability = axCoerceString(availability);
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            availability: string = null) {
+			super(type, bubbles, cancelable);
+			this.availability = axCoerceString(availability);
+		}
 
-    // JS -> AS Bindings
-    static STAGE_VIDEO_AVAILABILITY: string = "stageVideoAvailability";
-  }
+		// JS -> AS Bindings
+		static STAGE_VIDEO_AVAILABILITY: string = "stageVideoAvailability";
+	}
 }

@@ -15,19 +15,19 @@
  */
 // Class: SecurityErrorEvent
 module Shumway.AVMX.AS.flash.events {
-  export class SecurityErrorEvent extends flash.events.ErrorEvent {
+	export class SecurityErrorEvent extends flash.events.ErrorEvent {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                text: string = "", id: number /*int*/ = 0) {
-      super(type, bubbles, cancelable, text, id);
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            text: string = "", id: number /*int*/ = 0) {
+			super(type, bubbles, cancelable, text, id);
+		}
 
-    // JS -> AS Bindings
-    static SECURITY_ERROR: string = "securityError";
-  }
+		// JS -> AS Bindings
+		static SECURITY_ERROR: string = "securityError";
+	}
 }

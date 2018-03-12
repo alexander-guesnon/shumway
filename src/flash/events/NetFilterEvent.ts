@@ -15,22 +15,22 @@
  */
 // Class: NetFilterEvent
 module Shumway.AVMX.AS.flash.events {
-  export class NetFilterEvent extends flash.events.Event {
+	export class NetFilterEvent extends flash.events.Event {
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    header: flash.utils.ByteArray;
-    data: flash.utils.ByteArray;
+		header: flash.utils.ByteArray;
+		data: flash.utils.ByteArray;
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                header: flash.utils.ByteArray = null, data: flash.utils.ByteArray = null) {
-      super(type, bubbles, cancelable);
-      // TODO: coerce
-      this.header = header;
-      this.data = data;
-    }
-  }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            header: flash.utils.ByteArray = null, data: flash.utils.ByteArray = null) {
+			super(type, bubbles, cancelable);
+			// TODO: coerce
+			this.header = header;
+			this.data = data;
+		}
+	}
 }

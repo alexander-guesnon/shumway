@@ -15,39 +15,41 @@
  */
 // Class: StaticText
 module Shumway.AVMX.AS.flash.text {
-  import assert = Debug.assert;
-  export class StaticText extends flash.display.DisplayObject {
+	import assert = Debug.assert;
 
-    static classInitializer: any = null;
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+	export class StaticText extends flash.display.DisplayObject {
 
-    _symbol: TextSymbol;
-    applySymbol() {
-      release || assert(this._symbol);
-      this._initializeFields();
-      this._setStaticContentFromSymbol(this._symbol);
-    }
+		static classInitializer: any = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor () {
-      super();
-      if (!this._fieldsInitialized) {
-        this._initializeFields();
-      }
-    }
+		_symbol: TextSymbol;
 
-    _canHaveTextContent(): boolean {
-      return true;
-    }
+		applySymbol() {
+			release || assert(this._symbol);
+			this._initializeFields();
+			this._setStaticContentFromSymbol(this._symbol);
+		}
 
-    _getTextContent(): Shumway.TextContent {
-      return this._textContent;
-    }
+		constructor() {
+			super();
+			if (!this._fieldsInitialized) {
+				this._initializeFields();
+			}
+		}
 
-    _textContent: Shumway.TextContent;
+		_canHaveTextContent(): boolean {
+			return true;
+		}
 
-    get text(): string {
-      return this._textContent.plainText;
-    }
-  }
+		_getTextContent(): Shumway.TextContent {
+			return this._textContent;
+		}
+
+		_textContent: Shumway.TextContent;
+
+		get text(): string {
+			return this._textContent.plainText;
+		}
+	}
 }

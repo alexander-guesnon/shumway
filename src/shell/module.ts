@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-function addLogPrefix(prefix, args) {
-  return [].concat.apply([prefix], args);
+function addLogPrefix(prefix: any, args: Array<any>) {
+	return [].concat.apply([prefix], args);
 }
 
 module Shumway.Shell {

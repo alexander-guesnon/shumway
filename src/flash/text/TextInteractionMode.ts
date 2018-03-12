@@ -15,18 +15,18 @@
  */
 // Class: TextInteractionMode
 module Shumway.AVMX.AS.flash.text {
-  export class TextInteractionMode extends ASObject {
+	export class TextInteractionMode extends ASObject {
 
-    static classInitializer: any = null;
-    static classSymbols: string [] = null;
-    static instanceSymbols: string [] = null;
+		static classInitializer: any = null;
+		static classSymbols: string [] = null;
+		static instanceSymbols: string [] = null;
 
-    constructor() {
-      super();
-    }
+		constructor() {
+			super();
+		}
 
-    // JS -> AS Bindings
-    static NORMAL: string = "normal";
-    static SELECTION: string = "selection";
-  }
+		// JS -> AS Bindings
+		static NORMAL: string = "normal";
+		static SELECTION: string = "selection";
+	}
 }

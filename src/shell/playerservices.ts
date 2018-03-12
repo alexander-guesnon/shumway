@@ -21,18 +21,18 @@ module Shumway.Shell {
     public mimeType:string;
     public data:string;
 
-    constructor(url, method, mimeType, data) {
+    constructor(url: string, method: string, mimeType: string, data: string) {
       this.url = url;
       this.method = method;
       this.mimeType = mimeType;
       this.data = data;
     }
 
-    readAll(progress, complete) {
+    readAll(progress: any, complete: any) {
       setTimeout(function () {
         try {
-          var url = this.url + '';
-          var strippedUrl = url.indexOf('file://') === 0 ? url.substr(7) : url;
+          let url = this.url + '';
+          let strippedUrl = url.indexOf('file://') === 0 ? url.substr(7) : url;
           complete(read(strippedUrl, 'binary'));
         } catch (e) {
           complete(null, 'Can\'t read ' + this.url);
@@ -40,9 +40,9 @@ module Shumway.Shell {
       }.bind(this));
     }
 
-    readAsync(ondata, onerror, onopen, oncomplete, onhttpstatus) {
+    readAsync(ondata: any, onerror: any, onopen: any, oncomplete: any, onhttpstatus: any) {
       onopen && setTimeout(onopen);
-      this.readAll(null, function (data, err) {
+      this.readAll(null, function (data: any, err: any) {
         if (data) {
           ondata(data, { loaded: data.byteLength, total: data.byteLength});
           oncomplete();
@@ -53,18 +53,18 @@ module Shumway.Shell {
     }
   }
 
-  var shellTelemetry = {
-    reportTelemetry: function (data) {
+  let shellTelemetry = {
+    reportTelemetry: function (data: any) {
     }
   };
 
-  var shellFileLoadingService = {
-    baseUrl: null,
+  let shellFileLoadingService = {
+    baseUrl: null as string,
     createSession: function () {
       return {
-        open: function (request) {
-          var self = this;
-          var path = Shumway.FileLoadingService.instance.resolveUrl(request.url);
+        open: function (request: any) {
+          let self = this;
+          let path = Shumway.FileLoadingService.instance.resolveUrl(request.url);
           new BinaryFileReader(path, request.method, request.mimeType, request.data).readAsync(
             function (data, progress) {
               self.onprogress(data, {bytesLoaded: progress.loaded, bytesTotal: progress.total});
@@ -81,14 +81,14 @@ module Shumway.Shell {
         }
       };
     },
-    setBaseUrl: function (url) {
+    setBaseUrl: function (url: any) {
       shellFileLoadingService.baseUrl = url;
       return url;
     },
-    resolveUrl: function (url) {
+    resolveUrl: function (url: any) {
       return new (<any>URL)(url, shellFileLoadingService.baseUrl).href;
     },
-    navigateTo: function (url, target) {
+    navigateTo: function (url: any, target: any) {
     }
   };
 

@@ -192,7 +192,9 @@ function packageRefs(includes, output, license) {
   });
   var content = '', included = {};
   refs.split('\n').forEach(function (entry) {
-    if (entry.trim() === '') {
+  	// lets trim it, git for windows can checkout \r\n
+    entry = entry.trim();
+    if (entry === '') {
       return;
     }
     if (entry[0] !== '#') {

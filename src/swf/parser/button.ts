@@ -16,47 +16,47 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
-  import assert = Shumway.Debug.assert;
+	import assert = Shumway.Debug.assert;
 
-  export function defineButton(tag: ButtonTag, dictionary: any): any {
-    var characters = tag.characters;
-    var states = {
-      up: [],
-      over: [],
-      down: [],
-      hitTest: []
-    };
-    var i = 0, character;
-    while ((character = characters[i++])) {
-      var characterItem = dictionary[character.symbolId];
-      // The Flash Player ignores references to undefined symbols here. So should we.
-      // TODO: What should happen if the symbol gets defined later in the file?
-      if (characterItem) {
-        var cmd = {
-          symbolId: characterItem.id,
-          code: SwfTagCode.CODE_PLACE_OBJECT,
-          depth: character.depth,
-          flags: character.matrix ? PlaceObjectFlags.HasMatrix : 0,
-          matrix: character.matrix
-        };
-        if (character.flags & ButtonCharacterFlags.StateUp)
-          states.up.push(cmd);
-        if (character.flags & ButtonCharacterFlags.StateOver)
-          states.over.push(cmd);
-        if (character.flags & ButtonCharacterFlags.StateDown)
-          states.down.push(cmd);
-        if (character.flags & ButtonCharacterFlags.StateHitTest)
-          states.hitTest.push(cmd);
-      } else {
-        release || Debug.warning('undefined character in button ' + tag.id);
-      }
-    }
-    var button = {
-      type: 'button',
-      id: tag.id,
-      buttonActions: tag.buttonActions,
-      states: states
-    };
-    return button;
-  }
+	export function defineButton(tag: ButtonTag, dictionary: any): any {
+		let characters = tag.characters;
+		let states = {
+			up: [] as Array<any>,
+			over: [] as Array<any>,
+			down: [] as Array<any>,
+			hitTest: [] as Array<any>
+		};
+		let i = 0, character;
+		while ((character = characters[i++])) {
+			let characterItem = dictionary[character.symbolId];
+			// The Flash Player ignores references to undefined symbols here. So should we.
+			// TODO: What should happen if the symbol gets defined later in the file?
+			if (characterItem) {
+				let cmd = {
+					symbolId: characterItem.id,
+					code: SwfTagCode.CODE_PLACE_OBJECT,
+					depth: character.depth,
+					flags: character.matrix ? PlaceObjectFlags.HasMatrix : 0,
+					matrix: character.matrix
+				};
+				if (character.flags & ButtonCharacterFlags.StateUp)
+					states.up.push(cmd);
+				if (character.flags & ButtonCharacterFlags.StateOver)
+					states.over.push(cmd);
+				if (character.flags & ButtonCharacterFlags.StateDown)
+					states.down.push(cmd);
+				if (character.flags & ButtonCharacterFlags.StateHitTest)
+					states.hitTest.push(cmd);
+			} else {
+				release || Debug.warning('undefined character in button ' + tag.id);
+			}
+		}
+		let button = {
+			type: 'button',
+			id: tag.id,
+			buttonActions: tag.buttonActions,
+			states: states
+		};
+		return button;
+	}
 }

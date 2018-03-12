@@ -15,33 +15,33 @@
  */
 // Class: AsyncErrorEvent
 module Shumway.AVMX.AS.flash.events {
-  export class AsyncErrorEvent extends flash.events.ErrorEvent {
+	export class AsyncErrorEvent extends flash.events.ErrorEvent {
 
-    static ASYNC_ERROR: string = "asyncError";
+		static ASYNC_ERROR: string = "asyncError";
 
-    static classInitializer: any = null;
+		static classInitializer: any = null;
 
-    $Bgerror: ASError;
+		$Bgerror: ASError;
 
 
-    constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-                text: string = "", error: ASError = null) {
-      super(type, bubbles, cancelable, text);
-      this.$Bgerror = error;
-    }
+		constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		            text: string = "", error: ASError = null) {
+			super(type, bubbles, cancelable, text);
+			this.$Bgerror = error;
+		}
 
-    public get error() {
-      return this.$Bgerror;
-    }
+		public get error() {
+			return this.$Bgerror;
+		}
 
-    clone(): Event {
-      return new this.sec.flash.events.AsyncErrorEvent(this._type, this._bubbles, this._cancelable,
-                                                       this._text, this.$Bgerror);
-    }
+		clone(): Event {
+			return new this.sec.flash.events.AsyncErrorEvent(this._type, this._bubbles, this._cancelable,
+				this._text, this.$Bgerror);
+		}
 
-    toString(): string {
-      return this.formatToString('AsyncErrorEvent', 'type', 'bubbles', 'cancelable', 'eventPhase',
-                                 'text', 'error');
-    }
-  }
+		toString(): string {
+			return this.formatToString('AsyncErrorEvent', 'type', 'bubbles', 'cancelable', 'eventPhase',
+				'text', 'error');
+		}
+	}
 }

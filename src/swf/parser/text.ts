@@ -16,18 +16,18 @@
 
 /// <reference path='references.ts'/>
 module Shumway.SWF.Parser {
-  export function defineText(tag: TextTag) {
-    var bold = false;
-    var italic = false;
+	export function defineText(tag: TextTag) {
+		let bold = false;
+		let italic = false;
 
-    return {
-      type: 'text',
-      id: tag.id,
-      fillBounds: tag.bbox,
-      variableName: tag.variableName, // for AVM1
-      tag: tag,
-      bold: bold,
-      italic: italic
-    };
-  }
+		return {
+			type: 'text',
+			id: tag.id,
+			fillBounds: tag.bbox,
+			variableName: tag.variableName, // for AVM1
+			tag: tag,
+			bold: bold,
+			italic: italic
+		};
+	}
 }
