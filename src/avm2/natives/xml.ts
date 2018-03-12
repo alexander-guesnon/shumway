@@ -262,7 +262,7 @@ module Shumway.AVMX.AS {
 		}
 		// The E4X spec says we must throw a TypeError for non-Boolean, Number, or String objects.
 		// Flash thinks otherwise.
-		let x = sec.xmlParser.parseFromString(axCoerceString(v));
+		let x = sec.xmlParser.parseFromString(axCoerceString(v).trim());
 		let length = x._children.length;
 		if (length === 0) {
 			return createXML(sec, ASXMLKind.Text);
